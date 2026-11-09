@@ -5,9 +5,9 @@ interface __BaseEnv_Env {
 	MEDIA: R2Bucket;
 	DB: D1Database;
 	AI: Ai;
-	SITE_URL: "https://tgbox-web.wayoute.workers.dev";
-	ADMIN_URL: "https://tgbox-admin.wayoute.workers.dev";
-	R2_PUBLIC_URL: "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev";
+	SITE_URL: "https://tgsearch.app";
+	ADMIN_URL: "https://admin.tgsearch.app";
+	R2_PUBLIC_URL: "https://media.tgsearch.app";
 	GITHUB_REPO: "forfreek/tgbox";
 	BOT_USERNAME?: string;
 	REFRESH_BATCH_SIZE: "6";

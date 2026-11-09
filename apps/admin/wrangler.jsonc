@@ -4,9 +4,11 @@
   "main": "@tanstack/react-start/server-entry",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
-  // Keep the admin hostname off until Cloudflare Access is confirmed. The app also
-  // rejects requests that lack an Access JWT or a valid Telegram initData signature.
+  // Mini App hostname. workers.dev stays off, and Cloudflare Access is not placed in
+  // front of this domain: Access would block Telegram initData login. Server calls
+  // still require an Access JWT or valid initData (see src/server/auth.ts).
   "workers_dev": false,
+  "routes": [{ "pattern": "admin.tgsearch.app", "custom_domain": true }],
   "observability": { "enabled": true },
   "d1_databases": [
     {
@@ -27,10 +29,10 @@
     // "1" skips auth, but only for requests to localhost / 127.0.0.1. Set in .dev.vars, never here.
     "ADMIN_DEV_BYPASS": "",
     "GITHUB_REPO": "forfreek/tgbox",
-    "SITE_URL": "https://tgbox-web.wayoute.workers.dev",
-    "R2_PUBLIC_URL": "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev",
+    "SITE_URL": "https://tgsearch.app",
+    "R2_PUBLIC_URL": "https://media.tgsearch.app",
     // Public URL of the bot Worker; the admin shows `${BOT_PUBLIC_URL}/cryptopay/webhook` for @CryptoBot.
-    "BOT_PUBLIC_URL": "https://tgbox-bot.wayoute.workers.dev"
+    "BOT_PUBLIC_URL": "https://bot.tgsearch.app"
   }
   // Secrets (see .dev.vars.example): BOT_TOKEN, GITHUB_DISPATCH_TOKEN, ADMIN_IDS, ADMIN_EMAILS, SETTINGS_KEY
 }

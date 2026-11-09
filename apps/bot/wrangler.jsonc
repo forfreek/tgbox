@@ -4,8 +4,9 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
-  // Phase 1 has no custom domain. workers.dev is on unless a routes entry is present.
-  "workers_dev": true,
+  // Telegram webhook hostname. workers.dev stays off.
+  "workers_dev": false,
+  "routes": [{ "pattern": "bot.tgsearch.app", "custom_domain": true }],
   "observability": { "enabled": true },
   // Every 5 minutes: entry refresh (REFRESH_INTERVAL_MS in packages/core/src/refresh.ts must match
   // this, or the batch rotation strands entries). Hourly: promotion maintenance, in its own
@@ -24,10 +25,10 @@
   // Workers AI (free allocation): description translations in the hourly cron.
   "ai": { "binding": "AI" },
   "vars": {
-    "SITE_URL": "https://tgbox-web.wayoute.workers.dev",
+    "SITE_URL": "https://tgsearch.app",
     // Admins get the chat menu button pointed here; everyone else gets SITE_URL/app/.
-    "ADMIN_URL": "https://tgbox-admin.wayoute.workers.dev",
-    "R2_PUBLIC_URL": "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev",
+    "ADMIN_URL": "https://admin.tgsearch.app",
+    "R2_PUBLIC_URL": "https://media.tgsearch.app",
     "GITHUB_REPO": "forfreek/tgbox",
     // Entries refreshed per cron minute; keep under the 50-subrequest budget (see src/refresh).
     "REFRESH_BATCH_SIZE": "6"

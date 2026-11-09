@@ -44,6 +44,15 @@ if (values.remote && !process.env.SITE_URL) {
     "SITE_URL is required for --remote; deploy with `gh workflow run build-deploy.yml` instead",
   );
 }
+// Same failure mode as a missing origin: the pages would link to the upstream bot.
+if (values.remote && !process.env.PUBLIC_BOT_USERNAME) {
+  throw new Error(
+    "PUBLIC_BOT_USERNAME is required for --remote; set the GitHub variable to this fork's bot",
+  );
+}
+if (values.remote && process.env.PUBLIC_BOT_USERNAME?.replace(/^@/, "") === "tgboxccbot") {
+  throw new Error("PUBLIC_BOT_USERNAME must be this fork's bot, not the upstream tgboxccbot");
+}
 
 const dataDir = path.resolve(repoRoot, values["data-dir"]);
 const webDir = path.join(repoRoot, "apps/web");
