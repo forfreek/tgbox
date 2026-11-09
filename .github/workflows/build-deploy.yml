@@ -72,6 +72,8 @@ jobs:
             echo "Site is clean; nothing to build."
           fi
 
+      # `--media-base-url` only becomes avatar links. Posts and history are read with the API
+      # token: media.tgsearch.app answers this runner with a Cloudflare challenge (HTTP 403).
       - name: Export D1, snapshot, astro build, Pagefind
         if: steps.dirty.outputs.build == 'true'
         run: node scripts/build-site.ts --remote --media-base-url "$R2_PUBLIC_URL"

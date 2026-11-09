@@ -1,11 +1,14 @@
 // End-to-end site build: D1 export → snapshot JSON → astro build → Pagefind index.
 //   local (default): node scripts/build-site.ts [--persist-to .data/wrangler] [--media-dir .data/media]
 //   CI:              node scripts/build-site.ts --remote --media-base-url "$R2_PUBLIC_URL"
+// `--media-base-url` is the public origin baked into avatar links. Posts and history are not
+// fetched from it: in CI they are read from R2 with the API token (see lib/r2-media.ts).
 import { existsSync } from "node:fs";
 import { mkdir, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { parseArgs } from "node:util";
+import { syncRemoteMedia } from "./lib/r2-media.ts";
 import { repoRoot, run, wrangler } from "./lib/run.ts";
 
 // Only what the snapshot reads. D1 export refuses databases with virtual tables (entries_fts),
@@ -95,9 +98,28 @@ if (values.remote) {
   console.log(`copied local D1 → ${path.relative(repoRoot, dbFile)}`);
 }
 
-// 2. Snapshot
+// 2. Snapshot. Remote builds copy posts/history out of R2 first. The public media hostname
+// challenges datacenter IPs, and the snapshot treats any non-404 as fatal.
 const siteData = path.join(dataDir, "site-data.json");
-const mediaDir = values["media-dir"] ?? (values.remote ? undefined : path.join(dataDir, "media"));
+let mediaDir = values["media-dir"] ?? (values.remote ? undefined : path.join(dataDir, "media"));
+if (values.remote && !values["media-dir"]) {
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+  if (!accountId || !apiToken) {
+    throw new Error(
+      "CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN are required to read posts and history from R2",
+    );
+  }
+  mediaDir = path.join(dataDir, "media");
+  await rm(mediaDir, { recursive: true, force: true });
+  await syncRemoteMedia({
+    dbPath: dbFile,
+    destDir: mediaDir,
+    accountId,
+    apiToken,
+    bucket: process.env.R2_BUCKET ?? "tgbox-media",
+  });
+}
 run("node", [
   "packages/snapshot/src/cli.ts",
   "--db",
