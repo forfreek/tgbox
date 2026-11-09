@@ -4,13 +4,14 @@
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
-  "routes": [{ "pattern": "tgbox.cc", "custom_domain": true }],
+  // Phase 1 has no custom domain. workers.dev is on unless a routes entry is present.
+  "workers_dev": true,
   // Only /r/* reads it: the promo click redirect counts the click before sending the visitor on.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "tgbox",
-      "database_id": "c208e71c-9155-458f-9744-2e20f09e866b",
+      "database_id": "426a1d23-bde7-42fc-a5ab-e76b3b408df5",
       "migrations_dir": "../../packages/db/migrations"
     }
   ],
@@ -21,7 +22,7 @@
   // keyword rules are unsure — a handful of calls a day (see packages/core/src/suggest.ts).
   "ai": { "binding": "AI" },
   "vars": {
-    "R2_PUBLIC_URL": "https://media.tgbox.cc"
+    "R2_PUBLIC_URL": "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev"
   },
   "assets": {
     // Astro writes static pages to dist/client; its build also emits dist/server/wrangler.json, which

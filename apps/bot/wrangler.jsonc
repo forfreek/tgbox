@@ -4,7 +4,8 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
-  "routes": [{ "pattern": "bot.tgbox.cc", "custom_domain": true }],
+  // Phase 1 has no custom domain. workers.dev is on unless a routes entry is present.
+  "workers_dev": true,
   "observability": { "enabled": true },
   // Every 5 minutes: entry refresh (REFRESH_INTERVAL_MS in packages/core/src/refresh.ts must match
   // this, or the batch rotation strands entries). Hourly: promotion maintenance, in its own
@@ -15,7 +16,7 @@
     {
       "binding": "DB",
       "database_name": "tgbox",
-      "database_id": "c208e71c-9155-458f-9744-2e20f09e866b",
+      "database_id": "426a1d23-bde7-42fc-a5ab-e76b3b408df5",
       "migrations_dir": "../../packages/db/migrations"
     }
   ],
@@ -23,12 +24,11 @@
   // Workers AI (free allocation): description translations in the hourly cron.
   "ai": { "binding": "AI" },
   "vars": {
-    "SITE_URL": "https://tgbox.cc",
+    "SITE_URL": "https://tgbox-web.wayoute.workers.dev",
     // Admins get the chat menu button pointed here; everyone else gets SITE_URL/app/.
-    "ADMIN_URL": "https://admin.tgbox.cc",
-    "R2_PUBLIC_URL": "https://media.tgbox.cc",
-    "GITHUB_REPO": "TGrpg/tgbox",
-    "BOT_USERNAME": "tgboxccbot",
+    "ADMIN_URL": "https://tgbox-admin.wayoute.workers.dev",
+    "R2_PUBLIC_URL": "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev",
+    "GITHUB_REPO": "forfreek/tgbox",
     // Entries refreshed per cron minute; keep under the 50-subrequest budget (see src/refresh).
     "REFRESH_BATCH_SIZE": "6"
   }

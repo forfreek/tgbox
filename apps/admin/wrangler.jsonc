@@ -4,13 +4,15 @@
   "main": "@tanstack/react-start/server-entry",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
-  "routes": [{ "pattern": "admin.tgbox.cc", "custom_domain": true }],
+  // Keep the admin hostname off until Cloudflare Access is confirmed. The app also
+  // rejects requests that lack an Access JWT or a valid Telegram initData signature.
+  "workers_dev": false,
   "observability": { "enabled": true },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "tgbox",
-      "database_id": "c208e71c-9155-458f-9744-2e20f09e866b",
+      "database_id": "426a1d23-bde7-42fc-a5ab-e76b3b408df5",
       "migrations_dir": "../../packages/db/migrations"
     }
   ],
@@ -24,11 +26,11 @@
     "CF_ACCESS_AUD": "",
     // "1" skips auth, but only for requests to localhost / 127.0.0.1. Set in .dev.vars, never here.
     "ADMIN_DEV_BYPASS": "",
-    "GITHUB_REPO": "TGrpg/tgbox",
-    "SITE_URL": "https://tgbox.cc",
-    "R2_PUBLIC_URL": "https://media.tgbox.cc",
+    "GITHUB_REPO": "forfreek/tgbox",
+    "SITE_URL": "https://tgbox-web.wayoute.workers.dev",
+    "R2_PUBLIC_URL": "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev",
     // Public URL of the bot Worker; the admin shows `${BOT_PUBLIC_URL}/cryptopay/webhook` for @CryptoBot.
-    "BOT_PUBLIC_URL": "https://bot.tgbox.cc"
+    "BOT_PUBLIC_URL": "https://tgbox-bot.wayoute.workers.dev"
   }
   // Secrets (see .dev.vars.example): BOT_TOKEN, GITHUB_DISPATCH_TOKEN, ADMIN_IDS, ADMIN_EMAILS, SETTINGS_KEY
 }
