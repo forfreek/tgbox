@@ -5,10 +5,11 @@ interface __BaseEnv_Env {
 	MEDIA: R2Bucket;
 	DB: D1Database;
 	AI: Ai;
-	SITE_URL: "https://tgbox.cc";
-	R2_PUBLIC_URL: "https://media.tgbox.cc";
-	GITHUB_REPO: "TGrpg/tgbox";
-	BOT_USERNAME: "tgboxccbot";
+	SITE_URL: "https://tgbox-web.wayoute.workers.dev";
+	ADMIN_URL: "https://tgbox-admin.wayoute.workers.dev";
+	R2_PUBLIC_URL: "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev";
+	GITHUB_REPO: "forfreek/tgbox";
+	BOT_USERNAME?: string;
 	REFRESH_BATCH_SIZE: "6";
 	BOT_TOKEN: string;
 	WEBHOOK_SECRET: string;
@@ -28,7 +29,7 @@ type StringifyValues<EnvType extends Record<string, unknown>> = {
 	[Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
 };
 declare namespace NodeJS {
-	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "SITE_URL" | "R2_PUBLIC_URL" | "GITHUB_REPO" | "BOT_USERNAME" | "REFRESH_BATCH_SIZE" | "BOT_TOKEN" | "WEBHOOK_SECRET" | "GITHUB_DISPATCH_TOKEN" | "ADMIN_IDS" | "ADMIN_CHAT_ID" | "SETTINGS_KEY">> {}
+	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "SITE_URL" | "ADMIN_URL" | "R2_PUBLIC_URL" | "GITHUB_REPO" | "BOT_USERNAME" | "REFRESH_BATCH_SIZE" | "BOT_TOKEN" | "WEBHOOK_SECRET" | "GITHUB_DISPATCH_TOKEN" | "ADMIN_IDS" | "ADMIN_CHAT_ID" | "SETTINGS_KEY">> {}
 }
 
 // Begin runtime types
