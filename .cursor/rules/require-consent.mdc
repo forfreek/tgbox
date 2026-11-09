@@ -1,0 +1,12 @@
+---
+description: Require explicit user consent before creating or deleting Cloudflare or account resources
+alwaysApply: true
+---
+
+# Create and delete need consent
+
+Do not create or delete Cloudflare resources, secrets, DNS records, Access apps/policies, Workers, or other account objects unless the user has explicitly approved that specific create or delete.
+
+Updating an existing setting is allowed when it is required to fix the current issue. Prefer updating what already exists over adding something new.
+
+If a create or delete is necessary, describe exactly what would be added or removed and wait for approval.
