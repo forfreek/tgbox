@@ -1,8 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <title>TGbox</title>
-  <rect width="32" height="32" rx="8" fill="#2a9fdb" />
-  <path
-    d="M7.4 15.3 23.1 9.2c.8-.3 1.5.2 1.2 1.4l-2.7 12.6c-.2.9-.7 1.1-1.5.7l-4.1-3-2 1.9c-.2.2-.4.4-.9.4l.3-4.2 7.6-6.9c.3-.3-.1-.5-.5-.2l-9.4 5.9-4-1.3c-.9-.3-.9-.9.3-1.2Z"
-    fill="#fbfaf6"
-  />
+  <title>TGsearch</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #1f97d6; }
+      .handle { stroke: #ff9a3d; }
+    }
+  </style>
+  <rect class="tile" width="32" height="32" rx="8" fill="#0088cc"/>
+  <circle cx="13.2" cy="13.2" r="6.15" fill="none" stroke="#fbfaf6" stroke-width="3.5"/>
+  <path class="handle" d="M16.6 16.6 24.4 24.4" fill="none" stroke="#ff8a1f" stroke-width="3.5" stroke-linecap="round"/>
 </svg>

@@ -33,6 +33,7 @@ const { locale, title, description } = Astro.props;
       path={Astro.url.pathname}
       noindex={true}
     />
+    <link rel="icon" href="/favicon.ico">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     {/* Runs before first paint; inside Telegram the theme params replace these a moment later. */}
     <script is:inline>

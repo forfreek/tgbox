@@ -1068,6 +1068,18 @@ describe("site build from snapshot data", () => {
     expect(enProse).toContain('href="/en/guides/channels-groups-bots/"');
   });
 
+  test("the tab icon and the bookmark icon are both linked", () => {
+    const page = html("");
+    expect(page).toContain('<link rel="icon" href="/favicon.ico">');
+    expect(page).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml">');
+    expect(page).toContain('<link rel="apple-touch-icon" href="/icons/icon-180.png">');
+    expect(existsSync(path.join(client, "favicon.ico"))).toBe(true);
+    expect(readFileSync(path.join(client, "favicon.svg"), "utf8")).toContain(
+      "<title>TGsearch</title>",
+    );
+    expect(html("app")).toContain('<link rel="icon" href="/favicon.ico">');
+  });
+
   test("the guides index lists every guide for its locale, newest first", () => {
     for (const [route, first, last] of [
       ["guides", "find-telegram-channels", "grow-a-telegram-channel"],
