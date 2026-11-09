@@ -4,8 +4,11 @@
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
-  // Phase 1 has no custom domain. workers.dev is on unless a routes entry is present.
-  "workers_dev": true,
+  // The public site. workers.dev stays off so this Worker is only reachable on the apex.
+  // www.tgsearch.app is a separate redirect Worker, not a route here: static assets would
+  // otherwise be served on www instead of redirecting to the apex.
+  "workers_dev": false,
+  "routes": [{ "pattern": "tgsearch.app", "custom_domain": true }],
   // Only /r/* reads it: the promo click redirect counts the click before sending the visitor on.
   "d1_databases": [
     {
@@ -22,7 +25,7 @@
   // keyword rules are unsure — a handful of calls a day (see packages/core/src/suggest.ts).
   "ai": { "binding": "AI" },
   "vars": {
-    "R2_PUBLIC_URL": "https://pub-bd62a219bc604095a00d17b90e4cc7c4.r2.dev"
+    "R2_PUBLIC_URL": "https://media.tgsearch.app"
   },
   "assets": {
     // Astro writes static pages to dist/client; its build also emits dist/server/wrangler.json, which
