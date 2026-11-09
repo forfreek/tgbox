@@ -11,7 +11,7 @@ const zh = {
     backToTop: "回到顶部",
   },
   search: {
-    placeholder: "搜索频道、群组、机器人",
+    placeholder: "搜索 Telegram 频道、群组、机器人",
     short: "搜索…",
     shortcut: "Ctrl K",
     dialogLabel: "站内搜索",
@@ -195,7 +195,7 @@ const en: typeof zh = {
     backToTop: "Back to top",
   },
   search: {
-    placeholder: "Search channels, groups, bots",
+    placeholder: "Search Telegram channels, groups and bots",
     short: "Search…",
     shortcut: "Ctrl K",
     dialogLabel: "Site search",

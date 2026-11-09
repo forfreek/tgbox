@@ -4,7 +4,7 @@ type Placement = { name: string; effect: string; includes: string | null };
 
 const zh = {
   title: "广告投放",
-  metaTitle: "Telegram 频道推广 · 广告位介绍 | TGbox",
+  metaTitle: "Telegram 频道推广 · 广告位介绍",
   description:
     "给你已收录的频道、群组或机器人买一个更靠前的位置，或者在首页和全站顶部投放品牌广告。这里是每种广告位的效果示意和剩余名额，价格在机器人里查看。",
   entryFamily: "推广我的条目",
@@ -79,7 +79,7 @@ const zh = {
 
 const en: typeof zh = {
   title: "Advertise",
-  metaTitle: "Promote a Telegram channel · Ad placements | TGbox",
+  metaTitle: "Promote a Telegram channel · Ad placements",
   description:
     "Move your listed channel, group or bot up the lists, or run a brand ad on the home page and at the top of every page. This page previews every placement and its free slots; prices are in the bot.",
   entryFamily: "Promote my listing",

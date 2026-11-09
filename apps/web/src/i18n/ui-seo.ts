@@ -11,9 +11,9 @@ const zh = {
   /** Entry names injected into listing descriptions so no two listings read alike. */
   examples: { wrap: "（如{list}）", separator: "、" },
   home: {
-    title: "Telegram 频道群组机器人大全 · 电报频道搜索",
+    title: "Telegram 综合资源导航",
     description:
-      "TGbox 已收录 {total} 个 Telegram 频道、群组和机器人，可按分类、标签搜索电报频道，或看涨粉排名，含精确成员数、活跃度和最近消息，数据自动更新。",
+      "TGsearch 是 Telegram 综合资源导航，已收录 {total} 个频道、群组和机器人，可按分类、标签搜索，或查看涨粉排名，含成员数、活跃度和最近消息。",
   },
   kind: {
     channel: {
@@ -58,9 +58,9 @@ const zh = {
       "TGbox 指南：怎么找到优质的 Telegram 频道、频道群组机器人到底有什么区别、怎么让自己的电报频道被更多人发现，依据 Telegram 官方限制和本站收录数据写成。",
   },
   about: {
-    title: "关于 TGbox · 开源的 Telegram 导航站",
+    title: "关于 TGsearch · 开源的 Telegram 综合资源导航",
     description:
-      "TGbox 是开源（AGPL-3.0）的简繁英三语 Telegram 频道、群组和机器人导航站，并解答怎么找电报频道、怎么提交收录、数据多久更新一次。",
+      "TGsearch 是开源（AGPL-3.0）的简繁英三语 Telegram 综合资源导航，说明收录方式、推广标记，以及数据如何刷新。",
   },
   detail: {
     title: "{title}（@{username}）· Telegram {kind}",
@@ -93,27 +93,27 @@ const zh = {
     {
       question: "怎么找 Telegram 频道？",
       answer:
-        "Telegram 自带的搜索只能按名称匹配，找不到没听说过的频道。在 TGbox 可以按分类（科技、新闻、影视等）和标签浏览电报频道，用站内搜索按关键词查找，或者打开排行榜看最近涨粉最快、最活跃的频道；每个条目都有成员数、活跃度和最近消息，点“直达”即可打开 Telegram。",
+        "Telegram 自带的搜索只能按名称匹配，找不到没听说过的频道。在 TGsearch 可以按分类（科技、新闻、影视等）和标签浏览电报频道，用站内搜索按关键词查找，或者打开排行榜看最近涨粉最快、最活跃的频道。条目展示成员数，频道另有活跃度和最近消息，点“直达”即可打开 Telegram。",
     },
     {
       question: "怎么提交收录自己的频道、群组或机器人？",
       answer:
-        "在 Telegram 里私聊收录机器人 @tgboxccbot，把频道、群组或机器人的链接（t.me/xxx 或 @xxx）发给它即可提交。系统会自动抓取公开资料，审核通过后几分钟内上线，结果会私信通知你。收录免费，详见站内的“提交收录说明”。",
+        "在 Telegram 里私聊收录机器人 @tgboxccbot，把频道、群组或机器人的链接（t.me/xxx 或 @xxx）发给它即可提交。系统会自动抓取公开资料，审核通过后上线，结果会私信通知你。收录免费，详见站内的“提交收录说明”。",
     },
     {
       question: "数据多久更新一次？",
       answer:
-        "后台按计划持续刷新每个条目的成员数、在线人数、活跃度和最近消息，整站页面也会随之定期重新生成，通常每天都有更新。被封禁、删除或转为私有的条目会被自动识别并下架，所以列表里基本不会有失效链接。",
+        "后台按计划刷新条目的成员数、在线人数、活跃度和最近消息，整站页面随构建重新生成。被封禁、删除或转为私有的条目，经多次检测确认后自动隐藏。",
     },
     {
       question: "收录要收费吗？“推广”是什么意思？",
       answer:
-        "普通收录完全免费，排序只看成员数、活跃度等公开数据。标有“推广”的条目是付费或合作展示，会明确标注，不会伪装成自然排序结果。",
+        "普通收录完全免费。普通条目按成员数、活跃度等公开数据排列；标有“推广”的条目是付费或合作展示，会单独标记并在推广位展示。",
     },
     {
       question: "发现违规内容或想删除自己的条目怎么办？",
       answer:
-        "私聊收录机器人 @tgboxccbot 发送 /help 获取联系方式，说明条目用户名和原因即可。本站只收录 Telegram 上已经公开的频道、群组和机器人，内容由其所有者负责。",
+        "私聊收录机器人 @tgboxccbot 发送 /help 获取联系方式，说明条目用户名和原因即可。TGsearch 只收录 Telegram 上已经公开的频道、群组和机器人，内容由其所有者负责。",
     },
   ],
 };
@@ -122,9 +122,9 @@ const en: typeof zh = {
   pageSuffix: " · Page {n}",
   examples: { wrap: " such as {list}", separator: ", " },
   home: {
-    title: "Telegram Channels, Groups & Bots Directory",
+    title: "Telegram Resource Directory",
     description:
-      "Browse {total} Telegram channels, groups and bots by category, tag or ranking. Exact member counts, activity levels and recent posts, refreshed automatically.",
+      "TGsearch is a Telegram resource directory of {total} channels, groups and bots. Browse by category, tag or growth ranking, with member counts, activity and recent posts.",
   },
   kind: {
     channel: {
@@ -169,9 +169,9 @@ const en: typeof zh = {
       "TGbox guides: how to find good Telegram channels, what actually separates channels, groups and bots, and how to get your own channel discovered — based on Telegram's documented limits and this directory's data.",
   },
   about: {
-    title: "About TGbox — Open-source Telegram Directory",
+    title: "About TGsearch — Open-source Telegram Directory",
     description:
-      "An open-source (AGPL-3.0) trilingual directory of Telegram channels, groups and bots: how TGbox picks entries, how to get listed, and how often the data is refreshed.",
+      "An open-source (AGPL-3.0) trilingual Telegram resource directory: how TGsearch lists entries, how to get listed, and how the data is refreshed.",
   },
   detail: {
     title: "{title} (@{username}) — Telegram {kind}",
@@ -222,27 +222,27 @@ const en: typeof zh = {
     {
       question: "How do I find good Telegram channels?",
       answer:
-        "Telegram's own search only matches names, so you can't find channels you haven't heard of. On TGbox you can browse Telegram channels by category (tech, news, video and so on) and by tag, search the whole directory by keyword, or open the rankings to see what is growing fastest and what is most active. Every entry shows its member count, activity level and recent posts, and a direct link opens it in Telegram.",
+        "Telegram's own search only matches names, so you can't find channels you haven't heard of. On TGsearch you can browse Telegram channels by category (tech, news, video and so on) and by tag, search the whole directory by keyword, or open the rankings to see what is growing fastest and what is most active. Entries show member counts. Channels also show an activity level and recent posts, and a direct link opens the entry in Telegram.",
     },
     {
       question: "How do I get my channel, group or bot listed?",
       answer:
-        "Message our submission bot @tgboxccbot privately on Telegram and send the link (t.me/xxx or @xxx). It fetches the public profile automatically; once approved the entry goes live within minutes and you get the result by private message. Listing is free — see the submission guide on the site.",
+        "Message our submission bot @tgboxccbot privately on Telegram and send the link (t.me/xxx or @xxx). It fetches the public profile automatically; once approved the entry goes live and you get the result by private message. Listing is free — see the submission guide on the site.",
     },
     {
       question: "How often is the data updated?",
       answer:
-        "Member counts, online counts, activity levels and recent posts are refreshed on a schedule, and the whole site is rebuilt regularly — usually something changes every day. Entries that get banned, deleted or switched to private are detected and taken down automatically, so the lists stay free of dead links.",
+        "Member counts, online counts, activity levels and recent posts are refreshed on a schedule, and the site is rebuilt with those refreshes. Entries that get banned, deleted or switched to private are hidden after repeated checks confirm the change.",
     },
     {
       question: "Does listing cost anything? What does “Promoted” mean?",
       answer:
-        "Regular listings are free and ordering only uses public data such as member count and activity. Entries marked “Promoted” are paid or partner placements and are always labelled, never disguised as organic results.",
+        "Regular listings are free. Regular entries are ordered by public data such as member count and activity. Entries marked “Promoted” are paid or partner placements: they are labelled and shown in their promotion slots.",
     },
     {
       question: "How do I report abuse or remove my entry?",
       answer:
-        "Message @tgboxccbot and send /help for contact details, then tell us the username and the reason. TGbox only lists channels, groups and bots that are already public on Telegram; their owners are responsible for the content.",
+        "Message @tgboxccbot and send /help for contact details, then tell us the username and the reason. TGsearch only lists channels, groups and bots that are already public on Telegram; their owners are responsible for the content.",
     },
   ],
 };
