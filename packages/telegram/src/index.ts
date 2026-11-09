@@ -1,4 +1,15 @@
 export { activityTier } from "./activity.ts";
+export {
+  type AwesomeImportOptions,
+  type AwesomeImportReason,
+  type AwesomeImportRequest,
+  type AwesomeImportRow,
+  type AwesomeImportStatus,
+  type AwesomeReport,
+  importAwesomeReadme,
+  parseAwesomeImportRequest,
+  workersAiCategoryClassifier,
+} from "./awesome-import.ts";
 export { parseChannelPage, parseCreatedAt } from "./channel.ts";
 export { detectLanguage } from "./language.ts";
 export { classifyLiveness, type LivenessInput, type ProfileResponse } from "./liveness.ts";

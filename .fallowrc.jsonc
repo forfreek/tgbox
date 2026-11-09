@@ -8,6 +8,8 @@
     "packages/snapshot/src/cli.ts",
     // CLIs run directly with `node` (docs/deploy.md, CI, package scripts).
     "scripts/**/*.ts",
+    "apps/import/src/worker.ts",
+    "apps/import/src/server.ts",
     "{apps,packages}/*/scripts/**/*.ts",
     // TanStack Start: file routes, router/start entries and the Vite config are loaded by convention.
     "apps/admin/src/routes/**/*.tsx",
