@@ -388,9 +388,9 @@ async function storePosts(
     stored?.fullHash !== fullHash &&
     (manual || !Number.isFinite(writtenAt) || now - writtenAt >= POSTS_VIEWS_REFRESH_MS);
   if (!contentChanged && !viewsStale) return;
-  // No `cacheControl` on purpose: the keys are not version-busted, so a long CDN cache would
-  // serve stale JSON to browsers. The site build reads these objects through the R2 API
-  // (scripts/lib/r2-media.ts), not the public URL, because the zone challenges datacenter clients.
+  // No `cacheControl` on purpose: `posts/` and `history/` are read from the public R2 URL by the
+  // GitHub Actions build (`scripts/build-site.ts --media-base-url`), and the keys are not
+  // version-busted, so a long CDN cache would publish a site built from stale data.
   await media.put(key, json, {
     httpMetadata: { contentType: "application/json" },
     customMetadata: { hash, fullHash, writtenAt: String(now) },
