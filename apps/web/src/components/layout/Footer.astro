@@ -154,7 +154,19 @@ const chip =
     <div
       class="mx-auto max-w-7xl space-y-2 px-4 py-6 text-xs leading-relaxed text-muted-foreground sm:px-6"
     >
-      <p class="max-w-4xl">{strings.footer.disclaimer}</p>
+      <p class="max-w-4xl">
+        {strings.footer.disclaimer}{strings.footer.reportBefore}<a
+          href={botUrl}
+          rel="noopener"
+          target="_blank"
+          class="underline decoration-border underline-offset-2 transition-colors hover:text-primary"
+          >{strings.footer.reportBot}</a
+        >{strings.footer.reportOr}<a
+          href="mailto:Contact@tgsearch.app"
+          class="underline decoration-border underline-offset-2 transition-colors hover:text-primary"
+          >Contact@tgsearch.app</a
+        >{strings.footer.reportAfter}
+      </p>
       <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
         <span>© {year} {t(locale, "site.title")}. {strings.footer.rights}</span>
         <a
