@@ -28,7 +28,7 @@ const rankings = (patch: Record<string, unknown> = {}) => ({
 });
 
 const digests = (h: Harness) =>
-  h.calls("sendMessage").filter((c) => String(c.payload.text).startsWith("📊 TGbox 日报"));
+  h.calls("sendMessage").filter((c) => String(c.payload.text).startsWith("📊 TGsearch 日报"));
 
 let h: Harness;
 beforeEach(async () => {

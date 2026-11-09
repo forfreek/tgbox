@@ -13,7 +13,7 @@ export const zh = {
     source: "开源代码",
   },
   bot: {
-    welcome: "欢迎使用 TGbox收录机器人。",
+    welcome: "欢迎使用 TGsearch 收录机器人。",
     submitButton: "提交收录",
     help: "发送频道、群组或机器人的链接即可提交收录。",
   },

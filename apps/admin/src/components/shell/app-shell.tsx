@@ -28,7 +28,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="sticky top-0 hidden h-dvh flex-col border-r bg-sidebar px-3 py-4 md:flex">
         <Link to="/" className="mb-6 flex items-center gap-2 px-3 font-semibold text-lg">
           <span className="size-2.5 rounded-full bg-brand-dot" aria-hidden />
-          TGbox · 后台
+          TGsearch · 后台
         </Link>
         <nav className="flex flex-col gap-1" aria-label="主导航">
           {navItems.map((item) => (
@@ -47,7 +47,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex min-w-0 flex-col">
         <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur md:px-8">
-          <span className="font-semibold md:hidden">TGbox · 后台</span>
+          <span className="font-semibold md:hidden">TGsearch · 后台</span>
           <div className="ml-auto flex items-center gap-2">
             {session.data ? (
               <span className="max-w-48 text-muted-foreground text-sm" title={session.data.via}>

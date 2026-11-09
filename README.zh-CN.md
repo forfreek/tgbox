@@ -1,10 +1,10 @@
 <div align="center">
 
 <a href="https://tgbox.cc">
-  <img src="apps/web/public/favicon.svg" width="88" height="88" alt="TGbox logo">
+  <img src="apps/web/public/favicon.svg" width="88" height="88" alt="TGsearch logo">
 </a>
 
-# TGbox
+# TGsearch
 
 **开源的 Telegram 频道 / 群组 / 机器人导航站：自带收录机器人和管理后台，完全跑在 Cloudflare 免费版上。**
 
@@ -17,13 +17,13 @@
 [![grammY](https://img.shields.io/badge/bot-grammY-009DC4?logo=telegram&logoColor=white)](https://grammy.dev)
 [![GitHub stars](https://img.shields.io/github/stars/TGrpg/tgbox?style=social)](https://github.com/TGrpg/tgbox/stargazers)
 
-<img src=".github/assets/home.jpg" alt="TGbox 首页：Telegram 频道、群组、机器人导航与搜索" width="100%">
+<img src=".github/assets/home.jpg" alt="TGsearch 首页：Telegram 频道、群组、机器人导航与搜索" width="100%">
 
 </div>
 
-## 为什么做 TGbox
+## 为什么做 TGsearch
 
-常见的 TG 导航站要么是一份很快过时的静态列表，要么是服务端实时渲染，被爬虫一扫就要花钱。TGbox 的做法：
+常见的 TG 导航站要么是一份很快过时的静态列表，要么是服务端实时渲染，被爬虫一扫就要花钱。TGsearch 的做法：
 
 - **全部页面静态化**：频道、群组、机器人页面在构建时生成 HTML，作为 Cloudflare 静态资源发布，访客和搜索引擎爬虫都不消耗 Worker 请求额度。
 - **数据自动保持新鲜**：定时任务读取公开的 `t.me` 页面，更新订阅人数、最近消息和活跃度，已注销或被封禁的频道自动下架。
@@ -63,7 +63,7 @@
 
 | 暗色模式 | 手机端 |
 |---|---|
-| <img src=".github/assets/home-dark.jpg" alt="TGbox 暗色模式"> | <img src=".github/assets/mobile.jpg" alt="TGbox 手机端" width="320"> |
+| <img src=".github/assets/home-dark.jpg" alt="TGsearch 暗色模式"> | <img src=".github/assets/mobile.jpg" alt="TGsearch 手机端" width="320"> |
 
 ## 架构
 
@@ -148,7 +148,7 @@ pnpm --filter @tgbox/admin dev         # 后台 → http://localhost:8789（本�
 
 ### 免费额度
 
-| 资源 | 免费上限 | TGbox 的做法 |
+| 资源 | 免费上限 | TGsearch 的做法 |
 |---|---|---|
 | Worker 请求 | 每天 10 万 | 公开页面是静态资源，不经过 Worker |
 | Worker CPU | 每次 10ms | 正则解析 `t.me`（约 2ms），小批量刷新 |
@@ -172,6 +172,6 @@ pnpm --filter @tgbox/admin dev         # 后台 → http://localhost:8789（本�
 
 ## 许可证
 
-[AGPL-3.0](LICENSE)。可以自由使用、修改和自建；如果把修改后的版本作为公开网站或服务运行，需要以同样的许可证公开源代码。Telegram 是 Telegram FZ-LLC 的商标，TGbox 是独立项目，与 Telegram 官方无关。
+[AGPL-3.0](LICENSE)。可以自由使用、修改和自建；如果把修改后的版本作为公开网站或服务运行，需要以同样的许可证公开源代码。Telegram 是 Telegram FZ-LLC 的商标，TGsearch 是独立项目，与 Telegram 官方无关。
 
 觉得有用的话，点个 ⭐ 能让更多人找到它。

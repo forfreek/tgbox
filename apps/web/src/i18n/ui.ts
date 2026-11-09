@@ -181,7 +181,7 @@ const zh = {
   },
   meta: {
     description:
-      "TGbox收录优质的 Telegram 中文频道、群组和机器人，提供精确成员数、活跃度、最近消息预览和分类标签，数据定期自动更新。",
+      "TGsearch 是 Telegram 综合资源导航，收录频道、群组和机器人，含成员数、分类标签和最近消息，数据按计划更新。",
   },
 };
 
@@ -361,7 +361,7 @@ const en: typeof zh = {
   },
   meta: {
     description:
-      "TGbox lists quality Telegram channels, groups and bots with exact member counts, activity levels, recent post previews and categories — refreshed automatically.",
+      "TGsearch is a Telegram resource directory of channels, groups and bots, with member counts, categories and recent posts, refreshed on a schedule.",
   },
 };
 

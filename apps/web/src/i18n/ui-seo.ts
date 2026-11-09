@@ -35,7 +35,7 @@ const zh = {
   category: {
     title: "{category}{kind}大全 · Telegram {category}{kind}推荐",
     description:
-      "TGbox 收录的{category}类 Telegram {kind}共 {n} 个{examples}，按成员数排序，含成员数、简介、活跃度和标签，数据定期自动更新。",
+      "TGsearch 收录的{category}类 Telegram {kind}共 {n} 个{examples}，按成员数排序，含成员数、简介、活跃度和标签，数据定期自动更新。",
   },
   tag: {
     title: "{tag} · Telegram 频道群组与机器人标签",
@@ -45,7 +45,7 @@ const zh = {
   tags: {
     title: "Telegram 标签索引 · 按标签找频道群组和机器人",
     description:
-      "TGbox 的全部 {n} 个标签，按主题和属性分组，覆盖 {total} 个 Telegram 频道、群组和机器人。点开任意标签即可看到同一主题下的全部条目。",
+      "TGsearch 的全部 {n} 个标签，按主题和属性分组，覆盖 {total} 个 Telegram 频道、群组和机器人。点开任意标签即可看到同一主题下的全部条目。",
   },
   rank: {
     title: "电报频道排名 · Telegram 群组与机器人排行榜",
@@ -55,7 +55,7 @@ const zh = {
   guides: {
     title: "Telegram 使用指南 · 频道怎么找、怎么运营",
     description:
-      "TGbox 指南：怎么找到优质的 Telegram 频道、频道群组机器人到底有什么区别、怎么让自己的电报频道被更多人发现，依据 Telegram 官方限制和本站收录数据写成。",
+      "TGsearch 指南：怎么找到优质的 Telegram 频道、频道群组机器人到底有什么区别、怎么让自己的电报频道被更多人发现，依据 Telegram 官方限制和本站收录数据写成。",
   },
   about: {
     title: "关于 TGsearch · 开源的 Telegram 综合资源导航",
@@ -67,7 +67,7 @@ const zh = {
   },
   /** Clauses of the auto-written one-sentence entry summary; empty ones are dropped. */
   summary: {
-    lead: "{title}（@{username}）是 TGbox 收录的 Telegram {category}{kind}",
+    lead: "{title}（@{username}）是 TGsearch 收录的 Telegram {category}{kind}",
     members: "目前有 {n} {noun}",
     created: "创建于 {date}",
     activity: "活跃度为{tier}",
@@ -76,7 +76,7 @@ const zh = {
     terminator: "。",
   },
   keywords: {
-    base: ["Telegram", "电报", "电报频道", "电报群", "电报机器人", "TGbox"],
+    base: ["Telegram", "电报", "电报频道", "电报群", "电报机器人", "TGsearch"],
     kind: {
       channel: ["电报频道大全", "tg频道", "电报频道怎么搜索", "telegram频道", "电报频道排名"],
       group: ["电报群组", "tg群组分享", "电报群怎么搜索", "tg群组入口", "telegram群组"],
@@ -156,7 +156,7 @@ const en: typeof zh = {
   tags: {
     title: "Telegram Tags — Browse Channels, Groups & Bots by Topic",
     description:
-      "All {n} tags in use on TGbox, grouped by topic and attribute, across {total} Telegram channels, groups and bots. Open a tag to see everything listed under it.",
+      "All {n} tags in use on TGsearch, grouped by topic and attribute, across {total} Telegram channels, groups and bots. Open a tag to see everything listed under it.",
   },
   rank: {
     title: "Telegram Rankings — Top & Fastest-growing Channels",
@@ -166,7 +166,7 @@ const en: typeof zh = {
   guides: {
     title: "Telegram Guides — Finding, Comparing and Growing Channels",
     description:
-      "TGbox guides: how to find good Telegram channels, what actually separates channels, groups and bots, and how to get your own channel discovered — based on Telegram's documented limits and this directory's data.",
+      "TGsearch guides: how to find good Telegram channels, what actually separates channels, groups and bots, and how to get your own channel discovered — based on Telegram's documented limits and this directory's data.",
   },
   about: {
     title: "About TGsearch — Open-source Telegram Directory",
@@ -177,7 +177,7 @@ const en: typeof zh = {
     title: "{title} (@{username}) — Telegram {kind}",
   },
   summary: {
-    lead: "{title} (@{username}) is a Telegram {category} {kind} listed on TGbox",
+    lead: "{title} (@{username}) is a Telegram {category} {kind} listed on TGsearch",
     members: "with {n} {noun}",
     created: "created on {date}",
     activity: "activity rated {tier}",
@@ -186,7 +186,7 @@ const en: typeof zh = {
     terminator: ".",
   },
   keywords: {
-    base: ["telegram", "telegram directory", "telegram directory websites", "TGbox"],
+    base: ["telegram", "telegram directory", "telegram directory websites", "TGsearch"],
     kind: {
       channel: [
         "telegram channels list",
