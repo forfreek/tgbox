@@ -103,14 +103,14 @@ const zhTarget = (t: PromotionTarget) =>
 
 export const zh = {
   welcome:
-    "欢迎使用 TGbox收录机器人！\n\n直接发送频道、群组或机器人的链接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收录。",
+    "欢迎使用 TGsearch 收录机器人！\n\n直接发送频道、群组或机器人的链接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收录。",
   submitButton: "提交收录",
   promoteButton: "购买推广",
   submissionsClosed: "收录暂时关闭，请稍后再来。",
   support: (username: string | null) =>
     username ? `客服联系方式：@${username}` : "暂未设置客服，请稍后再试。",
   help: "收录标准：公开的频道、群组或机器人，内容合法、持续更新、无刷粉。\n\n提交方式：发送 t.me 链接或 @用户名，按提示选择分类和标签。\n审核结果会通过私信通知。\n\n/lang 切换语言，/support 联系客服。",
-  menuButtonApp: "打开 TGbox",
+  menuButtonApp: "打开 TGsearch",
   menuButtonAdmin: "管理后台",
   openApp: "📱 在 App 中打开",
   openAppMy: "📱 查看我的提交",

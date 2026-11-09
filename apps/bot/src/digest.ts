@@ -51,7 +51,7 @@ export async function runDailyDigest(app: App, scheduledTime: number) {
     ...(growing.length ? [["📈 本周涨粉榜", ...growing.map(line)].join("\n")] : []),
   ];
   const text = [
-    "📊 TGbox 日报",
+    "📊 TGsearch 日报",
     ...sections,
     `<a href="${escapeHtml(`${site}/rank/`)}">查看完整榜单 »</a>`,
   ].join("\n\n");

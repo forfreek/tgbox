@@ -61,7 +61,7 @@ describe("/lang", () => {
     await h.callback(chinese, "lang:en");
     expect(h.lastText()).toContain("Language set to English");
     await h.message(chinese, "/start");
-    expect(h.lastText()).toContain("Welcome to the TGbox");
+    expect(h.lastText()).toContain("Welcome to the TGsearch");
   });
 
   test("picking a language pushes a matching command menu for that chat only", async () => {

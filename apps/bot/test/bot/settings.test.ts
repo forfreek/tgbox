@@ -60,7 +60,7 @@ describe("settings-driven bot", () => {
     await h.message(owner, "/start");
     expect(h.lastText()).toBe("自定义欢迎语");
     await h.message({ ...owner, language_code: "en" }, "/start");
-    expect(h.lastText()).toContain("Welcome to the TGbox");
+    expect(h.lastText()).toContain("Welcome to the TGsearch");
     await h.message(owner, "/support");
     expect(h.lastText()).toContain("@help_desk");
   });

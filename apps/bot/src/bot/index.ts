@@ -27,7 +27,7 @@ export function createBot(
     botInfo: {
       id: Number(env.BOT_TOKEN.split(":")[0]),
       is_bot: true,
-      first_name: "TGbox",
+      first_name: "TGsearch",
       username: env.BOT_USERNAME ?? "tgboxccbot",
       can_join_groups: true,
       can_read_all_group_messages: false,

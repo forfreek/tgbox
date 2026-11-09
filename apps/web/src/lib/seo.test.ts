@@ -132,7 +132,7 @@ describe("listing descriptions", () => {
 describe("entrySummary", () => {
   test("reads as one sentence with every known fact", () => {
     expect(entrySummary("zh", facts)).toBe(
-      "每日科技（@techdaily）是 TGbox 收录的 Telegram 科技频道，目前有 5,000 名订阅者，创建于 2025年8月2日，活跃度为非常活跃，内容以中文为主。",
+      "每日科技（@techdaily）是 TGsearch 收录的 Telegram 科技频道，目前有 5,000 名订阅者，创建于 2025年8月2日，活跃度为非常活跃，内容以中文为主。",
     );
   });
 
@@ -147,7 +147,7 @@ describe("entrySummary", () => {
       activity: null,
       language: null,
     });
-    expect(summary).toBe("GPT Bot (@gptbot) is a Telegram AI bot listed on TGbox.");
+    expect(summary).toBe("GPT Bot (@gptbot) is a Telegram AI bot listed on TGsearch.");
   });
 
   test("never leaves an unfilled placeholder behind", () => {

@@ -104,14 +104,14 @@ const zhTarget = (t: PromotionTarget) =>
 
 export const zhHant = {
   welcome:
-    "歡迎使用 TGbox收錄機器人！\n\n直接發送頻道、群組或機器人的鏈接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收錄。",
+    "歡迎使用 TGsearch 收錄機器人！\n\n直接發送頻道、群組或機器人的鏈接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收錄。",
   submitButton: "提交收錄",
   promoteButton: "購買推廣",
   submissionsClosed: "收錄暫時關閉，請稍後再來。",
   support: (username: string | null) =>
     username ? `客服聯繫方式：@${username}` : "暫未設置客服，請稍後再試。",
   help: "收錄標準：公開的頻道、群組或機器人，內容合法、持續更新、無刷粉。\n\n提交方式：發送 t.me 鏈接或 @用戶名，按提示選擇分類和標籤。\n審核結果會通過私信通知。\n\n/lang 切換語言，/support 聯繫客服。",
-  menuButtonApp: "打開 TGbox",
+  menuButtonApp: "打開 TGsearch",
   menuButtonAdmin: "管理後臺",
   openApp: "📱 在 App 中打開",
   openAppMy: "📱 查看我的提交",

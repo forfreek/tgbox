@@ -15,7 +15,7 @@ export const en: Dictionary = {
     source: "Source code",
   },
   bot: {
-    welcome: "Welcome to the TGbox submission bot.",
+    welcome: "Welcome to the TGsearch submission bot.",
     submitButton: "Submit",
     help: "Send a link to a channel, group or bot to submit it.",
   },

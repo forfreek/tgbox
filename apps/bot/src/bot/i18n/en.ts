@@ -43,7 +43,7 @@ const enTarget = (t: PromotionTarget) =>
 
 export const en: typeof zh = {
   welcome:
-    "Welcome to the TGbox submission bot!\n\nSend a link to a channel, group or bot (https://t.me/xxx, t.me/xxx or @xxx) to submit it.",
+    "Welcome to the TGsearch submission bot!\n\nSend a link to a channel, group or bot (https://t.me/xxx, t.me/xxx or @xxx) to submit it.",
   submitButton: "Submit",
   promoteButton: "Buy promotion",
   submissionsClosed: "Submissions are closed for now. Please come back later.",
@@ -52,7 +52,7 @@ export const en: typeof zh = {
       ? `Contact support: @${username}`
       : "Support isn't set up yet. Please try again later.",
   help: "Listing criteria: public channels, groups or bots with legal content, regular updates and no fake subscribers.\n\nHow to submit: send a t.me link or @username, then pick a category and tags.\nYou'll get a private message with the review result.\n\n/lang switches the language, /support reaches the team.",
-  menuButtonApp: "Open TGbox",
+  menuButtonApp: "Open TGsearch",
   menuButtonAdmin: "Admin panel",
   openApp: "📱 Open in the app",
   openAppMy: "📱 View my submissions",

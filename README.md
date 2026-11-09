@@ -1,10 +1,10 @@
 <div align="center">
 
 <a href="https://tgbox.cc">
-  <img src="apps/web/public/favicon.svg" width="88" height="88" alt="TGbox logo">
+  <img src="apps/web/public/favicon.svg" width="88" height="88" alt="TGsearch logo">
 </a>
 
-# TGbox
+# TGsearch
 
 **An open-source Telegram channel, group & bot directory — with a submission bot, admin panel and zero-cost hosting on Cloudflare's free plan.**
 
@@ -18,13 +18,13 @@
 [![grammY](https://img.shields.io/badge/bot-grammY-009DC4?logo=telegram&logoColor=white)](https://grammy.dev)
 [![GitHub stars](https://img.shields.io/github/stars/TGrpg/tgbox?style=social)](https://github.com/TGrpg/tgbox/stargazers)
 
-<img src=".github/assets/home.jpg" alt="TGbox home page: search, featured cards and trending Telegram channels, groups and bots" width="100%">
+<img src=".github/assets/home.jpg" alt="TGsearch home page: search, featured cards and trending Telegram channels, groups and bots" width="100%">
 
 </div>
 
-## Why TGbox
+## Why TGsearch
 
-Most Telegram directories are either a static list that goes stale, or a server-rendered site that gets expensive once crawlers show up. TGbox takes a different route:
+Most Telegram directories are either a static list that goes stale, or a server-rendered site that gets expensive once crawlers show up. TGsearch takes a different route:
 
 - **Every page is static.** Directory pages are pre-built HTML served as Cloudflare static assets, so visitors and search-engine crawlers never consume Worker requests.
 - **Every entry stays fresh.** A cron worker re-reads public `t.me` pages, tracks member counts, recent posts and activity, and hides channels that were deleted or banned.
@@ -64,7 +64,7 @@ Most Telegram directories are either a static list that goes stale, or a server-
 
 | Dark mode | Mobile |
 |---|---|
-| <img src=".github/assets/home-dark.jpg" alt="TGbox dark mode"> | <img src=".github/assets/mobile.jpg" alt="TGbox on mobile" width="320"> |
+| <img src=".github/assets/home-dark.jpg" alt="TGsearch dark mode"> | <img src=".github/assets/mobile.jpg" alt="TGsearch on mobile" width="320"> |
 
 ## Architecture
 
@@ -161,7 +161,7 @@ Checks: `pnpm check` (Biome + typecheck), `pnpm test`, `pnpm --filter @tgbox/web
 
 ### Free-plan budget
 
-| Resource | Free limit | How TGbox stays inside it |
+| Resource | Free limit | How TGsearch stays inside it |
 |---|---|---|
 | Worker requests | 100k / day | Public pages are static assets and never invoke a Worker |
 | Worker CPU | 10 ms / invocation | Regex-based `t.me` parsing (~2 ms), small refresh batches |
@@ -185,6 +185,6 @@ Issues and pull requests are welcome. Please run `pnpm check` and `pnpm test` be
 
 ## License
 
-[AGPL-3.0](LICENSE). You can use, modify and self-host TGbox freely; if you run a modified version as a public service, you must publish your source code under the same license. Telegram is a trademark of Telegram FZ-LLC; TGbox is an independent project and is not affiliated with Telegram.
+[AGPL-3.0](LICENSE). You can use, modify and self-host TGsearch freely; if you run a modified version as a public service, you must publish your source code under the same license. Telegram is a trademark of Telegram FZ-LLC; TGsearch is an independent project and is not affiliated with Telegram.
 
-If TGbox is useful to you, a ⭐ helps other people find it.
+If TGsearch is useful to you, a ⭐ helps other people find it.
