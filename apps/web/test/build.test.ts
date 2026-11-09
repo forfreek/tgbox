@@ -445,6 +445,17 @@ describe("site build from snapshot data", () => {
       expect(footer, route).toContain(licence);
       expect(footer, route).toContain(`© ${new Date().getUTCFullYear()} TGsearch`);
     }
+    for (const [route, sentence] of [
+      ["", "如发现违规内容或需要删除条目，请通过"],
+      ["zh-hant/", "如發現違規內容或需要刪除條目，請通過"],
+      ["en/", "contact us through the"],
+    ] as const) {
+      const footer = html(route).split("<footer")[1]?.split("</footer>")[0] ?? "";
+      expect(footer, route).toContain(sentence);
+      expect(footer, route).toContain('href="mailto:Contact@tgsearch.app"');
+      expect(footer, route).toContain(">Contact@tgsearch.app</a>");
+      expect(footer, route).toContain('href="https://t.me/tgboxccbot"');
+    }
   });
 
   test("every page but the 404 offers its other-locale copies and remembers the reader's choice", () => {

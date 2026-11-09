@@ -74,7 +74,11 @@ const zh = {
     enroll: "提交收录说明",
     bot: "收录机器人",
     disclaimer:
-      "本站仅收录公开的 Telegram 频道、群组和机器人，资料来自 Telegram 公开页面并定期自动更新。条目内容由其所有者负责，与本站无关；标有“推广”的条目为付费或合作展示。如发现违规内容或需要删除条目，请通过收录机器人联系我们。",
+      "本站仅收录公开的 Telegram 频道、群组和机器人，资料来自 Telegram 公开页面并定期自动更新。条目内容由其所有者负责，与本站无关；标有“推广”的条目为付费或合作展示。",
+    reportBefore: "如发现违规内容或需要删除条目，请通过",
+    reportBot: "收录机器人",
+    reportOr: "或",
+    reportAfter: "联系我们。",
     rights: "保留所有权利。",
     openSource: "开源于 GitHub",
     licensed: "以 {licence} 许可证发布",
@@ -258,7 +262,12 @@ const en: typeof zh = {
     enroll: "Submission guide",
     bot: "Submission bot",
     disclaimer:
-      "We only list public Telegram channels, groups and bots. Data comes from public Telegram pages and is refreshed automatically. Listed owners are responsible for their content; entries marked “Promoted” are paid or partner placements. To report abuse or request removal, contact us through the submission bot.",
+      "We only list public Telegram channels, groups and bots. Data comes from public Telegram pages and is refreshed automatically. Listed owners are responsible for their content; entries marked “Promoted” are paid or partner placements.",
+    reportBefore:
+      " To report abusive content or request removal of an entry, contact us through the ",
+    reportBot: "submission bot",
+    reportOr: " or ",
+    reportAfter: ".",
     rights: "All rights reserved.",
     openSource: "Open source on GitHub",
     licensed: "Released under {licence}",
