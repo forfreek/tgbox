@@ -1,6 +1,6 @@
 {
-  "name": "TGbox",
-  "short_name": "TGbox",
+  "name": "TGsearch",
+  "short_name": "TGsearch",
   "description": "发现优质的 Telegram 频道、群组和机器人",
   "lang": "zh-CN",
   "start_url": "/",

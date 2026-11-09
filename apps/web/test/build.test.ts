@@ -443,7 +443,7 @@ describe("site build from snapshot data", () => {
         new RegExp(`<a[^>]*href="${repoUrl}"[^>]*rel="noopener"[^>]*>[\\s\\S]*?${label}`),
       );
       expect(footer, route).toContain(licence);
-      expect(footer, route).toContain(`© ${new Date().getUTCFullYear()} TGbox`);
+      expect(footer, route).toContain(`© ${new Date().getUTCFullYear()} TGsearch`);
     }
   });
 
@@ -862,7 +862,7 @@ describe("site build from snapshot data", () => {
       // Header nav and mobile tab bar link the page.
       expect(html(prefix)).toContain(`href="/${prefix}rank/"`);
     }
-    expect(html("rank")).toContain("<title>电报频道排名 · Telegram 群组与机器人排行榜 | TGbox<");
+    expect(html("rank")).toContain("<title>电报频道排名 · Telegram 群组与机器人排行榜 | TGsearch<");
     expect(html("")).toMatch(/data-home-rankings[^>]*>|href="\/rank\/"[^>]*data-home-rankings/);
     const sitemap = readFileSync(path.join(client, "sitemap-pages.xml"), "utf8");
     expect(sitemap).toContain(`<loc>${siteUrl}/rank/</loc>`);
@@ -1101,7 +1101,7 @@ describe("site build from snapshot data", () => {
       datePublished: "2026-09-15T00:00:00.000Z",
       dateModified: "2026-09-17T00:00:00.000Z",
       inLanguage: "en",
-      author: { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "TGbox" },
+      author: { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "TGsearch" },
       publisher: { "@type": "Organization", "@id": `${siteUrl}/#organization` },
     });
     expect(Array.isArray(faq?.mainEntity) && faq.mainEntity.length).toBeGreaterThanOrEqual(2);

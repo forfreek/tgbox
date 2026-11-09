@@ -1,6 +1,6 @@
 export const zh = {
   site: {
-    title: "TGbox",
+    title: "TGsearch",
     tagline: "发现优质的 Telegram 频道、群组和机器人",
     home: "首页",
     channels: "频道",
