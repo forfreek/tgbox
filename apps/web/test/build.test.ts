@@ -1048,7 +1048,7 @@ describe("site build from snapshot data", () => {
       expect(page, route).toContain(tocLabel);
       // Published and updated dates are machine-readable and differ, as the frontmatter says.
       expect(page, route).toContain('<time datetime="2026-09-15T00:00:00.000Z">');
-      expect(page, route).toContain('<time datetime="2026-09-17T00:00:00.000Z">');
+      expect(page, route).toContain('<time datetime="2026-11-09T00:00:00.000Z">');
       // Every markdown h2 has an id and a matching entry in the table of contents.
       const ids = [...page.matchAll(/<h2 id="([^"]+)"/g)].map((match) => match[1] ?? "");
       expect(ids.length, route).toBeGreaterThanOrEqual(5);
@@ -1099,7 +1099,7 @@ describe("site build from snapshot data", () => {
         "@id": `${siteUrl}/en/guides/find-telegram-channels/`,
       },
       datePublished: "2026-09-15T00:00:00.000Z",
-      dateModified: "2026-09-17T00:00:00.000Z",
+      dateModified: "2026-11-09T00:00:00.000Z",
       inLanguage: "en",
       author: { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "TGsearch" },
       publisher: { "@type": "Organization", "@id": `${siteUrl}/#organization` },
@@ -1146,12 +1146,11 @@ describe("site build from snapshot data", () => {
     const sitemap = readFileSync(path.join(client, "sitemap-guides.xml"), "utf8");
     for (const prefix of ["", "en/"]) {
       expect(sitemap).toContain(`<loc>${siteUrl}/${prefix}guides/</loc>`);
-      // "channels-groups-bots" is the only guide revised on the 16th.
       expect(sitemap).toContain(
-        `<loc>${siteUrl}/${prefix}guides/channels-groups-bots/</loc><lastmod>2026-09-16T00:00:00.000Z</lastmod>`,
+        `<loc>${siteUrl}/${prefix}guides/channels-groups-bots/</loc><lastmod>2026-11-09T00:00:00.000Z</lastmod>`,
       );
       expect(sitemap).toContain(
-        `<loc>${siteUrl}/${prefix}guides/find-telegram-channels/</loc><lastmod>2026-09-17T00:00:00.000Z</lastmod>`,
+        `<loc>${siteUrl}/${prefix}guides/find-telegram-channels/</loc><lastmod>2026-11-09T00:00:00.000Z</lastmod>`,
       );
     }
     expect(sitemap).toContain(
