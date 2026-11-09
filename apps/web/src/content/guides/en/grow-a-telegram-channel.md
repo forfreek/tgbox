@@ -20,7 +20,7 @@ faq:
     a: "Message @tgboxccbot privately on Telegram and send the channel link (t.me/xxx or @xxx). It fetches the public profile automatically, the entry goes live after approval, and you get the result by private message. Listing is free."
 ---
 
-Telegram has no recommendation feed, no "suggested for you", and no reshare-to-a-timeline. Whether a new channel gets found comes down to a few very concrete things: whether people can search for you, whether they can read you before joining, and whether anything elsewhere points at you. Here is the work, split into what you set once and what you keep doing.
+Telegram has no recommendation feed, no “suggested for you”, and it will not reshare a post onto a timeline. Whether a new channel gets found comes down to a few very concrete things: whether people can search for you, whether they can read you before joining, and whether anything elsewhere points at you. Here is the work, split into what you set once and what you keep doing.
 
 ## Get the one-time settings right
 
@@ -56,7 +56,7 @@ Once the username is set, open `t.me/s/<your-username>` in a browser. That page 
 
 A channel owner can **add the first 200 subscribers directly**; after that people have to join on their own. Spend that allowance on people who will genuinely read — colleagues, friends, the active members of a community you already run. They generate the first views, and views are what everything downstream is built on.
 
-Don't waste the allowance on padding the number. Two hundred people who don't read make your view rate look bad from day one.
+Don't use the allowance just to pad the number. Two hundred people who don't read make your view rate look poor from day one.
 
 ### Make posts forwardable
 
@@ -84,7 +84,7 @@ Once listed, your entry appears in its [category](/en/channel/), and if it is gr
 
 ### Keep a rhythm
 
-This sounds banal, and it is the one signal every discovery channel uses: **a dormant channel gets unsubscribed, deprioritised by directories and buried in search.** A small channel that reliably posts three times a week outperforms one that posts a hundred times and then disappears for two months.
+This sounds ordinary, yet it is the signal every discovery channel watches: **a dormant channel gets unsubscribed, deprioritised by directories and buried in search.** A small channel that reliably posts three times a week outperforms one that posts a hundred times and then disappears for two months.
 
 ## What not to do
 
@@ -92,7 +92,7 @@ This sounds banal, and it is the one signal every discovery channel uses: **a do
 
 Bought accounts don't read. The result is that your **views-to-subscribers ratio** stays permanently low — and that ratio is the first thing anyone who knows the platform checks, whether they're a reader, an advertiser or a directory. Worse, Telegram clears those accounts out over time, leaving a spike-then-slow-decay step in your member chart that is recognisable at a glance.
 
-You are paying money for a permanent, publicly visible blemish.
+The numbers you pay for leave a blemish that stays public, where anyone can see it.
 
 ### Mass invites and cold DMs
 

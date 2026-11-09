@@ -8,7 +8,7 @@ keywords:
   - what is a telegram bot
   - channel or group
 publishedAt: 2026-09-12
-updatedAt: 2026-09-16
+updatedAt: 2026-11-09
 locale: en
 slug: "channels-groups-bots"
 faq:
@@ -20,7 +20,7 @@ faq:
     a: "No. Bots cannot initiate a conversation; you have to start one (press Start) or add the bot to a group. An unsolicited direct message from something calling itself a bot is almost always an ordinary account in disguise."
 ---
 
-Telegram has three containers whose names sound similar and whose purposes are not: channels, groups and bots. Picking the wrong one hurts — running a discussion in a channel, or announcements in a group, tends to force a rebuild a few months later. Here is the whole distinction in one place.
+Telegram has three containers whose names sound similar and whose purposes are not: channels, groups and bots. Picking the wrong one is hard to undo: running a discussion in a channel, or announcements in a group, tends to mean a rebuild a few months later. Here is the whole distinction in one place.
 
 ## The one-line version
 
@@ -57,7 +57,7 @@ A **broadcast group (gigagroup)** is a supergroup variant with **the member ceil
 
 ### How a basic group becomes a supergroup
 
-This is the most-asked question, and the answer is: **you usually don't do anything**.
+This is the most-asked question. The answer is: **you usually don't have to do it yourself**.
 
 Telegram's client specification is explicit — clients should migrate a basic group to a supergroup automatically as soon as an admin tries to perform an action only supergroups support. Setting a public link or crossing 200 members both trigger it.
 
@@ -95,6 +95,6 @@ Some rules of thumb:
 
 ## What this means when you're looking for something
 
-As a reader, keeping the three straight saves a lot of time. If you want to passively receive information on a topic, you want a **channel**. If you want your questions answered, you want a **group**. If you want something to convert a currency or fetch a file for you, you want a **bot**.
+As a reader, getting the three straight first saves a lot of time. If you want to passively receive a topic each day, you want a **channel**. If you want to ask a question and have someone answer, you want a **group**. If you want a currency converted or a file fetched, you want a **bot**.
 
 This directory lists the three separately — browse [channels](/en/channel/), [groups](/en/group/) and [bots](/en/bot/). To learn how to judge whether a channel is worth subscribing to, read [how to find good Telegram channels](/en/guides/find-telegram-channels/).
