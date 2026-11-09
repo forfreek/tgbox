@@ -13,3 +13,4 @@ test-results/
 .fallow/
 .data/
 *.tmp.mjs
+scripts/import-awesome/out/
