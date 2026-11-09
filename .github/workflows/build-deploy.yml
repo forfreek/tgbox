@@ -83,21 +83,58 @@ jobs:
 
       # A build that baked the wrong origin, or lost the Pagefind copy, deploys perfectly cleanly
       # and only surfaces weeks later as localhost canonicals in Search Console or as dead search.
+      # GitHub runners are datacenter IPs, and the zone's managed challenge answers them with 403
+      # before the site does. That response has no canonical tag; it is not a wrong SITE_URL.
       - name: Smoke-check the deployed site
         if: steps.dirty.outputs.build == 'true'
         run: |
           base="${SITE_URL%/}"
-          for attempt in 1 2 3; do
-            canonical=$(curl -fsS "$base/" \
-              | grep -o '<link rel="canonical" href="[^"]*"' | head -1 | cut -d'"' -f4) && break
-            sleep 5
-          done
-          echo "canonical: $canonical"
-          if [ "$canonical" != "$base/" ]; then
-            echo "::error::home canonical is '$canonical', expected '$base/' — SITE_URL was wrong at build time"
+          home="apps/web/dist/client/index.html"
+          pagefind="apps/web/dist/client/pagefind/pagefind.js"
+          if [ ! -f "$home" ]; then
+            echo "::error::$home is missing"
             exit 1
           fi
-          if ! curl -fsS -o /dev/null "$base/pagefind/pagefind.js"; then
+          canonical=$(grep -o -m 1 '<link rel="canonical" href="[^"]*"' "$home" | cut -d'"' -f4 || true)
+          echo "built canonical: $canonical"
+          if [ "$canonical" != "$base/" ]; then
+            echo "::error::built home canonical is '$canonical', expected '$base/' — SITE_URL was wrong at build time"
+            exit 1
+          fi
+          if [ ! -f "$pagefind" ]; then
+            echo "::error::$pagefind is missing — site search was not built"
+            exit 1
+          fi
+
+          body=$(mktemp)
+          headers=$(mktemp)
+          live=""
+          code=""
+          for attempt in 1 2 3; do
+            code=$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' --max-time 25 \
+              -A 'Mozilla/5.0 (compatible; tgbox-deploy-smoke/1.0)' \
+              "$base/" || true)
+            if grep -qi '^cf-mitigated:[[:space:]]*challenge' "$headers" || grep -q '<title>Just a moment' "$body"; then
+              echo "::warning::Cloudflare challenged the runner (HTTP ${code:-000}); live check skipped. Built files already match $base/."
+              exit 0
+            fi
+            live=$(grep -o -m 1 '<link rel="canonical" href="[^"]*"' "$body" | cut -d'"' -f4 || true)
+            if [ "$code" = "200" ] && [ -n "$live" ]; then
+              break
+            fi
+            echo "live home HTTP ${code:-000}; retrying"
+            sleep 5
+          done
+          echo "live canonical: $live (HTTP ${code:-000})"
+          if [ "$code" != "200" ]; then
+            echo "::error::live home returned HTTP ${code:-000}, so the canonical could not be read"
+            exit 1
+          fi
+          if [ "$live" != "$base/" ]; then
+            echo "::error::live home canonical is '$live', expected '$base/' — SITE_URL was wrong at build time"
+            exit 1
+          fi
+          if ! curl -fsS -o /dev/null --max-time 25 "$base/pagefind/pagefind.js"; then
             echo "::error::$base/pagefind/pagefind.js is missing — site search is dead"
             exit 1
           fi
