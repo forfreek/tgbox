@@ -90,7 +90,7 @@ describe("page titles", () => {
       /Telegram Channels List/,
     );
     expect(kindSeo("en", "group", { count: 1, examples: [] }).title).toMatch(/Telegram Groups/);
-    expect(homeSeo("en", { total: 3 }).title).toMatch(/Telegram Channels, Groups & Bots/);
+    expect(homeSeo("en", { total: 3 }).title).toMatch(/Telegram Resource Directory/);
   });
 });
 

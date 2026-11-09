@@ -1,7 +1,7 @@
 {
   "name": "TGsearch",
   "short_name": "TGsearch",
-  "description": "发现优质的 Telegram 频道、群组和机器人",
+  "description": "Telegram 综合资源导航",
   "lang": "zh-CN",
   "start_url": "/",
   "scope": "/",

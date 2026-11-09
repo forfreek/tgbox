@@ -11,9 +11,9 @@ const zh = {
   /** Entry names injected into listing descriptions so no two listings read alike. */
   examples: { wrap: "（如{list}）", separator: "、" },
   home: {
-    title: "Telegram 频道群组机器人大全 · 电报频道搜索",
+    title: "Telegram 综合资源导航",
     description:
-      "TGbox 已收录 {total} 个 Telegram 频道、群组和机器人，可按分类、标签搜索电报频道，或看涨粉排名，含精确成员数、活跃度和最近消息，数据自动更新。",
+      "TGsearch 是 Telegram 综合资源导航，已收录 {total} 个频道、群组和机器人，可按分类、标签搜索，或查看涨粉排名，含成员数、活跃度和最近消息。",
   },
   kind: {
     channel: {
@@ -122,9 +122,9 @@ const en: typeof zh = {
   pageSuffix: " · Page {n}",
   examples: { wrap: " such as {list}", separator: ", " },
   home: {
-    title: "Telegram Channels, Groups & Bots Directory",
+    title: "Telegram Resource Directory",
     description:
-      "Browse {total} Telegram channels, groups and bots by category, tag or ranking. Exact member counts, activity levels and recent posts, refreshed automatically.",
+      "TGsearch is a Telegram resource directory of {total} channels, groups and bots. Browse by category, tag or growth ranking, with member counts, activity and recent posts.",
   },
   kind: {
     channel: {
