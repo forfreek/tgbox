@@ -17,7 +17,7 @@ const zh = {
   members: { channel: "订阅", group: "成员", bot: "月活" } satisfies Record<EntryKind, string>,
   outside: {
     title: "请在 Telegram 中打开",
-    lead: "这是 TGbox 的 Telegram 小程序。从收录机器人的菜单打开，才能提交条目、查看进度和购买推广。",
+    lead: "这是 TGsearch 的 Telegram 小程序。从收录机器人的菜单打开，才能提交条目、查看进度和购买推广。",
     openBot: "打开收录机器人",
     browse: "先浏览目录",
   },
@@ -227,7 +227,7 @@ const en: typeof zh = {
   members: { channel: "subscribers", group: "members", bot: "monthly users" },
   outside: {
     title: "Open this in Telegram",
-    lead: "This is the TGbox mini app. Open it from the submission bot's menu to submit entries, follow their review and buy promotions.",
+    lead: "This is the TGsearch mini app. Open it from the submission bot's menu to submit entries, follow their review and buy promotions.",
     openBot: "Open the bot",
     browse: "Browse the directory",
   },
