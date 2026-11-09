@@ -4,12 +4,8 @@ import {
   type AwesomeParse,
   type AwesomePlacement,
   type AwesomeSkipped,
-  CATEGORY_MAX_TOKENS,
-  CATEGORY_MODEL,
-  CATEGORY_SYSTEM,
   type CategoryClassifier,
-  categoryClassifierPrompt,
-  categorySlugFromModel,
+  categories,
   entryKinds,
   parseAwesomeReadme,
   placeAwesomeCandidate,
@@ -23,7 +19,8 @@ import { fetchEntrySnapshot } from "./snapshot.ts";
  *
  * The keyword pass is instant and stays in-process. Everything it cannot finish — no kind in the
  * heading, or a blurb with nothing the rules will stand behind — is the slow part: one t.me
- * profile per username, then the same model `/submit` uses. A Worker dies on that (subrequest
+ * profile per username, then `@cf/cloudflare/clef-omni`, which scores the allowed categories
+ * instead of writing a slug. A Worker dies on that (subrequest
  * cap, CPU). `apps/import` runs this function inside a Cloudflare Container; `scripts/import-awesome.ts`
  * runs it locally with `--slow`. Either way the report is a suggestion. Nothing is written to D1,
  * and a category the rules and the model both refuse stays blank for a person.
@@ -148,19 +145,38 @@ function partition(rows: readonly AwesomeImportRow[], parsed: AwesomeParse): Awe
 }
 
 /**
- * Workers AI over HTTP, for the container (it has no `AI` binding). Same prompt as the binding.
- * Any failure is "no suggestion".
+ * `@cf/cloudflare/clef-omni` scores every allowed category instead of writing a slug. A forced
+ * guess is worse than a blank, so a choice sticks only when it leads the runner-up, including
+ * "none", by a clear margin. Catch-all buckets (资源分享, 交流社群, 其他) are not offered.
  */
-export function workersAiCategoryClassifier(input: {
+const CLEF_OMNI_MODEL = "@cf/cloudflare/clef-omni";
+const MIN_CLEF_PROBABILITY = 0.5;
+const MIN_CLEF_MARGIN = 0.15;
+const CATCH_ALL: Partial<Record<EntryKind, readonly string[]>> = {
+  channel: ["resources"],
+  group: ["chat", "other"],
+};
+
+export function clefOmniCategoryClassifier(input: {
   accountId: string;
   apiToken: string;
   fetch?: Fetch;
 }): CategoryClassifier {
   const call = input.fetch ?? fetch;
   return async (request) => {
+    const skip = new Set(CATCH_ALL[request.kind] ?? []);
+    const criteria: Record<string, string> = {};
+    for (const candidate of request.candidates) {
+      if (skip.has(candidate.slug)) continue;
+      const seed = categories.find(
+        (category) => category.kind === request.kind && category.slug === candidate.slug,
+      );
+      criteria[candidate.slug] = seed ? `${seed.nameEn} (${seed.nameZh})` : candidate.nameZh;
+    }
+    criteria.none = "None of these fit, or the text is too vague to choose.";
     try {
       const res = await call(
-        `https://api.cloudflare.com/client/v4/accounts/${input.accountId}/ai/run/${CATEGORY_MODEL}`,
+        `https://api.cloudflare.com/client/v4/accounts/${input.accountId}/ai/run/${CLEF_OMNI_MODEL}`,
         {
           method: "POST",
           headers: {
@@ -168,22 +184,72 @@ export function workersAiCategoryClassifier(input: {
             "content-type": "application/json",
           },
           body: JSON.stringify({
-            messages: [
-              { role: "system", content: CATEGORY_SYSTEM },
-              { role: "user", content: categoryClassifierPrompt(request) },
-            ],
-            max_tokens: CATEGORY_MAX_TOKENS,
-            temperature: 0,
+            model: "clef-omni",
+            state: [
+              `Telegram ${request.kind}`,
+              `Title: ${request.title}`,
+              `Description: ${request.description.slice(0, 500)}`,
+            ].join("\n"),
+            questions: {
+              category: {
+                type: "choice",
+                instructions: `Pick the single best directory category for this Telegram ${request.kind}. Choose none when nothing fits.`,
+                criteria,
+              },
+            },
           }),
           signal: AbortSignal.timeout(20_000),
         },
       );
       if (!res.ok) return null;
-      return categorySlugFromModel(await res.json());
+      return acceptedClefChoice(await res.json());
     } catch {
       return null;
     }
   };
+}
+
+function acceptedClefChoice(payload: unknown): string | null {
+  const answer = clefAnswer(payload);
+  if (!answer || answer.choice === "none") return null;
+  const top = answer.probabilities[answer.choice];
+  if (top === undefined || top < MIN_CLEF_PROBABILITY) return null;
+  let runnerUp = 0;
+  for (const [slug, probability] of Object.entries(answer.probabilities)) {
+    if (slug !== answer.choice && probability > runnerUp) runnerUp = probability;
+  }
+  if (top - runnerUp < MIN_CLEF_MARGIN) return null;
+  return answer.choice;
+}
+
+function clefAnswer(
+  payload: unknown,
+): { choice: string; probabilities: Record<string, number> } | null {
+  const root = clefResult(payload);
+  if (typeof root !== "object" || root === null || !("answers" in root)) return null;
+  const { answers } = root;
+  if (typeof answers !== "object" || answers === null || !("category" in answers)) return null;
+  const category = answers.category;
+  if (typeof category !== "object" || category === null) return null;
+  if (!("choice" in category) || typeof category.choice !== "string") return null;
+  if (
+    !("probabilities" in category) ||
+    typeof category.probabilities !== "object" ||
+    category.probabilities === null
+  ) {
+    return null;
+  }
+  const probabilities: Record<string, number> = {};
+  for (const [slug, probability] of Object.entries(category.probabilities)) {
+    if (typeof probability === "number") probabilities[slug] = probability;
+  }
+  return { choice: category.choice, probabilities };
+}
+
+function clefResult(payload: unknown): unknown {
+  if (typeof payload !== "object" || payload === null || !("result" in payload)) return payload;
+  const { result } = payload;
+  return typeof result === "object" && result !== null ? result : payload;
 }
 
 function capped(classify: CategoryClassifier | undefined): CategoryClassifier | undefined {

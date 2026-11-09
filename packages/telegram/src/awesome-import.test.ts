@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { importAwesomeReadme } from "./awesome-import.ts";
+import { clefOmniCategoryClassifier, importAwesomeReadme } from "./awesome-import.ts";
 import { fixture } from "./fixtures.ts";
 
 const LIST = `
@@ -93,5 +93,43 @@ describe("importAwesomeReadme", () => {
       source: "ai",
       pace: "slow",
     });
+  });
+});
+
+describe("clefOmniCategoryClassifier", () => {
+  const candidates = [
+    { slug: "media", nameZh: "影音下载" },
+    { slug: "search", nameZh: "搜索" },
+  ];
+
+  function answering(answer: { choice: string; probabilities: Record<string, number> }) {
+    return async () =>
+      new Response(JSON.stringify({ result: { answers: { category: answer } } }), { status: 200 });
+  }
+
+  test("keeps a category that leads every other option, including none", async () => {
+    const classify = clefOmniCategoryClassifier({
+      accountId: "acct",
+      apiToken: "token",
+      fetch: answering({ choice: "media", probabilities: { media: 0.8, none: 0.1, search: 0.05 } }),
+    });
+    expect(
+      await classify({ kind: "bot", title: "Downloader", description: "YouTube", candidates }),
+    ).toBe("media");
+  });
+
+  test("returns null when the model abstains or the lead is too small", async () => {
+    const abstain = clefOmniCategoryClassifier({
+      accountId: "acct",
+      apiToken: "token",
+      fetch: answering({ choice: "none", probabilities: { none: 0.6, media: 0.2 } }),
+    });
+    const close = clefOmniCategoryClassifier({
+      accountId: "acct",
+      apiToken: "token",
+      fetch: answering({ choice: "media", probabilities: { media: 0.42, none: 0.4 } }),
+    });
+    expect(await abstain({ kind: "bot", title: "x", description: "y", candidates })).toBeNull();
+    expect(await close({ kind: "bot", title: "x", description: "y", candidates })).toBeNull();
   });
 });

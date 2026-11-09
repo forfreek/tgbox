@@ -131,7 +131,7 @@ pnpm --filter @tgbox/admin dev         # admin    → http://localhost:8789 (aut
 
 An awesome-list README such as [ebertti/awesome-telegram](https://github.com/ebertti/awesome-telegram) is headings and blurbs. `Bots`, `Groups` and `Channels` say the kind, and a nested heading inherits it. They are not categories, and the list has no tags. Bullets that do not link to a public username (libraries, themes, websites) are skipped.
 
-Category and tags come from the same keyword rules as `/submit`. A blurb the rules will not stand behind stays blank. `--slow` then fetches each of those t.me profiles and, when `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` are set, asks Workers AI the same question the bot asks. The report is a suggestion. Nothing is written to D1.
+Category and tags come from the same keyword rules as `/submit`. A blurb the rules will not stand behind stays blank. `--slow` then fetches each of those t.me profiles and, when `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` are set, asks `@cf/cloudflare/clef-omni`. That model scores every allowed category and the row stays blank unless one option leads clearly. The report is a suggestion. Nothing is written to D1.
 
 ```bash
 node scripts/import-awesome.ts --url https://github.com/ebertti/awesome-telegram

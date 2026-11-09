@@ -6,13 +6,13 @@
 //
 // Without --slow, only the keyword pass runs and unsure rows are left in `review`.
 // --slow fetches each of those t.me profiles (and, when CLOUDFLARE_ACCOUNT_ID and
-// CLOUDFLARE_API_TOKEN are set, asks Workers AI). That is the job apps/import runs
+// CLOUDFLARE_API_TOKEN are set, asks @cf/cloudflare/clef-omni). That is the job apps/import runs
 // in a container, because a Worker cannot spend a subrequest per list entry.
 import { readFile, writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
 import {
+  clefOmniCategoryClassifier,
   importAwesomeReadme,
-  workersAiCategoryClassifier,
 } from "../packages/telegram/src/awesome-import.ts";
 
 const { values } = parseArgs({
@@ -56,7 +56,7 @@ const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
 const apiToken = process.env.CLOUDFLARE_API_TOKEN;
 const classify =
   values.slow && accountId && apiToken
-    ? workersAiCategoryClassifier({ accountId, apiToken })
+    ? clefOmniCategoryClassifier({ accountId, apiToken })
     : undefined;
 
 const report = await importAwesomeReadme(markdown, {

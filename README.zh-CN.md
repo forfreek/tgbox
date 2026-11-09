@@ -117,7 +117,7 @@ pnpm --filter @tgbox/admin dev         # 后台 → http://localhost:8789（本�
 
 [ebertti/awesome-telegram](https://github.com/ebertti/awesome-telegram) 这种 README 只有标题和一句介绍。`Bots`、`Groups`、`Channels` 表示种类，子标题沿用上一级，它们不是本站的分类，列表里也没有标签。没有公开用户名的条目（库、主题、网站）直接跳过。
 
-分类和标签走投稿机器人同一套关键词规则。规则不敢下结论的留空。`--slow` 会去拉这些 t.me 简介；如果设置了 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN`，再用 Workers AI 问一遍，问法和机器人相同。输出只是建议，不会写入 D1。
+分类和标签走投稿机器人同一套关键词规则。规则不敢下结论的留空。`--slow` 会去拉这些 t.me 简介；如果设置了 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN`，再交给 `@cf/cloudflare/clef-omni`。它给每个可选分类打分，没有一项明显领先就继续留空。输出只是建议，不会写入 D1。
 
 ```bash
 node scripts/import-awesome.ts --url https://github.com/ebertti/awesome-telegram

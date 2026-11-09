@@ -6,9 +6,9 @@ export {
   type AwesomeImportRow,
   type AwesomeImportStatus,
   type AwesomeReport,
+  clefOmniCategoryClassifier,
   importAwesomeReadme,
   parseAwesomeImportRequest,
-  workersAiCategoryClassifier,
 } from "./awesome-import.ts";
 export { parseChannelPage, parseCreatedAt } from "./channel.ts";
 export { detectLanguage } from "./language.ts";

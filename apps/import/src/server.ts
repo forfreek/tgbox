@@ -1,8 +1,8 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import {
+  clefOmniCategoryClassifier,
   importAwesomeReadme,
   parseAwesomeImportRequest,
-  workersAiCategoryClassifier,
 } from "../../../packages/telegram/src/awesome-import.ts";
 
 const PORT = 8080;
@@ -43,7 +43,7 @@ async function handle(req: IncomingMessage, res: ServerResponse) {
     const report = await importAwesomeReadme(parsed.markdown, {
       fetch,
       fetchProfiles: parsed.fetchProfiles,
-      classify: parsed.ai ? workersAiCategoryClassifier(parsed.ai) : undefined,
+      classify: parsed.ai ? clefOmniCategoryClassifier(parsed.ai) : undefined,
     });
     res.writeHead(200, { "content-type": "application/json" });
     res.end(JSON.stringify(report));
