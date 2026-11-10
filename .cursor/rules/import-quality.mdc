@@ -1,0 +1,77 @@
+---
+description: Quality gates, ad rejection, and clef-omni nodes for bulk Telegram list imports
+alwaysApply: true
+---
+
+# Import quality pipeline
+
+Bulk imports (awesome lists, navigation READMEs such as AZeC4/TelegramGroup) must filter junk before D1 writes. Run this on local/CI scripts only; see `import-token-budget.mdc`.
+
+## Pipeline order
+
+1. **Parse** the source README/list. Strip `?start=` / referral payloads to a bare username. Skip rows with no public username (sites, images, tutorials). Deduplicate usernames inside the batch.
+2. **Skip existing** D1 usernames. Do not update titles, descriptions, categories, or media for rows already listed.
+3. **Fetch** `t.me` via plain HTTP (`fetchEntrySnapshot`). For channels and groups that need ad/junk checks, fetch preview posts (`/s/`), not `profileOnly`. Bots may stay profile-only unless the blurb alone is enough to reject.
+4. **Hard reject** (no model) → status `rejected`, never write D1.
+5. **Borderline only** → `@cf/cloudflare/clef-omni` quality choice (see below).
+6. **Taxonomy** → keyword/`suggestTaxonomy` first; clef-omni category only when the rules leave category blank. Catch-alls (资源分享 / 交流社群 / 其他) must not be model targets. Import only rows that have a real category (`ready`).
+7. **Write** only `ready` rows. If the user asked for avatars with the import, use `scripts/seed/seed.ts --remote` (or equivalent) so profile + R2 avatar/posts/history go together. Otherwise leave media to the refresh cron.
+8. Report counts only to the agent chat: ready / rejected / review / skipped — not per-row SQL or media.
+
+Heading text in source lists maps to **kind** hints at most (Bots / Groups / Channels). It is not the site category.
+
+## Hard reject (no omi)
+
+Reject when any of these hold after a successful fetch shape check:
+
+- `liveness` is `not_found` or `banned`, or `kind` is `user`
+- Kind from the live page disagrees with a required kind and cannot be reconciled
+- Channel/group member count below the configured floor (default **500** unless the user sets another number)
+- Bot with empty/near-empty public description and no useful `monthlyUsers` signal
+- Channel with preview fetch available but **no recent posts**, or activity that clearly looks long-dead (`activityTier` 0 with empty/stale preview)
+- Title or description hits the grey/spam keyword list (gambling, porn funnel, fake-subs / boost farms, pure “加我领空投” style drains — keep the list in script config, not in chat)
+- Several usernames share near-identical title+description (clone farm) — keep one candidate at most, reject the rest
+- **Ad-heavy preview**: among fetched preview posts, a high share (default **≥ 70%**) are ads — outbound promo links, invite links, repeated sales copy, “广告投放 / 代理 / 优惠码” style blurbs with little substance
+
+Personal accounts, dead links, and type mismatches stay rejected even if member counts are high.
+
+## Ad-heavy detection (deterministic)
+
+Score each preview post when posts exist:
+
+- Contains invite/`t.me/+` / joinchat, or many distinct external URLs
+- Text is mostly CTA / pricing / agency / ad-placement language
+- Near-duplicate of another preview post in the same profile
+
+If scored posts / total preview posts ≥ threshold → hard reject as ads. Do not call omi for clear ad floods.
+
+Bots: if the public description is primarily ad placement / referral earning copy and does not describe a directory-worthy tool, hard reject. Affiliate `?start=` on the source list link alone is not enough to reject; combine with blurb/preview.
+
+## clef-omni quality node
+
+Use `@cf/cloudflare/clef-omni` **only** when hard rules did not reject and did not clearly accept (borderline blurb or mixed preview).
+
+Ask a **quality** choice with criteria such as:
+
+- `keep` — legitimate channel, group, or bot worth listing
+- `ads` — primarily advertising or referral spam
+- `spam_grey` — grey content, fake engagement, or scam funnel
+- `inactive` — abandoned or hollow shell
+- `unsure` — cannot tell from the provided text
+
+Same confidence gates as category classification: require a leading choice (not `unsure`) with solid probability and margin; otherwise status `review` and **do not** write D1.
+
+Prefer **one** Workers AI request with both `quality` and `category` questions when both are needed. Cap model calls per run. Do not send full post HTML or images into the model — title, description, and short preview text snippets only.
+
+omi does **not** replace hard rejects. Clear ads and liveness failures must not spend a model call.
+
+## Accept / review / write
+
+| Status   | Meaning                                      | D1 |
+|----------|----------------------------------------------|----|
+| `ready`  | Passed gates and has kind + category         | Yes (batch seed) |
+| `review` | Borderline or omi unsure / low confidence    | No |
+| `rejected` | Hard fail or omi `ads` / `spam_grey` / `inactive` | No |
+| skipped  | No username, duplicate in batch, already in D1 | No |
+
+Never invent avatars. Never deploy `apps/import` (Containers) without explicit user consent. Never create new Cloudflare resources for an import without consent (`require-consent.mdc`).
