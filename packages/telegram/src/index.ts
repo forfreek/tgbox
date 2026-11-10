@@ -6,9 +6,12 @@ export {
   type AwesomeImportRow,
   type AwesomeImportStatus,
   type AwesomeReport,
+  classifyAwesomeReviewRows,
   clefOmniCategoryClassifier,
+  clefOmniQualityClassifier,
   importAwesomeReadme,
   parseAwesomeImportRequest,
+  type QualityClassifier,
 } from "./awesome-import.ts";
 export { parseChannelPage, parseCreatedAt } from "./channel.ts";
 export {
@@ -20,6 +23,17 @@ export {
   matchGreyLexicon,
   normalizeGreyText,
 } from "./import-grey-lexicon.ts";
+export {
+  adHeavyRatio,
+  DEFAULT_AD_RATIO,
+  DEFAULT_MIN_MEMBERS,
+  isAdPreviewPost,
+  judgeImportQuality,
+  markCloneUsernames,
+  type QualityOptions,
+  type QualityRejectReason,
+  type QualityVerdict,
+} from "./import-quality.ts";
 export { detectLanguage } from "./language.ts";
 export { classifyLiveness, type LivenessInput, type ProfileResponse } from "./liveness.ts";
 export { type InitDataUser, verifyInitData } from "./mini-app.ts";

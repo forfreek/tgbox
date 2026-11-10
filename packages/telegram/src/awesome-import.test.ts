@@ -60,16 +60,35 @@ describe("importAwesomeReadme", () => {
     );
   });
 
-  test("a 429 stops the rest of the round", async () => {
+  test("a 429 retries the same username then continues with the next", async () => {
+    let telegramHits = 0;
     const { fetch, urls } = fetchCounting({
-      "https://t.me/telegram": () => new Response("", { status: 429 }),
+      "https://t.me/telegram": () => {
+        telegramHits += 1;
+        if (telegramHits === 1) return new Response("", { status: 429 });
+        return new Response(fixture("profile-channel.html"), { status: 200 });
+      },
       "https://t.me/other_channel": () =>
-        new Response(fixture("profile-channel.html"), { status: 200 }),
+        new Response(
+          fixture("profile-not-found.html").replaceAll("zzqq_not_exist_987654", "other_channel"),
+          { status: 200 },
+        ),
     });
-    const report = await importAwesomeReadme(LIST, { fetch, fetchProfiles: true, concurrency: 1 });
-    expect(urls).toEqual(["https://t.me/telegram"]);
-    expect(report.unknown.map((row) => row.username)).toEqual(["telegram", "other_channel"]);
-    expect(report.unknown[0]?.reason).toBe("unreachable");
+    const report = await importAwesomeReadme(LIST, {
+      fetch,
+      fetchProfiles: true,
+      concurrency: 1,
+      requestDelayMs: 0,
+      rateLimitBackoffMs: [0],
+    });
+    expect(urls).toEqual([
+      "https://t.me/telegram",
+      "https://t.me/telegram",
+      "https://t.me/other_channel",
+    ]);
+    expect(report.ready.some((row) => row.username === "telegram")).toBe(true);
+    expect(report.rejected.map((row) => row.username)).toEqual(["other_channel"]);
+    expect(report.unknown).toEqual([]);
   });
 
   test("a model slug is accepted only when it is a real category", async () => {

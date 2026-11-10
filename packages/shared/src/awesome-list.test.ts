@@ -91,6 +91,27 @@ describe("parseAwesomeReadme", () => {
     expect(byUser.get("some_news")?.kind).toBe("channel");
   });
 
+  test("markdown table rows yield candidates", () => {
+    const table = `
+## 一、搜索机器人
+
+| 名字 | 链接 | 功能描述 |
+| :--- | :---: | :--- |
+| SOSO | [@soso](https://t.me/soso?start=a_1) | 搜索群组 |
+| 网站 | [example.com](https://example.com/) | 不是用户名 |
+`;
+    const parsedTable = parseAwesomeReadme(table);
+    expect(parsedTable.candidates).toEqual([
+      expect.objectContaining({
+        username: "soso",
+        kind: "bot",
+        description: expect.stringContaining("搜索群组"),
+      }),
+    ]);
+    // Rows without a t.me username are ignored (not listed as skipped).
+    expect(parsedTable.candidates.map((row) => row.username)).not.toContain("example");
+  });
+
   test("joins a wrapped bullet, skips libraries, and drops a repeated username", () => {
     expect(byUser.get("mytetrisbot")?.description).toContain("Challenge your friends");
     expect(parsed.candidates.map((candidate) => candidate.username)).not.toContain("aiogram");

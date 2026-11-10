@@ -221,6 +221,10 @@ export const GREY_LEXICON: readonly GreyLexiconEntry[] = [
   { category: "adult", term: "黄播" },
   { category: "adult", term: "同城约" },
   { category: "adult", term: "莞式服务" },
+  { category: "adult", term: "去衣" },
+  { category: "adult", term: "脱衣" },
+  { category: "adult", term: "换脸" },
+  { category: "adult", term: "裸替" },
 
   // —— 博彩 ——
   { category: "gambling", term: "网赌" },

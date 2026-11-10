@@ -190,6 +190,21 @@ export function parseAwesomeReadme(markdown: string): AwesomeParse {
       buffer = [line.replace(/^\s*([-*+]|\d+\.)\s+/, "")];
       continue;
     }
+    // Markdown tables (AZeC4/TelegramGroup): one row per entry, often `| name | [@u](t.me/u) | blurb |`.
+    if (/^\s*\|/.test(line) && !/^\s*\|?\s*:?-{3,}/.test(line)) {
+      flush();
+      const cells = line
+        .trim()
+        .replace(/^\|/, "")
+        .replace(/\|$/, "")
+        .split("|")
+        .map((cell) => cell.trim());
+      if (cells.some((cell) => firstUsername(cell) || /t\.me\//i.test(cell))) {
+        buffer = [cells.join(" — ")];
+        flush();
+      }
+      continue;
+    }
     if (buffer && line.trim()) {
       buffer.push(line.trim());
       continue;
