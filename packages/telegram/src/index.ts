@@ -11,6 +11,15 @@ export {
   parseAwesomeImportRequest,
 } from "./awesome-import.ts";
 export { parseChannelPage, parseCreatedAt } from "./channel.ts";
+export {
+  GREY_LEXICON,
+  type GreyLexiconCategory,
+  type GreyLexiconEntry,
+  type GreyMatch,
+  hitsGreyLexicon,
+  matchGreyLexicon,
+  normalizeGreyText,
+} from "./import-grey-lexicon.ts";
 export { detectLanguage } from "./language.ts";
 export { classifyLiveness, type LivenessInput, type ProfileResponse } from "./liveness.ts";
 export { type InitDataUser, verifyInitData } from "./mini-app.ts";
