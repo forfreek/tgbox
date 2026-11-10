@@ -29,7 +29,7 @@ Reject when any of these hold after a successful fetch shape check:
 - Channel/group member count below the configured floor (default **500** unless the user sets another number)
 - Bot with empty/near-empty public description and no useful `monthlyUsers` signal
 - Channel with preview fetch available but **no recent posts**, or activity that clearly looks long-dead (`activityTier` 0 with empty/stale preview)
-- Title or description hits the grey/spam keyword list (gambling, porn funnel, fake-subs / boost farms, pure “加我领空投” style drains — keep the list in script config, not in chat)
+- Title or description (and preview snippets when fetched) hits `GREY_LEXICON` in `packages/telegram/src/import-grey-lexicon.ts` — categories include casting/海选, adult, gambling, fake_subs, airdrop_drain, finance_scam, ads_agency, account_trade, drugs_weapons, misc_scam. Matching uses `normalizeGreyText` (NFKC, strip separators/zero-width, 异体字 and common lookalike folds). Expand that file when new spam patterns appear; do not paste long hit lists into chat.
 - Several usernames share near-identical title+description (clone farm) — keep one candidate at most, reject the rest
 - **Ad-heavy preview**: among fetched preview posts, a high share (default **≥ 70%**) are ads — outbound promo links, invite links, repeated sales copy, “广告投放 / 代理 / 优惠码” style blurbs with little substance
 
