@@ -1,8 +1,9 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./test.ts";
 
-/** Islands hydrate on idle; wait for it before using keyboard shortcuts. */
+/** The search island hydrates on the first reach for it, not on idle. */
 async function searchReady(page: Page) {
+  await page.locator("[data-search-trigger]").first().hover();
   await expect(page.locator("astro-island:not([ssr])")).toHaveCount(1);
 }
 
@@ -31,6 +32,38 @@ test("search dialog closes with Escape after its exit animation", async ({ page 
   await expect(dialog.getByRole("combobox")).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
+});
+
+test("Google and Bing in the search dialog open a site-limited query", async ({ page }) => {
+  await page.goto("/");
+  await searchReady(page);
+  await page.locator("#site-search").click();
+  const dialog = page.locator("[data-search-dialog]");
+  await expect(dialog).toBeVisible();
+
+  // Idle, with the hot keywords above the footer: this is the state where the list's
+  // scroll box used to cover the links, so a click did nothing.
+  const google = dialog.getByRole("link", { name: "Google", exact: true });
+  await expect(google).toHaveAttribute("href", /google\.com\/search\?/);
+  const [idlePopup] = await Promise.all([page.waitForEvent("popup"), google.click()]);
+  await expect.poll(() => idlePopup.url()).toContain("google.com");
+  await idlePopup.close();
+  await expect(dialog).toBeVisible();
+
+  await dialog.getByRole("combobox").fill("科技 频道");
+  for (const [name, host] of [
+    ["Google", "google.com"],
+    ["Bing", "bing.com"],
+  ] as const) {
+    const link = dialog.getByRole("link", { name, exact: true });
+    const href = await link.getAttribute("href");
+    expect(new URL(href ?? "http://invalid").searchParams.get("q")).toBe(
+      "site:127.0.0.1:4329 科技 频道",
+    );
+    const [popup] = await Promise.all([page.waitForEvent("popup"), link.click()]);
+    await expect.poll(() => popup.url()).toContain(host);
+    await popup.close();
+  }
 });
 
 test("search results on English pages link to English detail pages", async ({ page }) => {

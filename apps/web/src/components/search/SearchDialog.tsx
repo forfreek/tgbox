@@ -230,9 +230,9 @@ export default function SearchDialog({
                         )}
                       </AnimatePresence>
                     </div>
-                    <CommandPanel className="mx-0 rounded-none border-0 bg-transparent shadow-none [clip-path:none]!">
+                    <CommandPanel className="mx-0 flex min-h-0 flex-1 flex-col overflow-hidden rounded-none border-0 bg-transparent shadow-none [clip-path:none]!">
                       {showHot && (
-                        <div className="px-4 pt-4 pb-5">
+                        <div className="shrink-0 px-4 pt-4 pb-5">
                           <p className="text-xs font-medium tracking-wide text-muted-foreground">
                             {strings.hot}
                           </p>
@@ -354,7 +354,7 @@ export default function SearchDialog({
                         <Spinner className="absolute top-3 right-3 size-4 text-muted-foreground" />
                       )}
                     </CommandPanel>
-                    <CommandFooter className="rounded-none bg-muted/50 px-4 py-2.5">
+                    <CommandFooter className="shrink-0 rounded-none bg-muted/50 px-4 py-2.5">
                       <span className="truncate">{strings.fallback}</span>
                       <span className="flex shrink-0 gap-1">
                         {[
