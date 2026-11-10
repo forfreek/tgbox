@@ -222,7 +222,15 @@ export function AutocompleteList({
   ...props
 }: AutocompletePrimitive.List.Props): React.ReactElement {
   return (
-    <ScrollArea overscrollContain scrollbarGutter scrollFade>
+    // `h-auto` instead of the scroll root's `size-full` (height: 100%). A percentage height
+    // is the whole panel, but this list sits after other panel content, so the extra box
+    // spills out and sits on top of whatever follows the panel (the search dialog footer).
+    <ScrollArea
+      className="h-auto! w-full min-h-0 flex-auto"
+      overscrollContain
+      scrollbarGutter
+      scrollFade
+    >
       <AutocompletePrimitive.List
         className={cn("not-empty:scroll-py-1 not-empty:p-1 in-data-has-overflow-y:pe-3", className)}
         data-slot="autocomplete-list"
