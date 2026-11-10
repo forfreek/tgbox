@@ -1091,6 +1091,12 @@ describe("site build from snapshot data", () => {
     expect(html("app")).toContain('<link rel="icon" href="/favicon.ico">');
   });
 
+  test("ads.txt is a root static file so AdSense can crawl it", () => {
+    expect(readFileSync(path.join(client, "ads.txt"), "utf8")).toBe(
+      "google.com, pub-1797920702200847, DIRECT, f08c47fec0942fa0\n",
+    );
+  });
+
   test("the guides index lists every guide for its locale, newest first", () => {
     for (const [route, first, last] of [
       ["guides", "find-telegram-channels", "grow-a-telegram-channel"],
