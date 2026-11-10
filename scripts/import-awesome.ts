@@ -12,8 +12,10 @@ import { readFile, writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
 import {
   clefOmniCategoryClassifier,
+  clefOmniQualityClassifier,
   importAwesomeReadme,
 } from "../packages/telegram/src/awesome-import.ts";
+import { DEFAULT_AD_RATIO, DEFAULT_MIN_MEMBERS } from "../packages/telegram/src/import-quality.ts";
 
 const { values } = parseArgs({
   options: {
@@ -21,12 +23,17 @@ const { values } = parseArgs({
     file: { type: "string" },
     out: { type: "string" },
     slow: { type: "boolean", default: false },
+    quality: { type: "boolean", default: false },
+    "skip-file": { type: "string" },
+    "min-members": { type: "string" },
+    "ad-ratio": { type: "string" },
+    concurrency: { type: "string" },
   },
 });
 
 if ((values.url ? 1 : 0) + (values.file ? 1 : 0) !== 1) {
   console.error(
-    "Usage: import-awesome.ts (--url REPO_OR_README | --file PATH) [--slow] [--out FILE]",
+    "Usage: import-awesome.ts (--url REPO_OR_README | --file PATH) [--slow] [--quality] [--skip-file FILE] [--min-members N] [--ad-ratio R] [--concurrency N] [--out FILE]",
   );
   process.exit(1);
 }
@@ -54,15 +61,40 @@ const markdown = values.file
 
 const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
 const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+const slow = values.slow || values.quality;
 const classify =
-  values.slow && accountId && apiToken
-    ? clefOmniCategoryClassifier({ accountId, apiToken })
+  slow && accountId && apiToken ? clefOmniCategoryClassifier({ accountId, apiToken }) : undefined;
+const judgeQuality =
+  values.quality && accountId && apiToken
+    ? clefOmniQualityClassifier({ accountId, apiToken })
     : undefined;
+
+let skipUsernames: Set<string> | undefined;
+if (values["skip-file"]) {
+  const raw: unknown = JSON.parse(await readFile(values["skip-file"], "utf8"));
+  const list = Array.isArray(raw)
+    ? raw
+    : raw && typeof raw === "object" && "usernames" in raw && Array.isArray(raw.usernames)
+      ? raw.usernames
+      : null;
+  if (!list || !list.every((item) => typeof item === "string")) {
+    throw new Error("--skip-file must be a JSON string array or { usernames: string[] }");
+  }
+  skipUsernames = new Set(list.map((item) => item.toLowerCase()));
+}
+
+const minMembers = values["min-members"] ? Number(values["min-members"]) : DEFAULT_MIN_MEMBERS;
+const adRatio = values["ad-ratio"] ? Number(values["ad-ratio"]) : DEFAULT_AD_RATIO;
 
 const report = await importAwesomeReadme(markdown, {
   fetch,
-  fetchProfiles: values.slow,
+  fetchProfiles: slow,
+  quality: values.quality,
+  qualityOptions: { minMembers, adRatio },
   classify,
+  judgeQuality,
+  skipUsernames,
+  concurrency: values.concurrency ? Number(values.concurrency) : undefined,
 });
 
 const json = `${JSON.stringify(report, null, 2)}\n`;
@@ -75,6 +107,6 @@ console.error(
     `review ${report.review.length}`,
     `rejected ${report.rejected.length}`,
     `unknown ${report.unknown.length}`,
-    `skipped ${report.skipped.noUsername} without a username, ${report.skipped.duplicate} duplicates`,
+    `skipped ${report.skipped.noUsername} without a username, ${report.skipped.duplicate} duplicates, ${report.skipped.alreadyListed} already listed`,
   ].join(", "),
 );
