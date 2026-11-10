@@ -11,12 +11,12 @@ Bulk imports (awesome lists, navigation READMEs such as AZeC4/TelegramGroup) mus
 
 1. **Parse** the source README/list. Strip `?start=` / referral payloads to a bare username. Skip rows with no public username (sites, images, tutorials). Deduplicate usernames inside the batch.
 2. **Skip existing** D1 usernames. Do not update titles, descriptions, categories, or media for rows already listed.
-3. **Fetch** `t.me` via plain HTTP (`fetchEntrySnapshot`). For channels and groups that need ad/junk checks, fetch preview posts (`/s/`), not `profileOnly`. Bots may stay profile-only unless the blurb alone is enough to reject.
+3. **Fetch** `t.me` via plain HTTP (`fetchEntrySnapshot`). For channels and groups that need ad/junk checks, fetch preview posts (`/s/`), not `profileOnly`. Bots may stay profile-only unless the blurb alone is enough to reject. **Pace fetches**: quality mode defaults to concurrency 1 with ~800ms between requests; on HTTP 429 backoff and retry the same username — do not abort the whole batch. Never burst.
 4. **Hard reject** (no model) → status `rejected`, never write D1.
 5. **Borderline only** → `@cf/cloudflare/clef-omni` quality choice (see below).
-6. **Taxonomy** → keyword/`suggestTaxonomy` first; clef-omni category only when the rules leave category blank. Catch-alls (资源分享 / 交流社群 / 其他) must not be model targets. Import only rows that have a real category (`ready`).
-7. **Write** only `ready` rows. If the user asked for avatars with the import, use `scripts/seed/seed.ts --remote` (or equivalent) so profile + R2 avatar/posts/history go together. Otherwise leave media to the refresh cron.
-8. Report counts only to the agent chat: ready / rejected / review / skipped — not per-row SQL or media.
+6. **Taxonomy** → keyword/`suggestTaxonomy` first; clef-omni category in the **same pass** when the rules leave category blank (local script resolves Workers AI via `CLOUDFLARE_API_TOKEN` or wrangler OAuth). Catch-alls (资源分享 / 交流社群 / 其他) must not be model targets. Import only rows that have a real category (`ready`). If a prior run left `review`/`no_category` with profiles already fetched, use `scripts/classify-awesome-review.ts` (no t.me refetch).
+7. **Write** only `ready` rows. If the user asked for avatars with the import, use `scripts/seed/seed.ts --remote` (or equivalent) so profile + R2 avatar/posts/history go together. Otherwise leave media to the refresh cron. Seed t.me re-fetch also stays concurrency 1.
+8. Report **exact** counts only to the agent chat and persist them to agent memory — ready / rejected / review / unknown / skipped — not per-row SQL or media.
 
 Heading text in source lists maps to **kind** hints at most (Bots / Groups / Channels). It is not the site category.
 

@@ -105,13 +105,31 @@ export type AwesomeImportOptions = {
   classify?: CategoryClassifier;
   /** Usernames already in D1 — skipped, never updated. */
   skipUsernames?: ReadonlySet<string>;
-  /** Profiles in flight at once. t.me answers 429 to a burst, and one 429 ends the round. */
+  /**
+   * Profiles in flight at once. Quality imports default to 1 — t.me 429s under burst traffic.
+   * Non-quality slow fetch defaults to 2.
+   */
   concurrency?: number;
+  /** Pause before each t.me fetch (ms). Quality defaults to 800. */
+  requestDelayMs?: number;
+  /** Backoff waits after a 429, then retry the same username. Exhausted → that row is unknown. */
+  rateLimitBackoffMs?: readonly number[];
+  /** Cap on clef-omni category (+ quality) calls for one run. Past this, rows stay in review. */
+  maxModelCalls?: number;
+  /** Pause between model calls (ms). Defaults to 250 when a classifier is present. */
+  modelDelayMs?: number;
 };
 
-const DEFAULT_CONCURRENCY = 4;
+const DEFAULT_CONCURRENCY = 2;
+const DEFAULT_QUALITY_CONCURRENCY = 1;
+const DEFAULT_QUALITY_REQUEST_DELAY_MS = 800;
+const DEFAULT_RATE_LIMIT_BACKOFF_MS = [5_000, 15_000, 45_000] as const;
 /** One list should not spend the account's daily Neuron allowance. Past this, rows stay in review. */
-const MAX_MODEL_CALLS = 150;
+const DEFAULT_MAX_MODEL_CALLS = 500;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function rowFromPlacement(
   placement: AwesomePlacement,
@@ -270,12 +288,17 @@ export function clefOmniQualityClassifier(input: {
   accountId: string;
   apiToken: string;
   fetch?: Fetch;
+  maxModelCalls?: number;
+  modelDelayMs?: number;
 }): QualityClassifier {
   const call = input.fetch ?? fetch;
+  const max = input.maxModelCalls ?? DEFAULT_MAX_MODEL_CALLS;
+  const delayMs = input.modelDelayMs ?? 250;
   let used = 0;
   return async (request) => {
-    if (used >= MAX_MODEL_CALLS) return null;
+    if (used >= max) return null;
     used += 1;
+    if (delayMs > 0) await sleep(delayMs);
     const payload = await runClefOmni(
       call,
       input.accountId,
@@ -356,14 +379,84 @@ function clefResult(payload: unknown): unknown {
   return typeof result === "object" && result !== null ? result : payload;
 }
 
-function capped(classify: CategoryClassifier | undefined): CategoryClassifier | undefined {
+function capped(
+  classify: CategoryClassifier | undefined,
+  maxModelCalls: number,
+  modelDelayMs: number,
+): CategoryClassifier | undefined {
   if (!classify) return undefined;
   let used = 0;
   return async (request) => {
-    if (used >= MAX_MODEL_CALLS) return null;
+    if (used >= maxModelCalls) return null;
     used += 1;
+    if (modelDelayMs > 0) await sleep(modelDelayMs);
     return classify(request);
   };
+}
+
+async function fetchSnapshotPaced(
+  username: string,
+  options: AwesomeImportOptions,
+  quality: boolean,
+): Promise<Awaited<ReturnType<typeof fetchEntrySnapshot>>> {
+  const delayMs = options.requestDelayMs ?? (quality ? DEFAULT_QUALITY_REQUEST_DELAY_MS : 0);
+  const backoff = options.rateLimitBackoffMs ?? DEFAULT_RATE_LIMIT_BACKOFF_MS;
+  for (let attempt = 0; ; attempt += 1) {
+    if (delayMs > 0) await sleep(delayMs);
+    const snap = await fetchEntrySnapshot(username, {
+      fetch: options.fetch,
+      now: options.now ?? new Date(),
+      knownKind: null,
+      needCreatedAt: false,
+      // Quality needs channel /s/ previews for ad-heavy checks.
+      profileOnly: !quality,
+    });
+    if (!snap.rateLimited) return snap;
+    const wait = backoff[attempt];
+    if (wait === undefined) return snap;
+    await sleep(wait);
+  }
+}
+
+/**
+ * Re-run taxonomy (rules + optional clef-omni) on already-fetched `review` rows.
+ * Does not hit t.me — use after a quality pass left rows at `no_category`.
+ */
+export async function classifyAwesomeReviewRows(
+  rows: readonly AwesomeImportRow[],
+  options: {
+    classify?: CategoryClassifier;
+    maxModelCalls?: number;
+    modelDelayMs?: number;
+  } = {},
+): Promise<{ ready: AwesomeImportRow[]; review: AwesomeImportRow[] }> {
+  const taxonomy = seedSuggestTaxonomy();
+  const maxModelCalls = options.maxModelCalls ?? DEFAULT_MAX_MODEL_CALLS;
+  const modelDelayMs = options.modelDelayMs ?? 250;
+  const classify = capped(options.classify, maxModelCalls, modelDelayMs);
+  const ready: AwesomeImportRow[] = [];
+  const review: AwesomeImportRow[] = [];
+  for (const row of rows) {
+    if (row.status !== "review" || !row.kind) {
+      review.push(row);
+      continue;
+    }
+    const placement = await placeAwesomeCandidate(
+      {
+        username: row.username,
+        kind: row.kind,
+        title: row.title,
+        description: row.description,
+        sections: row.sections,
+      },
+      taxonomy,
+      { classify },
+    );
+    const next = rowFromPlacement(placement, "slow", "no_category");
+    if (next.status === "ready") ready.push(next);
+    else review.push(next);
+  }
+  return { ready, review };
 }
 
 export async function importAwesomeReadme(
@@ -372,13 +465,17 @@ export async function importAwesomeReadme(
 ): Promise<AwesomeReport> {
   const parsed = parseAwesomeReadme(markdown);
   const taxonomy = seedSuggestTaxonomy();
-  const classify = capped(options.classify);
-  const fetchProfiles = options.fetchProfiles === true || options.quality === true;
   const quality = options.quality === true;
+  const maxModelCalls = options.maxModelCalls ?? DEFAULT_MAX_MODEL_CALLS;
+  const modelDelayMs = options.modelDelayMs ?? (options.classify ? 250 : 0);
+  const classify = capped(options.classify, maxModelCalls, modelDelayMs);
+  const fetchProfiles = options.fetchProfiles === true || quality;
   const skip = options.skipUsernames ?? new Set<string>();
   const rows: AwesomeImportRow[] = new Array(parsed.candidates.length);
   const slow: { candidate: AwesomeCandidate; index: number }[] = [];
   let alreadyListed = 0;
+  const concurrency =
+    options.concurrency ?? (quality ? DEFAULT_QUALITY_CONCURRENCY : DEFAULT_CONCURRENCY);
 
   for (const [index, candidate] of parsed.candidates.entries()) {
     if (skip.has(candidate.username)) {
@@ -401,37 +498,8 @@ export async function importAwesomeReadme(
     slow.push({ candidate, index });
   }
 
-  let halted = false;
-  await mapPool(slow, options.concurrency ?? DEFAULT_CONCURRENCY, async ({ candidate, index }) => {
-    if (halted) {
-      rows[index] = {
-        ...rowFromPlacement(
-          {
-            username: candidate.username,
-            kind: candidate.kind,
-            title: candidate.title,
-            description: candidate.description,
-            sections: candidate.sections,
-            category: null,
-            tags: [],
-            source: "none",
-          },
-          "slow",
-          "unreachable",
-        ),
-        status: "unknown",
-      };
-      return;
-    }
-    const snap = await fetchEntrySnapshot(candidate.username, {
-      fetch: options.fetch,
-      now: options.now ?? new Date(),
-      knownKind: null,
-      needCreatedAt: false,
-      // Quality needs channel /s/ previews for ad-heavy checks.
-      profileOnly: !quality,
-    });
-    if (snap.rateLimited) halted = true;
+  await mapPool(slow, concurrency, async ({ candidate, index }) => {
+    const snap = await fetchSnapshotPaced(candidate.username, options, quality);
     rows[index] = await rowFromSnapshot(candidate, snap, taxonomy, classify, {
       quality,
       qualityOptions: options.qualityOptions,

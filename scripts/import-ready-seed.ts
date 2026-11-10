@@ -14,11 +14,14 @@ const { values } = parseArgs({
   options: {
     report: { type: "string" },
     "out-dir": { type: "string" },
-    concurrency: { type: "string", default: "3" },
+    concurrency: { type: "string", default: "1" },
+    "request-delay-ms": { type: "string", default: "800" },
   },
 });
 if (!values.report || !values["out-dir"]) {
-  console.error("Usage: import-ready-seed.ts --report report.json --out-dir DIR");
+  console.error(
+    "Usage: import-ready-seed.ts --report report.json --out-dir DIR [--concurrency 1] [--request-delay-ms 800]",
+  );
   process.exit(1);
 }
 
@@ -36,10 +39,15 @@ const outDir = path.resolve(values["out-dir"]);
 const mediaDir = path.join(outDir, "media");
 await mkdir(mediaDir, { recursive: true });
 
-const concurrency = Number(values.concurrency ?? 3);
+const concurrency = Number(values.concurrency ?? 1);
+const requestDelayMs = Number(values["request-delay-ms"] ?? 800);
 const now = Date.now();
 const rows: SeedRow[] = [];
 const media: { key: string; file: string; contentType: string }[] = [];
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 async function mapPool<T>(items: readonly T[], limit: number, run: (item: T) => Promise<void>) {
   let next = 0;
@@ -56,6 +64,7 @@ async function mapPool<T>(items: readonly T[], limit: number, run: (item: T) => 
 }
 
 await mapPool(report.ready, concurrency, async (item) => {
+  if (requestDelayMs > 0) await sleep(requestDelayMs);
   const username = item.username.toLowerCase();
   const snap = await fetchEntrySnapshot(item.username, {
     fetch,

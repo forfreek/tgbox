@@ -16,6 +16,7 @@ import {
   importAwesomeReadme,
 } from "../packages/telegram/src/awesome-import.ts";
 import { DEFAULT_AD_RATIO, DEFAULT_MIN_MEMBERS } from "../packages/telegram/src/import-quality.ts";
+import { resolveCfAiCredentials } from "./cf-ai-credentials.ts";
 
 const { values } = parseArgs({
   options: {
@@ -28,12 +29,15 @@ const { values } = parseArgs({
     "min-members": { type: "string" },
     "ad-ratio": { type: "string" },
     concurrency: { type: "string" },
+    "request-delay-ms": { type: "string" },
+    "model-delay-ms": { type: "string" },
+    "max-model-calls": { type: "string" },
   },
 });
 
 if ((values.url ? 1 : 0) + (values.file ? 1 : 0) !== 1) {
   console.error(
-    "Usage: import-awesome.ts (--url REPO_OR_README | --file PATH) [--slow] [--quality] [--skip-file FILE] [--min-members N] [--ad-ratio R] [--concurrency N] [--out FILE]",
+    "Usage: import-awesome.ts (--url REPO_OR_README | --file PATH) [--slow] [--quality] [--skip-file FILE] [--min-members N] [--ad-ratio R] [--concurrency N] [--request-delay-ms N] [--model-delay-ms N] [--max-model-calls N] [--out FILE]",
   );
   process.exit(1);
 }
@@ -59,15 +63,31 @@ const markdown = values.file
   ? await readFile(values.file, "utf8")
   : await readmeFromUrl(values.url ?? "");
 
-const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+const creds = resolveCfAiCredentials();
 const slow = values.slow || values.quality;
+const maxModelCalls = values["max-model-calls"] ? Number(values["max-model-calls"]) : undefined;
+const modelDelayMs = values["model-delay-ms"] ? Number(values["model-delay-ms"]) : undefined;
 const classify =
-  slow && accountId && apiToken ? clefOmniCategoryClassifier({ accountId, apiToken }) : undefined;
-const judgeQuality =
-  values.quality && accountId && apiToken
-    ? clefOmniQualityClassifier({ accountId, apiToken })
+  slow && creds
+    ? clefOmniCategoryClassifier({
+        accountId: creds.accountId,
+        apiToken: creds.apiToken,
+      })
     : undefined;
+const judgeQuality =
+  values.quality && creds
+    ? clefOmniQualityClassifier({
+        accountId: creds.accountId,
+        apiToken: creds.apiToken,
+        maxModelCalls,
+        modelDelayMs,
+      })
+    : undefined;
+if (slow && !creds) {
+  console.error(
+    "warn: no CLOUDFLARE_API_TOKEN / wrangler OAuth — category/quality model calls skipped",
+  );
+}
 
 let skipUsernames: Set<string> | undefined;
 if (values["skip-file"]) {
@@ -95,6 +115,9 @@ const report = await importAwesomeReadme(markdown, {
   judgeQuality,
   skipUsernames,
   concurrency: values.concurrency ? Number(values.concurrency) : undefined,
+  requestDelayMs: values["request-delay-ms"] ? Number(values["request-delay-ms"]) : undefined,
+  modelDelayMs,
+  maxModelCalls,
 });
 
 const json = `${JSON.stringify(report, null, 2)}\n`;

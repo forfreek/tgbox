@@ -6,6 +6,7 @@ export {
   type AwesomeImportRow,
   type AwesomeImportStatus,
   type AwesomeReport,
+  classifyAwesomeReviewRows,
   clefOmniCategoryClassifier,
   clefOmniQualityClassifier,
   importAwesomeReadme,
