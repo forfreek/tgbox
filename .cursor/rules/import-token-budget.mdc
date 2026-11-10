@@ -7,17 +7,36 @@ alwaysApply: true
 
 Cursor weekly quota is charged for agent model turns and tool loops, not for fetching `t.me` or writing D1/R2. Bulk import must not be orchestrated inside a long Cloud Agent session.
 
+## Hard chat boundary (no exceptions)
+
+Agent chat / MCP / conversation may carry **only**:
+
+- Exact aggregate counts (ready / review / rejected / unknown / skipped / written / failed)
+- Short status lines (script started / exited / path to report on disk)
+- Exact totals persisted to agent memory (`/cursor/stores/self/...`)
+
+**Never** load into chat, MCP tool args, or PR/commit messages:
+
+- Per-row usernames, titles, descriptions, tags, categories
+- SQL statements, seed dumps, report JSON bodies
+- Avatar bytes / base64 / R2 object bodies
+- Model prompts, clef-omni payloads, or preview post text
+- Grey-lexicon hit lists longer than a category name
+
+All row work stays in local files under `/tmp/...` or the repo scripts. Read those files with tools only to drive scripts; do not paste their contents back to the user.
+
 ## Do
 
-- Run import/seed scripts on a local machine or CI (`scripts/import-awesome`, `scripts/seed/seed.ts`). The agent may start a command and report a short summary only.
-- Keep row content out of chat: no per-entry SQL, profile text, or avatar base64 through MCP or the conversation.
-- Follow `import-quality.mdc` before any D1 write (hard rejects and optional clef-omni quality node in the script, not in chat).
-- Default: write D1 rows first; leave avatars, recent posts, and member history to the every-5-minutes refresh cron. When the user explicitly wants media with the import, use `seed.ts --remote` (or the same local fetch→R2 path) so bytes never pass through the agent dialogue.
-- Prefer keyword taxonomy rules; call `@cf/cloudflare/clef-omni` for blank categories and for **borderline quality only** (Workers AI cost, not Cursor).
-- Keep agent sessions short: give an instruction, stop, open a new short session to check progress later.
+- Run import/seed/classify/retry scripts locally or in CI. The agent may start a command and report a short **count-only** summary.
+- Follow `import-quality.mdc` before any D1 write (gates and omi inside the script, not in chat).
+- Default: write D1 rows first; leave media to the refresh cron unless the user asked for avatars with the import — then `seed.ts --remote` / local fetch→R2 so bytes never pass through dialogue.
+- Prefer keyword taxonomy; call `@cf/cloudflare/clef-omni` for blank categories and borderline quality only (Workers AI, not Cursor).
+- Keep agent sessions short: start the paced job, stop watching; open a new short session later to read counts from the report file / memory.
 
 ## Do not
 
-- Do not drive hundreds of entries through the agent by pasting SQL or media into the dialogue.
-- Do not use Cloudflare Browser Rendering (or Puppeteer/Playwright on Workers) for public `t.me` profile pages. Plain HTTP fetch with a browser UA is enough; Browser Rendering spends Cloudflare browser-hours and does not reduce Cursor quota.
+- Do not drive entries through the agent by pasting SQL, profiles, or media into the dialogue.
+- Do not use Cloudflare Browser Rendering (or Puppeteer/Playwright on Workers) for public `t.me` pages. Plain HTTP fetch with a browser UA is enough.
+- Do not use chat MCP for bulk D1/R2 writes when wrangler is available.
 - Do not sit in one Cloud Agent for hours watching an import finish.
+- Do not burst t.me or Workers AI: concurrency 1 and delays for quality/retry passes.
