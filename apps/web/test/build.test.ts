@@ -443,6 +443,9 @@ describe("site build from snapshot data", () => {
         new RegExp(`<a[^>]*href="${repoUrl}"[^>]*rel="noopener"[^>]*>[\\s\\S]*?${label}`),
       );
       expect(footer, route).toContain(licence);
+      expect(footer, route).not.toContain("awesome-telegram");
+      expect(footer, route).not.toContain("GitHub 资源合集");
+      expect(footer, route).not.toContain("Awesome list on GitHub");
       expect(footer, route).toContain(`© ${new Date().getUTCFullYear()} TGsearch`);
     }
     for (const [route, sentence] of [
@@ -580,6 +583,8 @@ describe("site build from snapshot data", () => {
       expect(page, route).toMatch(new RegExp(`<h3[^>]*>${question.replace(/\?/g, "\\?")}`));
       expect(page, route).toContain("AGPL-3.0");
       expect(page, route).toContain(repoUrl);
+      expect(page, route).toContain(route.startsWith("en/") ? "based on tgbox" : "基于 tgbox");
+      expect(page, route).not.toContain("awesome-telegram");
       const faq = jsonLd(page).find(
         (item): item is Record<string, unknown> =>
           typeof item === "object" &&
