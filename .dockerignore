@@ -1,0 +1,13 @@
+.git
+node_modules
+**/node_modules
+.scratch
+.turbo
+.wrangler
+.astro
+.data
+dist
+**/*.jpg
+**/*.png
+playwright-report
+test-results

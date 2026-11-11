@@ -45,6 +45,77 @@ export type ClassifyRequest = SuggestInput & {
 /** Returns one candidate slug, or null when it fails or answers something unusable. */
 export type CategoryClassifier = (request: ClassifyRequest) => Promise<string | null>;
 
+/**
+ * The model half of a suggestion. The bot calls it through the Workers AI binding; the awesome-list
+ * importer calls the same model over HTTP from a container. One prompt, so the two cannot drift.
+ *
+ * `@cf/google/gemma-4-26b-a4b-it` — multilingual (the directory is Chinese-first), no reasoning
+ * tokens to pay for, and live in the catalog. JSON mode is not used: Cloudflare only supports it
+ * on a couple of large models, and one slug is easier to validate than JSON anyway.
+ */
+export const CATEGORY_MODEL = "@cf/google/gemma-4-26b-a4b-it";
+/** A slug and nothing else; anything longer is the model ignoring the prompt. */
+export const CATEGORY_MAX_TOKENS = 24;
+
+const CATEGORY_DESCRIPTION_LIMIT = 500;
+
+export const CATEGORY_SYSTEM = [
+  "You classify Telegram channels, groups and bots for a directory.",
+  "Answer with exactly one category slug from the list, lowercase, nothing else.",
+  'If none of them fits, answer "none".',
+].join(" ");
+
+export function categoryClassifierPrompt(request: ClassifyRequest): string {
+  const list = request.candidates
+    .map((candidate) => `- ${candidate.slug}: ${candidate.nameZh}`)
+    .join("\n");
+  return [
+    `Categories for a Telegram ${request.kind}:`,
+    list,
+    "",
+    `Title: ${request.title}`,
+    `Description: ${request.description.slice(0, CATEGORY_DESCRIPTION_LIMIT)}`,
+    "",
+    "Slug:",
+  ].join("\n");
+}
+
+/**
+ * The model's answer, stripped to a bare slug. Accepts the binding's raw result or the HTTP
+ * envelope `{ result }`. "none" is returned as the slug `none`; the caller drops it because it is
+ * not in the taxonomy, which is the same as no answer.
+ */
+export function categorySlugFromModel(payload: unknown): string | null {
+  const text = textOf(unwrapModel(payload));
+  if (text === null) return null;
+  const match = /[a-z0-9]+(?:-[a-z0-9]+)*/.exec(text.trim().toLowerCase());
+  return match?.[0] ?? null;
+}
+
+/** Chat-completion models answer in `choices`, older text-generation ones in `response`. */
+function textOf(result: unknown): string | null {
+  if (typeof result === "string") return result;
+  if (typeof result !== "object" || result === null) return null;
+  if ("response" in result && typeof result.response === "string") return result.response;
+  if ("choices" in result && Array.isArray(result.choices)) {
+    const [choice] = result.choices;
+    if (typeof choice === "object" && choice !== null && "message" in choice) {
+      const { message } = choice;
+      if (typeof message === "object" && message !== null && "content" in message) {
+        if (typeof message.content === "string") return message.content;
+      }
+    }
+  }
+  return null;
+}
+
+/** The REST API wraps the binding's result. A string `result` is an error message, not a slug. */
+function unwrapModel(payload: unknown): unknown {
+  if (typeof payload !== "object" || payload === null || !("result" in payload)) return payload;
+  const { result } = payload;
+  return typeof result === "object" && result !== null ? result : payload;
+}
+
 /* ------------------------------------------------------------------- matching */
 
 /** A term the rules look for. ASCII terms need word boundaries; CJK terms have none to need. */
