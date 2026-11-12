@@ -4,6 +4,8 @@
 
 P1-1 公共 DTO 与查询边界见 `docs/plans/cloudflare-dynamic-contracts.md`，记录已实现查询与完整页面契约的缺口，接入阶段按该清单验收。Phase 1 当前完成 5/8 项，总计划 12/55 项。
 
+P1-6 缓存时间/并发子节点见 `docs/plans/cloudflare-dynamic-cache-validation.md`，新增最终I/O后版本校验、响应时间区间和缓存命中成本验证。P1-6完整SQL成本清单继续待验收。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 

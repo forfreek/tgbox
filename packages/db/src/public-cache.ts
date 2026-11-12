@@ -23,9 +23,17 @@ export async function readPublicCached<T>(
   ) {
     throw new RangeError("Cache age must be between 1 and 300000ms");
   }
+  const now = () => {
+    const value = options.now();
+    if (!Number.isSafeInteger(value) || value < 0) throw new RangeError("Invalid cache time");
+    return value;
+  };
+  const startedAt = now();
   const revision = await getPublicRevision(db);
-  const key = JSON.stringify(["tgbox-public-v1", revision, ...keyParts]);
+  const key = JSON.stringify(["tgbox-public-v2", revision, ...keyParts]);
   let cached: T | undefined;
+  let expiresAt = startedAt + options.maxAgeMs;
+  let validFrom = startedAt;
   if (cache) {
     try {
       const text = await cache.get(key);
@@ -35,11 +43,19 @@ export async function readPublicCached<T>(
         envelope !== null &&
         "expiresAt" in envelope &&
         typeof envelope.expiresAt === "number" &&
-        Number.isFinite(envelope.expiresAt) &&
-        envelope.expiresAt > options.now() &&
+        Number.isSafeInteger(envelope.expiresAt) &&
+        envelope.expiresAt > now() &&
+        "validFrom" in envelope &&
+        typeof envelope.validFrom === "number" &&
+        Number.isSafeInteger(envelope.validFrom) &&
+        envelope.validFrom >= 0 &&
+        envelope.validFrom <= now() &&
+        envelope.expiresAt > envelope.validFrom &&
         "value" in envelope
       ) {
         cached = parse(envelope.value);
+        expiresAt = envelope.expiresAt;
+        validFrom = envelope.validFrom;
       }
     } catch {
       /* Unavailable or malformed derived cache falls back to authority. */
@@ -48,21 +64,26 @@ export async function readPublicCached<T>(
   const loaded = cached === undefined ? await load() : undefined;
   const value = loaded ? parse(loaded.value) : cached;
   if (value === undefined) throw new Error("Public cache values must be defined");
-  if ((await getPublicRevision(db)) !== revision) throw new Error("Public content changed; retry");
-  if (cache && loaded) {
-    const now = options.now();
-    const expiresAt = Math.min(now + options.maxAgeMs, loaded.validUntil ?? Infinity);
-    if (Number.isFinite(expiresAt) && expiresAt > now) {
-      try {
-        await cache.put(
-          key,
-          JSON.stringify({ value, expiresAt }),
-          Math.ceil((expiresAt - now) / 1000),
-        );
-      } catch {
-        /* A cache write failure does not change a successful authoritative read. */
-      }
+  if (loaded) {
+    if (loaded.validUntil !== undefined && !Number.isSafeInteger(loaded.validUntil))
+      throw new RangeError("Invalid public validity boundary");
+    expiresAt = Math.min(expiresAt, loaded.validUntil ?? Infinity);
+  }
+  if (cache && loaded && now() < expiresAt) {
+    try {
+      await cache.put(
+        key,
+        JSON.stringify({ value, validFrom, expiresAt }),
+        Math.ceil((expiresAt - now()) / 1000),
+      );
+    } catch {
+      /* A cache write failure does not change a successful authoritative read. */
     }
   }
+  // Cache I/O can await concurrent writes or cross a natural promotion boundary.
+  if ((await getPublicRevision(db)) !== revision) throw new Error("Public content changed; retry");
+  const finishedAt = now();
+  if (finishedAt < validFrom || finishedAt >= expiresAt)
+    throw new Error("Public content expired; retry");
   return value;
 }
