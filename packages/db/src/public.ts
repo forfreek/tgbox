@@ -1,7 +1,8 @@
 import type { EntryKind } from "@tgbox/shared";
 import { and, desc, eq, lt, lte, or, sql } from "drizzle-orm";
 import type { Db } from "./access.ts";
-import { categories, entries, entryStats, entryTags, tags } from "./schema.ts";
+import { getPublicRevision } from "./public-projection.ts";
+import { categories, entries, entryStats, entryTags, publicListing, tags } from "./schema.ts";
 
 /** Public fields only. Moderation counters and translation job metadata stay private. */
 const publicFields = {
@@ -99,5 +100,80 @@ export async function listPublicLatest(db: Db, query: PublicLatestQuery = {}) {
   return {
     items,
     next: rows.length > limit && last ? { listedAt: last.listedAt, username: last.username } : null,
+  };
+}
+
+export type PublicScope =
+  | { kind: "all" }
+  | { kind: "type"; type: EntryKind }
+  | { kind: "category"; id: number }
+  | { kind: "tag"; id: number };
+export type PublicDirectoryCursor = {
+  order: number;
+  username: string;
+  revision: string;
+  scope: string;
+  sort: "members" | "latest";
+};
+
+/** Scope-specific sort indexes avoid scanning unrelated entries for sparse tags. */
+export async function listPublicDirectory(
+  db: Db,
+  query: {
+    scope: PublicScope;
+    sort: "members" | "latest";
+    limit?: number;
+    after?: PublicDirectoryCursor;
+  },
+) {
+  const limit = query.limit ?? 60;
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 60)
+    throw new RangeError("Invalid page size");
+  const after = query.after;
+  if (after && (!Number.isSafeInteger(after.order) || typeof after.username !== "string")) {
+    throw new RangeError("Invalid directory cursor");
+  }
+  const revision = await getPublicRevision(db);
+  if (after && after.revision !== revision)
+    throw new Error("Public directory changed; restart pagination");
+  const scope =
+    query.scope.kind === "all"
+      ? "all"
+      : query.scope.kind === "type"
+        ? `kind:${query.scope.type}`
+        : `${query.scope.kind}:${query.scope.id}`;
+  if (after && (after.scope !== scope || after.sort !== query.sort)) {
+    throw new RangeError("Cursor belongs to another listing");
+  }
+  const order = query.sort === "members" ? publicListing.memberOrder : publicListing.latestOrder;
+  const rows = await db
+    .select({ ...publicFields, order })
+    .from(publicListing)
+    .innerJoin(entries, eq(entries.id, publicListing.entryId))
+    .innerJoin(categories, eq(categories.id, entries.categoryId))
+    .leftJoin(entryStats, eq(entryStats.entryId, entries.id))
+    .where(
+      and(
+        eq(publicListing.scope, scope),
+        eq(entries.status, "approved"),
+        after
+          ? sql`(${order}, ${publicListing.username}) > (${after.order}, ${after.username})`
+          : undefined,
+      ),
+    )
+    .orderBy(order, publicListing.username)
+    .limit(limit + 1);
+  // A concurrent mutation cannot publish data under an obsolete cache revision.
+  if ((await getPublicRevision(db)) !== revision)
+    throw new Error("Public directory changed; retry");
+  const items = rows.slice(0, limit);
+  const last = items.at(-1);
+  return {
+    items,
+    revision,
+    next:
+      rows.length > limit && last
+        ? { order: last.order, username: last.username, revision, scope, sort: query.sort }
+        : null,
   };
 }
