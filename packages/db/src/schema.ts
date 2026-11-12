@@ -172,6 +172,29 @@ export const siteState = sqliteTable("site_state", {
   value: text().notNull(),
 });
 
+/** Derived listing keys. Authority remains entries; enabled only after an explicit backfill. */
+export const publicListing = sqliteTable(
+  "public_listing",
+  {
+    scope: text().notNull(),
+    entryId: integer("entry_id").notNull(),
+    username: text().notNull(),
+    memberOrder: integer("member_order").notNull(),
+    latestOrder: integer("latest_order").notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.scope, t.entryId] }),
+    index("public_listing_entry").on(t.entryId),
+    index("public_listing_members").on(t.scope, t.memberOrder, t.username),
+    index("public_listing_latest").on(t.scope, t.latestOrder, t.username),
+  ],
+);
+
+export const publicCounts = sqliteTable("public_counts", {
+  scope: text().primaryKey(),
+  count: integer().notNull().default(0),
+});
+
 // Append-only admin/bot action log. Only the primary key: every extra index costs a row per write.
 export const auditLog = sqliteTable("audit_log", {
   id: integer().primaryKey(),
@@ -259,17 +282,21 @@ export const orders = sqliteTable(
 );
 
 // Public: exported to the site build. Rows are deleted when they expire.
-export const promotions = sqliteTable("promotions", {
-  id: integer().primaryKey(),
-  kind: text().$type<ProductKind>().notNull(),
-  /** null for promotions created manually in the admin */
-  orderId: integer("order_id"),
-  entryUsername: text("entry_username"),
-  banner: text({ mode: "json" }).$type<BannerContent>(),
-  startsAt: integer("starts_at").notNull(),
-  endsAt: integer("ends_at").notNull(),
-  createdAt: integer("created_at").notNull(),
-});
+export const promotions = sqliteTable(
+  "promotions",
+  {
+    id: integer().primaryKey(),
+    kind: text().$type<ProductKind>().notNull(),
+    /** null for promotions created manually in the admin */
+    orderId: integer("order_id"),
+    entryUsername: text("entry_username"),
+    banner: text({ mode: "json" }).$type<BannerContent>(),
+    startsAt: integer("starts_at").notNull(),
+    endsAt: integer("ends_at").notNull(),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => [index("promotions_public_end").on(t.endsAt, t.id)],
+);
 
 /**
  * One order awaiting an on-chain USDT transfer. `amount_micro` is the order's fingerprint: the
