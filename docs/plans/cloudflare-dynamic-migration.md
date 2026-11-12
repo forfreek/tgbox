@@ -273,7 +273,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 | 阶段 | 日期 | 提交/PR | 测试结果 | 验收人 | 结论 |
 |---|---|---|---|---|---|
 | 规划 | 2026-11-12 | `b8657e6` / PR #21 | 文档检查与 GitHub CI 通过 | PR 审查中 | 规划已固化 |
-| Phase 0 | 2026-11-12 | PR #22 | typecheck 通过；Bot 156/156；其余包通过数与 Windows 环境阻塞见基线；Linux CI 运行中 | 待确认 | 基线与源码审查完成，待 PR 验收 |
+| Phase 0 | 2026-11-12 | PR #22 | typecheck 通过；Bot 156/156；其余包通过数与 Windows 环境阻塞见基线；Linux CI 通过 | 待确认 | 阶段完成，待 PR 审查合并 |
 
 ### 下一步行动
 

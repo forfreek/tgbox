@@ -182,6 +182,6 @@ Pagefind；Mini App 的 browse 在 200 条静态列表之外也依赖 Pagefind�
 | 非 Hant package 单元/集成测试 | 部分受环境阻塞 | shared 152、telegram 85、db 74、core 150、snapshot 27、admin 103 通过；Web 329 通过、68 跳过、1 个构建测试因 Windows `.bin/astro` 路径/VM ESM 环境失败 |
 | `pnpm test` | 环境性失败 | `@tgbox/hant` 的生成文件字节比较受 Windows CRLF 影响；未发现 Phase 0 文档变更导致的业务回归 |
 | 源码审查 | 完成 | 覆盖路由、SEO、公开 JSON、`getSiteData()`、Pagefind、繁体转换、GitHub Actions、Bot/Admin/Cron 状态入口 |
-| PR Linux CI | 运行中 | [PR #22](https://github.com/forfreek/tgbox/pull/22) 的 `check` 是 Windows 可移植性问题之外的最终基础测试门禁 |
+| PR Linux CI | 通过 | [PR #22](https://github.com/forfreek/tgbox/pull/22) 的 `check` 完成 lint、typecheck、测试及 scripts 检查 |
 
 Phase 0 的回滚仅需撤回本基线文档、计划状态与规则增量；没有数据库、Cloudflare 资源或生产状态需要回滚。
