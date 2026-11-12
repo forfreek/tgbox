@@ -181,19 +181,66 @@ export const publicListing = sqliteTable(
     username: text().notNull(),
     memberOrder: integer("member_order").notNull(),
     latestOrder: integer("latest_order").notNull(),
+    promotionOrder: integer("promotion_order").notNull().default(0),
+    usernameKey: text("username_key").notNull().default(""),
   },
   (t) => [
     primaryKey({ columns: [t.scope, t.entryId] }),
     index("public_listing_entry").on(t.entryId),
     index("public_listing_members").on(t.scope, t.memberOrder, t.username),
     index("public_listing_latest").on(t.scope, t.latestOrder, t.username),
+    index("public_listing_page_members").on(
+      t.scope,
+      t.promotionOrder,
+      t.memberOrder,
+      t.usernameKey,
+    ),
+    index("public_listing_page_latest").on(t.scope, t.promotionOrder, t.latestOrder, t.usernameKey),
   ],
 );
 
 export const publicCounts = sqliteTable("public_counts", {
   scope: text().primaryKey(),
   count: integer().notNull().default(0),
+  orderRevision: integer("order_revision").notNull().default(0),
 });
+
+/** Time validity of the paid promotion tier, derived from promotions for one entry. */
+export const publicPromotionState = sqliteTable(
+  "public_promotion_state",
+  {
+    entryId: integer("entry_id").primaryKey(),
+    isPublic: integer("is_public", { mode: "boolean" }).notNull(),
+    tier: integer().notNull().default(0),
+    validFrom: integer("valid_from").notNull().default(0),
+    validUntil: integer("valid_until").notNull().default(0),
+    inputRevision: integer("input_revision").notNull().default(0),
+    evaluationKey: text("evaluation_key").notNull().default(""),
+  },
+  (t) => [
+    index("public_promotions_due").on(t.validUntil, t.entryId).where(sql`is_public = 1`),
+    index("public_promotions_future").on(t.validFrom, t.entryId).where(sql`is_public = 1`),
+  ],
+);
+
+/** Keys immediately before numbered pages; ordinary content edits keep these usable. */
+export const publicPageAnchors = sqliteTable(
+  "public_page_anchors",
+  {
+    scope: text().notNull(),
+    sort: text().$type<"members" | "latest">().notNull(),
+    orderRevision: integer("order_revision").notNull(),
+    page: integer().notNull(),
+    promotionOrder: integer("promotion_order").notNull(),
+    orderValue: integer("order_value").notNull(),
+    usernameKey: text("username_key").notNull(),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.scope, t.sort, t.orderRevision, t.page] }),
+    index("public_page_anchors_created").on(t.createdAt),
+  ],
+);
 
 // Append-only admin/bot action log. Only the primary key: every extra index costs a row per write.
 export const auditLog = sqliteTable("audit_log", {
@@ -295,7 +342,11 @@ export const promotions = sqliteTable(
     endsAt: integer("ends_at").notNull(),
     createdAt: integer("created_at").notNull(),
   },
-  (t) => [index("promotions_public_end").on(t.endsAt, t.id)],
+  (t) => [
+    index("promotions_public_end").on(t.endsAt, t.id),
+    index("promotions_entry_start").on(t.entryUsername, t.startsAt, t.id),
+    index("promotions_entry_end").on(t.entryUsername, t.endsAt, t.startsAt, t.kind),
+  ],
 );
 
 /**

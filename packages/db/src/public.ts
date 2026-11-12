@@ -5,7 +5,7 @@ import { getPublicRevision } from "./public-projection.ts";
 import { categories, entries, entryStats, entryTags, publicListing, tags } from "./schema.ts";
 
 /** Public fields only. Moderation counters and translation job metadata stay private. */
-const publicFields = {
+export const publicFields = {
   id: entries.id,
   username: entries.username,
   startPayload: entries.startPayload,
@@ -108,6 +108,22 @@ export type PublicScope =
   | { kind: "type"; type: EntryKind }
   | { kind: "category"; id: number }
   | { kind: "tag"; id: number };
+
+export function publicScopeKey(scope: PublicScope) {
+  if (scope.kind === "all") return "all";
+  if (scope.kind === "type") {
+    if (!["channel", "group", "bot"].includes(scope.type)) throw new RangeError("Invalid kind");
+    return `kind:${scope.type}`;
+  }
+  if (
+    !["category", "tag"].includes(scope.kind) ||
+    !Number.isSafeInteger(scope.id) ||
+    scope.id < 1
+  ) {
+    throw new RangeError("Invalid listing scope");
+  }
+  return `${scope.kind}:${scope.id}`;
+}
 export type PublicDirectoryCursor = {
   order: number;
   username: string;
@@ -136,12 +152,7 @@ export async function listPublicDirectory(
   const revision = await getPublicRevision(db);
   if (after && after.revision !== revision)
     throw new Error("Public directory changed; restart pagination");
-  const scope =
-    query.scope.kind === "all"
-      ? "all"
-      : query.scope.kind === "type"
-        ? `kind:${query.scope.type}`
-        : `${query.scope.kind}:${query.scope.id}`;
+  const scope = publicScopeKey(query.scope);
   if (after && (after.scope !== scope || after.sort !== query.sort)) {
     throw new RangeError("Cursor belongs to another listing");
   }
