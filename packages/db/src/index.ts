@@ -15,6 +15,7 @@ export * from "./public-cache.ts";
 export * from "./public-operations.ts";
 export * from "./public-pages.ts";
 export * from "./public-projection.ts";
+export * from "./public-promotion-preparation.ts";
 export * from "./public-promotions.ts";
 export * from "./schema.ts";
 export * from "./settings.ts";
