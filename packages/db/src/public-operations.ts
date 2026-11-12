@@ -1,5 +1,5 @@
 import { SiteSettings, settingsDefaults } from "@tgbox/shared";
-import { and, eq, gt, inArray, isNull, lte, or, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, isNull, lte, or, type SQL, sql } from "drizzle-orm";
 import type { Db } from "./access.ts";
 import { getPublicRevision } from "./public-projection.ts";
 import { categories, entries, promotions, publicCounts, settings, tags } from "./schema.ts";
@@ -91,29 +91,44 @@ export async function listPublicPromotions(
   const after = query.after;
   if (after && (!Number.isSafeInteger(after.endsAt) || !Number.isSafeInteger(after.id)))
     throw new RangeError("Invalid promotion cursor");
-  const rows = await db
-    .select({
-      id: promotions.id,
-      kind: promotions.kind,
-      entryUsername: promotions.entryUsername,
-      banner: promotions.banner,
-      startsAt: promotions.startsAt,
-      endsAt: promotions.endsAt,
-    })
-    .from(promotions)
-    .leftJoin(entries, eq(entries.username, promotions.entryUsername))
-    .where(
-      and(
+  const select = (boundary: SQL | undefined, readLimit: number) =>
+    db
+      .select({
+        id: promotions.id,
+        kind: promotions.kind,
+        entryUsername: promotions.entryUsername,
+        banner: promotions.banner,
+        startsAt: promotions.startsAt,
+        endsAt: promotions.endsAt,
+      })
+      .from(promotions)
+      .leftJoin(entries, eq(entries.username, promotions.entryUsername))
+      .where(
+        and(
+          boundary ?? gt(promotions.endsAt, query.now),
+          lte(promotions.startsAt, query.now),
+          or(isNull(promotions.entryUsername), eq(entries.status, "approved")),
+        ),
+      )
+      .orderBy(promotions.endsAt, promotions.id)
+      .limit(readLimit);
+  // Equality on ends_at lets the composite index seek directly to id within a tie.
+  const sameEnd = after
+    ? and(
+        eq(promotions.endsAt, after.endsAt),
+        gt(promotions.id, after.id),
         gt(promotions.endsAt, query.now),
-        lte(promotions.startsAt, query.now),
-        or(isNull(promotions.entryUsername), eq(entries.status, "approved")),
-        after
-          ? sql`(${promotions.endsAt}, ${promotions.id}) > (${after.endsAt}, ${after.id})`
-          : undefined,
-      ),
-    )
-    .orderBy(promotions.endsAt, promotions.id)
-    .limit(limit + 1);
+      )
+    : undefined;
+  const rows = await select(sameEnd, limit + 1);
+  if (after && rows.length < limit + 1) {
+    rows.push(
+      ...(await select(
+        gt(promotions.endsAt, Math.max(query.now, after.endsAt)),
+        limit + 1 - rows.length,
+      )),
+    );
+  }
   const items = rows.slice(0, limit);
   const last = items.at(-1);
   return { items, next: rows.length > limit && last ? { endsAt: last.endsAt, id: last.id } : null };
