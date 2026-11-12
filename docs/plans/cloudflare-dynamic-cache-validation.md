@@ -31,7 +31,7 @@
 | 详情/最新 | public.test.ts 的部分索引/分页测试；本节点缓存完整读取计划 | 异常标签规模、完整详情R2与相关查询 |
 | 成员数/标签目录 | public-projection.test.ts 稀疏1000条样本，业务SELECT 4 rows-read | 生产分布与全链路缓存成本 |
 | 数字页 | public-pages.test.ts 1000条第17页，完整9SQL 259 rows-read | 冷锚点准备、高频排序变化、完整写放大 |
-| 首页/分类标签/推广/设置 | 功能与边界测试已有 | 各目标SQL完整计划、rows-read和写预算逐项补齐 |
+| 首页/分类标签/推广/设置 | 完整函数SQL计划及成本见cloudflare-dynamic-operations-cost.md | 推广稀疏有效候选扫描与同步写预算 |
 | 排行 | P1-5 四榜Top50原型各100 rows-read | 生产投影、镜像同步与时间代次成本 |
 | 版本同步写入 | 状态事务回滚与缓存并发测试；当前成员数单行变更样本18 rows-written | 多标签、批量隐藏、翻译/推广/R2恢复入口及Cron预算 |
 
