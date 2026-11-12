@@ -5,6 +5,7 @@ import {
   backfillPublicProjection,
   beginPublicProjection,
   createDb,
+  getPublicEntry,
   getPublicRevision,
   getPublicSiteSettings,
   getPublicTotals,
@@ -257,7 +258,7 @@ test("versioned cache avoids reloads, expires on time, and never reuses a hidden
   expect(await read()).toBe(1);
   expect(reads).toBe(1);
   now = 2000;
-  expect(await read()).toBe(1);
+  await expect(read()).rejects.toThrow("expired");
   expect(reads).toBe(2);
   now = 1500;
   await setEntryStatus(db, row.id, "hidden_by_admin", 3000);
@@ -285,6 +286,142 @@ test("versioned cache avoids reloads, expires on time, and never reuses a hidden
       options,
     ),
   ).rejects.toThrow("changed");
+});
+
+test("cache I/O cannot publish an entry hidden during get or put", async () => {
+  const row = await add("cache_io", 100);
+  await beginPublicProjection(db);
+  await finish();
+  for (const phase of ["get", "put"] as const) {
+    await setEntryStatus(db, row.id, "approved", 1000);
+    const stored = new Map<string, string>();
+    let hide = false;
+    const cache = {
+      get: async (key: string) => {
+        if (hide && phase === "get") await setEntryStatus(db, row.id, "hidden_by_admin", 2000);
+        return stored.get(key) ?? null;
+      },
+      put: async (key: string, value: string) => {
+        stored.set(key, value);
+        if (hide && phase === "put") await setEntryStatus(db, row.id, "hidden_by_admin", 2000);
+      },
+    };
+    const read = () =>
+      readPublicCached(
+        db,
+        cache,
+        [phase],
+        (value) => value,
+        async () => ({ value: await getPublicEntry(db, "cache_io") }),
+        { now: () => 1000, maxAgeMs: 1000 },
+      );
+    if (phase === "get") await read();
+    hide = true;
+    await expect(read()).rejects.toThrow("changed");
+  }
+});
+
+test("slow cache I/O and clock rollback cannot publish outside the time interval", async () => {
+  await beginPublicProjection(db);
+  await finish();
+  let time = 1000;
+  const stored = new Map<string, string>();
+  let afterPut = 1000;
+  const cache = {
+    get: async (key: string) => stored.get(key) ?? null,
+    put: async (key: string, value: string) => {
+      stored.set(key, value);
+      time = afterPut;
+    },
+  };
+  const read = (parse = (value: unknown) => value) =>
+    readPublicCached(db, cache, ["time"], parse, async () => ({ value: 1, validUntil: 2000 }), {
+      now: () => time,
+      maxAgeMs: 1000,
+    });
+  afterPut = 2000;
+  await expect(read()).rejects.toThrow("expired");
+  time = 1000;
+  await expect(
+    read((value) => {
+      time = 2000;
+      return value;
+    }),
+  ).rejects.toThrow("expired");
+  stored.clear();
+  time = 1000;
+  afterPut = 999;
+  await expect(read()).rejects.toThrow("expired");
+  // A cache object from a future interval must be ignored after clock rollback.
+  afterPut = 999;
+  expect(await read()).toBe(1);
+  await expect(
+    readPublicCached(
+      db,
+      null,
+      [],
+      (value) => value,
+      async () => ({ value: 1, validUntil: NaN }),
+      { now: () => 1000, maxAgeMs: 1000 },
+    ),
+  ).rejects.toThrow("validity");
+});
+
+test("cache hit costs only two indexed authority reads and skips the detail loader", async () => {
+  await add("cache_budget", 100);
+  await beginPublicProjection(db);
+  await finish();
+  const statements: { query: string; params: unknown[] }[] = [];
+  const traced = drizzle(env.DB, {
+    schema,
+    logger: {
+      logQuery(query, params) {
+        statements.push({ query, params });
+      },
+    },
+  });
+  const stored = new Map<string, string>();
+  const cache = {
+    get: async (key: string) => stored.get(key) ?? null,
+    put: async (key: string, value: string) => {
+      stored.set(key, value);
+    },
+  };
+  let loads = 0;
+  const read = () =>
+    readPublicCached(
+      traced,
+      cache,
+      ["detail", "zh", "cache_budget"],
+      (value) => value,
+      async () => {
+        loads++;
+        return { value: await getPublicEntry(traced, "cache_budget") };
+      },
+      { now: () => 1000, maxAgeMs: 1000 },
+    );
+  for (const phase of ["miss", "hit"] as const) {
+    statements.length = 0;
+    await read();
+    expect(loads).toBe(1);
+    expect(statements).toHaveLength(phase === "miss" ? 4 : 2);
+    let rowsRead = 0;
+    for (const statement of statements) {
+      const plan = await env.DB.prepare(`EXPLAIN QUERY PLAN ${statement.query}`)
+        .bind(...statement.params)
+        .all<{ detail: string }>();
+      const details = plan.results.map((row) => row.detail).join("\n");
+      expect(details).toContain("INDEX");
+      expect(details).not.toContain("SCAN");
+      const result = await env.DB.prepare(statement.query)
+        .bind(...statement.params)
+        .all();
+      rowsRead += result.meta.rows_read;
+      expect(result.meta.rows_written).toBe(0);
+    }
+    expect(rowsRead).toBeLessThanOrEqual(phase === "miss" ? 30 : 12);
+    console.info("cache authority budget", { phase, statements: statements.length, rowsRead });
+  }
 });
 
 test("disabled authority rejects cached reads", async () => {
