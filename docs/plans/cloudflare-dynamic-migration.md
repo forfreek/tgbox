@@ -293,12 +293,12 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 | Phase 0 | 2026-11-12 | PR #22 | typecheck 通过；Bot 156/156；其余包通过数与 Windows 环境阻塞见基线；Linux CI 通过 | 待确认 | 阶段完成，待 PR 审查合并 |
 | Phase 1 第一批 | 2026-11-12 | PR #24（P1-2） | DB 78/78；全仓 typecheck 通过；真实查询 SQL 的 EXPLAIN 索引检查通过 | 待确认 | 公开详情与最新分页完成，全阶段实施中 |
 | Phase 1 第二批 | 2026-11-12 | PR #23 | DB 86/86；1000 条稀疏标签样本业务查询 rows-read 从 1003 降为 4；全仓 typecheck 通过 | 待确认 | 首页运营读取完成，投影/缓存与回填基础已实现，完整阶段继续验收 |
-| P1-5 | 2026-11-12 | 独立 PR，依赖 #23 | DB 90/90；排行原型 4/4；既有排行测试 13/13；typecheck 9/9；四榜在 1000 个候选下均读取 100 行 | 待确认 | 设计与原型验证完成，R2 镜像顺序等按待验证方案跟踪 |
+| P1-5 | 2026-11-12 | PR #25，依赖 #23 | DB 90/90；排行原型 4/4；既有排行测试 13/13；typecheck 9/9；四榜在 1000 个候选下均读取 100 行 | 待确认 | 设计与原型验证完成，R2 镜像顺序等按待验证方案跟踪 |
 
 当前 PR 依赖顺序为 #21 → #22 → #24 → #23。PR #24 包含第一批提交 `d55b5af`，
 PR #23 的 base 为 `codex/cloudflare-phase-1-detail`，仅审查第二批及规则/进度更新。
 第二批对应 P1-4 及排序、缓存、回填的前置基础，其余任务继续按 checklist 跟踪。
-P1-5 使用独立分支 `codex/cloudflare-p1-5-rankings`，依赖 #23 的 `codex/cloudflare-phase-1` 分支。
+P1-5 通过 PR #25 的独立分支 `codex/cloudflare-p1-5-rankings` 交付，依赖 #23 的 `codex/cloudflare-phase-1` 分支。
 
 ### 下一步行动
 

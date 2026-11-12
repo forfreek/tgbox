@@ -1,5 +1,7 @@
 # P1-5 排行投影与 R2 历史设计验证
 
+本节点通过 [PR #25](https://github.com/forfreek/tgbox/pull/25) 交付，依赖 PR #23。
+
 本节点完成排行查询边界、候选投影、R2 迁移与失败恢复设计，以及本地 D1 SQL 原型验证。
 生产表结构、同步代码和页面接入继续在后续实现节点验收。原型表仅由
 `packages/db/src/public-rankings-design.test.ts` 在隔离测试数据库中创建。
