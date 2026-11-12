@@ -79,7 +79,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 
 ### Phase 1：D1 动态数据访问层与必要索引
 
-- 状态：实施中；第一批公开详情与最新分页，见 `docs/plans/cloudflare-dynamic-phase-1.md`。
+- 状态：实施中；P1-2/P1-4 实现与 P1-5 设计验证已完成，见 `docs/plans/cloudflare-dynamic-phase-1.md`。
 - 前置依赖：Phase 0 验收完成；目标查询及真实或等价数据规模已记录。
 - 涉及模块：`packages/db/src/schema.ts`、`packages/db/src/access.ts`、新增公共读取模块、
   `packages/db/migrations`、`packages/core` 写入路径、测试数据库夹具。
@@ -92,7 +92,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 - [x] P1-2 实现按 username 的公开详情查询，并统一强制 `status = 'approved'`。
 - [ ] P1-3 实现类型、分类、标签的成员数/最新排序查询及每页 60 条的稳定分页。
 - [x] P1-4 实现首页统计、分类/标签计数、推广、公告和友情链接的有界读取。
-- [ ] P1-5 设计排行所需的 D1 投影或有界计算；R2 历史迁移方案标记为待验证后再定。
+- [x] P1-5 设计排行所需的 D1 投影或有界计算；R2 历史迁移方案标记为待验证后再定。设计与 SQL 原型证据见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 - [ ] P1-6 为每条目标 SQL 记录查询计划；仅添加有性能依据且写放大可接受的索引。同步记录缓存键、数据依赖、权威状态校验成本和读写预算，验证内容写入与缓存失效的并发顺序。
 - [ ] P1-7 覆盖新增、审核、编辑、下架、恢复、分类标签、翻译、推广和隐藏操作的索引/投影同步。
 - [ ] P1-8 实现迁移回填脚本的分批、幂等、可续跑和结果校验，但不在未授权时执行生产 migration。
@@ -249,7 +249,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 
 ### 当前阶段
 
-- Phase 1：用户已授权启动，当前实现公开详情与最新分页基础。全阶段验收继续跟踪。
+- Phase 1：P1-2/P1-4 实现及 P1-5 设计验证完成，其他节点与整阶段验收继续跟踪。
 
 ### 已完成事项
 
@@ -258,6 +258,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 - 已完成 Phase 0 的 URL、SEO、公开数据、构建调用链、状态入口、等价规模和允许差异基线。
 - 已运行基础代码测试并记录 Windows 测试可移植性问题；详细结果见 Phase 0 基线文档。
 - Phase 1 已实现公开详情、成员数/标签基础分页、投影计数和首页运营读取，以及版本化缓存协议与分批回填基础。
+- P1-5 排行投影与 R2 历史设计验证完成；候选 SQL 在本地 D1 验证，生产实现及待验证决策继续按后续节点验收。
 
 ### 未完成事项
 
@@ -292,15 +293,17 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 | Phase 0 | 2026-11-12 | PR #22 | typecheck 通过；Bot 156/156；其余包通过数与 Windows 环境阻塞见基线；Linux CI 通过 | 待确认 | 阶段完成，待 PR 审查合并 |
 | Phase 1 第一批 | 2026-11-12 | PR #24（P1-2） | DB 78/78；全仓 typecheck 通过；真实查询 SQL 的 EXPLAIN 索引检查通过 | 待确认 | 公开详情与最新分页完成，全阶段实施中 |
 | Phase 1 第二批 | 2026-11-12 | PR #23 | DB 86/86；1000 条稀疏标签样本业务查询 rows-read 从 1003 降为 4；全仓 typecheck 通过 | 待确认 | 首页运营读取完成，投影/缓存与回填基础已实现，完整阶段继续验收 |
+| P1-5 | 2026-11-12 | PR #25，依赖 #23 | DB 90/90；排行原型 4/4；既有排行测试 13/13；typecheck 9/9；四榜在 1000 个候选下均读取 100 行 | 待确认 | 设计与原型验证完成，R2 镜像顺序等按待验证方案跟踪 |
 
 当前 PR 依赖顺序为 #21 → #22 → #24 → #23。PR #24 包含第一批提交 `d55b5af`，
 PR #23 的 base 为 `codex/cloudflare-phase-1-detail`，仅审查第二批及规则/进度更新。
 第二批对应 P1-4 及排序、缓存、回填的前置基础，其余任务继续按 checklist 跟踪。
+P1-5 通过 PR #25 的独立分支 `codex/cloudflare-p1-5-rankings` 交付，依赖 #23 的 `codex/cloudflare-phase-1` 分支。
 
 ### 下一步行动
 
-1. 审查并合并 Phase 0 PR，确认基线和源码审查发现。
-2. 在启动 Phase 1 前确认隔离 D1、代表性数据规模、允许读取的指标及 migration/回填授权边界。
+1. 按依赖顺序审查各节点 PR，结合用户安排合并。
+2. 继续 P1-3 的推广优先排序/数字页码映射，以及 P1-6/P1-7/P1-8 的实际同步、查询成本和回填验收。
 3. 明确 Mini App 契约落库方式和 Windows 测试可移植性问题的处理批次。
 4. 按 Phase 1 实施记录继续剩余任务，生产 D1 migration 和 Cloudflare 资源操作逐项确认。
 
@@ -309,10 +312,10 @@ PR #23 的 base 为 `codex/cloudflare-phase-1-detail`，仅审查第二批及规
 | 阶段 | 任务数 | 完成数 |
 |---|---:|---:|
 | Phase 0 | 7 | 7 |
-| Phase 1 | 8 | 2 |
+| Phase 1 | 8 | 3 |
 | Phase 2 | 9 | 0 |
 | Phase 3 | 9 | 0 |
 | Phase 4 | 9 | 0 |
 | Phase 5 | 7 | 0 |
 | Phase 6 | 6 | 0 |
-| 合计 | 55 | 9 |
+| 合计 | 55 | 10 |
