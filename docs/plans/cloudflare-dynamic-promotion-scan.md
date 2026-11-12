@@ -38,7 +38,7 @@
 - [ ] 设计准备中HTTP状态与重试，验证跨地区缓存故障、下架/恢复/删除、未来开始及评估耗时超出validUntil。
 - [ ] 据真实规模和写放大评估是否需要进一步候选投影或时间窗口索引。
 
-以上接入继续单独验收。本节点新增读取函数与测试，网站、Bot、Admin、Mini App当前入口尚未切换到新函数。
+有界准备与D1固定键状态、有限输出和缓存读取已有后续实现，见 `cloudflare-dynamic-promotion-preparation.md`；Worker/Cron调度、adapter与HTTP接入继续单独验收。本节点新增读取函数与测试，网站、Bot、Admin、Mini App当前入口尚未切换到新函数。
 
 ## 验收与回滚
 

@@ -10,6 +10,8 @@ P1-6 缓存时间/并发子节点见 `docs/plans/cloudflare-dynamic-cache-valida
 
 `scanPublicPromotions()`已提供最多100候选的有界准备接口，见 `docs/plans/cloudflare-dynamic-promotion-scan.md`。新旧读取兼容，准备/缓存调度与HTTP接入仍待P1-7/Phase2完成。
 
+推广准备状态与缓存发布已提供数据层入口，见 `docs/plans/cloudflare-dynamic-promotion-preparation.md`。每次推进一批、D1固定键CAS保存有限输出，完整结果沿用版本缓存协议；Worker/Cron与HTTP接入继续待验收。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 
