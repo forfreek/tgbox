@@ -88,7 +88,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
   rows-read/rows-written 对照。
 - 回滚方法：保持旧快照读取与旧表可用；新表/索引采用增量迁移，应用回退时停止双写，不立即删除结构。
 
-- [ ] P1-1 定义请求级公共 DTO 和条目、分类、标签、首页、排行、推广、设置的查询边界。
+- [x] P1-1 定义请求级公共 DTO 和条目、分类、标签、首页、排行、推广、设置的查询边界。契约及实现缺口见 `docs/plans/cloudflare-dynamic-contracts.md`，后续接入逐项验收。
 - [x] P1-2 实现按 username 的公开详情查询，并统一强制 `status = 'approved'`。
 - [x] P1-3 实现类型、分类、标签的成员数/最新排序查询及每页 60 条的稳定分页。推广排序、数字页锚点及准备状态见 `docs/plans/cloudflare-dynamic-pagination.md`。
 - [x] P1-4 实现首页统计、分类/标签计数、推广、公告和友情链接的有界读取。
@@ -295,6 +295,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 | Phase 1 第二批 | 2026-11-12 | PR #23 | DB 86/86；1000 条稀疏标签样本业务查询 rows-read 从 1003 降为 4；全仓 typecheck 通过 | 待确认 | 首页运营读取完成，投影/缓存与回填基础已实现，完整阶段继续验收 |
 | P1-5 | 2026-11-12 | PR #25，依赖 #23 | DB 90/90；排行原型 4/4；既有排行测试 13/13；typecheck 9/9；四榜在 1000 个候选下均读取 100 行 | 待确认 | 设计与原型验证完成，R2 镜像顺序等按待验证方案跟踪 |
 | P1-3 | 2026-11-12 | #26，承接 #25 | DB 99/99；页码 9/9；分类排序 8/8；迁移 1/1；typecheck 9/9 | 源码审查完成，CI 以 PR checks 为准 | 数据访问层完成，HTTP 接入和准备编排由 Phase 2/P1-7 验收 |
+| P1-1 | 2026-11-12 | 独立分支 codex/cloudflare-p1-1-contracts，承接 #26 | DB 100/100；typecheck 9/9；字段精确白名单测试通过 | 源码审查完成，CI 以 PR checks 为准 | 完成契约定义，online、详情推广、R2过滤与相关推荐等实现缺口按契约后续验收 |
 
 当前 PR 依赖顺序为 #21 → #22 → #24 → #23。PR #24 包含第一批提交 `d55b5af`，
 PR #23 的 base 为 `codex/cloudflare-phase-1-detail`，仅审查第二批及规则/进度更新。
@@ -304,7 +305,7 @@ P1-5 通过 PR #25 的独立分支 `codex/cloudflare-p1-5-rankings` 交付，依
 ### 下一步行动
 
 1. 按依赖顺序审查各节点 PR，结合用户安排合并。
-2. 继续 P1-1/P1-6/P1-7/P1-8 的 DTO 边界、查询成本、任务同步和完整回填验收。
+2. 按 P1-1 契约继续 P1-6/P1-7/P1-8 的查询成本、任务同步和完整回填验收。
 3. 明确 Mini App 契约落库方式和 Windows 测试可移植性问题的处理批次。
 4. 按 Phase 1 实施记录继续剩余任务，生产 D1 migration 和 Cloudflare 资源操作逐项确认。
 
@@ -313,10 +314,10 @@ P1-5 通过 PR #25 的独立分支 `codex/cloudflare-p1-5-rankings` 交付，依
 | 阶段 | 任务数 | 完成数 |
 |---|---:|---:|
 | Phase 0 | 7 | 7 |
-| Phase 1 | 8 | 4 |
+| Phase 1 | 8 | 5 |
 | Phase 2 | 9 | 0 |
 | Phase 3 | 9 | 0 |
 | Phase 4 | 9 | 0 |
 | Phase 5 | 7 | 0 |
 | Phase 6 | 6 | 0 |
-| 合计 | 55 | 11 |
+| 合计 | 55 | 12 |

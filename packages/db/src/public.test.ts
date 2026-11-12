@@ -7,7 +7,9 @@ import {
   insertApprovedEntry,
   listCategories,
   listPublicLatest,
+  listTags,
   setEntryStatus,
+  setEntryTags,
   syncTaxonomy,
 } from "./index.ts";
 import * as schema from "./schema.ts";
@@ -62,6 +64,44 @@ test("public detail reflects hide, restore and deletion without a build", async 
   expect(detail).not.toHaveProperty("failCount");
   await env.DB.prepare("DELETE FROM entries WHERE id = ?").bind(row.id).run();
   expect(await getPublicEntry(db, "public_detail")).toBeUndefined();
+});
+
+test("detail and latest expose only the public data-layer contract", async () => {
+  const row = await add("public_contract");
+  const tag = (await listTags(db))[0];
+  if (!tag) throw new Error("Missing taxonomy tag");
+  await setEntryTags(db, row.id, [tag.id], 1000);
+  const fields = [
+    "id",
+    "username",
+    "startPayload",
+    "kind",
+    "categoryId",
+    "category",
+    "title",
+    "description",
+    "descriptionZh",
+    "descriptionEn",
+    "lang",
+    "verified",
+    "avatarVersion",
+    "tgCreatedAt",
+    "listedAt",
+    "updatedAt",
+    "isPromoted",
+    "hidePosts",
+    "members",
+    "activityTier",
+  ];
+  const detail = await getPublicEntry(db, "public_contract");
+  expect(detail).toBeDefined();
+  expect(Object.keys(detail ?? {}).sort()).toEqual([...fields, "tags"].sort());
+  expect(detail?.tags).toHaveLength(1);
+  expect(Object.keys(detail?.tags[0] ?? {}).sort()).toEqual(
+    ["id", "slug", "nameZh", "nameEn"].sort(),
+  );
+  const latest = (await listPublicLatest(db)).items[0];
+  expect(Object.keys(latest ?? {}).sort()).toEqual(fields.sort());
 });
 
 test("61 equal-date entries paginate stably without duplicates", async () => {

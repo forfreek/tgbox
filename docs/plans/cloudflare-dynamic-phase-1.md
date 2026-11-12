@@ -2,6 +2,8 @@
 
 当前状态为实施中。第一批交付公开详情和最新收录查询，第二批增加成员数/标签排序投影、首页运营读取和版本化缓存协议。推广优先排序、数字页码映射、排行与 R2 一致性继续验收。
 
+P1-1 公共 DTO 与查询边界见 `docs/plans/cloudflare-dynamic-contracts.md`，记录已实现查询与完整页面契约的缺口，接入阶段按该清单验收。Phase 1 当前完成 5/8 项，总计划 12/55 项。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 
