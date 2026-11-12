@@ -10,6 +10,7 @@ export * from "./clicks.ts";
 export * from "./friend-links.ts";
 export * from "./prefs.ts";
 export * from "./promotions.ts";
+export * from "./public.ts";
 export * from "./schema.ts";
 export * from "./settings.ts";
 export * from "./support.ts";

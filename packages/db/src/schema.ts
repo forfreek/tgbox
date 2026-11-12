@@ -88,6 +88,15 @@ export const entries = sqliteTable(
     updatedAt: integer("updated_at").notNull(),
   },
   (t) => [
+    index("entries_public_latest")
+      .on(sql`${t.listedAt} DESC`, t.username)
+      .where(sql`status = 'approved'`),
+    index("entries_public_kind_latest")
+      .on(t.kind, sql`${t.listedAt} DESC`, t.username)
+      .where(sql`status = 'approved'`),
+    index("entries_public_category_latest")
+      .on(t.categoryId, sql`${t.listedAt} DESC`, t.username)
+      .where(sql`status = 'approved'`),
     check(
       "entries_start_payload_valid",
       sql`${t.startPayload} IS NULL OR (${t.kind} = 'bot' AND length(${t.startPayload}) BETWEEN 1 AND 64 AND instr(${t.startPayload}, char(0)) = 0 AND ${t.startPayload} NOT GLOB '*[^A-Za-z0-9_-]*')`,

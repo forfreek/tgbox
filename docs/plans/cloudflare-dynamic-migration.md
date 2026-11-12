@@ -1,7 +1,7 @@
 # TGbox Cloudflare 原生动态化实施计划
 
-> - 状态：Phase 0 基线与源码审查完成，尚未开始业务代码实施
-> - 当前阶段：Phase 1（待授权；不得在 Phase 0 PR 中实施）
+> - 状态：Phase 0 已完成，Phase 1 数据读取层实施中
+> - 当前阶段：Phase 1（实施中，独立堆叠 PR）
 > - 基线：`main@c087f77e61f4cabf746cf6da9b8a6e9170f64d45`
 > - 更新日期：2026-11-12
 
@@ -78,7 +78,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 
 ### Phase 1：D1 动态数据访问层与必要索引
 
-- 状态：未开始
+- 状态：实施中；第一批公开详情与最新分页，见 `docs/plans/cloudflare-dynamic-phase-1.md`。
 - 前置依赖：Phase 0 验收完成；目标查询及真实或等价数据规模已记录。
 - 涉及模块：`packages/db/src/schema.ts`、`packages/db/src/access.ts`、新增公共读取模块、
   `packages/db/migrations`、`packages/core` 写入路径、测试数据库夹具。
@@ -88,7 +88,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 - 回滚方法：保持旧快照读取与旧表可用；新表/索引采用增量迁移，应用回退时停止双写，不立即删除结构。
 
 - [ ] P1-1 定义请求级公共 DTO 和条目、分类、标签、首页、排行、推广、设置的查询边界。
-- [ ] P1-2 实现按 username 的公开详情查询，并统一强制 `status = 'approved'`。
+- [x] P1-2 实现按 username 的公开详情查询，并统一强制 `status = 'approved'`。
 - [ ] P1-3 实现类型、分类、标签的成员数/最新排序查询及每页 60 条的稳定分页。
 - [ ] P1-4 实现首页统计、分类/标签计数、推广、公告和友情链接的有界读取。
 - [ ] P1-5 设计排行所需的 D1 投影或有界计算；R2 历史迁移方案标记为待验证后再定。
@@ -248,7 +248,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 
 ### 当前阶段
 
-- Phase 1：待明确授权后启动。Phase 0 已完成基线与源码审查，本 PR 不进入业务代码实施。
+- Phase 1：用户已授权启动，当前实现公开详情与最新分页基础。全阶段验收继续跟踪。
 
 ### 已完成事项
 
@@ -287,23 +287,24 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 |---|---|---|---|---|---|
 | 规划 | 2026-11-12 | `b8657e6` / PR #21 | 文档检查与 GitHub CI 通过 | PR 审查中 | 规划已固化 |
 | Phase 0 | 2026-11-12 | PR #22 | typecheck 通过；Bot 156/156；其余包通过数与 Windows 环境阻塞见基线；Linux CI 通过 | 待确认 | 阶段完成，待 PR 审查合并 |
+| Phase 1 第一批 | 2026-11-12 | 独立堆叠 PR | DB 78/78；全仓 typecheck 通过；真实查询 SQL 的 EXPLAIN 索引检查通过 | 待确认 | 公开详情与最新分页完成，全阶段实施中 |
 
 ### 下一步行动
 
 1. 审查并合并 Phase 0 PR，确认基线和源码审查发现。
 2. 在启动 Phase 1 前确认隔离 D1、代表性数据规模、允许读取的指标及 migration/回填授权边界。
 3. 明确 Mini App 契约落库方式和 Windows 测试可移植性问题的处理批次。
-4. 未经新的明确授权，不执行 Phase 1 业务代码、D1 migration 或 Cloudflare 资源操作。
+4. 按 Phase 1 实施记录继续剩余任务，生产 D1 migration 和 Cloudflare 资源操作逐项确认。
 
 ### 阶段任务统计
 
 | 阶段 | 任务数 | 完成数 |
 |---|---:|---:|
 | Phase 0 | 7 | 7 |
-| Phase 1 | 8 | 0 |
+| Phase 1 | 8 | 1 |
 | Phase 2 | 9 | 0 |
 | Phase 3 | 9 | 0 |
 | Phase 4 | 9 | 0 |
 | Phase 5 | 7 | 0 |
 | Phase 6 | 6 | 0 |
-| 合计 | 55 | 7 |
+| 合计 | 55 | 8 |
