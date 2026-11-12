@@ -169,6 +169,13 @@
       "when": 1794462025895,
       "tag": "0024_public_counts",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "6",
+      "when": 1794471645766,
+      "tag": "0025_public_numbered_pages",
+      "breakpoints": true
     }
   ]
 }
