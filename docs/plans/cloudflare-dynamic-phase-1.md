@@ -8,6 +8,8 @@ P1-6 缓存时间/并发子节点见 `docs/plans/cloudflare-dynamic-cache-valida
 
 首页运营查询SQL计划与推广续页成本见 `docs/plans/cloudflare-dynamic-operations-cost.md`。复用现有索引优化同结束时间续页，推广未来/隐藏候选过滤的扫描成本仍需接入前解决。
 
+`scanPublicPromotions()`已提供最多100候选的有界准备接口，见 `docs/plans/cloudflare-dynamic-promotion-scan.md`。新旧读取兼容，准备/缓存调度与HTTP接入仍待P1-7/Phase2完成。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 

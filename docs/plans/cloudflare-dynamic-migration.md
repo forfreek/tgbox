@@ -96,6 +96,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 - [ ] P1-6 为每条目标 SQL 记录查询计划；仅添加有性能依据且写放大可接受的索引。同步记录缓存键、数据依赖、权威状态校验成本和读写预算，验证内容写入与缓存失效的并发顺序。
   - 缓存时间/并发子节点与已验证SQL族清单见 `docs/plans/cloudflare-dynamic-cache-validation.md`，完整SQL与生产规模成本继续验收。
   - 首页统计、taxonomy、设置和推广SQL证据见 `docs/plans/cloudflare-dynamic-operations-cost.md`，推广稀疏有效候选扫描问题继续待解决。
+  - 新增推广有界准备读取接口见 `docs/plans/cloudflare-dynamic-promotion-scan.md`，每批最多100候选；准备/缓存编排与SSR接入继续验收。
 - [ ] P1-7 覆盖新增、审核、编辑、下架、恢复、分类标签、翻译、推广和隐藏操作的索引/投影同步。
 - [ ] P1-8 实现迁移回填脚本的分批、幂等、可续跑和结果校验，但不在未授权时执行生产 migration。
 
@@ -300,6 +301,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 | P1-1 | 2026-11-12 | 独立分支 codex/cloudflare-p1-1-contracts，承接 #26 | DB 100/100；typecheck 9/9；字段精确白名单测试通过 | 源码审查完成，CI 以 PR checks 为准 | 完成契约定义，online、详情推广、R2过滤与相关推荐等实现缺口按契约后续验收 |
 | P1-6 缓存子节点 | 2026-11-12 | 独立分支 codex/cloudflare-p1-6-cache，承接 #27 | DB 103/103；typecheck 9/9；命中2 SQL/12 rows-read，详情回源4 SQL/16 rows-read | 源码审查完成，CI以PR checks为准 | 时间和并发失效子任务完成，P1-6整项继续待验收 |
 | P1-6 运营查询子节点 | 2026-11-12 | 独立分支 codex/cloudflare-p1-6-operations，承接 #28 | DB 108/108；运营查询5/5；typecheck9/9；同结束时间推广续页180降至121 rows-read | 源码审查完成，CI以PR checks为准 | 首页/分类标签/设置/推广SQL证据完成，稀疏有效推广候选扫描待解决 |
+| P1-6 推广扫描子节点 | 2026-11-12 | 独立分支 codex/cloudflare-p1-6-promotion-scan，承接 #29 | DB112/112；运营/扫描9/9；typecheck9/9；每批最多100候选，完整调用最高212 rows-read | 源码审查完成，CI以PR checks为准 | 有界准备接口完成，准备调度、缓存发布及页面接入继续待验收 |
 
 当前 PR 依赖顺序为 #21 → #22 → #24 → #23。PR #24 包含第一批提交 `d55b5af`，
 PR #23 的 base 为 `codex/cloudflare-phase-1-detail`，仅审查第二批及规则/进度更新。

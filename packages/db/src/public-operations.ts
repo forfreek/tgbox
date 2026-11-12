@@ -2,7 +2,17 @@ import { SiteSettings, settingsDefaults } from "@tgbox/shared";
 import { and, eq, gt, inArray, isNull, lte, or, type SQL, sql } from "drizzle-orm";
 import type { Db } from "./access.ts";
 import { getPublicRevision } from "./public-projection.ts";
+import { PUBLIC_TIME_INFINITY, validatePublicTime } from "./public-promotions.ts";
 import { categories, entries, promotions, publicCounts, settings, tags } from "./schema.ts";
+
+const promotionFields = {
+  id: promotions.id,
+  kind: promotions.kind,
+  entryUsername: promotions.entryUsername,
+  banner: promotions.banner,
+  startsAt: promotions.startsAt,
+  endsAt: promotions.endsAt,
+};
 
 /** Homepage totals are fixed-key reads of transactionally maintained counts. */
 export async function getPublicTotals(db: Db) {
@@ -93,14 +103,7 @@ export async function listPublicPromotions(
     throw new RangeError("Invalid promotion cursor");
   const select = (boundary: SQL | undefined, readLimit: number) =>
     db
-      .select({
-        id: promotions.id,
-        kind: promotions.kind,
-        entryUsername: promotions.entryUsername,
-        banner: promotions.banner,
-        startsAt: promotions.startsAt,
-        endsAt: promotions.endsAt,
-      })
+      .select(promotionFields)
       .from(promotions)
       .leftJoin(entries, eq(entries.username, promotions.entryUsername))
       .where(
@@ -132,4 +135,92 @@ export async function listPublicPromotions(
   const items = rows.slice(0, limit);
   const last = items.at(-1);
   return { items, next: rows.length > limit && last ? { endsAt: last.endsAt, id: last.id } : null };
+}
+
+export type PublicPromotionScanCursor = {
+  endsAt: number;
+  id: number;
+  revision: string;
+  evaluatedAt: number;
+};
+
+/** Bounded candidate batch for preparation. An empty items array may still have a continuation. */
+export async function scanPublicPromotions(
+  db: Db,
+  query: { now: number; after?: PublicPromotionScanCursor; batchSize?: number },
+) {
+  validatePublicTime(query.now);
+  const size = query.batchSize ?? 100;
+  if (!Number.isSafeInteger(size) || size < 1 || size > 100)
+    throw new RangeError("Invalid promotion scan size");
+  const after = query.after;
+  if (
+    after &&
+    (!Number.isSafeInteger(after.endsAt) ||
+      after.endsAt <= query.now ||
+      !Number.isSafeInteger(after.id) ||
+      typeof after.revision !== "string" ||
+      !/^\d+$/.test(after.revision) ||
+      after.evaluatedAt !== query.now)
+  )
+    throw new RangeError("Invalid promotion scan cursor");
+  const revision = await getPublicRevision(db);
+  if (after && after.revision !== revision) throw new Error("Public promotions changed; restart");
+  const select = (boundary: SQL | undefined, limit: number) => {
+    // LIMIT is inside the subquery so status and start-time filters cannot widen the source scan.
+    const candidates = db
+      .select(promotionFields)
+      .from(promotions)
+      .where(boundary)
+      .orderBy(promotions.endsAt, promotions.id)
+      .limit(limit)
+      .as("candidates");
+    return db
+      .select({
+        id: candidates.id,
+        kind: candidates.kind,
+        entryUsername: candidates.entryUsername,
+        banner: candidates.banner,
+        startsAt: candidates.startsAt,
+        endsAt: candidates.endsAt,
+        status: entries.status,
+      })
+      .from(candidates)
+      .leftJoin(entries, eq(entries.username, candidates.entryUsername))
+      .orderBy(candidates.endsAt, candidates.id);
+  };
+  const rows = await select(
+    after
+      ? and(eq(promotions.endsAt, after.endsAt), gt(promotions.id, after.id))
+      : gt(promotions.endsAt, query.now),
+    size,
+  );
+  if (after && rows.length < size) {
+    rows.push(...(await select(gt(promotions.endsAt, after.endsAt), size - rows.length)));
+  }
+  let validUntil = PUBLIC_TIME_INFINITY;
+  const items = [];
+  for (const { status, ...row } of rows) {
+    validUntil = Math.min(
+      validUntil,
+      row.endsAt,
+      row.startsAt > query.now ? row.startsAt : PUBLIC_TIME_INFINITY,
+    );
+    if (row.startsAt <= query.now && (row.entryUsername === null || status === "approved"))
+      items.push(row);
+  }
+  if ((await getPublicRevision(db)) !== revision)
+    throw new Error("Public promotions changed; restart");
+  const last = rows.at(-1);
+  return {
+    items,
+    revision,
+    evaluatedAt: query.now,
+    validUntil,
+    scanned: rows.length,
+    next:
+      rows.length === size && last
+        ? { endsAt: last.endsAt, id: last.id, revision, evaluatedAt: query.now }
+        : null,
+  };
 }

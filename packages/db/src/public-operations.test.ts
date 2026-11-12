@@ -9,6 +9,8 @@ import {
   getPublicTotals,
   listPublicPromotions,
   listPublicTaxonomy,
+  type PublicPromotionScanCursor,
+  scanPublicPromotions,
 } from "./index.ts";
 import * as schema from "./schema.ts";
 
@@ -162,4 +164,134 @@ test("filtered promotion candidates expose the scan cost beyond the returned LIM
     const rowsRead = await budget(`promotions/filtered-${size}`, 1, size * 4 + 10);
     expect(rowsRead).toBeGreaterThanOrEqual(size);
   }
+});
+
+test("bounded promotion scans progress through 1000 filtered candidates with fixed per-call cost", async () => {
+  await fixture(`WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM n WHERE i<1000)
+    INSERT INTO promotions(kind,entry_username,starts_at,ends_at,created_at)
+    SELECT 'pin',CASE WHEN i%2=0 THEN 'cost_hidden' ELSE 'cost_public' END,
+    CASE WHEN i%2=0 THEN 0 ELSE 2000 END,3000,0 FROM n;
+    INSERT INTO promotions(kind,starts_at,ends_at,created_at) VALUES('home_banner',0,4000,0);`);
+  let after: PublicPromotionScanCursor | undefined;
+  let totalScanned = 0;
+  const ids: number[] = [];
+  let maxRowsRead = 0;
+  for (let step = 0; step < 12; step++) {
+    statements.length = 0;
+    const batch = await scanPublicPromotions(traced, { now: 1000, after });
+    expect(batch.scanned).toBeLessThanOrEqual(100);
+    expect(statements.length).toBeLessThanOrEqual(4);
+    let rowsRead = 0;
+    for (const statement of statements) {
+      const plan = await env.DB.prepare(`EXPLAIN QUERY PLAN ${statement.query}`)
+        .bind(...statement.params)
+        .all<{ detail: string }>();
+      const text = plan.results.map((row) => row.detail).join("\n");
+      expect(text).not.toMatch(/SCAN (?:promotions|entries)\b/);
+      if (statement.query.includes('"candidates"')) expect(text).toContain("promotions_public_end");
+      const replay = await env.DB.prepare(statement.query)
+        .bind(...statement.params)
+        .all();
+      expect(replay.meta.rows_written).toBe(0);
+      rowsRead += replay.meta.rows_read;
+    }
+    expect(rowsRead).toBeLessThanOrEqual(450);
+    maxRowsRead = Math.max(maxRowsRead, rowsRead);
+    totalScanned += batch.scanned;
+    ids.push(...batch.items.map((row) => row.id));
+    if (step < 10) {
+      expect(batch.items).toEqual([]);
+      expect(batch.next).not.toBeNull();
+      expect(batch.validUntil).toBe(2000);
+    }
+    if (!batch.next) break;
+    after = batch.next;
+  }
+  expect(totalScanned).toBe(1001);
+  expect(ids).toHaveLength(1);
+  console.info("bounded promotion scan budget", { candidates: totalScanned, maxRowsRead });
+});
+
+test("promotion scan batches match the compatible live list and preserve time boundaries", async () => {
+  await fixture(`WITH RECURSIVE n(i) AS (SELECT 1 UNION ALL SELECT i+1 FROM n WHERE i<120)
+    INSERT INTO promotions(kind,entry_username,starts_at,ends_at,created_at)
+    SELECT 'pin',CASE WHEN i%5=0 THEN 'cost_hidden' WHEN i%7=0 THEN NULL ELSE 'cost_public' END,
+    CASE WHEN i%3=0 THEN 1500 ELSE 0 END,900+(i%4)*500,0 FROM n;`);
+  const baseline = await listPublicPromotions(db, { now: 1000, limit: 100 });
+  for (const batchSize of [1, 7, 100]) {
+    let after: PublicPromotionScanCursor | undefined;
+    const items: typeof baseline.items = [];
+    let validUntil = Number.MAX_SAFE_INTEGER;
+    for (let step = 0; step < 121; step++) {
+      const batch = await scanPublicPromotions(db, { now: 1000, batchSize, after });
+      validUntil = Math.min(validUntil, batch.validUntil);
+      items.push(...batch.items);
+      if (!batch.next) break;
+      after = batch.next;
+    }
+    expect(items).toEqual(baseline.items);
+    expect(validUntil).toBe(1400);
+  }
+});
+
+test("promotion scan cursors reject state changes and changed evaluation times", async () => {
+  await fixture(`INSERT INTO promotions(kind,entry_username,starts_at,ends_at,created_at)
+    VALUES('pin','cost_public',1000,2000,0);`);
+  const first = await scanPublicPromotions(db, { now: 1000, batchSize: 1 });
+  expect(first.items).toHaveLength(1);
+  expect(first.next).not.toBeNull();
+  if (!first.next) throw new Error("Missing scan cursor");
+  await expect(scanPublicPromotions(db, { now: 1001, after: first.next })).rejects.toThrow(
+    "cursor",
+  );
+  await fixture("UPDATE entries SET status='hidden_by_admin' WHERE username='cost_public';");
+  await expect(scanPublicPromotions(db, { now: 1000, after: first.next })).rejects.toThrow(
+    "changed",
+  );
+  expect((await scanPublicPromotions(db, { now: 1000 })).items).toEqual([]);
+  await fixture("UPDATE entries SET status='approved' WHERE username='cost_public';");
+  expect((await scanPublicPromotions(db, { now: 1000 })).items).toHaveLength(1);
+  expect((await scanPublicPromotions(db, { now: 999 })).items).toEqual([]);
+  expect((await scanPublicPromotions(db, { now: 2000 })).items).toEqual([]);
+  for (const batchSize of [0, 101, NaN, 1.5]) {
+    await expect(scanPublicPromotions(db, { now: 1000, batchSize })).rejects.toThrow(RangeError);
+  }
+  await fixture("UPDATE site_state SET value='0' WHERE key='public_projection_ready';");
+  await expect(scanPublicPromotions(db, { now: 1000 })).rejects.toThrow("not ready");
+});
+
+test("promotion scan rejects a result changed after its candidate query", async () => {
+  await fixture(`INSERT INTO promotions(kind,entry_username,starts_at,ends_at,created_at)
+    VALUES('pin','cost_public',0,2000,0);`);
+  let changed = false;
+  const wrap = (statement: D1PreparedStatement, text: string): D1PreparedStatement =>
+    new Proxy(statement, {
+      get(target, key) {
+        if (key === "bind") return (...params: unknown[]) => wrap(target.bind(...params), text);
+        if (key === "raw" || key === "all")
+          return async (...args: unknown[]) => {
+            const result = await Reflect.apply(Reflect.get(target, key), target, args);
+            if (!changed && text.includes('"candidates"')) {
+              changed = true;
+              await fixture(
+                "UPDATE entries SET status='hidden_by_admin' WHERE username='cost_public';",
+              );
+            }
+            return result;
+          };
+        const value = Reflect.get(target, key);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    });
+  const intercepted = new Proxy(env.DB, {
+    get(target, key) {
+      if (key === "prepare") return (text: string) => wrap(target.prepare(text), text);
+      const value = Reflect.get(target, key);
+      return typeof value === "function" ? value.bind(target) : value;
+    },
+  });
+  await expect(scanPublicPromotions(createDb(intercepted), { now: 1000 })).rejects.toThrow(
+    "changed",
+  );
+  expect(changed).toBe(true);
 });
