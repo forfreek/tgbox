@@ -6,6 +6,7 @@ import {
   type EntryStats,
   getEntriesByIdRange,
   getMaxEntryId,
+  getSiteState,
   recordLivenessResult,
   updateEntryCold,
   upsertEntryStats,
@@ -14,6 +15,7 @@ import { type Liveness, MemberPoint, type PostView, reviewRecipients } from "@tg
 import { type EntrySnapshot, fetchEntrySnapshot } from "@tgbox/telegram";
 import { markDirtyAndDispatch } from "./build.ts";
 import type { CoreContext } from "./context.ts";
+import { appendHistorySafely } from "./history-write.ts";
 import { getSettings } from "./settings.ts";
 
 type Fetch = (input: string, init?: RequestInit) => Promise<Response>;
@@ -23,7 +25,7 @@ type RefreshDeps = { fetch: Fetch };
 export type MediaBucket = Pick<R2Bucket, "get" | "head" | "put">;
 
 /** Where one entry's refresh writes to. */
-type RefreshIo = { db: Db; fetch: Fetch; media: MediaBucket };
+type RefreshIo = { db: Db; fetch: Fetch; media: MediaBucket; historyWritesEnabled?: boolean };
 
 /** Counters of one refresh (a cron batch or a single manual refresh). */
 type RefreshTally = {
@@ -161,6 +163,10 @@ export async function runRefresh(
   const maxId = await getMaxEntryId(db);
   result.subrequests++;
   if (maxId === 0) return result;
+  const historyWritesEnabled = (await getSiteState(db, "public_history_writes_enabled")) === "1";
+  result.subrequests++;
+  // Seven history operations on the enabled path; existing intents can also drain while disabled.
+  const entryWorstCase = ENTRY_WORST_CASE + (historyWritesEnabled ? 6 : 2);
   const batchSize = batchSizeOf(env);
   const batches = Math.ceil(maxId / batchSize);
   // Counted in cron ticks, not wall-clock minutes: with an every-5-minutes trigger the minute of
@@ -182,7 +188,7 @@ export async function runRefresh(
   for (const { entry, stats } of rows) {
     if (entry.status === "removed" || entry.status === "hidden_by_admin") continue;
     if (oddCycle && (stats?.activityTier === 0 || stats?.activityTier === 1)) continue;
-    if (rateLimited || result.subrequests + ENTRY_WORST_CASE + FINAL_RESERVE > SUBREQUEST_BUDGET) {
+    if (rateLimited || result.subrequests + entryWorstCase + FINAL_RESERVE > SUBREQUEST_BUDGET) {
       result.deferred.push(entry.username);
       continue;
     }
@@ -198,7 +204,7 @@ export async function runRefresh(
     rateLimited = snapshot.rateLimited;
 
     if (snapshot.liveness === "active" && snapshot.profile) {
-      const io = { db, fetch: deps.fetch, media: env.MEDIA };
+      const io = { db, fetch: deps.fetch, media: env.MEDIA, historyWritesEnabled };
       await applyActiveSnapshot(io, { entry, stats, snapshot, now, manual: false }, result);
     }
 
@@ -333,7 +339,15 @@ export async function applyActiveSnapshot(
   const members = next.members;
   const lastStatsAt = statsWritten ? now : (stats?.statsWrittenAt ?? now);
   if (members !== null && (statsWritten || now - lastStatsAt >= WEEK_MS)) {
-    await appendHistory(io.media, username, members, now, result);
+    const enabled =
+      io.historyWritesEnabled ?? (await getSiteState(db, "public_history_writes_enabled")) === "1";
+    if (io.historyWritesEnabled === undefined) result.subrequests++;
+    const written = await appendHistorySafely(db, io.media, entry, members, now, enabled);
+    result.subrequests += written.subrequests;
+    result.r2Writes += written.r2Writes;
+    result.rowsWritten += written.rowsWritten;
+    if (written.r2Writes > 0) result.dirty = true;
+    if (!written.handled) await appendHistory(io.media, username, members, now, result);
   }
 
   if (snapshot.posts !== null) {

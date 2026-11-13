@@ -20,7 +20,8 @@ export async function getHistoryMirror(db: Db, id: number) {
   return (await db.select().from(historyMirrors).where(eq(historyMirrors.entryId, id)).limit(1))[0];
 }
 const current = `EXISTS(SELECT 1 FROM history_mirrors m JOIN entries e ON e.id=m.entry_id
-  AND e.username=m.username AND e.listed_at=m.listed_at WHERE m.entry_id=? AND m.generation=?)
+  AND e.username=m.username AND e.listed_at=m.listed_at WHERE m.entry_id=? AND m.generation=?
+  AND NOT EXISTS(SELECT 1 FROM history_writes w WHERE w.entry_id=m.entry_id))
   AND (SELECT value FROM site_state WHERE key='public_content_revision')=?
   AND (SELECT value FROM site_state WHERE key='public_projection_enabled')='1'
   AND (SELECT value FROM site_state WHERE key='public_projection_ready')='1'`;
@@ -71,6 +72,7 @@ export async function advanceHistoryMirror(db: Db, input: HistoryMirrorInput) {
         .prepare(`INSERT INTO history_mirrors
         (entry_id,username,listed_at,object_version,object_etag,generation,phase,cursor,raw_points,point_count,invalid_times,updated_at,commit_token)
         SELECT ?,?,?,?,?,?,?,0,?,?,?,?,'' FROM entries WHERE id=? AND username=? AND listed_at=?
+        AND NOT EXISTS(SELECT 1 FROM history_writes WHERE entry_id=entries.id)
         AND COALESCE((SELECT generation FROM history_mirrors WHERE entry_id=?),'')=?
         AND (SELECT value FROM site_state WHERE key='public_content_revision')=?
         AND (SELECT value FROM site_state WHERE key='public_projection_enabled')='1'
@@ -208,7 +210,7 @@ export async function readHistoryBaseline(db: Db, entryId: number, cutoff: numbe
     JOIN entries e ON e.id=m.entry_id AND e.username=m.username AND e.listed_at=m.listed_at AND e.status='approved'
     LEFT JOIN history_baselines b ON m.phase='ready' AND b.entry_id=m.entry_id AND b.sampled_at=(SELECT sampled_at
       FROM history_baselines WHERE entry_id=m.entry_id AND sampled_at<=? ORDER BY sampled_at DESC LIMIT 1)
-    WHERE m.entry_id=?`)
+    WHERE m.entry_id=? AND NOT EXISTS(SELECT 1 FROM history_writes WHERE entry_id=m.entry_id)`)
     .bind(cutoff, entryId)
     .first<{ phase: string; sampled_at: number | null; members: number | null }>();
 }

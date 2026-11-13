@@ -172,6 +172,17 @@ export const siteState = sqliteTable("site_state", {
   value: text().notNull(),
 });
 
+/** Durable append intents fence public baselines until the matching R2 write is confirmed. */
+export const historyWrites = sqliteTable("history_writes", {
+  entryId: integer("entry_id").primaryKey(),
+  username: text().notNull(),
+  listedAt: integer("listed_at").notNull(),
+  token: text().notNull(),
+  baseEtag: text("base_etag"),
+  sampledAt: integer("sampled_at").notNull(),
+  members: integer().notNull(),
+});
+
 /** Derived growth baselines. R2 keeps the original ordered history for compatibility. */
 export const historyMirrors = sqliteTable("history_mirrors", {
   entryId: integer("entry_id").primaryKey(),

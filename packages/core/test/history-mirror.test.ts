@@ -266,7 +266,7 @@ test("backfill cannot skip a lower ID inserted between entry selection and mirro
 
 test("invalidation bumps the latest revision atomically and repeated invalidation is a no-op", async () => {
   const result = await complete();
-  const generation = result.state?.generation;
+  const generation = "state" in result ? result.state?.generation : undefined;
   if (!generation) throw new Error("Missing generation");
   const intercepted = createDb(
     new Proxy(env.DB, {
