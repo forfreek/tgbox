@@ -4,6 +4,7 @@ import { createApp, createBot } from "./bot/index.ts";
 import { handleCryptoPayWebhook } from "./cryptopay.ts";
 import { DIGEST_UTC_HOUR, runDailyDigest } from "./digest.ts";
 import { runHourlyMaintenance } from "./maintenance.ts";
+import { runPromotionPreparationTick } from "./promotion-preparation.ts";
 import { runUsdtWatch } from "./usdt-watch.ts";
 
 /** Second cron trigger in wrangler.jsonc; a separate invocation with its own subrequest budget. */
@@ -82,8 +83,10 @@ export default {
           undefined,
           spent + broadcast,
         );
-        // One line per run in Workers Logs: the only record of what the cron did.
+        // Each job records its result in Workers Logs.
         console.log("refresh", JSON.stringify(result));
+        const preparation = await runPromotionPreparationTick(app.db, result.subrequests, Date.now);
+        console.log("promotion preparation", JSON.stringify(preparation));
       })(),
     );
   },
