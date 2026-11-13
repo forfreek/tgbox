@@ -357,6 +357,42 @@ test("a hide between key selection and hydration fails the request instead of re
   expect((await readPublicPage(db, query())).status).toBe("not_found");
 });
 
+test("a stale preparation cannot insert an anchor after a rebuild version change", async () => {
+  for (let index = 0; index < 61; index++) await add(`anchor_race_${index}`, index);
+  await activate();
+  let changed = false;
+  const wrap = (statement: D1PreparedStatement, text: string): D1PreparedStatement =>
+    new Proxy(statement, {
+      get(target, key) {
+        if (key === "bind") return (...params: unknown[]) => wrap(target.bind(...params), text);
+        if (key === "run" && text.includes("INSERT INTO public_page_anchors"))
+          return async () => {
+            changed = true;
+            await env.DB.prepare(
+              "UPDATE site_state SET value=CAST(CAST(value AS INTEGER)+1 AS TEXT) WHERE key='public_content_revision'",
+            ).run();
+            return target.run();
+          };
+        const value = Reflect.get(target, key);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    });
+  const intercepted = createDb(
+    new Proxy(env.DB, {
+      get(target, key) {
+        if (key === "prepare") return (text: string) => wrap(target.prepare(text), text);
+        const value = Reflect.get(target, key);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    }),
+  );
+  await expect(preparePublicPage(intercepted, query(undefined, 2))).rejects.toThrow("changed");
+  expect(changed).toBe(true);
+  expect(
+    await env.DB.prepare("SELECT count(*) AS n FROM public_page_anchors").first<number>("n"),
+  ).toBe(0);
+});
+
 test("actual warm-page keys use the promoted sort index and bounded indexed reads", async () => {
   for (let i = 0; i < 1000; i++) await add(`budget_${String(i).padStart(4, "0")}`, i);
   await activate();

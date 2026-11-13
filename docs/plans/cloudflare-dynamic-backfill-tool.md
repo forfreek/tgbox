@@ -27,6 +27,7 @@ start重复调用保留进度，done后再次start也保留状态。需要从头
 | promotion_cleanup | 按entry_id seek最多100个推广状态，删除源条目已不存在的状态 |
 | backfill | 按entries.id seek最多100条，复用publicBackfillStatements重置推广状态、重建目录并推进cursor |
 | counts | 按scope续跑最多100个计数键，修正count及非法排序版本 |
+| anchors | 按created_at每批清理最多100个旧锚点，清空后进入verify |
 | verify | 等待完整本地审计，step不自动发布 |
 | done | finish在同一事务内通过审计后设置ready=1并推进内容版本 |
 
@@ -37,7 +38,7 @@ start关闭ready、启用来源触发器并从cursor0开始，源数据在批次
 
 ## 校验内容与成本
 
-完整本地audit使用双向EXCEPT核对public_listing_source与public_listing的七个字段，检查缺失及多余行。
+完整本地audit使用双向EXCEPT核对public_listing_source与public_listing的七个字段，检查缺失及多余行。finish还会拒绝残留旧锚点；远端CLI使用分页审计，见 `cloudflare-dynamic-remote-backfill.md`。
 另检查各scope计数、排序版本及每个来源条目的推广状态存在性、公开状态和tier范围，包含推广状态孤儿。
 缺失表/view、审计差异或异常状态均不能通过finish开放ready。已有推广dirty状态可保留，付费推广时间计算仍由独立有界准备流程推进。
 

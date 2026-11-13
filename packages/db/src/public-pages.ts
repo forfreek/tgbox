@@ -282,19 +282,29 @@ export async function preparePublicPage(db: Db, query: PublicPageQuery) {
     );
     if (!key) throw new Error("Public page anchor source changed; retry");
     await verify(db, ctx);
-    await db
-      .insert(anchors)
-      .values({
-        scope: ctx.scope,
-        sort: query.sort,
-        orderRevision: ctx.orderRevision,
-        page: target,
-        promotionOrder: key.promotionOrder,
-        orderValue: key.order,
-        usernameKey: key.usernameKey,
-        createdAt: query.now,
-      })
-      .onConflictDoNothing();
+    await db.$client
+      .prepare(`INSERT INTO public_page_anchors
+      (scope,sort,order_revision,page,promotion_order,order_value,username_key,created_at)
+      SELECT ?,?,?,?,?,?,?,? WHERE
+      (SELECT value FROM site_state WHERE key='public_content_revision')=?
+      AND (SELECT value FROM site_state WHERE key='public_projection_enabled')='1'
+      AND (SELECT value FROM site_state WHERE key='public_projection_ready')='1'
+      AND (SELECT order_revision FROM public_counts WHERE scope=?)=?
+      ON CONFLICT DO NOTHING`)
+      .bind(
+        ctx.scope,
+        query.sort,
+        ctx.orderRevision,
+        target,
+        key.promotionOrder,
+        key.order,
+        key.usernameKey,
+        query.now,
+        ctx.revision,
+        ctx.scope,
+        ctx.orderRevision,
+      )
+      .run();
     anchor = {
       page: target,
       promotionOrder: key.promotionOrder,

@@ -73,6 +73,8 @@ export function operateProjection(
       )
         throw new Error("Rebuild gate changed");
       const audit = auditProjection(db);
+      if (phase !== "done" && db.prepare("SELECT rowid FROM public_page_anchors LIMIT 1").get())
+        throw new Error("Old page anchors remain; restart cleanup");
       if (Object.values(audit).some((value) => value !== 0))
         throw new Error(`Projection audit failed: ${JSON.stringify(audit)}`);
       if (phase !== "done") {
@@ -138,7 +140,12 @@ export function operateProjection(
           SET count=excluded.count,order_revision=CASE WHEN order_revision>=0 AND typeof(order_revision)='integer'
           THEN order_revision+1 ELSE 1 END`).run(String(row.scope), String(row.scope));
         if (scopes.length) set(db, "public_local_rebuild_scope", String(scopes.at(-1)?.scope));
-        else set(db, phaseKey, "verify");
+        else set(db, phaseKey, "anchors");
+      } else if (phase === "anchors") {
+        db.prepare(`DELETE FROM public_page_anchors WHERE rowid IN
+          (SELECT rowid FROM public_page_anchors ORDER BY created_at LIMIT ?)`).run(limit);
+        if (!db.prepare("SELECT rowid FROM public_page_anchors LIMIT 1").get())
+          set(db, phaseKey, "verify");
       } else if (phase !== "verify" && phase !== "done") throw new Error("Unknown rebuild phase");
     }
     const status = projectionStatus(db);

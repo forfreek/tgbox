@@ -1,11 +1,16 @@
 /** Shared by D1 backfill and the offline SQLite recovery tool. */
-export function publicBackfillStatements(cursor: number, last: number) {
+export function publicBackfillStatements(
+  cursor: number,
+  last: number,
+  run?: { key: string; value: string },
+) {
   if (!Number.isSafeInteger(cursor) || cursor < 0 || !Number.isSafeInteger(last) || last <= cursor)
     throw new RangeError("Invalid public backfill range");
   const guard = `(SELECT value FROM site_state WHERE key='public_backfill_cursor')=?
     AND (SELECT value FROM site_state WHERE key='public_projection_enabled')='1'
-    AND (SELECT value FROM site_state WHERE key='public_projection_ready')='0'`;
-  return [
+    AND (SELECT value FROM site_state WHERE key='public_projection_ready')='0'
+    ${run ? "AND (SELECT value FROM site_state WHERE key=?)=?" : ""}`;
+  const statements = [
     {
       sql: `INSERT INTO public_promotion_state(entry_id,is_public,valid_until)
       SELECT e.id,e.status='approved',CASE WHEN EXISTS
@@ -34,4 +39,8 @@ export function publicBackfillStatements(cursor: number, last: number) {
       params: [String(last), String(cursor)],
     },
   ];
+  return statements.map((statement) => ({
+    ...statement,
+    params: [...statement.params, ...(run ? [run.key, run.value] : [])],
+  }));
 }
