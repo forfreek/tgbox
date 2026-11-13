@@ -184,4 +184,3 @@ AND ((SELECT value FROM site_state WHERE key='public_rankings_enabled')='1' OR E
 ON CONFLICT(entry_id) DO UPDATE SET dirty=1 WHERE public_rankings.dirty<>1;
 DELETE FROM public_rankings WHERE entry_id=NEW.entry_id AND NOT EXISTS(SELECT 1 FROM entries WHERE id=NEW.entry_id AND status='approved');
 END;
-
