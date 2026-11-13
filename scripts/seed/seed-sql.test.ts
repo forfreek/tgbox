@@ -86,7 +86,10 @@ test("re-seeding keeps listed_at and the dirty mark, and updates changed fields"
   assert.deepEqual({ ...entry }, { title: "Solidot 2", listed_at: 1000 });
   assert.equal(db.prepare("SELECT members FROM entry_stats").get()?.members, 48_000);
   assert.equal(db.prepare("SELECT count(*) AS n FROM entries_fts").get()?.n, 1);
-  assert.equal(db.prepare("SELECT value FROM site_state").get()?.value, "1000");
+  assert.equal(
+    db.prepare("SELECT value FROM site_state WHERE key='dirty_since'").get()?.value,
+    "1000",
+  );
 });
 
 test("an unknown category inserts nothing", () => {

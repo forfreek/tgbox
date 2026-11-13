@@ -19,6 +19,7 @@ export * from "./public-pages.ts";
 export * from "./public-projection.ts";
 export * from "./public-promotion-preparation.ts";
 export * from "./public-promotions.ts";
+export * from "./public-rankings.ts";
 export * from "./schema.ts";
 export * from "./settings.ts";
 export * from "./support.ts";

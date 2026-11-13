@@ -26,6 +26,8 @@ P1-8本地副本重建/审计CLI见 `docs/plans/cloudflare-dynamic-backfill-tool
 
 原刷新历史入口现提供默认关闭的持久意图/R2条件写入协议，见 `docs/plans/cloudflare-dynamic-history-write.md`。0027仅本地隔离验证，公开基准及每批镜像以SQL拒绝未完成写入；四榜、完整审计和预发布演练继续验收。
 
+四榜实际投影与查询见 `docs/plans/cloudflare-dynamic-rankings-implementation.md`。0028包含六个已验证排序/维护索引，单条条件准备及完整性/时间门禁，1000候选四榜业务各读100行；Cron、缓存、完整回填和公开接入继续验收。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 
