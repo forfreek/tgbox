@@ -1,10 +1,33 @@
 import { type EntryView, RankingsData, type SiteData } from "@tgbox/shared";
 import { describe, expect, test } from "vitest";
+import { normalizeHistory } from "../../../../packages/core/src/history-normalization.ts";
 import { devSiteData } from "./dev-site-data.ts";
 import { buildRankings, formatGrowth, memberGrowth, RANK_LIMIT } from "./rankings.ts";
 
 const now = new Date("2026-09-15T03:00:00.000Z");
 const daysAgo = (days: number) => new Date(now.getTime() - days * 86_400_000).toISOString();
+
+test("D1 baseline normalization retains the current weekly and monthly growth semantics", () => {
+  const history = [
+    { t: daysAgo(40), members: 0 },
+    { t: daysAgo(6), members: 20 },
+    { t: daysAgo(27), members: 10 },
+    { t: daysAgo(27), members: 12 },
+    { t: "invalid date", members: 999 },
+  ];
+  const normalized = normalizeHistory(history);
+  const mirror = normalized.points.map((point) => ({
+    t: new Date(point.sampledAt).toISOString(),
+    members: point.members,
+  }));
+  for (const days of [6, 27])
+    for (const offset of [-1, 0, 1]) {
+      const evaluated = new Date(now.getTime() + offset);
+      expect(memberGrowth(100, mirror, evaluated, days)).toEqual(
+        memberGrowth(100, history, evaluated, days),
+      );
+    }
+});
 
 function entry(username: string, overrides: Partial<EntryView> = {}): EntryView {
   return {

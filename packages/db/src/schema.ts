@@ -172,6 +172,35 @@ export const siteState = sqliteTable("site_state", {
   value: text().notNull(),
 });
 
+/** Derived growth baselines. R2 keeps the original ordered history for compatibility. */
+export const historyMirrors = sqliteTable("history_mirrors", {
+  entryId: integer("entry_id").primaryKey(),
+  username: text().notNull(),
+  listedAt: integer("listed_at").notNull(),
+  objectVersion: text("object_version").notNull(),
+  objectEtag: text("object_etag").notNull(),
+  generation: text().notNull(),
+  phase: text()
+    .$type<"clean" | "write" | "verify" | "ready" | "invalid" | "oversized" | "stale">()
+    .notNull(),
+  cursor: integer().notNull().default(0),
+  rawPoints: integer("raw_points").notNull(),
+  pointCount: integer("point_count").notNull(),
+  invalidTimes: integer("invalid_times").notNull(),
+  updatedAt: integer("updated_at").notNull(),
+  commitToken: text("commit_token").notNull().default(""),
+});
+export const historyBaselines = sqliteTable(
+  "history_baselines",
+  {
+    entryId: integer("entry_id").notNull(),
+    sampledAt: integer("sampled_at").notNull(),
+    members: integer().notNull(),
+    ordinal: integer().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.entryId, table.sampledAt] })],
+);
+
 /** Derived listing keys. Authority remains entries; enabled only after an explicit backfill. */
 export const publicListing = sqliteTable(
   "public_listing",

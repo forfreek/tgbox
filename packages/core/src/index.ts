@@ -33,6 +33,7 @@ export {
   rejectFriendLink,
   setFriendLinks,
 } from "./friend-links.ts";
+export { backfillHistoryMirrorStep, mirrorHistoryStep } from "./history-mirror.ts";
 export {
   type ModerationError,
   setEntryPostsVisibility,

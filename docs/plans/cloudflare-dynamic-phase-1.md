@@ -20,6 +20,8 @@ P1-8本地副本重建/审计CLI见 `docs/plans/cloudflare-dynamic-backfill-tool
 
 远端D1运维CLI已实现分页回填/清理/审计及条件ready发布，见 `docs/plans/cloudflare-dynamic-remote-backfill.md`。默认写入预演，本地API模拟验证，真实远端及恢复费用继续验收。
 
+历史镜像数据层与独立失败恢复接口见 `docs/plans/cloudflare-dynamic-history-mirror.md`。migration 0026 增加有界基准镜像，等价保留乱序源数组增长口径，每次最多推进100点。刷新调度、四榜投影及完整历史审计继续验收，Phase 1 保持5/8。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 
