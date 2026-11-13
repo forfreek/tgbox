@@ -172,6 +172,42 @@ test("all public source table write families invalidate a warm cache transaction
   }
 });
 
+test("empty backfill cannot reopen ready after a concurrent disable", async () => {
+  await beginPublicProjection(db);
+  let intercepted = false;
+  const wrap = (statement: D1PreparedStatement, text: string): D1PreparedStatement =>
+    new Proxy(statement, {
+      get(target, key) {
+        if (key === "bind") return (...params: unknown[]) => wrap(target.bind(...params), text);
+        if (key === "run" && text.includes("NOT EXISTS"))
+          return async () => {
+            intercepted = true;
+            await env.DB.prepare(
+              "UPDATE site_state SET value='0' WHERE key='public_projection_enabled'",
+            ).run();
+            return target.run();
+          };
+        const value = Reflect.get(target, key);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    });
+  const guarded = createDb(
+    new Proxy(env.DB, {
+      get(target, key) {
+        if (key === "prepare") return (text: string) => wrap(target.prepare(text), text);
+        const value = Reflect.get(target, key);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    }),
+  );
+  expect((await backfillPublicProjection(guarded)).done).toBe(false);
+  expect(intercepted).toBe(true);
+  const ready = await env.DB.prepare(
+    "SELECT value FROM site_state WHERE key='public_projection_ready'",
+  ).first<string>("value");
+  expect(ready).toBe("0");
+});
+
 test("member cursor is stable and rejected after authority changes", async () => {
   await beginPublicProjection(db);
   await finish();
