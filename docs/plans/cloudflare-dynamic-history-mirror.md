@@ -115,6 +115,9 @@ R2 与 D1 跨存储一致性仍需刷新失效协议和定期恢复任务共同�
 
 ## 进度与下一步
 
+原刷新入口后续写入协议见 `docs/plans/cloudflare-dynamic-history-write.md`，增加0027意图门禁与R2条件写入，
+后台可重放未完成点；旧原型记录继续作为基线，预发布和四榜完整验收见最新节点。
+
 后续恢复调度子节点见 `docs/plans/cloudflare-dynamic-history-scheduler.md`，已将单步镜像接入默认关闭的
 既有五分钟 Cron 空闲预算，每次一个条目/阶段。原刷新写入失效和四榜投影继续验收。
 

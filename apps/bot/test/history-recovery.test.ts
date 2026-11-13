@@ -42,7 +42,7 @@ async function enable() {
   for (let batch = 0; batch < 5; batch++) if ((await backfillPublicProjection(db)).done) break;
   await setSiteState(db, "public_history_recovery_enabled", "1");
 }
-const tick = () => runHistoryRecoveryTick(db, env.MEDIA, 34, () => now);
+const tick = () => runHistoryRecoveryTick(db, env.MEDIA, 33, () => now);
 
 test("budget guard performs zero I/O and validates spent", async () => {
   const prepare = vi.fn(() => {
@@ -57,7 +57,7 @@ test("budget guard performs zero I/O and validates spent", async () => {
       },
     }),
   );
-  expect(await runHistoryRecoveryTick(blocked, env.MEDIA, 35, () => now)).toEqual({
+  expect(await runHistoryRecoveryTick(blocked, env.MEDIA, 34, () => now)).toEqual({
     status: "budget",
     reserved: 0,
   });
@@ -80,10 +80,10 @@ test("one phase per invocation survives restart and wraps to revisit changed R2 
     JSON.stringify([{ t: new Date(now - 86400000).toISOString(), members: 20 }]),
   );
   for (const status of ["clean", "write", "verify", "ready"])
-    expect(await runHistoryRecoveryTick(createDb(env.DB), env.MEDIA, 34, () => now)).toMatchObject({
+    expect(await runHistoryRecoveryTick(createDb(env.DB), env.MEDIA, 33, () => now)).toMatchObject({
       status,
       entryId: id,
-      reserved: 16,
+      reserved: 17,
     });
   expect(await getSiteState(db, cursorKey)).toBe(String(id));
   expect((await readHistoryBaseline(db, id, now))?.members).toBe(20);
@@ -162,6 +162,7 @@ test("all phases including late R2 failure stay inside the SQL plus R2 reservati
     }),
   );
   const media = {
+    put: env.MEDIA.put.bind(env.MEDIA),
     get: (key: string) => {
       calls++;
       return env.MEDIA.get(key);
@@ -177,7 +178,7 @@ test("all phases including late R2 failure stay inside the SQL plus R2 reservati
     calls = 0;
     heads = 0;
     fail = step === 3;
-    const result = await runHistoryRecoveryTick(traced, media, 34, () => now);
+    const result = await runHistoryRecoveryTick(traced, media, 33, () => now);
     expect(calls).toBeLessThanOrEqual(result.reserved);
     costs.push(calls);
     if (fail) expect(result.status).toBe("failed");
@@ -231,18 +232,18 @@ test("scheduled preparation passes each reservation to the next job at the budge
     restored: [],
     rowsWritten: 0,
     r2Writes: 0,
-    subrequests: 34,
+    subrequests: 33,
     dirty: false,
   });
   const history = vi.spyOn(recovery, "runHistoryRecoveryTick");
   const promotion = vi.spyOn(promotions, "runPromotionPreparationTick");
   try {
     await harness.scheduled(0, "*/5 * * * *");
-    expect(history.mock.calls[0]?.[2]).toBe(34);
+    expect(history.mock.calls[0]?.[2]).toBe(33);
     expect(promotion.mock.calls[0]?.[1]).toBe(50);
     await harness.scheduled(300000, "*/5 * * * *");
-    expect(promotion.mock.calls[1]?.[1]).toBe(34);
-    expect(history.mock.calls[1]?.[2]).toBe(44);
+    expect(promotion.mock.calls[1]?.[1]).toBe(33);
+    expect(history.mock.calls[1]?.[2]).toBe(43);
   } finally {
     refresh.mockRestore();
     history.mockRestore();

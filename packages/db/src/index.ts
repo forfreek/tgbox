@@ -9,6 +9,7 @@ export * from "./app.ts";
 export * from "./clicks.ts";
 export * from "./friend-links.ts";
 export * from "./history-mirror.ts";
+export * from "./history-write.ts";
 export * from "./prefs.ts";
 export * from "./promotions.ts";
 export * from "./public.ts";

@@ -1,20 +1,27 @@
 import {
   advanceHistoryMirror,
   type Db,
+  getHistoryWrite,
   getPublicRevision,
   getSiteState,
   invalidateHistoryMirror,
 } from "@tgbox/db";
 import { HISTORY_BYTE_LIMIT, normalizeHistory } from "./history-normalization.ts";
+import { recoverHistoryWrite } from "./history-write.ts";
 
 /** Independent of appendHistory's weekly skip. Every retry re-reads the persisted source object. */
 export async function mirrorHistoryStep(
   db: Db,
-  media: Pick<R2Bucket, "get" | "head">,
+  media: Pick<R2Bucket, "get" | "head"> & Partial<Pick<R2Bucket, "put">>,
   entryId: number,
   now: number,
 ) {
   const sourceRevision = await getPublicRevision(db);
+  const pending = await getHistoryWrite(db, entryId);
+  if (pending) {
+    if (!media.put) return { status: "pending" as const };
+    return recoverHistoryWrite(db, media as Pick<R2Bucket, "get" | "put">, pending);
+  }
   const entry = await db.$client
     .prepare("SELECT id,username,listed_at FROM entries WHERE id=?")
     .bind(entryId)

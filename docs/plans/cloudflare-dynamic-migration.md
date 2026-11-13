@@ -107,6 +107,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
   - 远端D1 CLI及100-ID分页审计见 `docs/plans/cloudflare-dynamic-remote-backfill.md`，本地API模拟通过后仍需预发布远端验证。
   - 历史镜像与失败恢复见 `docs/plans/cloudflare-dynamic-history-mirror.md`。新增0026仅本地验证，排行投影、刷新调度及完整历史回填审计继续验收。
   - 镜像后台恢复调度见 `docs/plans/cloudflare-dynamic-history-scheduler.md`。既有Cron默认关闭、每tick最多一阶段，原刷新写入一致性和四榜发布继续验收。
+  - 原刷新写入协议见 `docs/plans/cloudflare-dynamic-history-write.md`，新增0027持久意图与R2条件写入，公开基准/镜像提交拒绝未完成意图；预发布与完整排行继续验收。
 
 ### Phase 2：Astro SSR 页面迁移、多语言与 SEO
 
@@ -313,6 +314,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 | P1-7 推广准备子节点 | 2026-11-12 | 独立分支 codex/cloudflare-p1-7-promotion-preparation，承接 #30 | DB119/119；准备/缓存7/7；typecheck9/9；命中2SQL、冷读取4SQL，准备每次最多8SQL | 源码审查完成，CI以PR checks为准 | D1可续跑状态及缓存发布完成，Worker/Cron、HTTP接入及其他写入覆盖继续验收 |
 | 历史镜像子节点 | 2026-11-13 | PR #36，独立分支 codex/cloudflare-history-mirror，承接 #35 | Core166/166、镜像9/9、DB122/122、Web排行14/14、Node21/21；snapshot重跑27/27；全仓typecheck9/9；Windows差异与CI见节点记录 | 源码审查完成，CI以PR checks为准 | 有界镜像、独立重试及索引基准完成，刷新调度/排行/完整审计继续验收 |
 | 历史恢复调度子节点 | 2026-11-13 | 独立分支 codex/cloudflare-history-scheduler，承接 #36 | Bot171/171，恢复9/9、推广6/6、Node21/21、全仓typecheck9/9；单步SQL/R2实测10至16次 | 源码审查完成，CI以PR checks为准 | 既有Cron默认关闭的有界恢复完成，原刷新写入一致性、四榜与完整审计继续验收 |
+| 历史写入同步子节点 | 2026-11-13 | 独立分支 codex/cloudflare-history-write，承接 #37 | Core178/178、协议11/11、Bot172/172、DB122/122、Node22/22、全仓typecheck9/9；写入7次SQL/R2，恢复预算17 | 源码审查完成，CI以PR checks为准 | 原刷新共享入口默认关闭的意图/条件写入完成，真实远端故障演练、四榜与完整审计继续验收 |
 
 当前 PR 依赖顺序为 #21 → #22 → #24 → #23。PR #24 包含第一批提交 `d55b5af`，
 PR #23 的 base 为 `codex/cloudflare-phase-1-detail`，仅审查第二批及规则/进度更新。

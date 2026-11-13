@@ -16,16 +16,20 @@ import {
   triggerBuild,
 } from "@tgbox/core";
 import {
+  backfillPublicProjection,
+  beginPublicProjection,
   clearDirty,
   createSubmission,
   getBlacklistEntry,
   getEntryByUsername,
   getEntryTagIds,
+  getHistoryWrite,
   getSiteState,
   getSubmission,
   insertApprovedEntry,
   listCategories,
   listTags,
+  setSiteState,
 } from "@tgbox/db";
 import { PostView } from "@tgbox/shared";
 import { describe, expect, test, vi } from "vitest";
@@ -222,6 +226,24 @@ describe("entry changes", () => {
     });
     expect(await refreshEntryNow(ctx, { id: 999_999, actor, media })).toBeNull();
   });
+});
+
+test("admin refresh uses the enabled history intent path and retains the existing audit/build flow", async () => {
+  const { ctx, dispatches } = await setup();
+  const id = await listedEntry("stale_channel", "Old title");
+  await env.MEDIA.delete("history/stale_channel.json");
+  await beginPublicProjection(db);
+  await backfillPublicProjection(db);
+  await backfillPublicProjection(db);
+  await setSiteState(db, "public_history_writes_enabled", "1");
+  const result = await refreshEntryNow(ctx, { id, actor, media: env.MEDIA });
+  expect(result?.liveness).toBe("active");
+  expect(
+    (await env.MEDIA.head("history/stale_channel.json"))?.customMetadata?.historyWriteToken,
+  ).toBeTruthy();
+  expect(await getHistoryWrite(db, id)).toBeNull();
+  expect((await auditRows()).some((row) => row.action === "entry.refresh")).toBe(true);
+  expect(dispatches.length).toBeGreaterThan(0);
 });
 
 describe("build and blacklist", () => {

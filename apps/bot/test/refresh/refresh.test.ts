@@ -1,10 +1,14 @@
 import { env } from "cloudflare:workers";
 import { REFRESH_INTERVAL_MS, runRefresh } from "@tgbox/core";
 import {
+  backfillPublicProjection,
+  beginPublicProjection,
   createDb,
   getEntryByUsername,
+  getHistoryWrite,
   getSiteState,
   insertApprovedEntry,
+  setSiteState,
   upsertSetting,
 } from "@tgbox/db";
 import { type EntryKind, type EntryStatus, PostView, settingsDefaults } from "@tgbox/shared";
@@ -477,6 +481,26 @@ test("stays within the subrequest budget when every entry needs full writes", as
   expect(run.deferred.length).toBeGreaterThan(0);
   expect([...run.processed, ...run.deferred]).toEqual(names);
   for (const name of run.deferred) expect(tg.tme(name)).toHaveLength(0);
+});
+
+test("enabled history writes run through refresh and retain its bounded deferral behavior", async () => {
+  const names = Array.from({ length: 6 }, (_, index) => `safe_history_${index}`);
+  for (const name of names) await addEntry(name, { kind: "group" });
+  await beginPublicProjection(db);
+  await backfillPublicProjection(db);
+  await backfillPublicProjection(db);
+  await setSiteState(db, "public_history_writes_enabled", "1");
+  const tg = fakeTelegram(Object.fromEntries(names.map((name) => [name, "group" as const])));
+  const run = await runRefresh({ ...env, REFRESH_BATCH_SIZE: "20" }, T0, tg);
+  expect(run.subrequests).toBeLessThanOrEqual(45);
+  expect(run.processed.length).toBeGreaterThan(0);
+  expect(run.deferred.length).toBeGreaterThan(0);
+  for (const name of run.processed) {
+    expect(
+      (await env.MEDIA.head(`history/${name}.json`))?.customMetadata?.historyWriteToken,
+    ).toBeTruthy();
+    expect(await getHistoryWrite(db, (await entry(name)).id)).toBeNull();
+  }
 });
 
 test("the cron's default fetch is called the way the Workers runtime requires", async () => {

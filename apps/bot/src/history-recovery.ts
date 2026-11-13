@@ -4,13 +4,13 @@ import { type Db, getSiteStates } from "@tgbox/db";
 const enabledKey = "public_history_recovery_enabled";
 const cursorKey = "public_history_recovery_cursor";
 // Includes SQL statements, R2 reads and late object-check failure invalidation.
-const TICK_COST = 16;
+const TICK_COST = 17;
 const LIMIT = 50;
 
 /** One entry/one mirror phase using spare cron budget. Failed entries yield until the next pass. */
 export async function runHistoryRecoveryTick(
   db: Db,
-  media: Pick<R2Bucket, "get" | "head">,
+  media: Pick<R2Bucket, "get" | "head" | "put">,
   spent: number,
   now: () => number,
 ) {

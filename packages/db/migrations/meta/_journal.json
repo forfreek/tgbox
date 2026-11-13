@@ -183,6 +183,13 @@
       "when": 1794542126952,
       "tag": "0026_public_history_mirror",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "6",
+      "when": 1794545342007,
+      "tag": "0027_public_history_write",
+      "breakpoints": true
     }
   ]
 }
