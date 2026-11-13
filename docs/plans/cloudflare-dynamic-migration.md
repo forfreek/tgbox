@@ -4,6 +4,7 @@
 > - 当前阶段：Phase 1（实施中，独立堆叠 PR）
 > - 基线：`main@c087f77e61f4cabf746cf6da9b8a6e9170f64d45`
 > - 更新日期：2026-11-12
+> - 最新节点日期：2026-11-13
 
 本文固化已完成的源码分析结论，用于分阶段实施，不替代阶段内的测量和验证。标为
 `待验证` 的设计不得直接视为强制实现。所有生产操作都需要单独、明确的人工确认。
@@ -99,6 +100,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
   - 新增推广有界准备读取接口见 `docs/plans/cloudflare-dynamic-promotion-scan.md`，每批最多100候选；准备/缓存编排与SSR接入继续验收。
 - [ ] P1-7 覆盖新增、审核、编辑、下架、恢复、分类标签、翻译、推广和隐藏操作的索引/投影同步。
   - 推广有界准备、可续跑状态与缓存发布协议见 `docs/plans/cloudflare-dynamic-promotion-preparation.md`，生产入口/调度和其余写入覆盖继续验收。
+  - Bot既有tick空闲预算调度见 `docs/plans/cloudflare-dynamic-promotion-scheduler.md`，默认关闭，生产启用按专项授权进行。
 - [ ] P1-8 实现迁移回填脚本的分批、幂等、可续跑和结果校验，但不在未授权时执行生产 migration。
 
 ### Phase 2：Astro SSR 页面迁移、多语言与 SEO
