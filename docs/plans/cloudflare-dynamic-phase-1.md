@@ -18,6 +18,8 @@ P1-7写入链路及D1触发器核对见 `docs/plans/cloudflare-dynamic-write-aud
 
 P1-8本地副本重建/审计CLI见 `docs/plans/cloudflare-dynamic-backfill-tool.md`。共用D1回填SQL，副本分批修复孤儿与计数，完整本地审计后才开放ready；远端适配和部署级验证继续验收。
 
+远端D1运维CLI已实现分页回填/清理/审计及条件ready发布，见 `docs/plans/cloudflare-dynamic-remote-backfill.md`。默认写入预演，本地API模拟验证，真实远端及恢复费用继续验收。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 
