@@ -176,6 +176,13 @@
       "when": 1794471645766,
       "tag": "0025_public_numbered_pages",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "6",
+      "when": 1794542126952,
+      "tag": "0026_public_history_mirror",
+      "breakpoints": true
     }
   ]
 }

@@ -2,6 +2,9 @@
 
 本节点通过 [PR #25](https://github.com/forfreek/tgbox/pull/25) 交付，依赖 PR #23。
 
+后续历史镜像实现见 `docs/plans/cloudflare-dynamic-history-mirror.md`，已通过有界归一化保留乱序数组的
+`findLast` 语义，交付0026和独立失败恢复接口。下文为原设计基线，四榜实际投影及刷新调度继续验收。
+
 本节点完成排行查询边界、候选投影、R2 迁移与失败恢复设计，以及本地 D1 SQL 原型验证。
 生产表结构、同步代码和页面接入继续在后续实现节点验收。原型表仅由
 `packages/db/src/public-rankings-design.test.ts` 在隔离测试数据库中创建。

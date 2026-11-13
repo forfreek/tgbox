@@ -105,6 +105,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 - [ ] P1-8 实现迁移回填脚本的分批、幂等、可续跑和结果校验，但不在未授权时执行生产 migration。
   - 本地SQLite副本重建与审计CLI见 `docs/plans/cloudflare-dynamic-backfill-tool.md`，远端运维适配及部署级恢复仍待验收。
   - 远端D1 CLI及100-ID分页审计见 `docs/plans/cloudflare-dynamic-remote-backfill.md`，本地API模拟通过后仍需预发布远端验证。
+  - 历史镜像与失败恢复见 `docs/plans/cloudflare-dynamic-history-mirror.md`。新增0026仅本地验证，排行投影、刷新调度及完整历史回填审计继续验收。
 
 ### Phase 2：Astro SSR 页面迁移、多语言与 SEO
 
@@ -309,6 +310,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 | P1-6 运营查询子节点 | 2026-11-12 | 独立分支 codex/cloudflare-p1-6-operations，承接 #28 | DB 108/108；运营查询5/5；typecheck9/9；同结束时间推广续页180降至121 rows-read | 源码审查完成，CI以PR checks为准 | 首页/分类标签/设置/推广SQL证据完成，稀疏有效推广候选扫描待解决 |
 | P1-6 推广扫描子节点 | 2026-11-12 | 独立分支 codex/cloudflare-p1-6-promotion-scan，承接 #29 | DB112/112；运营/扫描9/9；typecheck9/9；每批最多100候选，完整调用最高212 rows-read | 源码审查完成，CI以PR checks为准 | 有界准备接口完成，准备调度、缓存发布及页面接入继续待验收 |
 | P1-7 推广准备子节点 | 2026-11-12 | 独立分支 codex/cloudflare-p1-7-promotion-preparation，承接 #30 | DB119/119；准备/缓存7/7；typecheck9/9；命中2SQL、冷读取4SQL，准备每次最多8SQL | 源码审查完成，CI以PR checks为准 | D1可续跑状态及缓存发布完成，Worker/Cron、HTTP接入及其他写入覆盖继续验收 |
+| 历史镜像子节点 | 2026-11-13 | PR #36，独立分支 codex/cloudflare-history-mirror，承接 #35 | Core166/166、镜像9/9、DB122/122、Web排行14/14、Node21/21；snapshot重跑27/27；全仓typecheck9/9；Windows差异与CI见节点记录 | 源码审查完成，CI以PR checks为准 | 有界镜像、独立重试及索引基准完成，刷新调度/排行/完整审计继续验收 |
 
 当前 PR 依赖顺序为 #21 → #22 → #24 → #23。PR #24 包含第一批提交 `d55b5af`，
 PR #23 的 base 为 `codex/cloudflare-phase-1-detail`，仅审查第二批及规则/进度更新。
