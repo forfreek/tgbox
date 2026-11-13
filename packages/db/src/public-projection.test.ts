@@ -108,6 +108,70 @@ test("backfill resumes while writes, hides and new entries remain synchronized",
   ).toEqual(["third"]);
 });
 
+test("all public source table write families invalidate a warm cache transactionally", async () => {
+  await add("write_audit", 10, true);
+  await beginPublicProjection(db);
+  await finish();
+  const mutations = [
+    "UPDATE entries SET title='edited' WHERE username='write_audit'",
+    "UPDATE entries SET description='source',description_zh=NULL,description_en=NULL WHERE username='write_audit'",
+    "UPDATE entries SET description_en='translated' WHERE username='write_audit'",
+    "UPDATE entries SET hide_posts=1,is_promoted=1 WHERE username='write_audit'",
+    "UPDATE entries SET status='hidden_by_admin' WHERE username='write_audit'",
+    "UPDATE entries SET status='approved' WHERE username='write_audit'",
+    "UPDATE entry_stats SET members=20 WHERE entry_id=(SELECT id FROM entries WHERE username='write_audit')",
+    "DELETE FROM entry_stats WHERE entry_id=(SELECT id FROM entries WHERE username='write_audit')",
+    `UPDATE categories SET name_en='Audited' WHERE id=${categoryId}`,
+    `UPDATE tags SET name_en='Audited' WHERE id=${tagId}`,
+    `DELETE FROM entry_tags WHERE tag_id=${tagId}`,
+    `INSERT INTO entry_tags(entry_id,tag_id) SELECT id,${tagId} FROM entries WHERE username='write_audit'`,
+    "INSERT INTO hidden_posts(entry_id,post_id,created_at) SELECT id,123,0 FROM entries WHERE username='write_audit'",
+    "DELETE FROM hidden_posts WHERE post_id=123",
+    "INSERT INTO promotions(kind,entry_username,starts_at,ends_at,created_at) VALUES('pin','write_audit',0,5000,0)",
+    "UPDATE promotions SET starts_at=2000 WHERE entry_username='write_audit'",
+    "DELETE FROM promotions WHERE entry_username='write_audit'",
+    "INSERT INTO settings(key,value,updated_at) VALUES('site','{}',0) ON CONFLICT(key) DO UPDATE SET value='{}'",
+    "UPDATE settings SET value='{\"hidePostMedia\":true}' WHERE key='site'",
+    "DELETE FROM settings WHERE key='site'",
+    "INSERT INTO products(kind,name_zh,name_en,days,price_stars,price_usdt,slots) VALUES('banner','测试','Audit',7,10,'1',1)",
+    "UPDATE products SET active=0 WHERE name_en='Audit'",
+    "DELETE FROM products WHERE name_en='Audit'",
+    "DELETE FROM entries WHERE username='write_audit'",
+  ];
+  const values = new Map<string, string>();
+  const cache = {
+    get: async (key: string) => values.get(key) ?? null,
+    put: async (key: string, value: string) => {
+      values.set(key, value);
+    },
+  };
+  let loads = 0;
+  const read = () =>
+    readPublicCached(
+      db,
+      cache,
+      ["write-audit"],
+      (value) => {
+        if (typeof value !== "string") throw new Error("Invalid revision payload");
+        return value;
+      },
+      async () => {
+        loads++;
+        return { value: await getPublicRevision(db) };
+      },
+      { now: () => 1000, maxAgeMs: 1000 },
+    );
+  for (const mutation of mutations) {
+    const before = await read();
+    const loaded = loads;
+    expect(await read()).toBe(before);
+    expect(loads).toBe(loaded);
+    await env.DB.prepare(mutation).run();
+    expect(await read(), mutation).not.toBe(before);
+    expect(loads).toBe(loaded + 1);
+  }
+});
+
 test("member cursor is stable and rejected after authority changes", async () => {
   await beginPublicProjection(db);
   await finish();

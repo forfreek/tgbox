@@ -14,6 +14,8 @@ P1-6 缓存时间/并发子节点见 `docs/plans/cloudflare-dynamic-cache-valida
 
 Bot既有五分钟入口已增加默认关闭的空闲预算推广准备调度，见 `docs/plans/cloudflare-dynamic-promotion-scheduler.md`。启用后每tick最多一个scope/一批，Cache/KV adapter及HTTP/SSR继续验收。
 
+P1-7写入链路及D1触发器核对见 `docs/plans/cloudflare-dynamic-write-audit.md`。R2对象缓存新增ETag依赖复核，覆盖对象写成而D1后续失败的旧缓存复用风险；页面接入、头像URL与历史镜像/排行恢复继续验收。
+
 P1-5 的排行设计与 SQL 原型验证已通过独立 PR #25 交付，见 `docs/plans/cloudflare-dynamic-rankings-design.md`。
 该节点先验证增长窗口、索引与 R2 恢复边界，为后续排行实现提供依据，P1-3 等任务继续按原 checklist 验收。
 
