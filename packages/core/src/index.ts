@@ -75,6 +75,7 @@ export {
   setPlacementSlots,
   upsertProduct,
 } from "./promotions.ts";
+export { readPublicMediaCached } from "./public-media-cache.ts";
 export { publishEntryToChannel } from "./publish.ts";
 export { type MediaBucket, REFRESH_INTERVAL_MS, runRefresh } from "./refresh.ts";
 export { approveSubmissions, previewSubmission, rejectSubmissions } from "./review.ts";

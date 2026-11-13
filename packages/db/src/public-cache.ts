@@ -14,7 +14,7 @@ export async function readPublicCached<T>(
   keyParts: readonly (string | number)[],
   parse: (value: unknown) => T,
   load: () => Promise<{ value: T; validUntil?: number }>,
-  options: { now: () => number; maxAgeMs: number },
+  options: { now: () => number; maxAgeMs: number; validateDependencies?: () => Promise<void> },
 ) {
   if (
     !Number.isSafeInteger(options.maxAgeMs) ||
@@ -81,6 +81,7 @@ export async function readPublicCached<T>(
     }
   }
   // Cache I/O can await concurrent writes or cross a natural promotion boundary.
+  await options.validateDependencies?.();
   if ((await getPublicRevision(db)) !== revision) throw new Error("Public content changed; retry");
   const finishedAt = now();
   if (finishedAt < validFrom || finishedAt >= expiresAt)

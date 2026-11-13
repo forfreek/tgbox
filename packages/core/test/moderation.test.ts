@@ -1,5 +1,13 @@
-import { setEntryPostsVisibility, setPostVisibility } from "@tgbox/core";
-import { getEntryByUsername, insertApprovedEntry, listHiddenPostIds } from "@tgbox/db";
+import { env } from "cloudflare:workers";
+import { readPublicMediaCached, setEntryPostsVisibility, setPostVisibility } from "@tgbox/core";
+import {
+  backfillPublicProjection,
+  beginPublicProjection,
+  getEntryByUsername,
+  getPublicEntry,
+  insertApprovedEntry,
+  listHiddenPostIds,
+} from "@tgbox/db";
 import { expect, test } from "vitest";
 import { actor, auditRows, db, NOW, setup } from "./fake.ts";
 
@@ -19,6 +27,45 @@ async function listedEntry(username: string) {
   });
   return id;
 }
+
+test("normal post moderation invalidates R2-backed cached output without changing the object", async () => {
+  const { ctx } = await setup();
+  await listedEntry("noisy_channel");
+  await beginPublicProjection(db);
+  await backfillPublicProjection(db);
+  await backfillPublicProjection(db);
+  const key = "posts/noisy_channel.json";
+  await env.MEDIA.put(key, "visible");
+  const values = new Map<string, string>();
+  const cache = {
+    get: async (key: string) => values.get(key) ?? null,
+    put: async (key: string, value: string) => {
+      values.set(key, value);
+    },
+  };
+  const read = () =>
+    readPublicMediaCached(
+      db,
+      env.MEDIA,
+      cache,
+      key,
+      ["zh"],
+      (value) => {
+        if (typeof value !== "string") throw new Error("Invalid text");
+        return value;
+      },
+      async (object) => {
+        const entry = await getPublicEntry(db, "noisy_channel");
+        return !entry || entry.hidePosts ? "hidden" : ((await object?.text()) ?? "missing");
+      },
+      { now: () => NOW, maxAgeMs: 1000 },
+    );
+  expect(await read()).toBe("visible");
+  await setEntryPostsVisibility(ctx, { actor, username: "noisy_channel", hide: true });
+  expect(await read()).toBe("hidden");
+  await setEntryPostsVisibility(ctx, { actor, username: "noisy_channel", hide: false });
+  expect(await read()).toBe("visible");
+});
 
 test("hiding an entry's posts audits once and rebuilds the site", async () => {
   const { ctx, dispatches } = await setup();

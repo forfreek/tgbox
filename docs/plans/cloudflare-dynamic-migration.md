@@ -101,6 +101,7 @@ D1 export → site-data.json → Astro 静态构建 → Pagefind → wrangler de
 - [ ] P1-7 覆盖新增、审核、编辑、下架、恢复、分类标签、翻译、推广和隐藏操作的索引/投影同步。
   - 推广有界准备、可续跑状态与缓存发布协议见 `docs/plans/cloudflare-dynamic-promotion-preparation.md`，生产入口/调度和其余写入覆盖继续验收。
   - Bot既有tick空闲预算调度见 `docs/plans/cloudflare-dynamic-promotion-scheduler.md`，默认关闭，生产启用按专项授权进行。
+  - 全写入链路核对、24项D1失效回归及R2对象身份缓存保护见 `docs/plans/cloudflare-dynamic-write-audit.md`；实际SSR接入和历史镜像/排行恢复继续验收。
 - [ ] P1-8 实现迁移回填脚本的分批、幂等、可续跑和结果校验，但不在未授权时执行生产 migration。
 
 ### Phase 2：Astro SSR 页面迁移、多语言与 SEO
