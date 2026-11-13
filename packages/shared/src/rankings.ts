@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { ActivityTier, EntryKind } from "./domain.ts";
 
+/** Shared JavaScript rounding for snapshot and D1-prepared rankings. */
+export function growthFromBaseline(members: number | null, baseline: number | null) {
+  if (members === null || baseline === null) return null;
+  const growth = members - baseline;
+  return { growth, growthPct: baseline > 0 ? Math.round((growth / baseline) * 1000) / 10 : null };
+}
+
 // Contract for the static `/data/rankings.json` built by apps/web and read by the bot's daily digest.
 export const RankItem = z.object({
   username: z.string(),

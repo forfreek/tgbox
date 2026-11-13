@@ -6,6 +6,7 @@ import type {
   SiteData,
   SiteLocale,
 } from "@tgbox/shared";
+import { growthFromBaseline } from "@tgbox/shared";
 import { formatNumber } from "./format.ts";
 
 /** Rows per ranking list (also the cap of each list in `/data/rankings.json`). */
@@ -34,9 +35,7 @@ export function memberGrowth(
   const cutoff = now.getTime() - days * DAY_MS;
   const base = history.findLast((point) => Date.parse(point.t) <= cutoff);
   if (!base) return null;
-  const growth = members - base.members;
-  const growthPct = base.members > 0 ? Math.round((growth / base.members) * 1000) / 10 : null;
-  return { growth, growthPct };
+  return growthFromBaseline(members, base.members);
 }
 
 function rankItem(entry: EntryView, growth: Growth | null): RankItem {

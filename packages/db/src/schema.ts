@@ -23,6 +23,7 @@ import {
   index,
   integer,
   primaryKey,
+  real,
   sqliteTable,
   text,
   uniqueIndex,
@@ -171,6 +172,44 @@ export const siteState = sqliteTable("site_state", {
   key: text().primaryKey(),
   value: text().notNull(),
 });
+
+/** One global ranking row per approved entry, with explicit preparation and time validity. */
+export const publicRankings = sqliteTable(
+  "public_rankings",
+  {
+    entryId: integer("entry_id").primaryKey(),
+    usernameKey: text("username_key").notNull().default(""),
+    members: integer(),
+    weekGrowth: real("week_growth"),
+    weekPct: real("week_pct"),
+    weekPctOrder: real("week_pct_order").notNull().default(0),
+    monthGrowth: real("month_growth"),
+    monthPct: real("month_pct"),
+    monthPctOrder: real("month_pct_order").notNull().default(0),
+    memberOrder: integer("member_order").notNull().default(-1),
+    listedAt: integer("listed_at").notNull().default(0),
+    activityTier: integer("activity_tier"),
+    dirty: integer().notNull().default(1),
+    evaluatedAt: integer("evaluated_at").notNull().default(0),
+    validUntil: integer("valid_until").notNull().default(0),
+  },
+  (table) => [
+    index("public_rank_week")
+      .on(sql`week_growth DESC`, sql`week_pct_order DESC`, table.usernameKey)
+      .where(sql`${table.dirty}=0 AND ${table.weekGrowth}>0`),
+    index("public_rank_month")
+      .on(sql`month_growth DESC`, sql`month_pct_order DESC`, table.usernameKey)
+      .where(sql`${table.dirty}=0 AND ${table.monthGrowth}>0`),
+    index("public_rank_newest")
+      .on(sql`listed_at DESC`, table.usernameKey)
+      .where(sql`${table.dirty}=0`),
+    index("public_rank_active")
+      .on(sql`activity_tier DESC`, sql`member_order DESC`, table.usernameKey)
+      .where(sql`${table.dirty}=0 AND ${table.activityTier}>0`),
+    index("public_rank_dirty").on(table.entryId).where(sql`${table.dirty}=1`),
+    index("public_rank_due").on(table.validUntil, table.entryId).where(sql`${table.dirty}=0`),
+  ],
+);
 
 /** Durable append intents fence public baselines until the matching R2 write is confirmed. */
 export const historyWrites = sqliteTable("history_writes", {

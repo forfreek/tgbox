@@ -2,6 +2,9 @@
 
 本节点通过 [PR #25](https://github.com/forfreek/tgbox/pull/25) 交付，依赖 PR #23。
 
+后续实际四榜投影与读取见 `docs/plans/cloudflare-dynamic-rankings-implementation.md`。0028提供单条准备、
+有界待办和完整性/时间门禁，复用JavaScript增长公式；Cron、缓存和公开路由继续按接入节点验收。
+
 后续历史镜像实现见 `docs/plans/cloudflare-dynamic-history-mirror.md`，已通过有界归一化保留乱序数组的
 `findLast` 语义，交付0026和独立失败恢复接口。下文为原设计基线，四榜实际投影及刷新调度继续验收。
 
