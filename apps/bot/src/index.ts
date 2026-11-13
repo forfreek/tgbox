@@ -1,8 +1,9 @@
-import { runDueBroadcasts, runRefresh } from "@tgbox/core";
+import { REFRESH_INTERVAL_MS, runDueBroadcasts, runRefresh } from "@tgbox/core";
 import { webhookCallback } from "grammy";
 import { createApp, createBot } from "./bot/index.ts";
 import { handleCryptoPayWebhook } from "./cryptopay.ts";
 import { DIGEST_UTC_HOUR, runDailyDigest } from "./digest.ts";
+import { runHistoryRecoveryTick } from "./history-recovery.ts";
 import { runHourlyMaintenance } from "./maintenance.ts";
 import { runPromotionPreparationTick } from "./promotion-preparation.ts";
 import { runUsdtWatch } from "./usdt-watch.ts";
@@ -85,8 +86,24 @@ export default {
         );
         // Each job records its result in Workers Logs.
         console.log("refresh", JSON.stringify(result));
-        const preparation = await runPromotionPreparationTick(app.db, result.subrequests, Date.now);
-        console.log("promotion preparation", JSON.stringify(preparation));
+        const jobs = [
+          {
+            name: "promotion preparation",
+            run: (spent: number) => runPromotionPreparationTick(app.db, spent, Date.now),
+          },
+          {
+            name: "history recovery",
+            run: (spent: number) => runHistoryRecoveryTick(app.db, env.MEDIA, spent, Date.now),
+          },
+        ];
+        // Alternate first use of spare budget so one preparation cannot always consume the remainder.
+        if (Math.floor(controller.scheduledTime / REFRESH_INTERVAL_MS) % 2 === 0) jobs.reverse();
+        let preparationSpent = result.subrequests;
+        for (const job of jobs) {
+          const preparation = await job.run(preparationSpent);
+          preparationSpent += preparation.reserved;
+          console.log(job.name, JSON.stringify(preparation));
+        }
       })(),
     );
   },
