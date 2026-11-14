@@ -46,4 +46,5 @@
 - 相关测试 66 项、构建及 42 项产物检查通过。构建使用内置开发数据。来源与限制见 GUIDE-SAMPLE.md。
 - 已刷新远端 main，基线仍为 c087f77。
 - Astro 类型检查覆盖 303 个文件，0 errors、0 warnings、0 hints。
+- 已提交独立草稿 PR #40，https://github.com/forfreek/tgbox/pull/40 。后续从该样板复核内容标准，远端 CI 状态另行核验。
 - 后续工作按独立节点继续，AI 模型评测尚缺调用凭据。
