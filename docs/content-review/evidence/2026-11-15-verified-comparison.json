@@ -1,0 +1,61 @@
+{
+  "method": "HTML main text extracted, script/style and tags removed, HTML entities decoded, whitespace removed and brand normalized. Unique character five-gram overlap. Numbers retained. Diagnostic metrics, no Google threshold.",
+  "results": [
+    {
+      "path": "/",
+      "status": [200, 200],
+      "characters": [2635, 1814],
+      "siteFiveGramOverlapPercent": 21.5,
+      "jaccardPercent": 14.7
+    },
+    {
+      "path": "/about/",
+      "status": [200, 200],
+      "characters": [1466, 1371],
+      "siteFiveGramOverlapPercent": 62.9,
+      "jaccardPercent": 48.1
+    },
+    {
+      "path": "/guides/find-telegram-channels/",
+      "status": [200, 200],
+      "characters": [3030, 3046],
+      "siteFiveGramOverlapPercent": 96.8,
+      "jaccardPercent": 93.5
+    },
+    {
+      "path": "/guides/channels-groups-bots/",
+      "status": [200, 200],
+      "characters": [2566, 2597],
+      "siteFiveGramOverlapPercent": 94.9,
+      "jaccardPercent": 89.7
+    },
+    {
+      "path": "/guides/grow-a-telegram-channel/",
+      "status": [200, 200],
+      "characters": [3073, 3087],
+      "siteFiveGramOverlapPercent": 96.6,
+      "jaccardPercent": 93.3
+    },
+    {
+      "path": "/detail/telegram/",
+      "status": [200, 200],
+      "characters": [5778, 5696],
+      "siteFiveGramOverlapPercent": 91.7,
+      "jaccardPercent": 86
+    },
+    {
+      "path": "/detail/durov/",
+      "status": [200, 200],
+      "characters": [8712, 8816],
+      "siteFiveGramOverlapPercent": 79.2,
+      "jaccardPercent": 64.7
+    },
+    {
+      "path": "/detail/botfather/",
+      "status": [200, 200],
+      "characters": [1473, 1573],
+      "siteFiveGramOverlapPercent": 68.9,
+      "jaccardPercent": 50.7
+    }
+  ]
+}
