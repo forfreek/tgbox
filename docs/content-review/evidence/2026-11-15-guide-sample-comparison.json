@@ -1,0 +1,15 @@
+{
+  "method": "Source Markdown body, frontmatter excluded, whitespace stripped, brand normalized, unique character five-gram overlap against upstream d297cdb. Diagnostic only.",
+  "rows": [
+    {
+      "locale": "zh",
+      "before": 96.9,
+      "after": 4.8
+    },
+    {
+      "locale": "en",
+      "before": 97.5,
+      "after": 18.6
+    }
+  ]
+}
