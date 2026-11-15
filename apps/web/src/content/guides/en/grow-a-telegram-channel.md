@@ -8,7 +8,7 @@ keywords:
   - telegram channel username
   - get telegram channel listed
 publishedAt: 2026-09-09
-updatedAt: 2026-11-09
+updatedAt: 2026-11-15
 locale: en
 slug: "grow-a-telegram-channel"
 faq:
@@ -17,7 +17,7 @@ faq:
   - q: "Is buying subscribers really that bad?"
     a: "It is worse than useless. Bought accounts generate no views, so your views-to-subscribers ratio stays permanently low, which is the first thing readers, advertisers and directories check. Telegram also removes those accounts over time, leaving an obvious spike-then-decay step in your member chart."
   - q: "How do I get listed on TGsearch?"
-    a: "Message @tgboxccbot privately on Telegram and send the channel link (t.me/xxx or @xxx). It fetches the public profile automatically, the entry goes live after approval, and you get the result by private message. Listing is free."
+    a: "Open the submission guide on this site and use its bot link to submit a public channel URL. Check the details and choose a category and optional tags. Regular listing is free. Review results arrive by private message, and approved entries are published with a site build."
 ---
 
 Telegram has no recommendation feed, no “suggested for you”, and it will not reshare a post onto a timeline. Whether a new channel gets found comes down to a few very concrete things: whether people can search for you, whether they can read you before joining, and whether anything elsewhere points at you. Here is the work, split into what you set once and what you keep doing.
@@ -78,7 +78,7 @@ The cost is that you now moderate a group. Configure new-member permissions firs
 
 Telegram won't distribute you internally, which makes off-platform entry points matter. A directory serves exactly the case search can't: readers who don't yet have a keyword and are browsing by topic.
 
-To get listed here, message **[@tgboxccbot](https://t.me/tgboxccbot)** privately on Telegram and send the channel link (`t.me/xxx` or `@xxx`). It fetches the public profile automatically, the entry goes live after approval, and the result comes back as a private message. Listing is free — see the [submission guide](/en/enroll/).
+Open this site’s bot from the [submission guide](/en/enroll/). Send a public channel URL, check the fetched details and choose a category and optional tags. Review results arrive by private message, and approved entries are published with a site build. Regular listing is free.
 
 Once listed, your entry appears in its [category](/en/channel/), and if it is growing quickly or posting actively it also shows up in the [rankings](/en/rank/).
 

@@ -58,7 +58,7 @@ const paidPromo = {
   imageUrl: promoImage,
   sponsored: true as const,
 };
-const repoUrl = "https://github.com/TGrpg/tgbox";
+const repoUrl = "https://github.com/forfreek/tgbox";
 // techdaily's own content was last edited well after it was listed, so its sitemap lastmod
 // has to differ from both its listing date and the snapshot's build time.
 const techdailyUpdatedAt = "2026-08-28T00:00:00.000Z";
@@ -172,7 +172,12 @@ beforeAll(async () => {
     [path.join(webRoot, "node_modules/astro/bin/astro.mjs"), "build", "--outDir", outDir],
     {
       cwd: webRoot,
-      env: { ...process.env, SITE_DATA_PATH: dataPath, SITE_URL: siteUrl },
+      env: {
+        ...process.env,
+        SITE_DATA_PATH: dataPath,
+        SITE_URL: siteUrl,
+        PUBLIC_BOT_USERNAME: "fixture_submit_bot",
+      },
       stdio: "pipe",
     },
   );
@@ -213,7 +218,12 @@ describe("sponsor block with ad slots off", () => {
       [path.join(webRoot, "node_modules/astro/bin/astro.mjs"), "build", "--outDir", offOut],
       {
         cwd: webRoot,
-        env: { ...process.env, SITE_DATA_PATH: offDataPath, SITE_URL: siteUrl },
+        env: {
+          ...process.env,
+          SITE_DATA_PATH: offDataPath,
+          SITE_URL: siteUrl,
+          PUBLIC_BOT_USERNAME: "fixture_submit_bot",
+        },
         stdio: "pipe",
       },
     );
@@ -384,7 +394,7 @@ describe("site build from snapshot data", () => {
       expect(organization).toMatchObject({
         "@id": `${siteUrl}/#organization`,
         url: `${siteUrl}/`,
-        sameAs: [repoUrl, "https://t.me/tgboxccbot"],
+        sameAs: [repoUrl, "https://t.me/fixture_submit_bot"],
       });
       expect(website).toMatchObject({
         url: `${siteUrl}/${prefix}`,
@@ -494,7 +504,7 @@ describe("site build from snapshot data", () => {
       expect(footer, route).toContain(sentence);
       expect(footer, route).toContain('href="mailto:Contact@tgsearch.app"');
       expect(footer, route).toContain(">Contact@tgsearch.app</a>");
-      expect(footer, route).toContain('href="https://t.me/tgboxccbot"');
+      expect(footer, route).toContain('href="https://t.me/fixture_submit_bot"');
     }
   });
 
@@ -636,6 +646,29 @@ describe("site build from snapshot data", () => {
         name: question,
         acceptedAnswer: { "@type": "Answer" },
       });
+    }
+  });
+
+  test("public copy uses the configured bot and credits the upstream separately", () => {
+    for (const prefix of ["", "en/", "zh-hant/"]) {
+      const about = html(`${prefix}about`);
+      expect(about).toContain(`href="${repoUrl}"`);
+      expect(about).toContain('href="https://github.com/TGrpg/tgbox"');
+      expect(about).toContain('href="https://t.me/fixture_submit_bot"');
+      expect(about).toContain("/support");
+      const faq = jsonLd(about).find(
+        (item) =>
+          typeof item === "object" &&
+          item !== null &&
+          "@type" in item &&
+          item["@type"] === "FAQPage",
+      );
+      expect(JSON.stringify(faq)).toContain("/support");
+      for (const route of ["", "about", "enroll", "guides/grow-a-telegram-channel"]) {
+        const page = html(`${prefix}${route}`);
+        expect(page, `${prefix}${route}`).not.toContain("tgboxccbot");
+        expect(page, `${prefix}${route}`).not.toContain("tgbox.cc");
+      }
     }
   });
 
@@ -876,7 +909,7 @@ describe("site build from snapshot data", () => {
   test("every directory page offers a way into the bot's submit flow", () => {
     // The deep link existed in the bot all along; nothing on the site ever produced it, so the
     // pages with the most traffic had no way in at all.
-    const deepLink = 'href="https://t.me/tgboxccbot?start=submit"';
+    const deepLink = 'href="https://t.me/fixture_submit_bot?start=submit"';
     for (const route of [
       "channel",
       "group",
@@ -1142,6 +1175,17 @@ describe("site build from snapshot data", () => {
     expect(readFileSync(path.join(client, "ads.txt"), "utf8").replaceAll("\r\n", "\n")).toBe(
       "google.com, pub-1797920702200847, DIRECT, f08c47fec0942fa0\n",
     );
+  });
+
+  test("the social preview template identifies this deployment", () => {
+    const template = readFileSync(path.join(webRoot, "../../scripts/og/og-default.html"), "utf8");
+    expect(template).toContain("tgsearch.app");
+    expect(template).toContain("@TGeverythingSearchBot");
+    expect(template).not.toContain("tgbox.cc");
+    expect(template).not.toContain("tgboxccbot");
+    const image = readFileSync(path.join(client, "og-default.png"));
+    expect(image.readUInt32BE(16)).toBe(1200);
+    expect(image.readUInt32BE(20)).toBe(630);
   });
 
   test("the guides index lists every guide for its locale, newest first", () => {
