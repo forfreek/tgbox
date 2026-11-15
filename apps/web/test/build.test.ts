@@ -1189,13 +1189,15 @@ describe("site build from snapshot data", () => {
   });
 
   test("the guides index lists every guide for its locale, newest first", () => {
-    for (const [route, first, last] of [
-      ["guides", "find-telegram-channels", "grow-a-telegram-channel"],
-      ["en/guides", "find-telegram-channels", "grow-a-telegram-channel"],
-    ] as const) {
+    for (const route of ["guides", "en/guides"]) {
       const page = html(route);
       const slugs = [...page.matchAll(/data-guide-card="([^"]+)"/g)].map((match) => match[1] ?? "");
-      expect(slugs, route).toEqual([first, "channels-groups-bots", last]);
+      expect(slugs, route).toEqual([
+        "listing-requirements",
+        "find-telegram-channels",
+        "channels-groups-bots",
+        "grow-a-telegram-channel",
+      ]);
       expect(types(page), route).toEqual(["ItemList", "BreadcrumbList"]);
     }
     expect(html("guides")).toContain("怎么找 Telegram 频道，并判断是否值得订阅");
@@ -1237,6 +1239,7 @@ describe("site build from snapshot data", () => {
       "find-telegram-channels",
       "channels-groups-bots",
       "grow-a-telegram-channel",
+      "listing-requirements",
     ]) {
       const zh = html(`guides/${slug}`);
       const en = html(`en/guides/${slug}`);
@@ -1259,6 +1262,28 @@ describe("site build from snapshot data", () => {
     }
   });
 
+  test("listing requirements replace the withdrawn guides in all three locales", () => {
+    const guideSitemap = readFileSync(path.join(client, "sitemap-guides.xml"), "utf8");
+    for (const [prefix, rejectHeading] of [
+      ["", "哪些内容不收录"],
+      ["en/", "Content we reject"],
+      ["zh-hant/", "哪些內容不收錄"],
+    ] as const) {
+      const page = html(`${prefix}guides/listing-requirements`);
+      expect(types(page)).toEqual(["Article", "FAQPage", "BreadcrumbList"]);
+      expect(page).toContain('<time datetime="2026-11-15T00:00:00.000Z">');
+      expect(page).toContain('href="https://telegram.org/tos"');
+      expect(page).toContain("/support");
+      expect(page).toContain(rejectHeading);
+      expect(html(`${prefix}enroll`)).toContain(`href="/${prefix}guides/listing-requirements/"`);
+      for (const slug of ["read-telegram-directory-data", "check-telegram-bot-links"]) {
+        expect(existsSync(path.join(client, prefix, "guides", slug, "index.html"))).toBe(false);
+        expect(html(`${prefix}guides`)).not.toContain(slug);
+        expect(guideSitemap).not.toContain(slug);
+      }
+    }
+  });
+
   test("the guides sitemap carries both locales with each guide's own lastmod", () => {
     expect(readFileSync(path.join(client, "sitemap-index.xml"), "utf8")).toContain(
       `${siteUrl}/sitemap-guides.xml`,
@@ -1271,6 +1296,9 @@ describe("site build from snapshot data", () => {
       );
       expect(sitemap).toContain(
         `<loc>${siteUrl}/${prefix}guides/find-telegram-channels/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
+      );
+      expect(sitemap).toContain(
+        `<loc>${siteUrl}/${prefix}guides/listing-requirements/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
       );
     }
     expect(sitemap).toContain(
