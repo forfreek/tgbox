@@ -185,10 +185,10 @@ export function entrySummary(locale: SiteLocale, facts: EntryFacts): string {
       category: facts.categoryName,
       kind: facts.kindWord,
     }),
+    facts.language && fill(summary.language, { language: facts.language }),
     facts.members && fill(summary.members, { n: facts.members.count, noun: facts.members.noun }),
     facts.created && fill(summary.created, { date: facts.created }),
     facts.activity && fill(summary.activity, { tier: facts.activity }),
-    facts.language && fill(summary.language, { language: facts.language }),
   ].filter((clause) => typeof clause === "string");
   return clauses.join(summary.separator) + summary.terminator;
 }
