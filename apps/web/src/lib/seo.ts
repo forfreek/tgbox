@@ -170,6 +170,10 @@ export type EntryFacts = {
   activity: string | null;
   /** Display name of the detected language; null when unknown. */
   language: string | null;
+  /** Localized taxonomy labels, when available. */
+  topics?: string[];
+  /** Last recorded change to the entry's profile, rather than a crawl timestamp. */
+  updated?: string | null;
 };
 
 /**
@@ -187,8 +191,11 @@ export function entrySummary(locale: SiteLocale, facts: EntryFacts): string {
     }),
     facts.language && fill(summary.language, { language: facts.language }),
     facts.members && fill(summary.members, { n: facts.members.count, noun: facts.members.noun }),
+    facts.topics?.length &&
+      fill(summary.topics, { topics: facts.topics.slice(0, 3).join(summary.topicSeparator) }),
     facts.created && fill(summary.created, { date: facts.created }),
     facts.activity && fill(summary.activity, { tier: facts.activity }),
+    facts.updated && fill(summary.updated, { date: facts.updated }),
   ].filter((clause) => typeof clause === "string");
   return clauses.join(summary.separator) + summary.terminator;
 }

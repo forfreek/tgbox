@@ -284,6 +284,7 @@ describe("site build from snapshot data", () => {
   test("each locale reads its own translated description, or the original when there is none", () => {
     // techdaily is written in Chinese and has an English translation.
     const zh = html("detail/techdaily");
+    expect(zh).toContain("资料更新于 2026年8月28日");
     const en = html("en/detail/techdaily");
     expect(zh).toContain("每天分享开发与科技新闻");
     expect(zh).not.toContain("自动翻译");
