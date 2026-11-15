@@ -43,7 +43,7 @@ const enTarget = (t: PromotionTarget) =>
 
 export const en: typeof zh = {
   welcome:
-    "Welcome to the TGsearch submission bot!\n\nSend a link to a channel, group or bot (https://t.me/xxx, t.me/xxx or @xxx) to submit it.",
+    "Welcome to the <b>TGsearch submission bot</b>!\n\nSubmit a public Telegram channel, group or bot link to apply for a listing.\n\nAccepted formats follow.\n• <code>https://t.me/xxx</code>\n• <code>t.me/xxx</code>\n• <code>@xxx</code>\n\n🚫 <b>We reject illegal content, pornography, gambling, scams and illicit services.</b>\n\nChannels, groups and bots follow the same requirements. Regular listing is free. Review results arrive by private message.",
   submitButton: "Submit",
   promoteButton: "Buy promotion",
   submissionsClosed: "Submissions are closed for now. Please come back later.",

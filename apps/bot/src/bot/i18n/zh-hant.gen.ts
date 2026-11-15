@@ -104,7 +104,7 @@ const zhTarget = (t: PromotionTarget) =>
 
 export const zhHant = {
   welcome:
-    "歡迎使用 TGsearch 收錄機器人！\n\n直接發送頻道、群組或機器人的鏈接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收錄。",
+    "歡迎使用 <b>TGsearch 收錄機器人</b>！\n\n提交 Telegram 頻道、群組或機器人的公開鏈接，即可申請收錄。\n\n支持以下格式。\n• <code>https://t.me/xxx</code>\n• <code>t.me/xxx</code>\n• <code>@xxx</code>\n\n🚫 <b>本站不收錄違法違規、色情、賭博、詐騙及灰黑產內容。</b>\n\n頻道、群組和機器人均按上述要求審核。普通收錄免費，審核結果會通過私信通知。",
   submitButton: "提交收錄",
   promoteButton: "購買推廣",
   submissionsClosed: "收錄暫時關閉，請稍後再來。",
