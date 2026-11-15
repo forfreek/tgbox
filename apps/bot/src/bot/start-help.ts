@@ -7,6 +7,11 @@ import { localeOf, messages } from "./i18n/index.ts";
 import { miniAppUrl, setChatMenuButton } from "./menu-button.ts";
 import { relayEnabled } from "./support.ts";
 
+const legacyWelcomeMessages = [
+  "欢迎使用 TGbox 收录机器人！\n\n直接发送频道、群组或机器人的链接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收录。",
+  "Welcome to the TGbox submission bot!\n\nSend a link to a channel, group or bot (https://t.me/xxx, t.me/xxx or @xxx) to submit it.",
+];
+
 export function startHelp(app: App) {
   const root = new Composer<Context>();
   const composer = root.chatType("private");
@@ -43,6 +48,11 @@ export function startHelp(app: App) {
     if (ctx.match === "support") return support(ctx);
     const m = messages(locale);
     const custom = (await app.settings()).bot.welcome[textLocale(locale)];
+    const useDefault =
+      !custom ||
+      legacyWelcomeMessages.some(
+        (message) => message.replace(/\s+/g, "") === custom.replace(/\s+/g, ""),
+      );
     const appUrl = miniAppUrl(app.env.SITE_URL, locale);
     const keyboard = new InlineKeyboard()
       .text(m.submitButton, "submit")
@@ -50,7 +60,10 @@ export function startHelp(app: App) {
       .row();
     if (appUrl) keyboard.webApp(m.openApp, appUrl).row();
     keyboard.text(m.langButton, "lang");
-    await ctx.reply(custom || m.welcome, { reply_markup: keyboard });
+    await ctx.reply(useDefault ? m.welcome : custom, {
+      reply_markup: keyboard,
+      ...(useDefault ? { parse_mode: "HTML" as const } : {}),
+    });
   });
 
   composer.command("help", async (ctx) => ctx.reply((await app.m(ctx)).help));

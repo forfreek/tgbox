@@ -103,7 +103,7 @@ const zhTarget = (t: PromotionTarget) =>
 
 export const zh = {
   welcome:
-    "欢迎使用 TGsearch 收录机器人！\n\n直接发送频道、群组或机器人的链接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收录。",
+    "欢迎使用 <b>TGsearch 收录机器人</b>！\n\n提交 Telegram 频道、群组或机器人的公开链接，即可申请收录。\n\n支持以下格式。\n• <code>https://t.me/xxx</code>\n• <code>t.me/xxx</code>\n• <code>@xxx</code>\n\n🚫 <b>本站不收录违法违规、色情、赌博、诈骗及灰黑产内容。</b>\n\n频道、群组和机器人均按上述要求审核。普通收录免费，审核结果会通过私信通知。",
   submitButton: "提交收录",
   promoteButton: "购买推广",
   submissionsClosed: "收录暂时关闭，请稍后再来。",

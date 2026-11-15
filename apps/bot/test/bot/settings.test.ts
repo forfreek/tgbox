@@ -59,10 +59,35 @@ describe("settings-driven bot", () => {
     await setBotSettings({ welcome: { zh: "自定义欢迎语", en: "" }, supportUsername: "help_desk" });
     await h.message(owner, "/start");
     expect(h.lastText()).toBe("自定义欢迎语");
+    expect(h.calls("sendMessage").at(-1)?.payload.parse_mode).toBeUndefined();
     await h.message({ ...owner, language_code: "en" }, "/start");
-    expect(h.lastText()).toContain("Welcome to the TGsearch");
+    expect(h.lastText()).toContain("TGsearch submission bot");
     await h.message(owner, "/support");
     expect(h.lastText()).toContain("@help_desk");
+  });
+
+  test.each([
+    ["zh-hans", "本站不收录违法违规、色情、赌博、诈骗及灰黑产内容。"],
+    ["zh-tw", "本站不收錄違法違規、色情、賭博、詐騙及灰黑產內容。"],
+    ["en", "We reject illegal content, pornography, gambling, scams and illicit services."],
+  ])("/start shows the confirmed policy in %s", async (language_code, policy) => {
+    await h.message({ ...owner, language_code }, "/start");
+    expect(h.lastText()).toContain(`<b>${policy}</b>`);
+    expect(h.lastText()).toContain("TGsearch");
+    expect(h.lastText()).not.toContain("TGbox");
+    expect(h.calls("sendMessage").at(-1)?.payload.parse_mode).toBe("HTML");
+  });
+
+  test("the previous TGbox welcome in settings uses the confirmed default", async () => {
+    await setBotSettings({
+      welcome: {
+        zh: "欢迎使用 TGbox收录机器人！\n\n直接发送频道、群组或机器人的链接（https://t.me/xxx、t.me/xxx 或 @xxx）即可提交收录。",
+        en: "",
+      },
+    });
+    await h.message(owner, "/start");
+    expect(h.lastText()).toContain("<b>TGsearch 收录机器人</b>");
+    expect(h.lastText()).toContain("🚫 <b>本站不收录");
   });
 
   test("my_chat_member updates are recorded for groups and channels only", async () => {
