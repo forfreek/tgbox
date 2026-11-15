@@ -38,7 +38,7 @@ test("actual Go client retains payload on native, immediate, every mirror and ti
   const source = readFileSync(new URL("../views/GoPage.astro", import.meta.url), "utf8");
   const content = source.split("<script>")[1]?.split("</script>")[0];
   if (!content) throw new Error("missing Go client");
-  const script = content.replace(/^import .*;\n/gm, "");
+  const script = content.replace(/^import .*;\r?\n/gm, "");
   const js = ts.transpile(script, { target: ts.ScriptTarget.ES2022 });
   const nodes = new Map<
     string,

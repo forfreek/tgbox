@@ -66,7 +66,32 @@ const techdailyUpdatedAt = "2026-08-28T00:00:00.000Z";
 // devnotes has posts in R2, but the operator turned them off for that entry.
 const hiddenPosts = [{ id: 7, date: "2026-08-29T12:00:00.000Z", text: "被隐藏的消息", views: 9 }];
 
-const approved = fixtureEntries.filter((entry) => (entry.status ?? "approved") === "approved");
+// Entries referenced by the guide's worked examples must exist in the built snapshot too.
+const guideEntries: FixtureEntry[] = [
+  {
+    username: "telegramtips",
+    kind: "channel",
+    category: "news",
+    tags: [],
+    title: "Telegram Tips",
+    description: "Telegram features and tips.",
+    lang: "en",
+    listedDaysAgo: 1,
+  },
+  {
+    username: "cocoon",
+    kind: "channel",
+    category: "ai",
+    tags: [],
+    title: "Cocoon",
+    description: "",
+    lang: "en",
+    listedDaysAgo: 1,
+  },
+];
+const approved = [...fixtureEntries, ...guideEntries].filter(
+  (entry) => (entry.status ?? "approved") === "approved",
+);
 const hidden = fixtureEntries.filter((entry) => (entry.status ?? "approved") !== "approved");
 
 /** One more than the footer shows, so it links to the full list. */
@@ -104,7 +129,11 @@ let dbPath = "";
 let mediaDir = "";
 
 beforeAll(async () => {
-  dbPath = buildFixtureDb(path.join(work, "export.sqlite"), [...fixtureEntries, ...gameChannels]);
+  dbPath = buildFixtureDb(path.join(work, "export.sqlite"), [
+    ...fixtureEntries,
+    ...guideEntries,
+    ...gameChannels,
+  ]);
   mediaDir = writeFixtureMedia(path.join(work, "media"));
   // devnotes (3,000 members now) grew over the last week and month; techdaily is flat week over week.
   writeFileSync(
@@ -138,11 +167,15 @@ beforeAll(async () => {
   data.friendLinks = friendLinks;
   const dataPath = path.join(work, "site-data.json");
   writeFileSync(dataPath, JSON.stringify(data));
-  execFileSync(path.join(webRoot, "node_modules/.bin/astro"), ["build", "--outDir", outDir], {
-    cwd: webRoot,
-    env: { ...process.env, SITE_DATA_PATH: dataPath, SITE_URL: siteUrl },
-    stdio: "pipe",
-  });
+  execFileSync(
+    process.execPath,
+    [path.join(webRoot, "node_modules/astro/bin/astro.mjs"), "build", "--outDir", outDir],
+    {
+      cwd: webRoot,
+      env: { ...process.env, SITE_DATA_PATH: dataPath, SITE_URL: siteUrl },
+      stdio: "pipe",
+    },
+  );
 }, 180_000);
 
 const cleanup: string[] = [];
@@ -175,11 +208,15 @@ describe("sponsor block with ad slots off", () => {
     ];
     const offDataPath = path.join(work, "site-data-noads.json");
     writeFileSync(offDataPath, JSON.stringify(data));
-    execFileSync(path.join(webRoot, "node_modules/.bin/astro"), ["build", "--outDir", offOut], {
-      cwd: webRoot,
-      env: { ...process.env, SITE_DATA_PATH: offDataPath, SITE_URL: siteUrl },
-      stdio: "pipe",
-    });
+    execFileSync(
+      process.execPath,
+      [path.join(webRoot, "node_modules/astro/bin/astro.mjs"), "build", "--outDir", offOut],
+      {
+        cwd: webRoot,
+        env: { ...process.env, SITE_DATA_PATH: offDataPath, SITE_URL: siteUrl },
+        stdio: "pipe",
+      },
+    );
     cleanup.push(offOut);
   }, 180_000);
 
@@ -523,7 +560,7 @@ describe("site build from snapshot data", () => {
       expect(existsSync(path.join(client, route, "index.html")), route).toBe(true);
     }
     expect(html("zh-hant/guides/find-telegram-channels")).toMatch(
-      /<h1[^>]*>\s*怎麼找到優質的 Telegram 頻道/,
+      /<h1[^>]*>\s*怎麼找 Telegram 頻道，並判斷是否值得訂閱/,
     );
     expect(readFileSync(path.join(client, "zh-hant/404.html"), "utf8")).toContain(
       '<html lang="zh-Hant">',
@@ -1051,10 +1088,15 @@ describe("site build from snapshot data", () => {
 
   test("guide articles render in both locales with dates, a table of contents and internal links", () => {
     for (const [route, heading, tocLabel, next] of [
-      ["guides/find-telegram-channels", "怎么找到优质的 Telegram 频道", "本文目录", "/channel/"],
+      [
+        "guides/find-telegram-channels",
+        "怎么找 Telegram 频道，并判断是否值得订阅",
+        "本文目录",
+        "/channel/",
+      ],
       [
         "en/guides/find-telegram-channels",
-        "How to find good Telegram channels",
+        "How to find Telegram channels worth following",
         "On this page",
         "/en/channel/",
       ],
@@ -1064,7 +1106,7 @@ describe("site build from snapshot data", () => {
       expect(page, route).toContain(tocLabel);
       // Published and updated dates are machine-readable and differ, as the frontmatter says.
       expect(page, route).toContain('<time datetime="2026-09-15T00:00:00.000Z">');
-      expect(page, route).toContain('<time datetime="2026-11-09T00:00:00.000Z">');
+      expect(page, route).toContain('<time datetime="2026-11-15T00:00:00.000Z">');
       // Every markdown h2 has an id and a matching entry in the table of contents.
       const ids = [...page.matchAll(/<h2 id="([^"]+)"/g)].map((match) => match[1] ?? "");
       expect(ids.length, route).toBeGreaterThanOrEqual(5);
@@ -1097,7 +1139,7 @@ describe("site build from snapshot data", () => {
   });
 
   test("ads.txt is a root static file so AdSense can crawl it", () => {
-    expect(readFileSync(path.join(client, "ads.txt"), "utf8")).toBe(
+    expect(readFileSync(path.join(client, "ads.txt"), "utf8").replaceAll("\r\n", "\n")).toBe(
       "google.com, pub-1797920702200847, DIRECT, f08c47fec0942fa0\n",
     );
   });
@@ -1112,8 +1154,8 @@ describe("site build from snapshot data", () => {
       expect(slugs, route).toEqual([first, "channels-groups-bots", last]);
       expect(types(page), route).toEqual(["ItemList", "BreadcrumbList"]);
     }
-    expect(html("guides")).toContain("怎么找到优质的 Telegram 频道");
-    expect(html("en/guides")).toContain("How to find good Telegram channels");
+    expect(html("guides")).toContain("怎么找 Telegram 频道，并判断是否值得订阅");
+    expect(html("en/guides")).toContain("How to find Telegram channels worth following");
     // Reachable from the footer of every page, and from the guides index breadcrumb.
     expect(html("")).toContain('href="/guides/"');
     expect(html("en/")).toContain('href="/en/guides/"');
@@ -1126,14 +1168,14 @@ describe("site build from snapshot data", () => {
     expect(article).toMatchObject({
       "@context": "https://schema.org",
       "@type": "Article",
-      headline: "How to find good Telegram channels",
+      headline: "How to find Telegram channels worth following",
       url: `${siteUrl}/en/guides/find-telegram-channels/`,
       mainEntityOfPage: {
         "@type": "WebPage",
         "@id": `${siteUrl}/en/guides/find-telegram-channels/`,
       },
       datePublished: "2026-09-15T00:00:00.000Z",
-      dateModified: "2026-11-09T00:00:00.000Z",
+      dateModified: "2026-11-15T00:00:00.000Z",
       inLanguage: "en",
       author: { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: "TGsearch" },
       publisher: { "@type": "Organization", "@id": `${siteUrl}/#organization` },
@@ -1142,7 +1184,7 @@ describe("site build from snapshot data", () => {
     expect(breadcrumb?.itemListElement).toMatchObject([
       { position: 1, item: `${siteUrl}/en/` },
       { position: 2, item: `${siteUrl}/en/guides/` },
-      { position: 3, name: "How to find good Telegram channels" },
+      { position: 3, name: "How to find Telegram channels worth following" },
     ]);
   });
 
@@ -1184,7 +1226,7 @@ describe("site build from snapshot data", () => {
         `<loc>${siteUrl}/${prefix}guides/channels-groups-bots/</loc><lastmod>2026-11-09T00:00:00.000Z</lastmod>`,
       );
       expect(sitemap).toContain(
-        `<loc>${siteUrl}/${prefix}guides/find-telegram-channels/</loc><lastmod>2026-11-09T00:00:00.000Z</lastmod>`,
+        `<loc>${siteUrl}/${prefix}guides/find-telegram-channels/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
       );
     }
     expect(sitemap).toContain(
