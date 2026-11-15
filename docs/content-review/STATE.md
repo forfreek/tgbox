@@ -86,3 +86,4 @@
 - Web 403 项测试、Astro 类型检查通过。构建改为串行验证，后续继续核查指南入口与页面。
 - 串行构建通过，267 个静态文件，47 页繁体转换。Playwright Edge 验证新增 6 个本地化页面、5 张指南卡片、目录到机器人指南再到数据指南的导航，以及 390px 手机无页面横向溢出。
 - 页面验证无应用错误。Edge 连续导航仍偶发 ViewTransition opt-in disabled 浏览器提示，功能断言通过，提示记录于系统临时 QA 结果。
+- 独立 PR #42 为 https://github.com/forfreek/tgbox/pull/42 ，最终 CI 状态以该 PR 最新提交为准。
