@@ -264,6 +264,25 @@ describe("helpers", () => {
     expect(truncate("abcdefghijk", 10)).toBe("abcdefghi…");
   });
 
+  test.each(["😀", "🇨🇳", "👨‍👩‍👧‍👦", "e\u0301"])(
+    "truncate preserves complete Unicode graphemes %s",
+    (character) => {
+      const result = truncate(`${"a".repeat(88)}${character}tail`, 90);
+      expect(result).toBe(`${"a".repeat(88)}…`);
+      expect(result.isWellFormed()).toBe(true);
+      expect(JSON.parse(JSON.stringify({ description: result })).description.isWellFormed()).toBe(
+        true,
+      );
+      expect(result.length).toBeLessThanOrEqual(90);
+    },
+  );
+
+  test("truncate handles malformed source Unicode and tiny budgets", () => {
+    expect(truncate("bad\ud83d", 20)).toBe("bad\ufffd");
+    expect(truncate("😀", 1)).toBe("…");
+    expect(truncate("text", 0)).toBe("");
+  });
+
   test("keywords dedupes while keeping the most specific term first", () => {
     expect(keywords(["电报频道", "Telegram"], ["Telegram", "电报", ""])).toBe(
       "电报频道, Telegram, 电报",

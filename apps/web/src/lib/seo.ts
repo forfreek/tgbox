@@ -16,9 +16,18 @@ export const MIN_INDEXED_LISTING_ENTRIES = 3;
 /** Roughly what Google renders before truncating; Chinese glyphs are about twice as wide. */
 export const descriptionBudget: Record<SiteLocale, number> = { zh: 90, "zh-hant": 90, en: 170 };
 
+const summarySegments = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+
 export function truncate(text: string, max: number): string {
-  const clean = text.replace(/\s+/g, " ").trim();
-  return clean.length <= max ? clean : `${clean.slice(0, max - 1).trimEnd()}…`;
+  const clean = text.toWellFormed().replace(/\s+/g, " ").trim();
+  if (max <= 0) return "";
+  if (clean.length <= max) return clean;
+  let end = 0;
+  for (const { segment, index } of summarySegments.segment(clean)) {
+    if (index + segment.length > max - 1) break;
+    end = index + segment.length;
+  }
+  return `${clean.slice(0, end).trimEnd()}…`;
 }
 
 /** Dedupes while keeping the first occurrence, so the most specific terms lead. */
