@@ -1,0 +1,23 @@
+{
+  "baseline": "3d65fbc8e8b2cd672dc8ba995e499348dbdbbee0",
+  "runtime": "Cloudflare local test harness and Node SQLite, simulated AI",
+  "existingTests": {
+    "bot": 12,
+    "webSeo": 52,
+    "db": 5
+  },
+  "diagnosticTests": 4,
+  "observations": [
+    "Candidate read, source refresh, then save old translation with task start timestamp produces new source with old translation until retry",
+    "A title-only cold update queues an unchanged translated description",
+    "Repeated @wrong_bot output is accepted and saved",
+    "Two hourly runs call the same first eight persistently failing entries and never call the ninth",
+    "Actual seedEntrySql rerun changes description but keeps old description_zh"
+  ],
+  "seedResult": {
+    "updatedAt": 2000,
+    "descriptionZh": "旧简介的翻译",
+    "description": "New source description",
+    "translatedAt": 1000
+  }
+}
