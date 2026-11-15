@@ -1,5 +1,6 @@
 ---
 import { entryKinds, type SiteLocale, t } from "@tgbox/shared";
+import { localizePath } from "@/i18n/locale.ts";
 import { ui } from "@/i18n/ui.ts";
 import PageLayout from "@/layouts/PageLayout.astro";
 import { botUrl, botUsername } from "@/lib/site.ts";
@@ -35,6 +36,8 @@ const kindTitle = {
           <a href={botUrl} rel="noopener" target="_blank">{bot}</a>
           提交公开链接，普通收录免费。机器人获取公开资料供你确认，审核结果通过私信通知，通过审核的条目随网站构建发布。
         </p>
+
+        <p><strong>本站不收录违法违规、色情、赌博、诈骗及灰黑产内容。</strong>频道、群组和机器人都按同一标准审核。请先<a href={localizePath("/guides/listing-requirements/", locale)}>查看详细收录要求</a>。</p>
 
         <h2>收录标准</h2>
         <ul>
@@ -74,6 +77,8 @@ const kindTitle = {
           <a href={botUrl} rel="noopener" target="_blank">{bot}</a>.
           Regular listing is free. The bot fetches public information for you to check, sends the review result by private message and publishes approved entries with a site build.
         </p>
+
+        <p><strong>TGsearch rejects illegal content, pornography, gambling, scams and illicit services.</strong>Channels, groups and bots follow the same review standard. Read the <a href={localizePath("/guides/listing-requirements/", locale)}>detailed listing requirements</a> before submitting.</p>
 
         <h2>Listing criteria</h2>
         <ul>

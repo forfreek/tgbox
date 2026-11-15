@@ -1192,11 +1192,8 @@ describe("site build from snapshot data", () => {
     for (const route of ["guides", "en/guides"]) {
       const page = html(route);
       const slugs = [...page.matchAll(/data-guide-card="([^"]+)"/g)].map((match) => match[1] ?? "");
-      expect(slugs, route).toHaveLength(5);
-      expect(slugs.slice(0, 2), route).toEqual(
-        expect.arrayContaining(["read-telegram-directory-data", "check-telegram-bot-links"]),
-      );
-      expect(slugs.slice(2), route).toEqual([
+      expect(slugs, route).toEqual([
+        "listing-requirements",
         "find-telegram-channels",
         "channels-groups-bots",
         "grow-a-telegram-channel",
@@ -1242,8 +1239,7 @@ describe("site build from snapshot data", () => {
       "find-telegram-channels",
       "channels-groups-bots",
       "grow-a-telegram-channel",
-      "read-telegram-directory-data",
-      "check-telegram-bot-links",
+      "listing-requirements",
     ]) {
       const zh = html(`guides/${slug}`);
       const en = html(`en/guides/${slug}`);
@@ -1266,21 +1262,25 @@ describe("site build from snapshot data", () => {
     }
   });
 
-  test("original guides render their worked examples and sources in all three locales", () => {
-    for (const prefix of ["", "en/", "zh-hant/"]) {
-      const dataGuide = html(`${prefix}guides/read-telegram-directory-data`);
-      const botGuide = html(`${prefix}guides/check-telegram-bot-links`);
-      for (const page of [dataGuide, botGuide]) {
-        expect(types(page)).toEqual(["Article", "FAQPage", "BreadcrumbList"]);
-        expect(page).toContain('<time datetime="2026-11-15T00:00:00.000Z">');
-        expect(page).toContain("<table>");
+  test("listing requirements replace the withdrawn guides in all three locales", () => {
+    const guideSitemap = readFileSync(path.join(client, "sitemap-guides.xml"), "utf8");
+    for (const [prefix, rejectHeading] of [
+      ["", "哪些内容不收录"],
+      ["en/", "Content we reject"],
+      ["zh-hant/", "哪些內容不收錄"],
+    ] as const) {
+      const page = html(`${prefix}guides/listing-requirements`);
+      expect(types(page)).toEqual(["Article", "FAQPage", "BreadcrumbList"]);
+      expect(page).toContain('<time datetime="2026-11-15T00:00:00.000Z">');
+      expect(page).toContain('href="https://telegram.org/tos"');
+      expect(page).toContain("/support");
+      expect(page).toContain(rejectHeading);
+      expect(html(`${prefix}enroll`)).toContain(`href="/${prefix}guides/listing-requirements/"`);
+      for (const slug of ["read-telegram-directory-data", "check-telegram-bot-links"]) {
+        expect(existsSync(path.join(client, prefix, "guides", slug, "index.html"))).toBe(false);
+        expect(html(`${prefix}guides`)).not.toContain(slug);
+        expect(guideSitemap).not.toContain(slug);
       }
-      expect(dataGuide).toContain("1,100");
-      expect(dataGuide).toContain("10%");
-      expect(dataGuide).toContain('href="https://telegram.org/faq_channels"');
-      expect(botGuide).toContain("start=submit");
-      expect(botGuide).toContain('href="https://core.telegram.org/bots/features#deep-linking"');
-      expect(botGuide).toContain('/guides/read-telegram-directory-data/"');
     }
   });
 
@@ -1297,11 +1297,9 @@ describe("site build from snapshot data", () => {
       expect(sitemap).toContain(
         `<loc>${siteUrl}/${prefix}guides/find-telegram-channels/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
       );
-      for (const slug of ["read-telegram-directory-data", "check-telegram-bot-links"]) {
-        expect(sitemap).toContain(
-          `<loc>${siteUrl}/${prefix}guides/${slug}/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
-        );
-      }
+      expect(sitemap).toContain(
+        `<loc>${siteUrl}/${prefix}guides/listing-requirements/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
+      );
     }
     expect(sitemap).toContain(
       `<xhtml:link rel="alternate" hreflang="en" href="${siteUrl}/en/guides/find-telegram-channels/"/>`,
