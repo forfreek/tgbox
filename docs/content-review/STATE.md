@@ -77,3 +77,4 @@
 - 补查发现社交图仍含上游域名和机器人、README 截图含 TGbox，已由现有模板和本地页面重新生成。
 - Web 402 项、shared 152 项测试、9 包类型检查、静态构建和桌面手机浏览器检查通过。详情及边界见 COPY-DELIVERY。
 - 后续优先剩余指南全文，依据 COPY-PLAN 逐节点交付。
+- 本节点分支已更名 codex/public-copy-identity，独立 PR #41 为 https://github.com/forfreek/tgbox/pull/41 ，远端 CI 以该 PR 最新提交为准。
