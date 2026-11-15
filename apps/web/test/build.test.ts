@@ -1284,6 +1284,30 @@ describe("site build from snapshot data", () => {
     }
   });
 
+  test("rewritten guides carry sources, current FAQs and localized submission links", () => {
+    for (const prefix of ["", "en/", "zh-hant/"]) {
+      for (const slug of ["grow-a-telegram-channel", "channels-groups-bots"]) {
+        const page = html(`${prefix}guides/${slug}`);
+        const [article, faq] = jsonLd(page) as Record<string, unknown>[];
+        expect(article).toMatchObject({ dateModified: "2026-11-15T00:00:00.000Z" });
+        expect(Array.isArray(faq?.mainEntity) && faq.mainEntity.length).toBe(3);
+        expect(page).toContain(`href="/${prefix}enroll/"`);
+        expect(page).toContain(`href="/${prefix}guides/listing-requirements/"`);
+        expect(page).toContain(
+          'href="https://telegram.org/blog/filters-anonymous-admins-comments#channel-comments"',
+        );
+        expect(page).not.toContain("tgboxccbot");
+        expect(page).not.toContain("20%");
+      }
+      expect(html(`${prefix}guides/grow-a-telegram-channel`)).toContain(
+        'href="https://telegram.org/faq_spam"',
+      );
+      expect(html(`${prefix}guides/channels-groups-bots`)).toContain(
+        'href="https://core.telegram.org/bots/features#privacy-mode"',
+      );
+    }
+  });
+
   test("the guides sitemap carries both locales with each guide's own lastmod", () => {
     expect(readFileSync(path.join(client, "sitemap-index.xml"), "utf8")).toContain(
       `${siteUrl}/sitemap-guides.xml`,
@@ -1292,7 +1316,7 @@ describe("site build from snapshot data", () => {
     for (const prefix of ["", "en/"]) {
       expect(sitemap).toContain(`<loc>${siteUrl}/${prefix}guides/</loc>`);
       expect(sitemap).toContain(
-        `<loc>${siteUrl}/${prefix}guides/channels-groups-bots/</loc><lastmod>2026-11-09T00:00:00.000Z</lastmod>`,
+        `<loc>${siteUrl}/${prefix}guides/channels-groups-bots/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
       );
       expect(sitemap).toContain(
         `<loc>${siteUrl}/${prefix}guides/find-telegram-channels/</loc><lastmod>2026-11-15T00:00:00.000Z</lastmod>`,
