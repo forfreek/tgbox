@@ -32,7 +32,7 @@ Before submitting, check the published content, the functions a bot provides and
 - **Malicious tools and illegal trade.** This includes malware distribution, account-theft or network-attack services, and trade in prohibited goods or services such as drugs, illegal firearms and forged documents.
 - **Infringement and other prohibited content.** This includes unauthorized distribution of paid content, disclosure of private information, violent threats and other content that violates applicable law or Telegram rules.
 
-Directories, channels, groups and bots that direct users to these activities are also rejected. Changing a name or description leaves the actual content subject to the same review. Paid promotions must meet these requirements too.
+Paid promotions must meet these requirements too.
 
 ## Basic submission requirements
 
