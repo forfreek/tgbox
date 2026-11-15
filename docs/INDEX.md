@@ -4,6 +4,7 @@
 
 | 任务 | 入口 | 何时读取 |
 | --- | --- | --- |
+| 两篇原创指南 | [原创交付](content-review/ORIGINAL-GUIDES.md) | 查看选题、事实来源和集成验证 |
 | 公共文案与身份交付 | [交付记录](content-review/COPY-DELIVERY.md) | 查看本节点修改、上游清查和验证 |
 | 当前文案优先顺序与上游残留 | [文案计划](content-review/COPY-PLAN.md) | 本轮执行入口，按最新用户指示改写 |
 | 搜索数据参考 | [搜索分析](content-review/SEARCH-NEXT.md) | 用于样本选择与效果复核，当前顺序以文案计划为准 |

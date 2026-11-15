@@ -78,3 +78,11 @@
 - Web 402 项、shared 152 项测试、9 包类型检查、静态构建和桌面手机浏览器检查通过。详情及边界见 COPY-DELIVERY。
 - 后续优先剩余指南全文，依据 COPY-PLAN 逐节点交付。
 - 本节点分支已更名 codex/public-copy-identity，独立 PR #41 为 https://github.com/forfreek/tgbox/pull/41 ，远端 CI 以该 PR 最新提交为准。
+
+## 原创文章节点
+
+- 已确认 PR #41 合并，更新 main 至 4d2d8ac，使用独立分支 codex/original-guides。
+- 用户要求新增一到两篇本站自有文章，已编写两篇中英指南，共 4 个源文件，选题及来源见 ORIGINAL-GUIDES.md。
+- Web 403 项测试、Astro 类型检查通过。构建改为串行验证，后续继续核查指南入口与页面。
+- 串行构建通过，267 个静态文件，47 页繁体转换。Playwright Edge 验证新增 6 个本地化页面、5 张指南卡片、目录到机器人指南再到数据指南的导航，以及 390px 手机无页面横向溢出。
+- 页面验证无应用错误。Edge 连续导航仍偶发 ViewTransition opt-in disabled 浏览器提示，功能断言通过，提示记录于系统临时 QA 结果。
