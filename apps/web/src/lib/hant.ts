@@ -1,13 +1,26 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { toHant } from "@tgbox/hant";
+import { localizePath } from "../i18n/locale.ts";
 
 // Links to other sites keep their exact bytes: a converted character in a URL is a different URL.
 // Site paths are converted with the page, so a `/?q=…` search link matches the Traditional index.
-const EXTERNAL_URL_ATTR = /(\s(?:href|src)=")((?!\/(?!\/))[^"]*)(")/g;
+const EXTERNAL_URL_ATTR = /(\s(?:href|src)=")((?!\/(?!\/)|#)[^"]*)(")/g;
 
 /** A rendered zh page in Traditional Chinese, leaving external URLs untouched. */
 export function toTraditionalPage(html: string): string {
+  // Markdown has root-relative links, while the surrounding Astro template is localized already.
+  html = html.replace(
+    /(<article\b[^>]*data-guide-content[^>]*>)([\s\S]*?)(<\/article>)/g,
+    (_, open: string, body: string, close: string) =>
+      open +
+      body.replace(
+        /(\shref=")(\/(?!\/)[^"]*)(")/g,
+        (_, start: string, href: string, end: string) =>
+          start + localizePath(href, "zh-hant") + end,
+      ) +
+      close,
+  );
   let out = "";
   let last = 0;
   for (const match of html.matchAll(EXTERNAL_URL_ATTR)) {

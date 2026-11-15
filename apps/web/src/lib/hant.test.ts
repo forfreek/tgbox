@@ -40,6 +40,24 @@ test("every page and JSON file in the tree is converted in place, other files ar
   expect(readFileSync(path.join(dir, "notes.txt"), "utf8")).toBe("简介");
 });
 
+test("guide links stay in Traditional and section fragments match converted heading IDs", () => {
+  const page = toTraditionalPage(
+    '<a href="/">简体</a><a href="/en/">English</a>' +
+      '<nav><a href="#频道要求">频道要求</a></nav>' +
+      '<article data-guide-content><h2 id="频道要求">频道要求</h2>' +
+      '<a href="/enroll/">提交</a><a href="/zh-hant/group/">群组</a>' +
+      '<a href="https://example.com/频道">来源</a>' +
+      '<a href="//example.com/频道">来源</a></article>',
+  );
+  expect(page).toContain('<a href="#頻道要求">頻道要求</a>');
+  expect(page).toContain('<h2 id="頻道要求">頻道要求</h2>');
+  expect(page).toContain('href="/zh-hant/enroll/"');
+  expect(page).toContain('href="/zh-hant/group/"');
+  expect(page).toContain('href="https://example.com/频道"');
+  expect(page).toContain('href="//example.com/频道"');
+  expect(page).toContain('<a href="/">簡體</a><a href="/en/">English</a>');
+});
+
 test("phrases OpenCC gets wrong in the site's copy are corrected", () => {
   expect(toTraditionalPage("<p>TGbox 是一个中英双语的导航站，私聊机器人并发送 /help</p>")).toBe(
     "<p>TGbox 是一個中英雙語的導航站，私聊機器人並發送 /help</p>",

@@ -1,0 +1,31 @@
+{
+  "method": "Source Markdown body, frontmatter excluded, whitespace stripped, TGbox and TGsearch normalized to SITE, unique character five-gram overlap with upstream. Diagnostic only.",
+  "upstreamCommit": "d297cdbc7c10866d024c0575e9e99cd7501ebecd",
+  "baseline": "c80c8cd",
+  "rows": [
+    {
+      "locale": "zh",
+      "slug": "grow-a-telegram-channel",
+      "before": 93.8,
+      "after": 4.9
+    },
+    {
+      "locale": "zh",
+      "slug": "channels-groups-bots",
+      "before": 94.8,
+      "after": 6
+    },
+    {
+      "locale": "en",
+      "slug": "grow-a-telegram-channel",
+      "before": 94,
+      "after": 21
+    },
+    {
+      "locale": "en",
+      "slug": "channels-groups-bots",
+      "before": 97.1,
+      "after": 23.2
+    }
+  ]
+}

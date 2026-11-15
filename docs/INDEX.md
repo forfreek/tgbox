@@ -4,6 +4,7 @@
 
 | 任务 | 入口 | 何时读取 |
 | --- | --- | --- |
+| 剩余两篇指南改写 | [改写记录](content-review/REMAINING-GUIDES.md) | 查看技能版本、来源、内容修改与上游复测 |
 | 详细收录要求指南 | [收录指南记录](content-review/LISTING-GUIDE.md) | 查看禁止收录范围、入口和验证 |
 | 公共文案与身份交付 | [交付记录](content-review/COPY-DELIVERY.md) | 查看本节点修改、上游清查和验证 |
 | 当前文案优先顺序与上游残留 | [文案计划](content-review/COPY-PLAN.md) | 本轮执行入口，按最新用户指示改写 |
