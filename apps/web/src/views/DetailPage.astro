@@ -102,6 +102,8 @@ const facts = {
   created: entry.tgCreatedAt === null ? null : formatDate(entry.tgCreatedAt, locale),
   activity: tierLabel,
   language: languageLabel,
+  topics: tags.map((tag) => tag.name),
+  updated: formatDate(entry.updatedAt, locale),
 };
 const summary = entrySummary(locale, facts);
 const seo = detailSeo(locale, {

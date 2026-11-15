@@ -130,9 +130,23 @@ describe("listing descriptions", () => {
 });
 
 describe("entrySummary", () => {
+  test("includes up to three localized topics and the recorded profile update date", () => {
+    const summary = entrySummary("zh", {
+      ...facts,
+      topics: ["开源", "编程", "教程", "工具"],
+      updated: "2026年11月15日",
+    });
+    expect(summary).toContain("主题标签为开源、编程、教程");
+    expect(summary).not.toContain("工具");
+    expect(summary).toContain("资料更新于 2026年11月15日");
+    expect(
+      entrySummary("en", { ...facts, topics: ["Open source"], updated: "Nov 15, 2026" }),
+    ).toContain("tagged Open source");
+    expect(entrySummary("zh", { ...facts, topics: [], updated: null })).not.toContain("资料更新于");
+  });
   test("reads as one sentence with every known fact", () => {
     expect(entrySummary("zh", facts)).toBe(
-      "每日科技（@techdaily）是 TGsearch 收录的 Telegram 科技频道，目前有 5,000 名订阅者，创建于 2025年8月2日，活跃度为非常活跃，内容以中文为主。",
+      "每日科技（@techdaily）是 Telegram 上的科技频道，主要语言为中文，公开资料记录 5,000 名订阅者，创建日期为 2025年8月2日，近期活跃程度为非常活跃。",
     );
   });
 
@@ -147,7 +161,7 @@ describe("entrySummary", () => {
       activity: null,
       language: null,
     });
-    expect(summary).toBe("GPT Bot (@gptbot) is a Telegram AI bot listed on TGsearch.");
+    expect(summary).toBe("GPT Bot (@gptbot) is a Telegram bot in the AI category.");
   });
 
   test("never leaves an unfilled placeholder behind", () => {

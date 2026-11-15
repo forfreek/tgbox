@@ -284,6 +284,7 @@ describe("site build from snapshot data", () => {
   test("each locale reads its own translated description, or the original when there is none", () => {
     // techdaily is written in Chinese and has an English translation.
     const zh = html("detail/techdaily");
+    expect(zh).toContain("资料更新于 2026年8月28日");
     const en = html("en/detail/techdaily");
     expect(zh).toContain("每天分享开发与科技新闻");
     expect(zh).not.toContain("自动翻译");
@@ -301,12 +302,12 @@ describe("site build from snapshot data", () => {
     const zh = html("detail/techdaily");
     expect(zh).toMatch(/<h1[\s\S]*?每日科技[\s\S]*?Telegram 开发编程频道[\s\S]*?<\/h1>/);
     expect(zh).toMatch(
-      /data-entry-summary[^>]*>\s*每日科技（@techdaily）是 TGsearch 收录的 Telegram 开发编程频道，目前有 5,000 名订阅者/,
+      /data-entry-summary[^>]*>\s*每日科技（@techdaily）是 Telegram 上的开发编程频道，主要语言为中文，公开资料记录 5,000 名订阅者/,
     );
     const en = html("en/detail/techdaily");
     expect(en).toMatch(/<h1[\s\S]*?Telegram Development Channel[\s\S]*?<\/h1>/);
     expect(en).toMatch(
-      /data-entry-summary[^>]*>\s*每日科技 \(@techdaily\) is a Telegram Development channel listed on TGsearch, with 5,000 subscribers/,
+      /data-entry-summary[^>]*>\s*每日科技 \(@techdaily\) is a Telegram channel in the Development category, primary language Chinese, public profile count of 5,000 subscribers/,
     );
     // The same sentence leads the meta description.
     expect(en).toMatch(/<meta name="description" content="每日科技 \(@techdaily\) is a Telegram/);
