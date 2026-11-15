@@ -21,6 +21,11 @@ export type SnapshotOptions = {
    * for a channel, the `/{u}/1` embed for a group (groups have no /s/ preview)
    */
   needCreatedAt: boolean;
+  /**
+   * Profile page only. The awesome-list importer classifies from the bio and must not spend a
+   * second request on `/s/` for every channel in a list of hundreds.
+   */
+  profileOnly?: boolean;
 };
 
 export type EntrySnapshot = {
@@ -84,7 +89,7 @@ export async function fetchEntrySnapshot(
   }
   let verdict = classifyLiveness({ profileResponse, previousKind: options.knownKind });
 
-  if (verdict.liveness === "active" && verdict.kind === "channel") {
+  if (!options.profileOnly && verdict.liveness === "active" && verdict.kind === "channel") {
     const preview = await get(`/s/${username}`);
     if (preview?.redirected) {
       verdict = classifyLiveness({
@@ -106,7 +111,12 @@ export async function fetchEntrySnapshot(
     }
   }
 
-  if (verdict.liveness === "active" && verdict.kind === "group" && options.needCreatedAt) {
+  if (
+    !options.profileOnly &&
+    verdict.liveness === "active" &&
+    verdict.kind === "group" &&
+    options.needCreatedAt
+  ) {
     // Message 1 of a public group is its creation (or migration to a supergroup). When it was
     // deleted the embed says "Post not found" and the date stays unknown.
     const first = await get(`/${username}/1?embed=1&mode=tme`);

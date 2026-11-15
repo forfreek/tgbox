@@ -184,6 +184,27 @@ describe("fetchEntrySnapshot", () => {
     expect(snap).toMatchObject({ liveness: "unknown", rateLimited: false, subrequests: 1 });
   });
 
+  test("profileOnly stops after the profile page", async () => {
+    const { fetch, calls } = fakeFetch({
+      "https://t.me/telegram": html("profile-channel.html"),
+      "https://t.me/s/telegram": html("channel-posts.html"),
+    });
+    const snap = await fetchEntrySnapshot("telegram", {
+      fetch,
+      now,
+      knownKind: null,
+      needCreatedAt: true,
+      profileOnly: true,
+    });
+    expect(snap).toMatchObject({
+      liveness: "active",
+      kind: "channel",
+      subrequests: 1,
+      posts: null,
+    });
+    expect(calls.map((call) => call.url)).toEqual(["https://t.me/telegram"]);
+  });
+
   test("not found profile", async () => {
     const { fetch } = fakeFetch({
       "https://t.me/zzqq_not_exist_987654": html("profile-not-found.html"),

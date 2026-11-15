@@ -91,12 +91,14 @@ flowchart LR
 | Admin | TanStack Start + Router / Query / Table, Cloudflare Access or Telegram Mini App auth |
 | Data | Cloudflare D1 + Drizzle ORM, R2 for avatars, posts and member history |
 | Delivery | GitHub Actions: rebuild only when D1 is marked dirty, then `wrangler deploy` |
+| Lists | Awesome-list README → keyword categories; the slow remainder runs in a Container (`apps/import`) |
 | Tests | Vitest + `@cloudflare/vitest-pool-workers`, Playwright end-to-end |
 
 ```
 apps/web            Astro static site
 apps/bot            Telegram bot: webhook + scheduled refresh
 apps/admin          Admin panel (web + Telegram Mini App)
+apps/import         Container that classifies awesome-list READMEs (not deployed by CI)
 packages/core       Domain operations shared by bot and admin
 packages/db         Drizzle schema and D1 migrations
 packages/telegram   t.me parsing, liveness detection, language detection
@@ -124,6 +126,19 @@ pnpm --filter @tgbox/web preview       # website  → http://localhost:8787
 (cd .data/media && python3 -m http.server 8790)  # local avatars and posts
 pnpm --filter @tgbox/admin dev         # admin    → http://localhost:8789 (auth bypassed on localhost)
 ```
+
+## Importing a list that has no categories
+
+An awesome-list README such as [ebertti/awesome-telegram](https://github.com/ebertti/awesome-telegram) is headings and blurbs. `Bots`, `Groups` and `Channels` say the kind, and a nested heading inherits it. They are not categories, and the list has no tags. Bullets that do not link to a public username (libraries, themes, websites) are skipped.
+
+Category and tags come from the same keyword rules as `/submit`. A blurb the rules will not stand behind stays blank. `--slow` then fetches each of those t.me profiles and, when `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` are set, asks `@cf/cloudflare/clef-omni`. That model scores every allowed category and the row stays blank unless one option leads clearly. The report is a suggestion. Nothing is written to D1.
+
+```bash
+node scripts/import-awesome.ts --url https://github.com/ebertti/awesome-telegram
+node scripts/import-awesome.ts --file README.md --slow --out report.json
+```
+
+Hundreds of profile fetches do not fit a Worker's subrequest budget. `apps/import` runs the same `--slow` path in a Cloudflare Container. It is not part of the free-plan deploy, and deploying it creates a Container application, so it stays undeployed until that is approved.
 
 Checks: `pnpm check` (Biome + typecheck), `pnpm test`, `pnpm --filter @tgbox/web test:e2e`.
 

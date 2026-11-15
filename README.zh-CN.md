@@ -90,6 +90,7 @@ flowchart LR
 | 后台 | TanStack Start + Router / Query / Table，Cloudflare Access 或 Telegram Mini App 登录 |
 | 数据 | Cloudflare D1 + Drizzle ORM；头像、消息和成员趋势存 R2 |
 | 发布 | GitHub Actions：D1 标记有变化时才构建，然后 `wrangler deploy` |
+| 列表导入 | 没有分类的 awesome README 先走关键词；拿不准的部分在 Container 里处理（`apps/import`） |
 | 测试 | Vitest + `@cloudflare/vitest-pool-workers`、Playwright 端到端测试 |
 
 ## 本地运行
@@ -111,6 +112,19 @@ pnpm --filter @tgbox/web preview       # 网站 → http://localhost:8787
 (cd .data/media && python3 -m http.server 8790)  # 本地头像和消息
 pnpm --filter @tgbox/admin dev         # 后台 → http://localhost:8789（本机访问免登录）
 ```
+
+## 没有分类和标签的列表
+
+[ebertti/awesome-telegram](https://github.com/ebertti/awesome-telegram) 这种 README 只有标题和一句介绍。`Bots`、`Groups`、`Channels` 表示种类，子标题沿用上一级，它们不是本站的分类，列表里也没有标签。没有公开用户名的条目（库、主题、网站）直接跳过。
+
+分类和标签走投稿机器人同一套关键词规则。规则不敢下结论的留空。`--slow` 会去拉这些 t.me 简介；如果设置了 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN`，再交给 `@cf/cloudflare/clef-omni`。它给每个可选分类打分，没有一项明显领先就继续留空。输出只是建议，不会写入 D1。
+
+```bash
+node scripts/import-awesome.ts --url https://github.com/ebertti/awesome-telegram
+node scripts/import-awesome.ts --file README.md --slow --out report.json
+```
+
+几百次简介抓取放不进 Worker 的子请求上限。`apps/import` 把同一条 `--slow` 路径放进 Cloudflare Container。Container 不在免费套餐里，部署会新建容器应用，所以 CI 不会部署它，需要单独同意之后再部署。
 
 检查：`pnpm check`（Biome + 类型检查）、`pnpm test`、`pnpm --filter @tgbox/web test:e2e`。
 

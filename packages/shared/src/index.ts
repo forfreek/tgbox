@@ -1,3 +1,4 @@
+export * from "./awesome-list.ts";
 export * from "./categories.ts";
 export * from "./domain.ts";
 export { type Dictionary, type MessageKey, t } from "./i18n/index.ts";

@@ -1,0 +1,29 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "tgbox-import",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-09-15",
+  "workers_dev": false,
+  "observability": { "enabled": true },
+  // One container handles a whole README: parsing is instant, the slow part is a t.me fetch
+  // (and, when configured, a Workers AI call) per entry the keyword rules cannot place.
+  // Not deployed by CI. Deploying creates a Container application and a Durable Object class;
+  // do that only after it is explicitly approved. Containers are billed, unlike the Workers free plan.
+  "containers": [
+    {
+      "class_name": "AwesomeImportContainer",
+      "image": "./Dockerfile",
+      "image_build_context": "../..",
+      "instance_type": "lite",
+      "max_instances": 2
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "IMPORT", "class_name": "AwesomeImportContainer" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["AwesomeImportContainer"] }]
+  // Secrets, set at deploy time, never committed:
+  //   IMPORT_TOKEN            bearer token the caller must send
+  //   CLOUDFLARE_ACCOUNT_ID   optional, forwarded so the container can call Workers AI
+  //   CLOUDFLARE_API_TOKEN    optional, Workers AI Read
+}
