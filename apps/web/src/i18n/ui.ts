@@ -74,7 +74,7 @@ const zh = {
     enroll: "提交收录说明",
     bot: "收录机器人",
     disclaimer:
-      "本站仅收录公开的 Telegram 频道、群组和机器人，资料来自 Telegram 公开页面并定期自动更新。条目内容由其所有者负责，与本站无关；标有“推广”的条目为付费或合作展示。",
+      "本站整理公开的 Telegram 频道、群组和机器人，资料定时获取并随网站构建发布。条目内容由外部发布者提供，付费或合作展示带有“推广”标记。",
     reportBefore: "如发现违规内容或需要删除条目，请通过",
     reportBot: "收录机器人",
     reportOr: "或",
@@ -99,7 +99,7 @@ const zh = {
   },
   guides: {
     eyebrow: "Guides",
-    lead: "关于怎么找频道、怎么分辨频道质量、怎么把自己的频道做起来的长文，基于 Telegram 的公开限制和本站的收录数据写成，不是凑数的清单。",
+    lead: "从查找频道、理解公开数据到准备收录资料，结合 Telegram 官方说明和本站页面介绍可操作的方法。",
     index: "全部指南",
     toc: "本文目录",
     published: "发布于",
@@ -261,7 +261,7 @@ const en: typeof zh = {
     enroll: "Submission guide",
     bot: "Submission bot",
     disclaimer:
-      "We only list public Telegram channels, groups and bots. Data comes from public Telegram pages and is refreshed automatically. Listed owners are responsible for their content; entries marked “Promoted” are paid or partner placements.",
+      "TGsearch organizes public Telegram channels, groups and bots. Scheduled tasks fetch information, and site builds publish updates. External publishers provide entry content. Paid or partner placements carry a “Promoted” label.",
     reportBefore:
       " To report abusive content or request removal of an entry, contact us through the ",
     reportBot: "submission bot",
@@ -287,7 +287,7 @@ const en: typeof zh = {
   },
   guides: {
     eyebrow: "Guides",
-    lead: "Long-form articles on finding channels, telling a real audience from a bought one, and getting your own channel discovered — written from Telegram's documented limits and this directory's own data.",
+    lead: "Practical guides to finding channels, interpreting public data and preparing a listing, with Telegram documentation and examples from this directory.",
     index: "All guides",
     toc: "On this page",
     published: "Published",

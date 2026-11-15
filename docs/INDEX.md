@@ -4,6 +4,9 @@
 
 | 任务 | 入口 | 何时读取 |
 | --- | --- | --- |
+| 公共文案与身份交付 | [交付记录](content-review/COPY-DELIVERY.md) | 查看本节点修改、上游清查和验证 |
+| 当前文案优先顺序与上游残留 | [文案计划](content-review/COPY-PLAN.md) | 本轮执行入口，按最新用户指示改写 |
+| 搜索数据参考 | [搜索分析](content-review/SEARCH-NEXT.md) | 用于样本选择与效果复核，当前顺序以文案计划为准 |
 | 第一篇中英指南样板 | [样板记录](content-review/GUIDE-SAMPLE.md) | 查看已改内容、来源与验证 |
 | 简介链路、30 条样本与模型验证 | [AI 核验](content-review/AI-AUDIT.md) | 决定简介和模型改动范围 |
 | 内容差异度核验证据 | [核验报告](content-review/VERIFICATION.md) | 判断是否需要改写或调整生成链路之前 |

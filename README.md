@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://tgbox.cc">
+<a href="https://tgsearch.app">
   <img src="apps/web/public/favicon.svg" width="88" height="88" alt="TGsearch logo">
 </a>
 
@@ -8,19 +8,21 @@
 
 **An open-source Telegram channel, group & bot directory — with a submission bot, admin panel and zero-cost hosting on Cloudflare's free plan.**
 
-[**Live demo → tgbox.cc**](https://tgbox.cc) · [Submission bot @tgboxccbot](https://t.me/tgboxccbot) · [Awesome list: awesome-telegram](https://github.com/TGrpg/awesome-telegram) · English · [简体中文](README.zh-CN.md)
+[**Live demo → tgsearch.app**](https://tgsearch.app) · [Submission bot @TGeverythingSearchBot](https://t.me/TGeverythingSearchBot) · English · [简体中文](README.zh-CN.md)
 
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
-[![CI](https://github.com/TGrpg/tgbox/actions/workflows/ci.yml/badge.svg)](https://github.com/TGrpg/tgbox/actions/workflows/ci.yml)
+[![CI](https://github.com/forfreek/tgbox/actions/workflows/ci.yml/badge.svg)](https://github.com/forfreek/tgbox/actions/workflows/ci.yml)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers%20free%20plan-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 [![Astro](https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white)](https://astro.build)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![grammY](https://img.shields.io/badge/bot-grammY-009DC4?logo=telegram&logoColor=white)](https://grammy.dev)
-[![GitHub stars](https://img.shields.io/github/stars/TGrpg/tgbox?style=social)](https://github.com/TGrpg/tgbox/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/forfreek/tgbox?style=social)](https://github.com/forfreek/tgbox/stargazers)
 
 <img src=".github/assets/home.jpg" alt="TGsearch home page: search, featured cards and trending Telegram channels, groups and bots" width="100%">
 
 </div>
+
+TGsearch is based on [TGrpg/tgbox](https://github.com/TGrpg/tgbox) and is distributed under AGPL-3.0. This repository contains the code maintained for [tgsearch.app](https://tgsearch.app).
 
 ## Why TGsearch
 
@@ -39,7 +41,7 @@ Most Telegram directories are either a static list that goes stale, or a server-
 - Instant client-side search (Pagefind, CJK-aware) with a `Ctrl K` command palette
 - Random discovery ("drift bottle"), a fastest-mirror `/go` redirect page, share links and QR codes
 - Simplified Chinese, Traditional Chinese (converted from Simplified at build time) and English, with `hreflang`, per-kind sitemaps, Open Graph tags and structured URLs for SEO; visitors whose browser prefers the other language get a one-tap switch that is remembered
-- Open data: the whole directory at `/data/entries.json`, mirrored daily to the [awesome-telegram](https://github.com/TGrpg/awesome-telegram) list
+- Open data: the public directory is available at `/data/entries.json` for reuse.
 - Friend links in the footer and on `/links/`, applied for through the bot and approved by admins
 - Light and dark themes, mobile tab bar, PWA manifest, subtle Motion animations that respect `prefers-reduced-motion`
 
@@ -57,6 +59,8 @@ Most Telegram directories are either a static list that goes stale, or a server-
 - Opens in the browser behind **Cloudflare Access**, or inside Telegram as a **Mini App** (signed `initData` + admin allow-list)
 
 ## Screenshots
+
+Screenshots below use the local demonstration dataset.
 
 | Channels | Detail page |
 |---|---|
@@ -110,7 +114,7 @@ scripts             Seeding, site build, Pagefind sync
 Requirements: Node.js ≥ 22.18 and pnpm 11. Nothing below touches your Cloudflare account or Telegram.
 
 ```bash
-git clone https://github.com/TGrpg/tgbox.git
+git clone https://github.com/forfreek/tgbox.git
 cd tgbox
 pnpm install
 

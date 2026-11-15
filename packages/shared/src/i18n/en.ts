@@ -3,7 +3,7 @@ import type { Dictionary } from "./index.ts";
 export const en: Dictionary = {
   site: {
     title: "TGsearch",
-    tagline: "Telegram Resource Directory",
+    tagline: "Find Telegram channels, groups and bots by topic",
     home: "Home",
     channels: "Channels",
     groups: "Groups",
