@@ -1,0 +1,1282 @@
+{
+  "checkedAt": "2026-11-15T08:49:28.676Z",
+  "source": "https://tgsearch.app/data/entries.json",
+  "generatedAt": "2026-11-15T05:55:08.895Z",
+  "baselineGeneratedAt": "2026-11-14T17:41:28.739Z",
+  "mainCommit": "3d65fbc8e8b2cd672dc8ba995e499348dbdbbee0",
+  "method": "Revisit the same 30 purposively selected entries. Original means the source stored in public data. Page HTML is compared with the corresponding public translation or original fallback. Missing tokens are review flags.",
+  "stats": {
+    "total": 1909,
+    "byKind": {
+      "bot": 742,
+      "channel": 756,
+      "group": 411
+    },
+    "empty": 113,
+    "short": 122,
+    "translatedZh": 143,
+    "translatedEn": 389,
+    "otherLanguage": 152
+  },
+  "rows": [
+    {
+      "username": "abskoop",
+      "kind": "channel",
+      "lang": "zh",
+      "samplingReason": "zh",
+      "description": "A姐分享订阅频道\n分享资源、影视、软件和福利等有趣的东西。\n所有内容均发布在：https://www.ahhhhfs.com\n影视资源：https://www.xbwpys.com/\n地址发布页：https://dizhi.abskoop.com\nDMCA/投稿/联系邮箱：feedback@abskoop.com\n使用Chrome等非国产浏览器打开链接，挂梯子打开比较顺畅",
+      "descriptionZh": null,
+      "descriptionEn": "A sister share subscription channel share interesting things such as resources, movies, software and benefits. All content is posted at:https://www.ahhhhfs.com Movie resources:https://www.xbwpys.com/ post page:https://dizhi.abskoop.com DMCA/ post/ contact mail:feedback@abskoop.com Open links with non-native browsers such as Chrome, and hang the ladder open more smoothly",
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 187,
+      "protectedTokens": [
+        "https://www.ahhhhfs.com",
+        "https://www.xbwpys.com/",
+        "https://dizhi.abskoop.com",
+        "feedback@abskoop.com"
+      ],
+      "translations": {
+        "descriptionEn": {
+          "text": "A sister share subscription channel share interesting things such as resources, movies, software and benefits. All content is posted at:https://www.ahhhhfs.com Movie resources:https://www.xbwpys.com/ post page:https://dizhi.abskoop.com DMCA/ post/ contact mail:feedback@abskoop.com Open links with non-native browsers such as Chrome, and hang the ladder open more smoothly",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/abskoop/",
+          "status": 200,
+          "meta": "ahhhhfs｜A姐分享（@abskoop）是 TGsearch 收录的 Telegram 资源分享频道，目前有 303,765 名订阅者，创建于 2022年1月12日，活跃度为…",
+          "summary": "ahhhhfs｜A姐分享（@abskoop）是 TGsearch 收录的 Telegram 资源分享频道，目前有 303,765 名订阅者，创建于 2022年1月12日，活跃度为活跃，内容以中文为主。",
+          "description": "A姐分享订阅频道\n分享资源、影视、软件和福利等有趣的东西。\n所有内容均发布在：https://www.ahhhhfs.com\n影视资源：https://www.xbwpys.com/\n地址发布页：https://dizhi.abskoop.com\nDMCA/投稿/联系邮箱：feedback@abskoop.com\n使用Chrome等非国产浏览器打开链接，挂梯子打开比较顺畅",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/abskoop/",
+          "status": 200,
+          "meta": "ahhhhfs｜A姐分享 (@abskoop) is a Telegram Resources channel listed on TGsearch, with 303,765 subscribers, created on Jan 12, 2022, activity rated Active, mainly in Chinese.…",
+          "summary": "ahhhhfs｜A姐分享 (@abskoop) is a Telegram Resources channel listed on TGsearch, with 303,765 subscribers, created on Jan 12, 2022, activity rated Active, mainly in Chinese.",
+          "description": "A sister share subscription channel share interesting things such as resources, movies, software and benefits. All content is posted at:https://www.ahhhhfs.com Movie resources:https://www.xbwpys.com/ post page:https://dizhi.abskoop.com DMCA/ post/ contact mail:feedback@abskoop.com Open links with non-native browsers such as Chrome, and hang the ladder open more smoothly",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 1,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "testflightcn",
+      "kind": "channel",
+      "lang": "zh",
+      "samplingReason": "zh",
+      "description": "分享 科技、AI、数码、互联网及前沿资讯，分享见闻与实用内容。\n\n📌 群规\n\n• 文明交流，理性讨论\n• 禁止刷屏、广告推广、恶意引流\n• 禁止黑产、色情、赌博等违规内容\n• 禁止宗教政治、键政、人身攻击及恶意争吵\n• 违规内容将被删除，严重者移出\n\n📮 科技圈投稿：@zaihuabot\n🛠 侵权｜申诉｜客服：@BiuAsstBot\n📡 备用频道：@zaihuatg\n🤝 广告合作：@zaihua_ad_bot",
+      "descriptionZh": null,
+      "descriptionEn": "Share technology, AI, digital, Internet and cutting-edge information to share insights and practical content. 📌 Group rules • Civilization communication, rational discussion • Prohibition of screen brushing, advertising promotion, malicious distribution • Prohibition of illegal content such as pornography, pornography, gambling • Prohibition of religious politics, key politics, personal assault and malicious quarrels • Violating content will be removed, serious persons will be removed  Tech circles posted:@zaihuabot  Violation complaints:@BiuAsstBot  Alternative channel:@zaihuatg  Advertising cooperation:@zuaaih_ad_bot",
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 211,
+      "protectedTokens": ["@zaihuabot", "@BiuAsstBot", "@zaihuatg", "@zaihua_ad_bot"],
+      "translations": {
+        "descriptionEn": {
+          "text": "Share technology, AI, digital, Internet and cutting-edge information to share insights and practical content. 📌 Group rules • Civilization communication, rational discussion • Prohibition of screen brushing, advertising promotion, malicious distribution • Prohibition of illegal content such as pornography, pornography, gambling • Prohibition of religious politics, key politics, personal assault and malicious quarrels • Violating content will be removed, serious persons will be removed  Tech circles posted:@zaihuabot  Violation complaints:@BiuAsstBot  Alternative channel:@zaihuatg  Advertising cooperation:@zuaaih_ad_bot",
+          "missingTokens": ["@zaihua_ad_bot"]
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/testflightcn/",
+          "status": 200,
+          "meta": "在花🎗️科技圈（@testflightcn）是 TGsearch 收录的 Telegram 资讯新闻频道，目前有 289,749 名订阅者，创建于 2017年7月31日，活跃度…",
+          "summary": "在花🎗️科技圈（@testflightcn）是 TGsearch 收录的 Telegram 资讯新闻频道，目前有 289,749 名订阅者，创建于 2017年7月31日，活跃度为非常活跃，内容以中文为主。",
+          "description": "分享 科技、AI、数码、互联网及前沿资讯，分享见闻与实用内容。\n\n📌 群规\n\n• 文明交流，理性讨论\n• 禁止刷屏、广告推广、恶意引流\n• 禁止黑产、色情、赌博等违规内容\n• 禁止宗教政治、键政、人身攻击及恶意争吵\n• 违规内容将被删除，严重者移出\n\n📮 科技圈投稿：@zaihuabot\n🛠 侵权｜申诉｜客服：@BiuAsstBot\n📡 备用频道：@zaihuatg\n🤝 广告合作：@zaihua_ad_bot",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/testflightcn/",
+          "status": 200,
+          "meta": "在花🎗️科技圈 (@testflightcn) is a Telegram News channel listed on TGsearch, with 289,749 subscribers, created on Jul 31, 2017, activity rated Very active, mainly in Chinese.…",
+          "summary": "在花🎗️科技圈 (@testflightcn) is a Telegram News channel listed on TGsearch, with 289,749 subscribers, created on Jul 31, 2017, activity rated Very active, mainly in Chinese.",
+          "description": "Share technology, AI, digital, Internet and cutting-edge information to share insights and practical content. 📌 Group rules • Civilization communication, rational discussion • Prohibition of screen brushing, advertising promotion, malicious distribution • Prohibition of illegal content such as pornography, pornography, gambling • Prohibition of religious politics, key politics, personal assault and malicious quarrels • Violating content will be removed, serious persons will be removed Tech circles posted:@zaihuabot Violation complaints:@BiuAsstBot Alternative channel:@zaihuatg Advertising cooperation:@zuaaih_ad_bot",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 1,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "telegramtips",
+      "kind": "channel",
+      "lang": "en",
+      "samplingReason": "en-with-zh-translation",
+      "description": "Telegram stands for freedom and privacy and has many easy to use features.",
+      "descriptionZh": "Telegram 代表自由和隐私,拥有许多易于使用的功能。",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 74,
+      "protectedTokens": [],
+      "translations": {
+        "descriptionZh": {
+          "text": "Telegram 代表自由和隐私,拥有许多易于使用的功能。",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "en": {
+          "url": "https://tgsearch.app/en/detail/telegramtips/",
+          "status": 200,
+          "meta": "Telegram Tips (@telegramtips) is a Telegram Software channel listed on TGsearch, with 10,621,999 subscribers, created on Jan 11, 2021, activity rated Low, mainly in Engl…",
+          "summary": "Telegram Tips (@telegramtips) is a Telegram Software channel listed on TGsearch, with 10,621,999 subscribers, created on Jan 11, 2021, activity rated Low, mainly in English.",
+          "description": "Telegram stands for freedom and privacy and has many easy to use features.",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "zh": {
+          "url": "https://tgsearch.app/detail/telegramtips/",
+          "status": 200,
+          "meta": "Telegram Tips（@telegramtips）是 TGsearch 收录的 Telegram 软件综合频道，目前有 10,621,999 名订阅者，创建于 2021年1…",
+          "summary": "Telegram Tips（@telegramtips）是 TGsearch 收录的 Telegram 软件综合频道，目前有 10,621,999 名订阅者，创建于 2021年1月11日，活跃度为低，内容以英语为主。",
+          "description": "Telegram 代表自由和隐私,拥有许多易于使用的功能。",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "durov",
+      "kind": "channel",
+      "lang": "en",
+      "samplingReason": "en-with-zh-translation",
+      "description": "Founder of Telegram.",
+      "descriptionZh": "电报的创始人",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 20,
+      "protectedTokens": [],
+      "translations": {
+        "descriptionZh": {
+          "text": "电报的创始人",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/durov/",
+          "status": 200,
+          "meta": "Pavel Durov（@durov）是 TGsearch 收录的 Telegram 博客杂谈频道，目前有 10,034,704 名订阅者，创建于 2015年10月28日，活跃度…",
+          "summary": "Pavel Durov（@durov）是 TGsearch 收录的 Telegram 博客杂谈频道，目前有 10,034,704 名订阅者，创建于 2015年10月28日，活跃度为一般，内容以英语为主。",
+          "description": "电报的创始人",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/durov/",
+          "status": 200,
+          "meta": "Pavel Durov (@durov) is a Telegram Blogs channel listed on TGsearch, with 10,034,704 subscribers, created on Oct 28, 2015, activity rated Moderate, mainly in English. Fo…",
+          "summary": "Pavel Durov (@durov) is a Telegram Blogs channel listed on TGsearch, with 10,034,704 subscribers, created on Oct 28, 2015, activity rated Moderate, mainly in English.",
+          "description": "Founder of Telegram.",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 4,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "telegramtipsar",
+      "kind": "channel",
+      "lang": "ar",
+      "samplingReason": "other-language",
+      "description": "يرمز تيليجرام إلى الحريّة والخصوصيّة ويحوي العديد من المزايا سهلة الاستخدام.",
+      "descriptionZh": "广播电台 广播电台 广播电台 广播电台 广播电台 广播电台",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 76,
+      "protectedTokens": [],
+      "translations": {
+        "descriptionZh": {
+          "text": "广播电台 广播电台 广播电台 广播电台 广播电台 广播电台",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/telegramtipsar/",
+          "status": 200,
+          "meta": "نصائح تيليجرام（@telegramtipsar）是 TGsearch 收录的 Telegram 软件综合频道，目前有 1,580,750 名订阅者，创建于 2021…",
+          "summary": "نصائح تيليجرام（@telegramtipsar）是 TGsearch 收录的 Telegram 软件综合频道，目前有 1,580,750 名订阅者，创建于 2021年1月17日，活跃度为一般，内容以阿拉伯语为主。",
+          "description": "广播电台 广播电台 广播电台 广播电台 广播电台 广播电台",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/telegramtipsar/",
+          "status": 200,
+          "meta": "نصائح تيليجرام (@telegramtipsar) is a Telegram Software channel listed on TGsearch, with 1,580,750 subscribers, created on Jan 17, 2021, activity rated Moderate, mainly…",
+          "summary": "نصائح تيليجرام (@telegramtipsar) is a Telegram Software channel listed on TGsearch, with 1,580,750 subscribers, created on Jan 17, 2021, activity rated Moderate, mainly in Arabic.",
+          "description": "يرمز تيليجرام إلى الحريّة والخصوصيّة ويحوي العديد من المزايا سهلة الاستخدام.",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "telegramtipses",
+      "kind": "channel",
+      "lang": "es",
+      "samplingReason": "other-language",
+      "description": "Telegram es sinónimo de libertad y privacidad y tiene muchas funciones fáciles de usar.",
+      "descriptionZh": "电报是自由和隐私的同义词,具有许多易于使用的功能。",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 87,
+      "protectedTokens": [],
+      "translations": {
+        "descriptionZh": {
+          "text": "电报是自由和隐私的同义词,具有许多易于使用的功能。",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/telegramtipses/",
+          "status": 200,
+          "meta": "Tips de Telegram（@telegramtipses）是 TGsearch 收录的 Telegram 软件综合频道，目前有 1,451,389 名订阅者，创建于 20…",
+          "summary": "Tips de Telegram（@telegramtipses）是 TGsearch 收录的 Telegram 软件综合频道，目前有 1,451,389 名订阅者，创建于 2021年1月14日，活跃度为低，内容以西班牙语为主。",
+          "description": "电报是自由和隐私的同义词,具有许多易于使用的功能。",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/telegramtipses/",
+          "status": 200,
+          "meta": "Tips de Telegram (@telegramtipses) is a Telegram Software channel listed on TGsearch, with 1,451,389 subscribers, created on Jan 14, 2021, activity rated Low, mainly in…",
+          "summary": "Tips de Telegram (@telegramtipses) is a Telegram Software channel listed on TGsearch, with 1,451,389 subscribers, created on Jan 14, 2021, activity rated Low, mainly in Spanish.",
+          "description": "Telegram es sinónimo de libertad y privacidad y tiene muchas funciones fáciles de usar.",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "cocoon",
+      "kind": "channel",
+      "lang": "en",
+      "samplingReason": "short",
+      "description": "",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 0,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/cocoon/",
+          "status": 200,
+          "meta": "Cocoon（@cocoon）是 TGsearch 收录的 Telegram AI频道，目前有 169,863 名订阅者，创建于 2025年10月29日，活跃度为停更，内容以英语…",
+          "summary": "Cocoon（@cocoon）是 TGsearch 收录的 Telegram AI频道，目前有 169,863 名订阅者，创建于 2025年10月29日，活跃度为停更，内容以英语为主。",
+          "description": "暂无简介",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/cocoon/",
+          "status": 200,
+          "meta": "Cocoon (@cocoon) is a Telegram AI channel listed on TGsearch, with 169,863 subscribers, created on Oct 29, 2025, activity rated Dormant, mainly in English.",
+          "summary": "Cocoon (@cocoon) is a Telegram AI channel listed on TGsearch, with 169,863 subscribers, created on Oct 29, 2025, activity rated Dormant, mainly in English.",
+          "description": "No description",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "customnotificationsounds",
+      "kind": "channel",
+      "lang": "en",
+      "samplingReason": "short",
+      "description": "",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 0,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/customnotificationsounds/",
+          "status": 200,
+          "meta": "Notification Sounds（@customnotificationsounds）是 TGsearch 收录的 Telegram 资源分享频道，目前有 75,236 名…",
+          "summary": "Notification Sounds（@customnotificationsounds）是 TGsearch 收录的 Telegram 资源分享频道，目前有 75,236 名订阅者，创建于 2022年4月10日，活跃度为停更，内容以英语为主。",
+          "description": "暂无简介",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/customnotificationsounds/",
+          "status": 200,
+          "meta": "Notification Sounds (@customnotificationsounds) is a Telegram Resources channel listed on TGsearch, with 75,236 subscribers, created on Apr 10, 2022, activity rated Dorm…",
+          "summary": "Notification Sounds (@customnotificationsounds) is a Telegram Resources channel listed on TGsearch, with 75,236 subscribers, created on Apr 10, 2022, activity rated Dormant, mainly in English.",
+          "description": "No description",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "cs3news",
+      "kind": "channel",
+      "lang": "ru",
+      "samplingReason": "long",
+      "description": "🎯 Реклама — @cs3newsADS\n\n🎮 Приложение — @cs3bet_bot\n📸 Жизнь вне CS — @cs3life\n💀 ТИР-2 сцена — @cs3hub\n\n📢 Предложка — @cs3newsbot\n⛔️ Баны — @cs3newsBANbot\n\n🎬 YouTube — youtube.com/@CS3NEWSgg\n📱 TikTok — tiktok.com/@cs3news\n💻 Наш сайт — https://cs3news.gg",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 260,
+      "protectedTokens": [
+        "@cs3newsADS",
+        "@cs3bet_bot",
+        "@cs3life",
+        "@cs3hub",
+        "@cs3newsbot",
+        "@cs3newsBANbot",
+        "@CS3NEWSgg",
+        "@cs3news",
+        "https://cs3news.gg"
+      ],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/cs3news/",
+          "status": 200,
+          "meta": "CS3NEWS | Counter-Strike 2（@cs3news）是 TGsearch 收录的 Telegram 资讯新闻频道，目前有 656,181 名订阅者，创建于 2…",
+          "summary": "CS3NEWS | Counter-Strike 2（@cs3news）是 TGsearch 收录的 Telegram 资讯新闻频道，目前有 656,181 名订阅者，创建于 2025年11月22日，活跃度为活跃，内容以俄语为主。",
+          "description": "🎯 Реклама — @cs3newsADS\n\n🎮 Приложение — @cs3bet_bot\n📸 Жизнь вне CS — @cs3life\n💀 ТИР-2 сцена — @cs3hub\n\n📢 Предложка — @cs3newsbot\n⛔️ Баны — @cs3newsBANbot\n\n🎬 YouTube — youtube.com/@CS3NEWSgg\n📱 TikTok — tiktok.com/@cs3news\n💻 Наш сайт — https://cs3news.gg",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/cs3news/",
+          "status": 200,
+          "meta": "CS3NEWS | Counter-Strike 2 (@cs3news) is a Telegram News channel listed on TGsearch, with 656,181 subscribers, created on Nov 22, 2025, activity rated Active, mainly in…",
+          "summary": "CS3NEWS | Counter-Strike 2 (@cs3news) is a Telegram News channel listed on TGsearch, with 656,181 subscribers, created on Nov 22, 2025, activity rated Active, mainly in Russian.",
+          "description": "🎯 Реклама — @cs3newsADS\n\n🎮 Приложение — @cs3bet_bot\n📸 Жизнь вне CS — @cs3life\n💀 ТИР-2 сцена — @cs3hub\n\n📢 Предложка — @cs3newsbot\n⛔️ Баны — @cs3newsBANbot\n\n🎬 YouTube — youtube.com/@CS3NEWSgg\n📱 TikTok — tiktok.com/@cs3news\n💻 Наш сайт — https://cs3news.gg",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "travelsfotod",
+      "kind": "channel",
+      "lang": "en",
+      "samplingReason": "long",
+      "description": "✨ Beautiful photos & videos about traveling around the world\n💰Buy ads / Contact:\n➡️ In Crypto: @innafoxD\n➡️ In $, €: https://telega.io/c/travelsfotoD\n✅ List of the best Telegram channels:\n➡️ @topchannels10\n⭐️ The best sales & deals online:\n➡️ @BestenDeals",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 256,
+      "protectedTokens": [
+        "@innafoxD",
+        "https://telega.io/c/travelsfotoD",
+        "@topchannels10",
+        "@BestenDeals"
+      ],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/travelsfotod/",
+          "status": 200,
+          "meta": "Travel, tourism, vacation around the world. Beauty of nature in photos and videos.（@trave…",
+          "summary": "Travel, tourism, vacation around the world. Beauty of nature in photos and videos.（@travelsfotod）是 TGsearch 收录的 Telegram 加密货币频道，目前有 13,612 名订阅者，创建于 2024年6月12日，活跃度为非常活跃，内容以英语为主。",
+          "description": "✨ Beautiful photos & videos about traveling around the world\n💰Buy ads / Contact:\n➡️ In Crypto: @innafoxD\n➡️ In $, €: https://telega.io/c/travelsfotoD\n✅ List of the best Telegram channels:\n➡️ @topchannels10\n⭐️ The best sales & deals online:\n➡️ @BestenDeals",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/travelsfotod/",
+          "status": 200,
+          "meta": "Travel, tourism, vacation around the world. Beauty of nature in photos and videos. (@travelsfotod) is a Telegram Crypto & Web3 channel listed on TGsearch, with 13,612 su…",
+          "summary": "Travel, tourism, vacation around the world. Beauty of nature in photos and videos. (@travelsfotod) is a Telegram Crypto & Web3 channel listed on TGsearch, with 13,612 subscribers, created on Jun 12, 2024, activity rated Very active, mainly in English.",
+          "description": "✨ Beautiful photos & videos about traveling around the world\n💰Buy ads / Contact:\n➡️ In Crypto: @innafoxD\n➡️ In $, €: https://telega.io/c/travelsfotoD\n✅ List of the best Telegram channels:\n➡️ @topchannels10\n⭐️ The best sales & deals online:\n➡️ @BestenDeals",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "binancechinese",
+      "kind": "group",
+      "lang": "zh",
+      "samplingReason": "zh",
+      "description": "币安官方中文TG群 @BinanceChinese\n谨防假冒！\n私聊您的都是骗子⚠️\n\n所有涉及黄、黑、赌、灰、政治的话题都将被踢出\n群内禁止发布不实谣言及其他交易所截图\n请大家共同维护社区秩序，营造友好的讨论环境，谢谢！\n\n中文推特: twitter.com/binancezh\nDiscord: discord.gg/bnb\n公告频道: @binance_cn\nBNB Chain: @BNBChainZH\nAPI 中文群: @Binance_api_Chinese",
+      "descriptionZh": null,
+      "descriptionEn": "Everything about yellow, black, gambling, gray, and politics will be kicked out Banned from publishing false rumors and other exchange screenshots Please keep community order and create a friendly discussion environment, thank you! Twitter: twitter.com/binancezh Discord: discord.gg/bnb Announcement channel: @binance_cn BNB Chain: @BNBChainZH API Chinese group: @Binance_api_Chinese",
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 235,
+      "protectedTokens": ["@BinanceChinese", "@binance_cn", "@BNBChainZH", "@Binance_api_Chinese"],
+      "translations": {
+        "descriptionEn": {
+          "text": "Everything about yellow, black, gambling, gray, and politics will be kicked out Banned from publishing false rumors and other exchange screenshots Please keep community order and create a friendly discussion environment, thank you! Twitter: twitter.com/binancezh Discord: discord.gg/bnb Announcement channel: @binance_cn BNB Chain: @BNBChainZH API Chinese group: @Binance_api_Chinese",
+          "missingTokens": ["@BinanceChinese"]
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/binancechinese/",
+          "status": 200,
+          "meta": "币安官方中文群（@binancechinese）是 TGsearch 收录的 Telegram 加密货币群组，目前有 280,224 名成员，内容以中文为主。 币安官方中文TG群…",
+          "summary": "币安官方中文群（@binancechinese）是 TGsearch 收录的 Telegram 加密货币群组，目前有 280,224 名成员，内容以中文为主。",
+          "description": "币安官方中文TG群 @BinanceChinese\n谨防假冒！\n私聊您的都是骗子⚠️\n\n所有涉及黄、黑、赌、灰、政治的话题都将被踢出\n群内禁止发布不实谣言及其他交易所截图\n请大家共同维护社区秩序，营造友好的讨论环境，谢谢！\n\n中文推特: twitter.com/binancezh\nDiscord: discord.gg/bnb\n公告频道: @binance_cn\nBNB Chain: @BNBChainZH\nAPI 中文群: @Binance_api_Chinese",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 11,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/binancechinese/",
+          "status": 200,
+          "meta": "币安官方中文群 (@binancechinese) is a Telegram Crypto & Web3 group listed on TGsearch, with 280,224 members, mainly in Chinese. Everything about yellow, black, gambling, gray,…",
+          "summary": "币安官方中文群 (@binancechinese) is a Telegram Crypto & Web3 group listed on TGsearch, with 280,224 members, mainly in Chinese.",
+          "description": "Everything about yellow, black, gambling, gray, and politics will be kicked out Banned from publishing false rumors and other exchange screenshots Please keep community order and create a friendly discussion environment, thank you! Twitter: twitter.com/binancezh Discord: discord.gg/bnb Announcement channel: @binance_cn BNB Chain: @BNBChainZH API Chinese group: @Binance_api_Chinese",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 49,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "okxgroup_cn",
+      "kind": "group",
+      "lang": "zh",
+      "samplingReason": "zh",
+      "description": "OKX公告频道：https://t.me/OKXAnnouncements_CN\nDiscord中文社区： https://discord.gg/hkCGKbbbqf\nOKX注册链接：https://www.okx.com/join?channelId=ACE505337\n\n本群为唯一官方指定中文社群 ，标有置换、生息、挖矿、智能合约、担保等都是诈骗群，管理员不会主动私信任何用户，请大家提高警惕，切勿上当受骗！注意某些产品服务或推广活动不适用于部分地区。",
+      "descriptionZh": null,
+      "descriptionEn": "OKX announcement channel: https://t.me/OKXAnnouncements_CN Discord Chinese community: https://discord.gg/hkCGKbbbqf OKX registration link: https://www.okx.com/join?channelId=ACE505337 This group is the only official designated Chinese community, tagged replacement, interest, mining, smart contract, guarantee etc. are scams, administrators will not actively confide any user, please be careful, don't be scammed!",
+      "sourceChanged": false,
+      "translationChanged": true,
+      "sourceLength": 229,
+      "protectedTokens": [
+        "https://t.me/OKXAnnouncements_CN",
+        "https://discord.gg/hkCGKbbbqf",
+        "https://www.okx.com/join?channelId=ACE505337"
+      ],
+      "translations": {
+        "descriptionEn": {
+          "text": "OKX announcement channel: https://t.me/OKXAnnouncements_CN Discord Chinese community: https://discord.gg/hkCGKbbbqf OKX registration link: https://www.okx.com/join?channelId=ACE505337 This group is the only official designated Chinese community, tagged replacement, interest, mining, smart contract, guarantee etc. are scams, administrators will not actively confide any user, please be careful, don't be scammed!",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/okxgroup_cn/",
+          "status": 200,
+          "meta": "欧易OKX官方中文群（@okxgroup_cn）是 TGsearch 收录的 Telegram 交流社群群组，目前有 273,190 名成员，内容以中文为主。 OKX公告频道：h…",
+          "summary": "欧易OKX官方中文群（@okxgroup_cn）是 TGsearch 收录的 Telegram 交流社群群组，目前有 273,190 名成员，内容以中文为主。",
+          "description": "OKX公告频道：https://t.me/OKXAnnouncements_CN\nDiscord中文社区： https://discord.gg/hkCGKbbbqf\nOKX注册链接：https://www.okx.com/join?channelId=ACE505337\n\n本群为唯一官方指定中文社群 ，标有置换、生息、挖矿、智能合约、担保等都是诈骗群，管理员不会主动私信任何用户，请大家提高警惕，切勿上当受骗！注意某些产品服务或推广活动不适用于部分地区。",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 11,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/okxgroup_cn/",
+          "status": 200,
+          "meta": "欧易OKX官方中文群 (@okxgroup_cn) is a Telegram Chat group listed on TGsearch, with 273,190 members, mainly in Chinese. OKX announcement channel: https://t.me/OKXAnnouncements_C…",
+          "summary": "欧易OKX官方中文群 (@okxgroup_cn) is a Telegram Chat group listed on TGsearch, with 273,190 members, mainly in Chinese.",
+          "description": "OKX announcement channel: https://t.me/OKXAnnouncements_CN Discord Chinese community: https://discord.gg/hkCGKbbbqf OKX registration link: https://www.okx.com/join?channelId=ACE505337 This group is the only official designated Chinese community, tagged replacement, interest, mining, smart contract, guarantee etc. are scams, administrators will not actively confide any user, please be careful, don't be scammed!",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 59,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "binanceexchange",
+      "kind": "group",
+      "lang": "en",
+      "samplingReason": "en-with-zh-translation",
+      "description": "Binance announcements: @binance_announcements\n\nOther Languages: Please type /communities in the chat to find our other communities.",
+      "descriptionZh": "Binance 公告: @binance_announcements 其他语言: 请在聊天中键入 /communities 以找到我们的其他社区。",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 131,
+      "protectedTokens": ["@binance_announcements"],
+      "translations": {
+        "descriptionZh": {
+          "text": "Binance 公告: @binance_announcements 其他语言: 请在聊天中键入 /communities 以找到我们的其他社区。",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/binanceexchange/",
+          "status": 200,
+          "meta": "Binance English（@binanceexchange）是 TGsearch 收录的 Telegram 加密货币群组，目前有 318,313 名成员，内容以英语为主。…",
+          "summary": "Binance English（@binanceexchange）是 TGsearch 收录的 Telegram 加密货币群组，目前有 318,313 名成员，内容以英语为主。",
+          "description": "Binance 公告: @binance_announcements 其他语言: 请在聊天中键入 /communities 以找到我们的其他社区。",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 1,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/binanceexchange/",
+          "status": 200,
+          "meta": "Binance English (@binanceexchange) is a Telegram Crypto & Web3 group listed on TGsearch, with 318,313 members, mainly in English. Binance announcements: @binance_announc…",
+          "summary": "Binance English (@binanceexchange) is a Telegram Crypto & Web3 group listed on TGsearch, with 318,313 members, mainly in English.",
+          "description": "Binance announcements: @binance_announcements\n\nOther Languages: Please type /communities in the chat to find our other communities.",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 41,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "ayugramchat",
+      "kind": "group",
+      "lang": "en",
+      "samplingReason": "en-with-zh-translation",
+      "description": "📈 Channel: @ayugram\n🔬 FAQ: @AyuGramFAQ\n💘 exteraGram: @exteraGram\n😂 Memes: @ayugramfun\n📚 Crowdin: translate.ayugram.one\n\n🌐 Languages: RU/EN\n\n📝 Rules: Read in /rules\n💢 Ignorance of the rules does not exempt from responsibility!",
+      "descriptionZh": "频道: @ayugram  常见问题: @AyuGramFAQ  exteraGram: @exteraGram 😂 记忆: @ayugramfun  Crowdin: translate.ayugram.one  语言: RU/EN  规则:阅读 /规则  对规则的无知并不免除责任!",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 233,
+      "protectedTokens": ["@ayugram", "@AyuGramFAQ", "@exteraGram", "@ayugramfun"],
+      "translations": {
+        "descriptionZh": {
+          "text": "频道: @ayugram  常见问题: @AyuGramFAQ  exteraGram: @exteraGram 😂 记忆: @ayugramfun  Crowdin: translate.ayugram.one  语言: RU/EN  规则:阅读 /规则  对规则的无知并不免除责任!",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/ayugramchat/",
+          "status": 200,
+          "meta": "🤙 AyuGram MaxGround（@ayugramchat）是 TGsearch 收录的 Telegram 软件社群群组，目前有 92,132 名成员，创建于 2023年…",
+          "summary": "🤙 AyuGram MaxGround（@ayugramchat）是 TGsearch 收录的 Telegram 软件社群群组，目前有 92,132 名成员，创建于 2023年4月8日，内容以英语为主。",
+          "description": "频道: @ayugram 常见问题: @AyuGramFAQ exteraGram: @exteraGram 😂 记忆: @ayugramfun Crowdin: translate.ayugram.one 语言: RU/EN 规则:阅读 /规则 对规则的无知并不免除责任!",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/ayugramchat/",
+          "status": 200,
+          "meta": "🤙 AyuGram MaxGround (@ayugramchat) is a Telegram Software group listed on TGsearch, with 92,132 members, created on Apr 8, 2023, mainly in English. 📈 Channel: @ayugram…",
+          "summary": "🤙 AyuGram MaxGround (@ayugramchat) is a Telegram Software group listed on TGsearch, with 92,132 members, created on Apr 8, 2023, mainly in English.",
+          "description": "📈 Channel: @ayugram\n🔬 FAQ: @AyuGramFAQ\n💘 exteraGram: @exteraGram\n😂 Memes: @ayugramfun\n📚 Crowdin: translate.ayugram.one\n\n🌐 Languages: RU/EN\n\n📝 Rules: Read in /rules\n💢 Ignorance of the rules does not exempt from responsibility!",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 22,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "stickergroup",
+      "kind": "group",
+      "lang": "nl",
+      "samplingReason": "other-language",
+      "description": "🥇新手教學\n@StartzeroTG\n\n🥈本群規定\ntelegra.ph/Sticker-Group-Rule-03-22\n\n🥉本群連結\nt.me/StickerGroup",
+      "descriptionZh": null,
+      "descriptionEn": "This group specifies telegra.ph/Sticker-Group-Rule-03-22 This group links t.me/StickerGroup",
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 89,
+      "protectedTokens": ["@StartzeroTG"],
+      "translations": {
+        "descriptionEn": {
+          "text": "This group specifies telegra.ph/Sticker-Group-Rule-03-22 This group links t.me/StickerGroup",
+          "missingTokens": ["@StartzeroTG"]
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/stickergroup/",
+          "status": 200,
+          "meta": "貼圖群 - 進群閱置頂 Sticker Group Taiwan（@stickergroup）是 TGsearch 收录的 Telegram 兴趣社群群组，目前有 39,257…",
+          "summary": "貼圖群 - 進群閱置頂 Sticker Group Taiwan（@stickergroup）是 TGsearch 收录的 Telegram 兴趣社群群组，目前有 39,257 名成员，创建于 2016年11月9日，内容以荷兰语为主。",
+          "description": "🥇新手教學\n@StartzeroTG\n\n🥈本群規定\ntelegra.ph/Sticker-Group-Rule-03-22\n\n🥉本群連結\nt.me/StickerGroup",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/stickergroup/",
+          "status": 200,
+          "meta": "貼圖群 - 進群閱置頂 Sticker Group Taiwan (@stickergroup) is a Telegram Interests group listed on TGsearch, with 39,257 members, created on Nov 9, 2016, mainly in Dutch. This gro…",
+          "summary": "貼圖群 - 進群閱置頂 Sticker Group Taiwan (@stickergroup) is a Telegram Interests group listed on TGsearch, with 39,257 members, created on Nov 9, 2016, mainly in Dutch.",
+          "description": "This group specifies telegra.ph/Sticker-Group-Rule-03-22 This group links t.me/StickerGroup",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 10,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "de_fi",
+      "kind": "group",
+      "lang": null,
+      "samplingReason": "other-language",
+      "description": "",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 0,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/de_fi/",
+          "status": 200,
+          "meta": "DeFi（@de_fi）是 TGsearch 收录的 Telegram 加密货币群组，目前有 6,874 名成员，创建于 2018年8月29日。",
+          "summary": "DeFi（@de_fi）是 TGsearch 收录的 Telegram 加密货币群组，目前有 6,874 名成员，创建于 2018年8月29日。",
+          "description": "暂无简介",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/de_fi/",
+          "status": 200,
+          "meta": "DeFi (@de_fi) is a Telegram Crypto & Web3 group listed on TGsearch, with 6,874 members, created on Aug 29, 2018.",
+          "summary": "DeFi (@de_fi) is a Telegram Crypto & Web3 group listed on TGsearch, with 6,874 members, created on Aug 29, 2018.",
+          "description": "No description",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "gouwu",
+      "kind": "group",
+      "lang": "zh",
+      "samplingReason": "short",
+      "description": "",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 0,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/gouwu/",
+          "status": 200,
+          "meta": "免费VPN加速器交流🔥🔥🔥（@gouwu）是 TGsearch 收录的 Telegram 科学上网群组，目前有 27,069 名成员，创建于 2016年3月20日，内容以中…",
+          "summary": "免费VPN加速器交流🔥🔥🔥（@gouwu）是 TGsearch 收录的 Telegram 科学上网群组，目前有 27,069 名成员，创建于 2016年3月20日，内容以中文为主。",
+          "description": "暂无简介",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/gouwu/",
+          "status": 200,
+          "meta": "免费VPN加速器交流🔥🔥🔥 (@gouwu) is a Telegram VPN & Proxy group listed on TGsearch, with 27,069 members, created on Mar 20, 2016, mainly in Chinese.",
+          "summary": "免费VPN加速器交流🔥🔥🔥 (@gouwu) is a Telegram VPN & Proxy group listed on TGsearch, with 27,069 members, created on Mar 20, 2016, mainly in Chinese.",
+          "description": "No description",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "coding_discussion2",
+      "kind": "group",
+      "lang": "en",
+      "samplingReason": "short",
+      "description": "",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 0,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/coding_discussion2/",
+          "status": 200,
+          "meta": "Code mania（@coding_discussion2）是 TGsearch 收录的 Telegram 技术开发群组，目前有 21,849 名成员，创建于 2024年10月…",
+          "summary": "Code mania（@coding_discussion2）是 TGsearch 收录的 Telegram 技术开发群组，目前有 21,849 名成员，创建于 2024年10月2日，内容以英语为主。",
+          "description": "暂无简介",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/coding_discussion2/",
+          "status": 200,
+          "meta": "Code mania (@coding_discussion2) is a Telegram Development group listed on TGsearch, with 21,849 members, created on Oct 2, 2024, mainly in English.",
+          "summary": "Code mania (@coding_discussion2) is a Telegram Development group listed on TGsearch, with 21,849 members, created on Oct 2, 2024, mainly in English.",
+          "description": "No description",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "zxfast",
+      "kind": "group",
+      "lang": "zh",
+      "samplingReason": "long",
+      "description": "🚚 优质线路，IPLC&BGP全中转线路\n🥳 全客户端，安卓/iOS/Win/Mac无缝切换\n🌐 全球覆盖，无缝连接亚美欧澳四大洲\n🇨🇳 版权限制，海外用户惬意使用回国节点\n🔐 安全加密，确保您的隐私与安全\n🚀 一键加速，流媒体/网页/APP流畅访问\n🆓 免费试用，满意再付款，付款后更好使\n💰 好用不贵，年费会员权益更多节省更多\n💯 客服支持，全天候解答您的任何问题\n\n网站： zxfast.com\n群组： @zxfast\n频道： @zxfast_channel\n奈飞合租： @b_netflixtown",
+      "descriptionZh": null,
+      "descriptionEn": "High-quality lines, IPLC & BGP all-transfer lines  Full client, Android/iOS/Win/Mac seamless switch  Global coverage, seamless connection to the four continents of Asia and Australia 🇳 copyright restrictions, overseas users are pleased to use home nodes  secure encryption, ensure your privacy and security  One-click acceleration, streaming media/web page/APP smooth access  Free trial, satisfied with re-payment, better after payment  Not expensive, annual membership benefits save more  customer support, all-day response to your questions Website: zxfast.com Group: @zxfast Channel: @zfastx_channel",
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 263,
+      "protectedTokens": ["@zxfast", "@zxfast_channel", "@b_netflixtown"],
+      "translations": {
+        "descriptionEn": {
+          "text": "High-quality lines, IPLC & BGP all-transfer lines  Full client, Android/iOS/Win/Mac seamless switch  Global coverage, seamless connection to the four continents of Asia and Australia 🇳 copyright restrictions, overseas users are pleased to use home nodes  secure encryption, ensure your privacy and security  One-click acceleration, streaming media/web page/APP smooth access  Free trial, satisfied with re-payment, better after payment  Not expensive, annual membership benefits save more  customer support, all-day response to your questions Website: zxfast.com Group: @zxfast Channel: @zfastx_channel",
+          "missingTokens": ["@zxfast_channel", "@b_netflixtown"]
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/zxfast/",
+          "status": 200,
+          "meta": "中信加速器/ZxfastVPN官方群 - IPLC专线/V2RAY引擎/4K极速体验（@zxfast）是 TGsearch 收录的 Telegram 科学上网群组，目前有 4,0…",
+          "summary": "中信加速器/ZxfastVPN官方群 - IPLC专线/V2RAY引擎/4K极速体验（@zxfast）是 TGsearch 收录的 Telegram 科学上网群组，目前有 4,049 名成员，创建于 2019年9月25日，内容以中文为主。",
+          "description": "🚚 优质线路，IPLC&BGP全中转线路\n🥳 全客户端，安卓/iOS/Win/Mac无缝切换\n🌐 全球覆盖，无缝连接亚美欧澳四大洲\n🇨🇳 版权限制，海外用户惬意使用回国节点\n🔐 安全加密，确保您的隐私与安全\n🚀 一键加速，流媒体/网页/APP流畅访问\n🆓 免费试用，满意再付款，付款后更好使\n💰 好用不贵，年费会员权益更多节省更多\n💯 客服支持，全天候解答您的任何问题\n\n网站： zxfast.com\n群组： @zxfast\n频道： @zxfast_channel\n奈飞合租： @b_netflixtown",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/zxfast/",
+          "status": 200,
+          "meta": "中信加速器/ZxfastVPN官方群 - IPLC专线/V2RAY引擎/4K极速体验 (@zxfast) is a Telegram VPN & Proxy group listed on TGsearch, with 4,049 members, created on Sep 25, 2019, mainly in Chinese.…",
+          "summary": "中信加速器/ZxfastVPN官方群 - IPLC专线/V2RAY引擎/4K极速体验 (@zxfast) is a Telegram VPN & Proxy group listed on TGsearch, with 4,049 members, created on Sep 25, 2019, mainly in Chinese.",
+          "description": "High-quality lines, IPLC & BGP all-transfer lines Full client, Android/iOS/Win/Mac seamless switch Global coverage, seamless connection to the four continents of Asia and Australia 🇳 copyright restrictions, overseas users are pleased to use home nodes secure encryption, ensure your privacy and security One-click acceleration, streaming media/web page/APP smooth access Free trial, satisfied with re-payment, better after payment Not expensive, annual membership benefits save more customer support, all-day response to your questions Website: zxfast.com Group: @zxfast Channel: @zfastx_channel",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 1,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "loon0x00",
+      "kind": "group",
+      "lang": "zh",
+      "samplingReason": "long",
+      "description": "💬 这里是Loon的官方群组\n\n🌐 官方网站 https://nsloon.app/\n👥 官方频道 https://t.me/LoonNews\n🗒 官方文档 https://nsloon.app/docs/intro/\n🅰️ 官方教程 https://is.gd/V6nyGA\n🔗 商店地址 https://apps.apple.com/app/loon/id1373567447\n\nℹ️ 禁止讨论共享、盗版、破解、免流、黑卡、政治及色情！\nℹ️ 禁止人身攻击、广告、仿冒他人及令人反感的任何内容！",
+      "descriptionZh": null,
+      "descriptionEn": "This is Loon's official group  Official website https://nsloon.app/  Official channel https://t.me/LoonNews  Official document https://nsloon.app/docs/intro/ ️ Official tutorial https://is.gd/V6nyGA  Shop address https://apps.apple.com/app/loon/id1373567447 i️ It is forbidden to discuss sharing, piracy, hacking, free flow, black cards, politics and pornography! i️ It is forbidden to talk about personal assault, advertising, imitation and anything disgusting!",
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 255,
+      "protectedTokens": [
+        "https://nsloon.app/",
+        "https://t.me/LoonNews",
+        "https://nsloon.app/docs/intro/",
+        "https://is.gd/V6nyGA",
+        "https://apps.apple.com/app/loon/id1373567447"
+      ],
+      "translations": {
+        "descriptionEn": {
+          "text": "This is Loon's official group  Official website https://nsloon.app/  Official channel https://t.me/LoonNews  Official document https://nsloon.app/docs/intro/ ️ Official tutorial https://is.gd/V6nyGA  Shop address https://apps.apple.com/app/loon/id1373567447 i️ It is forbidden to discuss sharing, piracy, hacking, free flow, black cards, politics and pornography! i️ It is forbidden to talk about personal assault, advertising, imitation and anything disgusting!",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/loon0x00/",
+          "status": 200,
+          "meta": "Loon-0x00（@loon0x00）是 TGsearch 收录的 Telegram 科学上网群组，目前有 44,560 名成员，内容以中文为主。 💬 这里是Loon的官方群…",
+          "summary": "Loon-0x00（@loon0x00）是 TGsearch 收录的 Telegram 科学上网群组，目前有 44,560 名成员，内容以中文为主。",
+          "description": "💬 这里是Loon的官方群组\n\n🌐 官方网站 https://nsloon.app/\n👥 官方频道 https://t.me/LoonNews\n🗒 官方文档 https://nsloon.app/docs/intro/\n🅰️ 官方教程 https://is.gd/V6nyGA\n🔗 商店地址 https://apps.apple.com/app/loon/id1373567447\n\nℹ️ 禁止讨论共享、盗版、破解、免流、黑卡、政治及色情！\nℹ️ 禁止人身攻击、广告、仿冒他人及令人反感的任何内容！",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 16,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/loon0x00/",
+          "status": 200,
+          "meta": "Loon-0x00 (@loon0x00) is a Telegram VPN & Proxy group listed on TGsearch, with 44,560 members, mainly in Chinese. This is Loon's official group Official website https://…",
+          "summary": "Loon-0x00 (@loon0x00) is a Telegram VPN & Proxy group listed on TGsearch, with 44,560 members, mainly in Chinese.",
+          "description": "This is Loon's official group Official website https://nsloon.app/ Official channel https://t.me/LoonNews Official document https://nsloon.app/docs/intro/ ️ Official tutorial https://is.gd/V6nyGA Shop address https://apps.apple.com/app/loon/id1373567447 i️ It is forbidden to discuss sharing, piracy, hacking, free flow, black cards, politics and pornography! i️ It is forbidden to talk about personal assault, advertising, imitation and anything disgusting!",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 57,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "jisou2",
+      "kind": "bot",
+      "lang": "zh",
+      "samplingReason": "zh",
+      "description": "Telegram必备的搜索引擎，极搜JISOU帮你精准找到，想要的群组、频道、 视频、音乐\n公告: @jisou1",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 57,
+      "protectedTokens": ["@jisou1"],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/jisou2/",
+          "status": 200,
+          "meta": "极搜🔍资源搜索@JISOU（@jisou2）是 TGsearch 收录的 Telegram 搜索机器人，目前有 22,576,463 月活用户，内容以中文为主。 Telegra…",
+          "summary": "极搜🔍资源搜索@JISOU（@jisou2）是 TGsearch 收录的 Telegram 搜索机器人，目前有 22,576,463 月活用户，内容以中文为主。",
+          "description": "Telegram必备的搜索引擎，极搜JISOU帮你精准找到，想要的群组、频道、 视频、音乐\n公告: @jisou1",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 9,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/jisou2/",
+          "status": 200,
+          "meta": "极搜🔍资源搜索@JISOU (@jisou2) is a Telegram Search bot listed on TGsearch, with 22,576,463 monthly users, mainly in Chinese. Telegram必备的搜索引擎，极搜JISOU帮你精准找到，想要的群组、频道、 视频、音乐 公告:…",
+          "summary": "极搜🔍资源搜索@JISOU (@jisou2) is a Telegram Search bot listed on TGsearch, with 22,576,463 monthly users, mainly in Chinese.",
+          "description": "Telegram必备的搜索引擎，极搜JISOU帮你精准找到，想要的群组、频道、 视频、音乐\n公告: @jisou1",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 51,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "kuai",
+      "kind": "bot",
+      "lang": "zh",
+      "samplingReason": "zh",
+      "description": "帮你发现有趣群组、频道、视频、音乐、电影、新闻 | Find cool stuff all in one bot!\n\n机器人： @kuai @kuaia @kuaiaa\n频道： @kuaisoupd\n群组 ： @kuaisouqz",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 115,
+      "protectedTokens": ["@kuaia", "@kuaiaa", "@kuaisoupd", "@kuaisouqz"],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/kuai/",
+          "status": 200,
+          "meta": "快搜🔍资源搜索@kuai（@kuai）是 TGsearch 收录的 Telegram 搜索机器人，目前有 3,905,866 月活用户，内容以中文为主。 帮你发现有趣群组、频道…",
+          "summary": "快搜🔍资源搜索@kuai（@kuai）是 TGsearch 收录的 Telegram 搜索机器人，目前有 3,905,866 月活用户，内容以中文为主。",
+          "description": "帮你发现有趣群组、频道、视频、音乐、电影、新闻 | Find cool stuff all in one bot!\n\n机器人： @kuai @kuaia @kuaiaa\n频道： @kuaisoupd\n群组 ： @kuaisouqz",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 13,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/kuai/",
+          "status": 200,
+          "meta": "快搜🔍资源搜索@kuai (@kuai) is a Telegram Search bot listed on TGsearch, with 3,905,866 monthly users, mainly in Chinese. 帮你发现有趣群组、频道、视频、音乐、电影、新闻 | Find cool stuff all in one…",
+          "summary": "快搜🔍资源搜索@kuai (@kuai) is a Telegram Search bot listed on TGsearch, with 3,905,866 monthly users, mainly in Chinese.",
+          "description": "帮你发现有趣群组、频道、视频、音乐、电影、新闻 | Find cool stuff all in one bot!\n\n机器人： @kuai @kuaia @kuaiaa\n频道： @kuaisoupd\n群组 ： @kuaisouqz",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 54,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "grouphelpapp",
+      "kind": "bot",
+      "lang": "en",
+      "samplingReason": "en-with-zh-translation",
+      "description": "🤖 This is the most complete Bot to help you manage your groups easily and safely!\n➡️ Add me in your group as Admin!",
+      "descriptionZh": "这是最完整的机器人,可以帮助您轻松安全地管理您的群组! ➡️添加我作为管理员加入您的群组!",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 116,
+      "protectedTokens": [],
+      "translations": {
+        "descriptionZh": {
+          "text": "这是最完整的机器人,可以帮助您轻松安全地管理您的群组! ➡️添加我作为管理员加入您的群组!",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/grouphelpapp/",
+          "status": 200,
+          "meta": "Group Help（@grouphelpapp）是 TGsearch 收录的 Telegram 群组管理机器人，目前有 2,764,287 月活用户，内容以英语为主。 这是最完…",
+          "summary": "Group Help（@grouphelpapp）是 TGsearch 收录的 Telegram 群组管理机器人，目前有 2,764,287 月活用户，内容以英语为主。",
+          "description": "这是最完整的机器人,可以帮助您轻松安全地管理您的群组! ➡️添加我作为管理员加入您的群组!",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 6,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/grouphelpapp/",
+          "status": 200,
+          "meta": "Group Help (@grouphelpapp) is a Telegram Group Admin bot listed on TGsearch, with 2,764,287 monthly users, mainly in English. 🤖 This is the most complete Bot to help yo…",
+          "summary": "Group Help (@grouphelpapp) is a Telegram Group Admin bot listed on TGsearch, with 2,764,287 monthly users, mainly in English.",
+          "description": "🤖 This is the most complete Bot to help you manage your groups easily and safely!\n➡️ Add me in your group as Admin!",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 45,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "userinfobot",
+      "kind": "bot",
+      "lang": "en",
+      "samplingReason": "en-with-zh-translation",
+      "description": "🔍 Shows the user’s basic information\n\n@dostoyno by g.media",
+      "descriptionZh": "显示用户的基本信息 @dostoyno by g.media",
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 59,
+      "protectedTokens": ["@dostoyno"],
+      "translations": {
+        "descriptionZh": {
+          "text": "显示用户的基本信息 @dostoyno by g.media",
+          "missingTokens": []
+        }
+      },
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/userinfobot/",
+          "status": 200,
+          "meta": "User Info • Get ID • IDbot（@userinfobot）是 TGsearch 收录的 Telegram 实用工具机器人，目前有 622,970 月活用户，…",
+          "summary": "User Info • Get ID • IDbot（@userinfobot）是 TGsearch 收录的 Telegram 实用工具机器人，目前有 622,970 月活用户，内容以英语为主。",
+          "description": "显示用户的基本信息 @dostoyno by g.media",
+          "autoTranslated": true,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/userinfobot/",
+          "status": 200,
+          "meta": "User Info • Get ID • IDbot (@userinfobot) is a Telegram Utilities bot listed on TGsearch, with 622,970 monthly users, mainly in English. 🔍 Shows the user’s basic inform…",
+          "summary": "User Info • Get ID • IDbot (@userinfobot) is a Telegram Utilities bot listed on TGsearch, with 622,970 monthly users, mainly in English.",
+          "description": "🔍 Shows the user’s basic information\n\n@dostoyno by g.media",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 34,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "missrose_bot",
+      "kind": "bot",
+      "lang": "fr",
+      "samplingReason": "other-language",
+      "description": "Powerful group mod bot.\nUpdates: @RoseNews.\nGet your own: @RoseClone_bot\n7b6dX3nE25xrfNViEKZHL9wVJFcBxQYuWPpmzHUxx28H",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 117,
+      "protectedTokens": ["@RoseNews", "@RoseClone_bot"],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/missrose_bot/",
+          "status": 200,
+          "meta": "Rose（@missrose_bot）是 TGsearch 收录的 Telegram 群组管理机器人，目前有 2,333,488 月活用户，内容以法语为主。 Powerful g…",
+          "summary": "Rose（@missrose_bot）是 TGsearch 收录的 Telegram 群组管理机器人，目前有 2,333,488 月活用户，内容以法语为主。",
+          "description": "Powerful group mod bot.\nUpdates: @RoseNews.\nGet your own: @RoseClone_bot\n7b6dX3nE25xrfNViEKZHL9wVJFcBxQYuWPpmzHUxx28H",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 12,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/missrose_bot/",
+          "status": 200,
+          "meta": "Rose (@missrose_bot) is a Telegram Group Admin bot listed on TGsearch, with 2,333,488 monthly users, mainly in French. Powerful group mod bot. Updates: @RoseNews. Get yo…",
+          "summary": "Rose (@missrose_bot) is a Telegram Group Admin bot listed on TGsearch, with 2,333,488 monthly users, mainly in French.",
+          "description": "Powerful group mod bot.\nUpdates: @RoseNews.\nGet your own: @RoseClone_bot\n7b6dX3nE25xrfNViEKZHL9wVJFcBxQYuWPpmzHUxx28H",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 52,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "truemafiabot",
+      "kind": "bot",
+      "lang": "ru",
+      "samplingReason": "other-language",
+      "description": "Бесплатный бот для игры в Мафию\n\nhttps://truemafia.online",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 57,
+      "protectedTokens": ["https://truemafia.online"],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/truemafiabot/",
+          "status": 200,
+          "meta": "🤵🏻 True Mafia（@truemafiabot）是 TGsearch 收录的 Telegram 游戏娱乐机器人，目前有 981,082 月活用户，内容以俄语为主。 Б…",
+          "summary": "🤵🏻 True Mafia（@truemafiabot）是 TGsearch 收录的 Telegram 游戏娱乐机器人，目前有 981,082 月活用户，内容以俄语为主。",
+          "description": "Бесплатный бот для игры в Мафию\n\nhttps://truemafia.online",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 3,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/truemafiabot/",
+          "status": 200,
+          "meta": "🤵🏻 True Mafia (@truemafiabot) is a Telegram Games & Fun bot listed on TGsearch, with 981,082 monthly users, mainly in Russian. Бесплатный бот для игры в Мафию https://…",
+          "summary": "🤵🏻 True Mafia (@truemafiabot) is a Telegram Games & Fun bot listed on TGsearch, with 981,082 monthly users, mainly in Russian.",
+          "description": "Бесплатный бот для игры в Мафию\n\nhttps://truemafia.online",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 42,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "pic",
+      "kind": "bot",
+      "lang": "en",
+      "samplingReason": "short",
+      "description": "",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 0,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/pic/",
+          "status": 200,
+          "meta": "Yandex Image Search（@pic）是 TGsearch 收录的 Telegram 搜索机器人，目前有 4,489,043 月活用户，内容以英语为主。",
+          "summary": "Yandex Image Search（@pic）是 TGsearch 收录的 Telegram 搜索机器人，目前有 4,489,043 月活用户，内容以英语为主。",
+          "description": "暂无简介",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/pic/",
+          "status": 200,
+          "meta": "Yandex Image Search (@pic) is a Telegram Search bot listed on TGsearch, with 4,489,043 monthly users, mainly in English.",
+          "summary": "Yandex Image Search (@pic) is a Telegram Search bot listed on TGsearch, with 4,489,043 monthly users, mainly in English.",
+          "description": "No description",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "fragment",
+      "kind": "bot",
+      "lang": "en",
+      "samplingReason": "short",
+      "description": "",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 0,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/fragment/",
+          "status": 200,
+          "meta": "Fragment Auction Alerts（@fragment）是 TGsearch 收录的 Telegram 效率提醒机器人，目前有 342,332 月活用户，内容以英语为…",
+          "summary": "Fragment Auction Alerts（@fragment）是 TGsearch 收录的 Telegram 效率提醒机器人，目前有 342,332 月活用户，内容以英语为主。",
+          "description": "暂无简介",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/fragment/",
+          "status": 200,
+          "meta": "Fragment Auction Alerts (@fragment) is a Telegram Productivity bot listed on TGsearch, with 342,332 monthly users, mainly in English.",
+          "summary": "Fragment Auction Alerts (@fragment) is a Telegram Productivity bot listed on TGsearch, with 342,332 monthly users, mainly in English.",
+          "description": "No description",
+          "autoTranslated": false,
+          "matchesPublicData": null,
+          "descriptionCharsInMeta": 0,
+          "emptySourcePlaceholder": true,
+          "metadataLimitedToTemplate": true
+        }
+      }
+    },
+    {
+      "username": "gmailbot",
+      "kind": "bot",
+      "lang": "en",
+      "samplingReason": "long",
+      "description": "This bot is an email client that works right inside Telegram. Connect your Gmail account to receive your emails as instant messages on Telegram, compose new emails and replies right from the chat, as well as delete or mark emails as spam.",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 238,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/gmailbot/",
+          "status": 200,
+          "meta": "Gmail Bot（@gmailbot）是 TGsearch 收录的 Telegram 效率提醒机器人，目前有 46,386 月活用户，内容以英语为主。 This bot is…",
+          "summary": "Gmail Bot（@gmailbot）是 TGsearch 收录的 Telegram 效率提醒机器人，目前有 46,386 月活用户，内容以英语为主。",
+          "description": "This bot is an email client that works right inside Telegram. Connect your Gmail account to receive your emails as instant messages on Telegram, compose new emails and replies right from the chat, as well as delete or mark emails as spam.",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 13,
+          "metadataLimitedToTemplate": false
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/gmailbot/",
+          "status": 200,
+          "meta": "Gmail Bot (@gmailbot) is a Telegram Productivity bot listed on TGsearch, with 46,386 monthly users, mainly in English. This bot is an email client that works right insid…",
+          "summary": "Gmail Bot (@gmailbot) is a Telegram Productivity bot listed on TGsearch, with 46,386 monthly users, mainly in English.",
+          "description": "This bot is an email client that works right inside Telegram. Connect your Gmail account to receive your emails as instant messages on Telegram, compose new emails and replies right from the chat, as well as delete or mark emails as spam.",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 52,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    },
+    {
+      "username": "copyright_infrigment_saver_bot",
+      "kind": "bot",
+      "lang": null,
+      "samplingReason": "long",
+      "description": "𝙏𝙃𝙄𝙎 𝘽𝙊𝙏 𝘾𝘼𝙉 𝙎𝘼𝙑𝙀 𝙔𝙊𝙐𝙍 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙁𝙍𝙊𝙈 𝘽𝙀𝙄𝙉𝙂 𝘽𝘼𝙉𝙉𝙀𝘿 𝘿𝙐𝙀 𝙏𝙊 𝘾𝙊𝙋𝙔𝙍𝙄𝙂𝙃𝙏 𝙎𝙏𝙍𝙄𝙆𝙀.🀄️✅\n\n♻️𝙏𝙍𝙐𝙎𝙏𝙀𝘿 𝘽𝙔:\n\n100𝙆+ 𝙂𝙍𝙊𝙐𝙋𝙎\n50𝙆+ 𝘾𝙃𝘼𝙉𝙉𝙀𝙇𝙎",
+      "descriptionZh": null,
+      "descriptionEn": null,
+      "sourceChanged": false,
+      "translationChanged": false,
+      "sourceLength": 205,
+      "protectedTokens": [],
+      "translations": {},
+      "pages": {
+        "zh": {
+          "url": "https://tgsearch.app/detail/copyright_infrigment_saver_bot/",
+          "status": 200,
+          "meta": "𝙋𝙍𝙊𝙏𝙀𝘾𝙏𝙄𝙊𝙉 𝘽𝙊𝙏⚡️（@copyright_infrigment_saver_bot）是 TGsearch 收录的 Telegram 群组管…",
+          "summary": "𝙋𝙍𝙊𝙏𝙀𝘾𝙏𝙄𝙊𝙉 𝘽𝙊𝙏⚡️（@copyright_infrigment_saver_bot）是 TGsearch 收录的 Telegram 群组管理机器人，目前有 23,119 月活用户。",
+          "description": "𝙏𝙃𝙄𝙎 𝘽𝙊𝙏 𝘾𝘼𝙉 𝙎𝘼𝙑𝙀 𝙔𝙊𝙐𝙍 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙁𝙍𝙊𝙈 𝘽𝙀𝙄𝙉𝙂 𝘽𝘼𝙉𝙉𝙀𝘿 𝘿𝙐𝙀 𝙏𝙊 𝘾𝙊𝙋𝙔𝙍𝙄𝙂𝙃𝙏 𝙎𝙏𝙍𝙄𝙆𝙀.🀄️✅\n\n♻️𝙏𝙍𝙐𝙎𝙏𝙀𝘿 𝘽𝙔:\n\n100𝙆+ 𝙂𝙍𝙊𝙐𝙋𝙎\n50𝙆+ 𝘾𝙃𝘼𝙉𝙉𝙀𝙇𝙎",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 0,
+          "metadataLimitedToTemplate": true
+        },
+        "en": {
+          "url": "https://tgsearch.app/en/detail/copyright_infrigment_saver_bot/",
+          "status": 200,
+          "meta": "𝙋𝙍𝙊𝙏𝙀𝘾𝙏𝙄𝙊𝙉 𝘽𝙊𝙏⚡️ (@copyright_infrigment_saver_bot) is a Telegram Group Admin bot listed on TGsearch, with 23,119 monthly users. 𝙏𝙃𝙄𝙎 𝘽𝙊𝙏 𝘾𝘼𝙉 𝙎𝘼�…",
+          "summary": "𝙋𝙍𝙊𝙏𝙀𝘾𝙏𝙄𝙊𝙉 𝘽𝙊𝙏⚡️ (@copyright_infrigment_saver_bot) is a Telegram Group Admin bot listed on TGsearch, with 23,119 monthly users.",
+          "description": "𝙏𝙃𝙄𝙎 𝘽𝙊𝙏 𝘾𝘼𝙉 𝙎𝘼𝙑𝙀 𝙔𝙊𝙐𝙍 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙁𝙍𝙊𝙈 𝘽𝙀𝙄𝙉𝙂 𝘽𝘼𝙉𝙉𝙀𝘿 𝘿𝙐𝙀 𝙏𝙊 𝘾𝙊𝙋𝙔𝙍𝙄𝙂𝙃𝙏 𝙎𝙏𝙍𝙄𝙆𝙀.🀄️✅\n\n♻️𝙏𝙍𝙐𝙎𝙏𝙀𝘿 𝘽𝙔:\n\n100𝙆+ 𝙂𝙍𝙊𝙐𝙋𝙎\n50𝙆+ 𝘾𝙃𝘼𝙉𝙉𝙀𝙇𝙎",
+          "autoTranslated": false,
+          "matchesPublicData": true,
+          "descriptionCharsInMeta": 30,
+          "metadataLimitedToTemplate": false
+        }
+      }
+    }
+  ]
+}
