@@ -1194,6 +1194,7 @@ describe("site build from snapshot data", () => {
       const page = html(route);
       const slugs = [...page.matchAll(/data-guide-card="([^"]+)"/g)].map((match) => match[1] ?? "");
       expect(slugs, route).toEqual([
+        ...(route === "guides" ? ["telegram-chinese-language-pack"] : []),
         "listing-requirements",
         "find-telegram-channels",
         "channels-groups-bots",
@@ -1261,6 +1262,28 @@ describe("site build from snapshot data", () => {
         `<link rel="alternate" hreflang="en" href="${siteUrl}/en/guides/">`,
       );
     }
+  });
+
+  test("Chinese language tutorial uses its help URL and exact SEO metadata", () => {
+    const route = "help/telegram-chinese-language-pack";
+    const page = html(route);
+    expect(page).toContain(
+      "<title>Telegram 中文设置教程：简体繁体语言包安装与汉化区别 | TGSearch</title>",
+    );
+    expect(page).toContain("Telegram 怎么设置中文？提供简体中文、繁体中文语言包安装地址");
+    expect(page).toContain(`<link rel="canonical" href="${siteUrl}/${route}/">`);
+    expect(page).toContain("Q7：简体中文和繁体中文可以随时切换吗？");
+    expect(page).toContain("https://t.me/setlanguage/zh-hans");
+    expect(page).toContain("https://t.me/setlanguage/zh-hant");
+    expect(html("guides")).toContain(`href="/${route}/"`);
+    expect(html(`zh-hant/${route}`)).toContain("語言包");
+    expect(html("zh-hant/guides")).toContain(`href="/zh-hant/${route}/"`);
+    expect(readFileSync(path.join(client, "sitemap-guides.xml"), "utf8")).toContain(
+      `<loc>${siteUrl}/${route}/</loc>`,
+    );
+    expect(existsSync(path.join(client, "guides/telegram-chinese-language-pack/index.html"))).toBe(
+      false,
+    );
   });
 
   test("listing requirements replace the withdrawn guides in all three locales", () => {

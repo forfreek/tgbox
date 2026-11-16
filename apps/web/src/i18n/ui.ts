@@ -99,7 +99,7 @@ const zh = {
   },
   guides: {
     eyebrow: "Guides",
-    lead: "从查找频道、理解公开数据到准备收录资料，结合 Telegram 官方说明和本站页面介绍可操作的方法。",
+    lead: "从中文设置、功能使用到资源查找与频道运营，结合 Telegram 官方说明，提供清晰、实用的教程与指南。",
     index: "全部指南",
     toc: "本文目录",
     published: "发布于",
@@ -287,7 +287,7 @@ const en: typeof zh = {
   },
   guides: {
     eyebrow: "Guides",
-    lead: "Practical guides to finding channels, interpreting public data and preparing a listing, with Telegram documentation and examples from this directory.",
+    lead: "Clear, practical tutorials and guides covering language settings, Telegram features, resource discovery, and channel management, informed by Telegram's official documentation.",
     index: "All guides",
     toc: "On this page",
     published: "Published",

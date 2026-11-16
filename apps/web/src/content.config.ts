@@ -20,6 +20,7 @@ const guides = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
+    seoTitle: z.string().optional(),
     description: z.string(),
     keywords: z.array(z.string()),
     // Coerced: whether the YAML parser hands back a Date or an ISO string is not ours to rely on.

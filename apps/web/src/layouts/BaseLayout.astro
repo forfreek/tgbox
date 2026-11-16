@@ -19,6 +19,7 @@ import { byMembers, getSiteData } from "@/lib/site-data.ts";
 interface Props {
   locale: SiteLocale;
   title?: string | undefined;
+  seoTitle?: string | undefined;
   description?: string | undefined;
   keywords?: string | undefined;
   image?: string | undefined;
@@ -32,6 +33,7 @@ interface Props {
 const {
   locale,
   title,
+  seoTitle,
   description,
   keywords,
   image,
@@ -93,6 +95,7 @@ const pagefindUrl = locale === "zh-hant" ? `${pagefindBase}/zh-hant` : pagefindB
     <Seo
       locale={locale}
       title={title}
+      seoTitle={seoTitle}
       description={description}
       keywords={keywords}
       path={path}

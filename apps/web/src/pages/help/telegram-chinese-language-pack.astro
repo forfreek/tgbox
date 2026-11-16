@@ -1,0 +1,9 @@
+---
+import { getEntry } from "astro:content";
+import GuidePage from "@/views/GuidePage.astro";
+
+const guide = await getEntry("guides", "zh/telegram-chinese-language-pack");
+if (!guide) throw new Error("Missing Chinese language pack guide");
+---
+
+<GuidePage locale="zh" guide={guide} />
