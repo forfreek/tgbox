@@ -1,5 +1,11 @@
 # 内容工作状态
 
+## 2026-11-16 后台 Crypto Pay 回调地址
+
+- 用户要求定位并修改后台显示的旧 workers.dev 回调。settings.ts:113 从 tgbox-admin 的 BOT_PUBLIC_URL 拼接地址，仓库 wrangler.jsonc 已为 https://bot.tgsearch.app，线上变量仍为旧值。
+- 使用 Cloudflare Worker Settings API 将线上 BOT_PUBLIC_URL 更新为 https://bot.tgsearch.app，重新读取确认，生成地址为 https://bot.tgsearch.app/cryptopay/webhook。其余 15 个绑定逐项比较通过，仓库运行代码无需变更。
+- 管理后台 settings 测试 22/22 通过。无签名 POST 探测返回 503 Not configured；只读查询确认生产 credentials 表没有 cryptopay_token，支付回调功能需后续通过后台配置该凭据。
+
 ## Unicode 截断修复
 
 - 用户报告 Search Console 的“Unicode 字符被截断了”，示例为 /detail/mrhxpj/。当前请求 HTTP 200，两段 JSON-LD 可以解析，递归检查未见不完整 UTF-16 字符。Search Console 中历史抓取内容尚待对照。

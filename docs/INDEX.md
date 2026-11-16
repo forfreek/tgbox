@@ -4,6 +4,7 @@
 
 | 任务 | 入口 | 何时读取 |
 | --- | --- | --- |
+| 后台 Crypto Pay 回调地址 | [状态记录](content-review/STATE.md) | 查看 2026-11-16 线上变量修正及凭据核对 |
 | AI 差异化简介链路 | [差异化核查](content-review/AI-DIFFERENTIATION.md) | 查看实际输入、模型任务、保存展示缺口与修正后的主线 |
 | 第 2 步简介链路核查 | [核查交付](content-review/DESCRIPTION-CHAIN-AUDIT.md) | 查看最新样本、复现问题、代码位置及下一步验收要求 |
 | 剩余两篇指南改写 | [改写记录](content-review/REMAINING-GUIDES.md) | 查看技能版本、来源、内容修改与上游复测 |
