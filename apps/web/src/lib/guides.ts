@@ -6,6 +6,7 @@ export type Guide = CollectionEntry<"guides">;
 
 /** Locale-neutral path; `localizePath` puts the en copy under `/en/`. */
 export function guidePath(slug: string) {
+  if (slug === "telegram-chinese-language-pack") return `/help/${slug}/`;
   return `/guides/${slug}/`;
 }
 
@@ -20,7 +21,9 @@ export async function listGuides(locale: SiteLocale): Promise<Guide[]> {
 /** getStaticPaths builder shared by `/guides/[slug]` and `/en/guides/[slug]`. */
 export async function guidePaths(locale: SiteLocale) {
   const guides = await listGuides(locale);
-  return guides.map((guide) => ({ params: { slug: guide.data.slug }, props: { guide } }));
+  return guides
+    .filter((guide) => guidePath(guide.data.slug).startsWith("/guides/"))
+    .map((guide) => ({ params: { slug: guide.data.slug }, props: { guide } }));
 }
 
 /** Rough reading time from the markdown source: CJK counts per character, the rest per word. */
