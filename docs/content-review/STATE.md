@@ -151,4 +151,3 @@
 ## 2026-11-16 中文语言包教程 PR
 
 用户提供文章和 SEO 信息，并要求扩展指南介绍后创建 PR。基于最新 main 创建 codex/chinese-language-guide，接入 help 路径、简繁页面、指南列表及站点地图，保留用户正文。实现与验证入口见 CHINESE-LANGUAGE-GUIDE.md。
-

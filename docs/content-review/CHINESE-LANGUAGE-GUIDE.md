@@ -23,6 +23,5 @@
 
 - Web 测试 27 个文件、412 项全部通过，包含两轮真实 Astro 构建与新增文章回归。
 - Astro 类型检查 306 文件零错误、零警告。
-- 修改文件 Biome 检查通过，Git 差异空白检查通过。
+- 修改文件 Biome 检查通过。
 - PR #49，https://github.com/forfreek/tgbox/pull/49 。
-
