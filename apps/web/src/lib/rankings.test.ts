@@ -1,7 +1,17 @@
 import { type EntryView, RankingsData, type SiteData } from "@tgbox/shared";
 import { describe, expect, test } from "vitest";
 import { devSiteData } from "./dev-site-data.ts";
-import { buildRankings, formatGrowth, memberGrowth, RANK_LIMIT } from "./rankings.ts";
+import {
+  buildRankings,
+  defaultRankTab,
+  formatGrowth,
+  growthCoverage,
+  growthEmptyReason,
+  MONTH_BASE_DAYS,
+  memberGrowth,
+  RANK_LIMIT,
+  WEEK_BASE_DAYS,
+} from "./rankings.ts";
 
 const now = new Date("2026-09-15T03:00:00.000Z");
 const daysAgo = (days: number) => new Date(now.getTime() - days * 86_400_000).toISOString();
@@ -157,4 +167,59 @@ test.each([
   { growth: 12, growthPct: 100, locale: "en", text: "+12 (+100%)" },
 ] as const)("growth reads as $text", ({ growth, growthPct, locale, text }) => {
   expect(formatGrowth(growth, growthPct, locale)).toBe(text);
+});
+
+describe("ranking presentation diagnostics", () => {
+  test("distinguishes absent entries, current values, history and non-positive growth", () => {
+    expect(growthEmptyReason(growthCoverage([], now, WEEK_BASE_DAYS))).toBe("noEntries");
+    expect(
+      growthEmptyReason(growthCoverage([entry("missing", { members: null })], now, WEEK_BASE_DAYS)),
+    ).toBe("noCurrent");
+    expect(growthEmptyReason(growthCoverage([entry("fresh")], now, WEEK_BASE_DAYS))).toBe(
+      "noBaseline",
+    );
+    expect(
+      growthEmptyReason(
+        growthCoverage([entry("flat", { memberHistory: history([8, 1000]) })], now, WEEK_BASE_DAYS),
+      ),
+    ).toBe("noPositive");
+  });
+
+  test("coverage partitions real data and shares baseline boundary semantics", () => {
+    const entries = [
+      entry("unknown", { members: null, memberHistory: history([30, 1000]) }),
+      entry("recent", { memberHistory: history([5.9, 500]) }),
+      entry("zero", { members: 0, memberHistory: history([6, 0]) }),
+      entry("growing", { members: 1200, memberHistory: history([6, 1000]) }),
+      entry("shrinking", { members: 900, memberHistory: history([30, 1000]) }),
+    ];
+    expect(growthCoverage(entries, now, WEEK_BASE_DAYS)).toEqual({
+      total: 5,
+      missingCurrent: 1,
+      missingBaseline: 1,
+      comparable: 3,
+      positive: 1,
+    });
+    expect(growthCoverage(entries, now, MONTH_BASE_DAYS)).toEqual({
+      total: 5,
+      missingCurrent: 1,
+      missingBaseline: 3,
+      comparable: 1,
+      positive: 0,
+    });
+  });
+
+  test("default selection uses weekly data and falls back to newest for empty or invalid samples", () => {
+    const empty = buildRankings(site([]), now);
+    expect(defaultRankTab(empty)).toBe("newest");
+    expect(defaultRankTab(buildRankings(site([entry("new")]), now))).toBe("newest");
+    expect(
+      defaultRankTab(
+        buildRankings(
+          site([entry("growing", { members: 1500, memberHistory: history([8, 1000]) })]),
+          now,
+        ),
+      ),
+    ).toBe("weekly");
+  });
 });

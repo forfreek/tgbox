@@ -14,8 +14,8 @@ export const RANK_LIMIT = 50;
 const DAY_MS = 86_400_000;
 // History points are sampled weekly while builds run more often, so a "week-old" point can be a few
 // hours short of 7 days; one day of slack keeps the ranking from flickering empty on those builds.
-const WEEK_BASE_DAYS = 6;
-const MONTH_BASE_DAYS = 27;
+export const WEEK_BASE_DAYS = 6;
+export const MONTH_BASE_DAYS = 27;
 
 export interface Growth {
   growth: number;
@@ -100,4 +100,40 @@ export function formatGrowth(growth: number, growthPct: number | null, locale: S
   const sign = (value: number) => (value > 0 ? "+" : "");
   const count = `${sign(growth)}${formatNumber(growth, locale)}`;
   return growthPct === null ? count : `${count} (${sign(growthPct)}${growthPct}%)`;
+}
+
+/** Presentation diagnostics reuse the same baseline selection as the ranking calculation. */
+export function growthCoverage(entries: EntryView[], now: Date, days: number) {
+  const coverage = {
+    total: entries.length,
+    missingCurrent: 0,
+    missingBaseline: 0,
+    comparable: 0,
+    positive: 0,
+  };
+  for (const entry of entries) {
+    if (entry.members === null) {
+      coverage.missingCurrent++;
+      continue;
+    }
+    const growth = memberGrowth(entry.members, entry.memberHistory, now, days);
+    if (growth === null) {
+      coverage.missingBaseline++;
+      continue;
+    }
+    coverage.comparable++;
+    if (growth.growth > 0) coverage.positive++;
+  }
+  return coverage;
+}
+
+export function defaultRankTab(rankings: RankingsData): "weekly" | "newest" {
+  return rankings.weeklyGrowth.length > 0 ? "weekly" : "newest";
+}
+
+export function growthEmptyReason(coverage: ReturnType<typeof growthCoverage>) {
+  if (coverage.total === 0) return "noEntries";
+  if (coverage.missingCurrent === coverage.total) return "noCurrent";
+  if (coverage.comparable === 0) return "noBaseline";
+  return "noPositive";
 }

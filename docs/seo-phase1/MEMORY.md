@@ -50,3 +50,10 @@
 ## 节点一交付
 
 2026-11-17 已创建 [PR #50](https://github.com/forfreek/tgbox/pull/50)。代码提交 78c4b14 的 Linux CI 通过，本地 web 421 测试、类型检查、三语言两视口筛选与导航检查通过。基线与修改版共有 Edge ViewTransition 中止提示，真实快照验证的 R2 边界见 STATE。当前等待评审，后续恢复先查 STATE 与 PR 最新状态。
+
+## 发布与节点二恢复点
+
+- 2026-11-17 AI 分类 PR #50 已合并为 addc43b，发布流程 44038264506 成功，线上三语言移动端点验通过。证据为 seo-ai-live-qa.json。
+- 用户要求继续下一步后，在独立工作树 C:/Users/123/tgbox-seo-rank、分支 codex/seo-rank-transparency 实施排行榜节点。
+- 排行榜数值算法保持原样，覆盖诊断复用 memberGrowth，默认榜由 defaultRankTab 同时提供给可见面板和 ItemList。无有效 hash 时周榜有数据选周榜，否则最新榜，有效 hash 与 hashchange 继续可用。
+- 方法与空态词条位于 ui-rank-method.ts，各语言独立表达。时间为快照生成时间，显示 UTC+08:00。更多当前状态查 STATE。

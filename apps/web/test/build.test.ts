@@ -1577,3 +1577,29 @@ describe("AI group category HTML", () => {
     });
   }
 });
+
+describe("ranking transparency HTML", () => {
+  for (const [prefix, label, method] of [
+    ["", "快照生成时间", "统计口径与排序规则"],
+    ["en/", "Snapshot generated", "How the rankings are calculated"],
+    ["zh-hant/", "快照產生時間", "資料如何計算與排序"],
+  ]) {
+    test(`server-rendered rules, timestamp and defaults for ${prefix || "zh"}`, () => {
+      const page = html(`${prefix}rank`);
+      expect(page).toContain(label);
+      expect(page).toContain(`<time datetime="${fixtureNow.toISOString()}" data-rank-timestamp`);
+      expect(page).toContain("UTC+08:00");
+      expect(page).toMatch(new RegExp(`<summary[^>]*>${method}</summary>`));
+      expect(page).not.toContain("{week}");
+      expect(page).not.toContain("{month}");
+      expect(page).toContain('data-default-rank="weekly"');
+      expect(page).toMatch(/data-rank-panel="weekly"[^>]*data-active/);
+      for (const kind of ["channel", "group", "bot"]) {
+        expect(page).toContain(`href="/${prefix}${kind}/"`);
+      }
+      expect(page).toContain("data-rank-coverage");
+      expect(page).not.toContain("每周更新");
+      expect(page).not.toContain("updated weekly");
+    });
+  }
+});

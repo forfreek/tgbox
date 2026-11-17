@@ -38,7 +38,7 @@ if (root) {
         else label.removeAttribute("data-top");
       }
       const empty = panel.querySelector<HTMLElement>("[data-rank-empty]");
-      // A list with no rows at all keeps its server-rendered message ("collecting data").
+      // Empty lists retain their server-rendered, data-backed reason.
       if (!empty || items.length === 0) continue;
       empty.textContent = empty.dataset.kindEmpty ?? "";
       empty.hidden = rank > 0;
@@ -65,5 +65,11 @@ if (root) {
     if (next) selectTab(next, true);
   });
 
-  selectTab(location.hash.slice(1));
+  const selectHash = () => {
+    const hash = location.hash.slice(1);
+    const key = tabs.some((tab) => tab.dataset.rankTab === hash) ? hash : root.dataset.defaultRank;
+    if (key) selectTab(key);
+  };
+  addEventListener("hashchange", selectHash);
+  selectHash();
 }
