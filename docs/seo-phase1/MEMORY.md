@@ -57,3 +57,5 @@
 - 用户要求继续下一步后，在独立工作树 C:/Users/123/tgbox-seo-rank、分支 codex/seo-rank-transparency 实施排行榜节点。
 - 排行榜数值算法保持原样，覆盖诊断复用 memberGrowth，默认榜由 defaultRankTab 同时提供给可见面板和 ItemList。无有效 hash 时周榜有数据选周榜，否则最新榜，有效 hash 与 hashchange 继续可用。
 - 方法与空态词条位于 ui-rank-method.ts，各语言独立表达。时间为快照生成时间，显示 UTC+08:00。更多当前状态查 STATE。
+
+- 排行榜节点已交付 [PR #51](https://github.com/forfreek/tgbox/pull/51)，代码提交 6348d70。web 427 测试、类型检查、18 组合及 9 个禁用 JS 页面检查、4 项浏览器回归通过。最新 CI 与合并发布状态在行动前查询 PR。
