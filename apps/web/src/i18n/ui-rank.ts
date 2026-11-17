@@ -1,15 +1,15 @@
 import type { SiteLocale } from "@tgbox/shared";
+import { rankMethodUi } from "./ui-rank-method.ts";
 
 /** Strings for the rankings page. */
 const zh = {
   title: "排行榜",
-  heading: "Telegram 频道、群组与机器人排行榜",
+  heading: "Telegram 资源排行榜",
   updated: "更新于 {date}",
   tabsLabel: "榜单",
   tabs: { weekly: "周涨粉", monthly: "月涨粉", newest: "最新收录", active: "最活跃" },
   kindsLabel: "类型",
   all: "全部",
-  growthEmpty: "数据积累中，每周更新",
   empty: "这里暂时还没有条目。",
   kindEmpty: "该类型暂无上榜条目。",
   growthTitle: "较上次采样的成员变化",
@@ -17,7 +17,7 @@ const zh = {
 
 const en: typeof zh = {
   title: "Rankings",
-  heading: "Telegram channel, group & bot rankings",
+  heading: "Telegram rankings",
   updated: "Updated {date}",
   tabsLabel: "Rankings",
   tabs: {
@@ -28,7 +28,6 @@ const en: typeof zh = {
   },
   kindsLabel: "Type",
   all: "All",
-  growthEmpty: "Collecting data — updated weekly",
   empty: "Nothing listed here yet.",
   kindEmpty: "No ranked entries of this type yet.",
   growthTitle: "Member change since the earlier sample",
@@ -37,5 +36,5 @@ const en: typeof zh = {
 const dictionaries: Record<SiteLocale, typeof zh> = { zh, "zh-hant": zh, en };
 
 export function rankUi(locale: SiteLocale) {
-  return dictionaries[locale];
+  return { ...dictionaries[locale], ...rankMethodUi(locale) };
 }

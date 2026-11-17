@@ -24,3 +24,5 @@
 ## SEO 第一阶段
 
 先查 [实施进度](seo-phase1/STATE.md)，按需查 [计划与回滚](seo-phase1/PLAN.md)、[约束](seo-phase1/CONSTRAINTS.md)、[项目记忆](seo-phase1/MEMORY.md)。范围为 AI 群组分类与排行榜的三语言页面。
+
+恢复排行榜工作时先查 STATE 中的“排行榜节点记录”，需要算法与回滚细节时再读取 PLAN 的节点二与实际交付映射。

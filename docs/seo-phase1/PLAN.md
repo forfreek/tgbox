@@ -1,6 +1,6 @@
 # TGSearch SEO 第一阶段计划
 
-制定于 2026-11-17，AI 分类页节点已获用户确认实施。约束见 [CONSTRAINTS](CONSTRAINTS.md)，实时进度见 [STATE](STATE.md)。
+制定于 2026-11-17，两个节点按用户指示顺序推进。约束见 [CONSTRAINTS](CONSTRAINTS.md)，实时进度见 [STATE](STATE.md)。
 
 ## 一、目标与验收
 
@@ -113,7 +113,7 @@ D1 导出与 R2 媒体历史由 packages/snapshot 生成 SiteData，web 在构�
 
 ## 八、授权记录
 
-2026-11-17 用户确认完成 AI 分类页节点并创建 PR。本节点沿用无数据库迁移方案。排行榜节点与生产发布按后续明确授权推进。
+2026-11-17 用户确认完成 AI 分类页节点并创建 PR。本节点沿用无数据库迁移方案。用户随后要求继续下一步，已完成 AI 发布点验并按计划推进排行榜节点。排行榜生产发布按后续明确授权推进。
 
 ## 九、节点一实际交付映射
 
@@ -123,3 +123,11 @@ D1 导出与 R2 媒体历史由 packages/snapshot 生成 SiteData，web 在构�
 - 为英文移动端筛选增加受限宽度的滚动容器，保留既有 hash 筛选脚本。
 - 新增 ai-category.test.ts 并扩展现有 build.test.ts，具体结果见 STATE。
 - 本节点文档、索引与实现一并通过独立 PR 交付。
+
+## 十、节点二实际交付映射
+
+- RankPage 与 ui-rank-method 输出三语言方法说明、数据覆盖、缺失原因、类型目录导航和带 UTC+08:00 标识的快照时间。
+- rankings.ts 导出既有 6/27 天常量，追加复用 memberGrowth 的覆盖诊断与默认榜选择函数。原有排序、截断与 RankingsData 契约保持兼容。
+- rankings.ts 客户端脚本保留类型筛选与键盘切换，新增有效 hash 和默认榜协调，并响应 hashchange。
+- 原有 ItemList 继续输出默认榜前 20 条，面板使用同一默认榜选择结果。
+- 扩展排行榜单元测试、三语言构建回归，新增 rankings.spec.ts 浏览器回归。
