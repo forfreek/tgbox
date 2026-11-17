@@ -46,3 +46,7 @@
 ## 事实来源索引
 
 源码路径和任务映射见 PLAN 的文件表。线上读取来源为 https://tgsearch.app/group/ai/ 与 https://tgsearch.app/rank/，仅为读取时网页工具返回的内容，不代表生产部署版本与本地 HEAD 一致。
+
+## 节点一交付
+
+2026-11-17 已创建 [PR #50](https://github.com/forfreek/tgbox/pull/50)。代码提交 78c4b14 的 Linux CI 通过，本地 web 421 测试、类型检查、三语言两视口筛选与导航检查通过。基线与修改版共有 Edge ViewTransition 中止提示，真实快照验证的 R2 边界见 STATE。当前等待评审，后续恢复先查 STATE 与 PR 最新状态。
