@@ -2,6 +2,8 @@
 
 AdSense 验证脚本接入与检查见 [交付记录](adsense/DELIVERY.md)。
 
+Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
+
 按当前任务读取单个专题，较长文件先定位章节，再读取所需行段。
 
 | 任务 | 入口 | 何时读取 |
