@@ -69,6 +69,38 @@ const hiddenPosts = [{ id: 7, date: "2026-08-29T12:00:00.000Z", text: "被隐藏
 // Entries referenced by the guide's worked examples must exist in the built snapshot too.
 const guideEntries: FixtureEntry[] = [
   {
+    username: "ai_group_en",
+    kind: "group",
+    category: "ai",
+    tags: ["chatgpt"],
+    title: "AI Group English",
+    description: "Discuss language models.",
+    lang: "en",
+    members: 100,
+    listedDaysAgo: 3,
+  },
+  {
+    username: "ai_group_zero",
+    kind: "group",
+    category: "ai",
+    tags: ["programming"],
+    title: "AI Group Zero",
+    description: "",
+    lang: "zh",
+    members: 0,
+    listedDaysAgo: 2,
+  },
+  {
+    username: "ai_group_missing",
+    kind: "group",
+    category: "ai",
+    tags: [],
+    title: "AI Group Missing",
+    description: "",
+    listedDaysAgo: 1,
+  },
+
+  {
     username: "telegramtips",
     kind: "channel",
     category: "news",
@@ -1508,5 +1540,40 @@ test("built detail and exports retain opt-in bot start payload on actual launch 
     expect(
       data.entries.find((entry: { username: string }) => entry.username === "gptbot").startPayload,
     ).toBe("botlist");
+  }
+});
+
+describe("AI group category HTML", () => {
+  for (const [prefix, title, missingCount] of [
+    ["", "AI 交流群组", "成员数未获取"],
+    ["en/", "AI Telegram Groups", "Member count unavailable"],
+    ["zh-hant/", "AI 討論群組", "尚未取得成員人數"],
+  ]) {
+    test(`localized facts, metadata and links for ${prefix || "zh"}`, () => {
+      const page = html(`${prefix}group/ai`);
+      expect(page).toContain(title);
+      expect(page).toContain(`rel="canonical" href="${siteUrl}/${prefix}group/ai/"`);
+      expect(page).toContain(`hreflang="en" href="${siteUrl}/en/group/ai/"`);
+      expect(page).toContain("data-ai-introduction");
+      expect(page).toContain("Discuss language models.");
+      expect(page).toContain("@ai_group_zero");
+      expect(page).toContain(missingCount);
+      expect(page).toContain(prefix === "en/" ? "0 members" : prefix ? "0 位成員" : "0 名成员");
+      expect(page).toContain(`href="/${prefix}tag/chatgpt/"`);
+      expect(page).toContain(`href="/${prefix}channel/ai/"`);
+      expect(page).toContain(`href="/${prefix}bot/ai/"`);
+      expect(types(page)).toContain("ItemList");
+      const ordered = [...page.matchAll(/data-entry-card="([^"]+)"/g)].map((match) => match[1]);
+      expect(ordered).toEqual(["ai_group_en", "ai_group_zero", "ai_group_missing"]);
+      const latest = html(`${prefix}group/ai/latest`);
+      expect(latest).toContain('content="noindex, follow"');
+      expect([...latest.matchAll(/data-entry-card="([^"]+)"/g)].map((match) => match[1])).toEqual([
+        "ai_group_missing",
+        "ai_group_zero",
+        "ai_group_en",
+      ]);
+      expect(html(`${prefix}group/tech`)).not.toContain("data-detailed");
+      expect(html(`${prefix}rank`)).not.toContain("data-ai-introduction");
+    });
   }
 });

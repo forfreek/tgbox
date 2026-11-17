@@ -12,8 +12,10 @@ import Pagination from "@/components/Pagination.astro";
 import SubmitButton from "@/components/SubmitButton.astro";
 import { localizePath } from "@/i18n/locale.ts";
 import { kindTitles, ui } from "@/i18n/ui.ts";
+import { aiCategoryUi } from "@/i18n/ui-ai-category.ts";
 import { kindUi } from "@/i18n/ui-kind.ts";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { aiCategoryResources } from "@/lib/ai-category.ts";
 import { fill } from "@/lib/format.ts";
 import { itemListJsonLd } from "@/lib/json-ld.ts";
 import {
@@ -38,10 +40,11 @@ const strings = ui(locale);
 const kindStrings = kindUi(locale);
 const kindTitle = kindTitles(locale)[category.kind];
 const name = localName(category, locale);
+const data = getSiteData();
+const isAiGroup = category.kind === "group" && category.slug === "ai";
+const aiStrings = aiCategoryUi(locale);
 const entries = sortEntries(
-  getSiteData().entries.filter(
-    (entry) => entry.kind === category.kind && entry.category === category.slug,
-  ),
+  data.entries.filter((entry) => entry.kind === category.kind && entry.category === category.slug),
   sort,
 );
 const totalPages = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
@@ -59,8 +62,13 @@ const seo = categorySeo(locale, {
   page,
   examples: visible.map((entry) => entry.title),
 });
-const title = `${seo.title}${sortSuffix}`;
-const description = seo.description;
+const title = isAiGroup
+  ? `${aiStrings.title}${sortSuffix}${pageSuffix}`
+  : `${seo.title}${sortSuffix}`;
+const description = isAiGroup
+  ? fill(aiStrings.description, { n: entries.length })
+  : seo.description;
+const related = isAiGroup ? aiCategoryResources(data, entries) : { tags: [], categories: [] };
 const pageUrl = absoluteUrl(
   localizePath(pageHref(categoryListingBase(category.kind, category.slug, sort), page), locale),
 );
@@ -93,7 +101,7 @@ const jsonLd = [
     <KindPageHeader
       locale={locale}
       title={`${name}${pageSuffix}`}
-      description={description}
+      description={isAiGroup ? aiStrings.introduction : description}
       count={{ n: entries.length, template: kindStrings.entries }}
       breadcrumbs={[
           { label: t(locale, "site.home"), href: localizePath("/", locale) },
@@ -108,13 +116,23 @@ const jsonLd = [
         slot="icon"
         class="size-7 sm:size-8"
       />
+      {isAiGroup && (
+        <div class="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground" data-ai-introduction>
+          <p>{aiStrings.sorts[sort]} {aiStrings.promotions}</p>
+          <p>{aiStrings.filters}</p>
+        </div>
+      )}
       <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border pt-4">
         <KindSortTabs locale={locale} kind={category.kind} slug={category.slug} sort={sort} />
-        {langs.length > 1 && <LangFilter locale={locale} langs={langs} />}
+        {langs.length > 1 && (
+          <div class:list={[isAiGroup ? "max-w-full overflow-x-auto" : "contents"]}>
+            <LangFilter locale={locale} langs={langs} />
+          </div>
+        )}
         {tags.length > 0 && <TagFilter locale={locale} tags={tags} />}
       </div>
     </KindPageHeader>
-    <KindGrid locale={locale} entries={visible} eager={10} class="mt-6" />
+    <KindGrid locale={locale} entries={visible} eager={10} detailed={isAiGroup} class="mt-6" />
     <p
       data-filter-empty
       hidden
@@ -122,6 +140,27 @@ const jsonLd = [
     >
       {kindStrings.tagFilter.empty}
     </p>
+    {isAiGroup && (related.tags.length > 0 || related.categories.length > 0) && (
+      <nav aria-labelledby="ai-related-heading" class="mt-8 rounded-2xl border border-border bg-card p-4 sm:p-5" data-ai-related>
+        <h2 id="ai-related-heading" class="font-semibold">{aiStrings.related}</h2>
+        {related.tags.length > 0 && (
+          <div class="mt-3">
+            <h3 class="text-sm text-muted-foreground">{aiStrings.topics}</h3>
+            <ul class="mt-2 flex flex-wrap gap-2">
+              {related.tags.map((tag) => <li><a class="inline-flex min-h-10 items-center rounded-full border border-border px-3 text-sm text-primary-accent hover:underline" href={localizePath(`/tag/${tag.slug}/`, locale)}>#{localName(tag, locale)}</a></li>)}
+            </ul>
+          </div>
+        )}
+        {related.categories.length > 0 && (
+          <div class="mt-4">
+            <h3 class="text-sm text-muted-foreground">{aiStrings.resources}</h3>
+            <ul class="mt-2 flex flex-wrap gap-2">
+              {related.categories.map((item) => <li><a class="inline-flex min-h-10 items-center rounded-full border border-border px-3 text-sm text-primary-accent hover:underline" href={localizePath(`/${item.kind}/${item.slug}/`, locale)}>{localName(item, locale)} · {kindTitles(locale)[item.kind]}</a></li>)}
+            </ul>
+          </div>
+        )}
+      </nav>
+    )}
     <Pagination
       locale={locale}
       current={page}
