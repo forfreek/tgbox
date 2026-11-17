@@ -20,3 +20,7 @@
 | 当前决策与恢复点 | [状态记录](content-review/STATE.md) | 恢复本任务、确认授权和已核实信息 |
 
 动态化相关资料目前位于其他独立分支。涉及该工作时先核对分支及其现有索引，再读取目标文件。
+
+## SEO 第一阶段
+
+先查 [实施进度](seo-phase1/STATE.md)，按需查 [计划与回滚](seo-phase1/PLAN.md)、[约束](seo-phase1/CONSTRAINTS.md)、[项目记忆](seo-phase1/MEMORY.md)。范围为 AI 群组分类与排行榜的三语言页面。

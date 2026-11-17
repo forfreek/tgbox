@@ -2,8 +2,10 @@
 import RosetteCheck from "@tabler/icons/filled/rosette-discount-check.svg";
 import type { EntryView, SiteLocale } from "@tgbox/shared";
 import Avatar from "@/components/Avatar.astro";
-import { localizePath } from "@/i18n/locale.ts";
+import { htmlLang, localizePath } from "@/i18n/locale.ts";
 import { ui } from "@/i18n/ui.ts";
+import { aiCategoryUi } from "@/i18n/ui-ai-category.ts";
+import { fill, formatNumber } from "@/lib/format.ts";
 import { localizedDescription } from "@/lib/seo.ts";
 
 interface Props {
@@ -20,16 +22,32 @@ interface Props {
   >;
   locale: SiteLocale;
   eagerAvatar?: boolean | undefined;
+  detailed?: boolean;
+  members?: number | null;
+  lang?: string | null;
 }
 
-const { entry, locale, eagerAvatar = false } = Astro.props;
+const {
+  entry,
+  locale,
+  eagerAvatar = false,
+  detailed = false,
+  members = null,
+  lang = null,
+} = Astro.props;
 const strings = ui(locale).entry;
 const { text: description } = localizedDescription(entry, locale);
+const aiStrings = aiCategoryUi(locale);
+const languageName =
+  detailed && lang
+    ? new Intl.DisplayNames([htmlLang[locale]], { type: "language" }).of(lang)
+    : null;
 ---
 
 {/* Every promotion tier looks the same (the tiers differ by position): tinted card + 推广 badge. */}
 <article
   data-entry-card={entry.username}
+  data-detailed={detailed ? "" : undefined}
   data-promoted={entry.promo ? "" : undefined}
   data-reveal
   data-hover-lift
@@ -40,7 +58,7 @@ const { text: description } = localizedDescription(entry, locale);
     <h3 class="flex min-w-0 items-center gap-1 text-[0.95rem] leading-snug font-semibold">
       <a
         href={localizePath(`/detail/${entry.username}/`, locale)}
-        class="truncate outline-none after:absolute after:inset-0 after:rounded-2xl group-hover:text-primary-accent focus-visible:after:ring-3 focus-visible:after:ring-outline/40"
+        class:list={[detailed ? "break-words [overflow-wrap:anywhere]" : "truncate", "outline-none after:absolute after:inset-0 after:rounded-2xl group-hover:text-primary-accent focus-visible:after:ring-3 focus-visible:after:ring-outline/40"]}
       >
         {entry.title}
       </a>
@@ -56,7 +74,16 @@ const { text: description } = localizedDescription(entry, locale);
         )}
     </h3>
   </div>
-  <p class="mt-2 truncate text-[0.825rem] text-muted-foreground" dir="auto">
-    {description || strings.noDescription}
+  <p
+    class:list={["mt-2 text-[0.825rem] text-muted-foreground", detailed ? "line-clamp-3 break-words leading-relaxed [overflow-wrap:anywhere]" : "truncate"]}
+    dir="auto"
+  >
+    {detailed ? description.trim() || fill(aiStrings.missingDescription, { username: entry.username }) : description || strings.noDescription}
   </p>
+  {detailed && (
+    <ul class="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+      <li>{members === null ? aiStrings.unknownMembers : fill(aiStrings.members, { n: formatNumber(members, locale) })}</li>
+      <li>{languageName ?? aiStrings.unknownLanguage}</li>
+    </ul>
+  )}
 </article>
