@@ -1,5 +1,7 @@
 # 项目资料索引
 
+构建读取 R2 与 Bot Fight 隔离见 [方案与验收](build-media/PLAN.md)、[当前状态](build-media/STATE.md)、[决策记录](build-media/MEMORY.md)。
+
 AdSense 验证脚本接入与检查见 [交付记录](adsense/DELIVERY.md)。
 
 Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。

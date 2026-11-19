@@ -174,31 +174,32 @@ describe("buildSiteData", () => {
     expect(entry(data, "devnotes")).toMatchObject({ posts: [], memberHistory: [] });
   });
 
-  test("fetches posts for channels and history for all entries from the media URL", async () => {
+  test("reads only public entry JSON through the input reader, keeping public URLs for assets", async () => {
     const requested: string[] = [];
-    const fakeFetch: typeof fetch = async (input) => {
-      const url = String(input);
-      requested.push(url);
-      if (url === "https://media.example.com/posts/techdaily.json") {
-        return Response.json(fixturePosts);
+    const readMedia = async (key: string) => {
+      requested.push(key);
+      if (key === "posts/techdaily.json") {
+        return fixturePosts;
       }
-      if (url === "https://media.example.com/history/devchat.json") {
-        return Response.json(fixtureHistory);
+      if (key === "history/devchat.json") {
+        return fixtureHistory;
       }
-      return new Response("not found", { status: 404 });
+      return undefined;
     };
     const data = await buildSiteData({
       dbPath: fixtureDb(),
       mediaBaseUrl: "https://media.example.com",
-      fetch: fakeFetch,
+      readMedia,
       now: fixtureNow,
     });
 
     expect(entry(data, "techdaily").posts).toEqual(fixturePosts);
     expect(entry(data, "devchat").memberHistory).toEqual(fixtureHistory);
     expect(entry(data, "devchat").posts).toEqual([]);
-    expect(requested).not.toContain("https://media.example.com/posts/devchat.json");
-    expect(requested).not.toContain("https://media.example.com/posts/hiddenchan.json");
+    expect(requested).not.toContain("posts/devchat.json");
+    expect(requested).not.toContain("posts/hiddenchan.json");
+    expect(requested).not.toContain("history/hiddenchan.json");
+    expect(entry(data, "techdaily").avatarUrl).toContain("https://media.example.com/");
   });
 
   test("reads a .sql dump like the one wrangler d1 export writes", async () => {
@@ -370,16 +371,58 @@ describe("buildSiteData", () => {
     expect(entry(data, "aiwatch").promo).toBe("pin");
   });
 
-  test("fails when the media URL returns a server error", async () => {
-    const failing: typeof fetch = async () => new Response("boom", { status: 500 });
+  test("fails rather than publishing missing content when the input reader fails", async () => {
     await expect(
       buildSiteData({
         dbPath: fixtureDb(),
         mediaBaseUrl: "https://media.example.com",
-        fetch: failing,
+        readMedia: async () => {
+          throw new Error("AccessDenied");
+        },
         now: fixtureNow,
       }),
-    ).rejects.toThrow(/500/);
+    ).rejects.toThrow(/AccessDenied/);
+  });
+
+  test("public asset URL never causes a build input HTTP request", async () => {
+    const data = await buildSiteData({
+      dbPath: fixtureDb(),
+      mediaBaseUrl: "https://this-domain-must-not-be-fetched.invalid",
+      mediaDir: writeFixtureMedia(tempDir()),
+      now: fixtureNow,
+    });
+    expect(entry(data, "techdaily").posts).toEqual(fixturePosts);
+  });
+
+  test("directory and object-reader inputs produce identical complete snapshots", async () => {
+    const dbPath = fixtureDb();
+    const mediaDir = writeFixtureMedia(tempDir());
+    const common = { dbPath, now: fixtureNow, mediaBaseUrl: "https://media.example.com" };
+    const local = await buildSiteData({ ...common, mediaDir });
+    const remote = await buildSiteData({
+      ...common,
+      readMedia: async (key) => {
+        try {
+          return JSON.parse(readFileSync(path.join(mediaDir, key), "utf8"));
+        } catch (error) {
+          if (error instanceof Error && "code" in error && error.code === "ENOENT")
+            return undefined;
+          throw error;
+        }
+      },
+    });
+    expect(remote).toEqual(local);
+  });
+
+  test("rejects ambiguous input sources", async () => {
+    await expect(
+      buildSiteData({
+        dbPath: fixtureDb(),
+        mediaDir: tempDir(),
+        readMedia: async () => [],
+        now: fixtureNow,
+      }),
+    ).rejects.toThrow("Choose mediaDir or readMedia");
   });
 });
 
