@@ -2,6 +2,8 @@
 
 构建读取 R2 与 Bot Fight 隔离见 [方案与验收](build-media/PLAN.md)、[当前状态](build-media/STATE.md)、[决策记录](build-media/MEMORY.md)。
 
+构建数据增长、全量读取与静态文件数量风险见 [容量与扩展性待办](build-media/SCALING.md)。该问题尚未解决，恢复评估时先读此文及 STATE；不要把 R2 读取修复视为已完成增量构建或动态化。
+
 AdSense 验证脚本接入与检查见 [交付记录](adsense/DELIVERY.md)。
 
 Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
