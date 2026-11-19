@@ -18,6 +18,11 @@ on:
     # Daily forced build so rankings stay current before the 09:00 (UTC+8) channel digest.
     - cron: "30 0 * * *"
   workflow_dispatch:
+    inputs:
+      verify_only:
+        description: Build from live D1/R2 without deploying or clearing the dirty flag
+        type: boolean
+        default: false
 
 # Never cancel a running deploy; queued runs pick up whatever is dirty by then.
 concurrency:
@@ -81,7 +86,7 @@ jobs:
         run: node scripts/build-site.ts --remote --media-base-url "$R2_PUBLIC_URL"
 
       - name: Deploy web
-        if: steps.dirty.outputs.build == 'true'
+        if: steps.dirty.outputs.build == 'true' && !inputs.verify_only
         working-directory: apps/web
         run: pnpm exec wrangler deploy
 
@@ -90,7 +95,7 @@ jobs:
       # GitHub runners are datacenter IPs, and the zone's managed challenge answers them with 403
       # before the site does. That response has no canonical tag; it is not a wrong SITE_URL.
       - name: Smoke-check the deployed site
-        if: steps.dirty.outputs.build == 'true'
+        if: steps.dirty.outputs.build == 'true' && !inputs.verify_only
         run: |
           base="${SITE_URL%/}"
           home="apps/web/dist/client/index.html"
@@ -151,14 +156,14 @@ jobs:
 
       # Changes made after this build started keep the flag for the next run.
       - name: Clear dirty flag
-        if: steps.dirty.outputs.build == 'true'
+        if: steps.dirty.outputs.build == 'true' && !inputs.verify_only
         working-directory: apps/bot
         run: |
           pnpm exec wrangler d1 execute tgbox --remote \
             --command "DELETE FROM site_state WHERE key = 'dirty_since' AND CAST(value AS INTEGER) < $BUILD_STARTED_AT"
 
       - name: Tell the awesome list to regenerate
-        if: steps.dirty.outputs.build == 'true' && env.AWESOME_DISPATCH_TOKEN != ''
+        if: steps.dirty.outputs.build == 'true' && !inputs.verify_only && env.AWESOME_DISPATCH_TOKEN != ''
         continue-on-error: true
         run: |
           curl -fsS -X POST https://api.github.com/repos/TGrpg/awesome-telegram/dispatches \

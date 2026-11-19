@@ -10,5 +10,7 @@
 - `pnpm check` 在 Windows 因已有 CRLF 格式差异失败（668 条错误），未批量格式化无关文件；Linux 的全仓检查与测试以 [PR #55 的 CI](https://github.com/forfreek/tgbox/pull/55/checks) 对应提交结果为准，避免将本地局部检查写成全仓通过。
 - 源码自审：核对了输入选择、公开条目筛选、并发上限、缺失与故障区分、SDK 生命周期、凭据注入范围及日志脱敏；本次没有增加公开 HTTP 回退或发布失败数据的降级路径。
 - S3 适配器测试使用 SDK mock，尚未验证真实 S3 签名、权限及故障重试行为；SDK 的重试/超时参数已源码核对。
-- 当前 GitHub 仅存在 CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN 两个 secrets；没有 R2 S3 凭据（2026-11-20 只读核对快照）。
-- 尚未创建凭据或 secrets，未修改生产防护设置，未合并或部署。未在 Bot Fight 开启状态验证完整生产构建，未测生产下载体积/耗时。
+- 2026-11-20 用户已自行配置 R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY，GitHub secrets 名称和存在性已核实；权限及正确性待真实读取验证。原 CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN 保留。
+- PR #55 已正式待审；实现与文档版本 c6954c6 的 Linux CI 全部通过。
+- 增加工作流 `verify_only` 手动选项：使用真实 D1/R2 完整构建，但跳过部署、公网探测、清除 dirty 与下游派发；默认发布行为保持不变。验证结果待补充。
+- 未修改生产防护设置，未合并或部署。Cloudflare 插件重连仍失败，本机 Wrangler OAuth 有效但无凭据管理接口权限；使用 GitHub secrets 验证，未读取密钥值。

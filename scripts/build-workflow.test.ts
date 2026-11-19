@@ -7,6 +7,27 @@ import { test } from "node:test";
 
 const bash = process.platform === "win32" ? "C:/Program Files/Git/bin/bash.exe" : "/bin/bash";
 
+test("verify-only workflow cannot deploy, clear the dirty flag or dispatch downstream builds", () => {
+  const yaml = readFileSync(
+    new URL("../.github/workflows/build-deploy.yml", import.meta.url),
+    "utf8",
+  );
+  for (const name of [
+    "Deploy web",
+    "Smoke-check the deployed site",
+    "Clear dirty flag",
+    "Tell the awesome list to regenerate",
+  ]) {
+    const step = yaml.split(`      - name: ${name}`)[1]?.split("      - name:")[0];
+    assert.ok(step, name);
+    assert.match(step, /if: .*&& !inputs\.verify_only/, name);
+  }
+  const build = yaml
+    .split("      - name: Export D1, snapshot, astro build, Pagefind")[1]
+    ?.split("      - name:")[0];
+  assert.ok(build && !build.includes("!inputs.verify_only"));
+});
+
 test("deployment probe distinguishes WAF challenges from real HTTP failures", {
   skip: !existsSync(bash),
 }, () => {
