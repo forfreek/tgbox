@@ -1,6 +1,6 @@
 // End-to-end site build: D1 export → snapshot JSON → astro build → Pagefind index.
 //   local (default): node scripts/build-site.ts [--persist-to .data/wrangler] [--media-dir .data/media]
-//   CI:              node scripts/build-site.ts --remote --media-base-url "$R2_PUBLIC_URL"
+//   CI:              node scripts/build-site.ts --remote (authenticated R2 input; public URL is output only)
 import { existsSync } from "node:fs";
 import { mkdir, readdir, rm } from "node:fs/promises";
 import path from "node:path";
@@ -56,6 +56,13 @@ if (values.remote && process.env.PUBLIC_BOT_USERNAME?.replace(/^@/, "") === "tgb
 
 const dataDir = path.resolve(repoRoot, values["data-dir"]);
 const webDir = path.join(repoRoot, "apps/web");
+// Fail before D1 export if remote input credentials are missing. Explicit local media remains
+// useful for reproducible builds against an exported database.
+if (values.remote && !values["media-dir"]) {
+  for (const name of ["CLOUDFLARE_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY"]) {
+    if (!process.env[name]) throw new Error(`Remote snapshot requires ${name}`);
+  }
+}
 await mkdir(dataDir, { recursive: true });
 
 // 1. Export D1
@@ -105,6 +112,7 @@ run("node", [
   "--out",
   siteData,
   ...(mediaDir ? ["--media-dir", path.resolve(repoRoot, mediaDir)] : []),
+  ...(!mediaDir && values.remote ? ["--media-source", "r2"] : []),
   ...(values["media-base-url"] ? ["--media-base-url", values["media-base-url"]] : []),
 ]);
 

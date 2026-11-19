@@ -19,11 +19,12 @@ import {
 export type BuildSiteDataOptions = {
   /** Exported D1 database: a SQLite file, or a `.sql` dump as produced by `wrangler d1 export`. */
   dbPath: string;
-  /** Public R2 base URL; used for avatar URLs and, without `mediaDir`, to fetch media JSON. */
+  /** Public R2 base URL for asset links only; never used to read build inputs. */
   mediaBaseUrl?: string;
   /** Local copy of the media bucket (`posts/<u>.json`, `history/<u>.json`). */
   mediaDir?: string;
-  fetch?: typeof fetch;
+  /** Authenticated build input reader. Undefined means the object does not exist. */
+  readMedia?: (key: string) => Promise<unknown>;
   now: Date;
 };
 
@@ -64,6 +65,7 @@ function isoOrNull(ms: unknown): string | null {
 
 export async function buildSiteData(options: BuildSiteDataOptions): Promise<SiteData> {
   const { dbPath, mediaDir, now } = options;
+  if (mediaDir && options.readMedia) throw new Error("Choose mediaDir or readMedia, not both");
   const mediaBaseUrl = options.mediaBaseUrl?.replace(/\/+$/, "");
 
   const isSqlDump = dbPath.endsWith(".sql");
@@ -444,12 +446,7 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
         throw error;
       }
     }
-    if (!mediaBaseUrl) return undefined;
-    const url = `${mediaBaseUrl}/${key}`;
-    const response = await (options.fetch ?? fetch)(url);
-    if (response.status === 404) return undefined;
-    if (!response.ok) throw new Error(`GET ${url} failed: ${response.status}`);
-    return response.json();
+    return options.readMedia?.(key);
   }
 }
 

@@ -74,6 +74,10 @@ jobs:
 
       - name: Export D1, snapshot, astro build, Pagefind
         if: steps.dirty.outputs.build == 'true'
+        env:
+          # Bucket-scoped Object Read only credentials, available only to the build step.
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: node scripts/build-site.ts --remote --media-base-url "$R2_PUBLIC_URL"
 
       - name: Deploy web
@@ -134,7 +138,13 @@ jobs:
             echo "::error::live home canonical is '$live', expected '$base/' — SITE_URL was wrong at build time"
             exit 1
           fi
-          if ! curl -fsS -o /dev/null --max-time 25 "$base/pagefind/pagefind.js"; then
+          code=$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' --max-time 25 \
+            -A 'tgbox-deploy-smoke/1.0' "$base/pagefind/pagefind.js" || true)
+          if grep -qi '^cf-mitigated:[[:space:]]*challenge' "$headers" || grep -q '<title>Just a moment' "$body"; then
+            echo "::warning::Cloudflare challenged Pagefind verification (HTTP ${code:-000}); online search verification remains incomplete. Built file exists."
+            exit 0
+          fi
+          if [ "$code" != "200" ]; then
             echo "::error::$base/pagefind/pagefind.js is missing — site search is dead"
             exit 1
           fi
