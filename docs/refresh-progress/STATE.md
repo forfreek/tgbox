@@ -20,6 +20,7 @@
 ## 本节点开发状态
 
 - 基线 origin/main 1205866，分支 codex/refresh-progress，工作树 C:/Users/123/tgbox-build-media。
+- 独立 [PR #57](https://github.com/forfreek/tgbox/pull/57) 已创建，未合并；提交与检查的实时状态以 PR 为准。
 - 已实现持久 ID 进度、租约及比较交换、失败与限流接续。生产尚未部署此版本，未初始化或修改生产进度键。
 - 本地验证：进度状态测试 8/8（含在 core 全套中）；bot 刷新链路 24/24（含在 bot 全套中）；db 全套 74/74、core 全套 158/158、bot 全套 164/164 通过。全仓 9 个类型检查任务通过，Astro 311 文件零错误/警告。修改的 5 个 TypeScript 文件 Biome 检查及 git diff --check 通过。
 - 源码复核：核对领取/提交的条件更新、异常及过期路径、延期条目位置、低活跃轮次、通知预留及发布 dirty 门禁。相关包测试使用本地 D1/R2 与模拟 fetch；没有执行生产 Cron 或调度版发布。Linux 全仓检查以本 PR CI 为准。
