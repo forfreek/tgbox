@@ -565,6 +565,23 @@ export async function getSiteState(db: Db, key: string) {
   return row?.value;
 }
 
+/** Compare-and-swap also fences stale cron invocations; undefined means insert only. */
+export async function compareAndSetSiteState(
+  db: Db,
+  key: string,
+  expected: string | undefined,
+  value: string,
+) {
+  const result = await (expected === undefined
+    ? db.insert(siteState).values({ key, value }).onConflictDoNothing()
+    : db
+        .update(siteState)
+        .set({ value })
+        .where(and(eq(siteState.key, key), eq(siteState.value, expected)))
+  ).run();
+  return result.meta.changes === 1;
+}
+
 /** Several keys in one query, for callers on a tight subrequest budget (the hourly cron). */
 export async function getSiteStates(db: Db, keys: string[]) {
   const rows = await db.select().from(siteState).where(inArray(siteState.key, keys));

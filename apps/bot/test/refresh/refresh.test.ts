@@ -5,6 +5,7 @@ import {
   getEntryByUsername,
   getSiteState,
   insertApprovedEntry,
+  setSiteState,
   upsertSetting,
 } from "@tgbox/db";
 import { type EntryKind, type EntryStatus, PostView, settingsDefaults } from "@tgbox/shared";
@@ -111,16 +112,20 @@ beforeEach(async () => {
 });
 
 describe("scheduling", () => {
-  test("picks the id slice from the clock and writes nothing to schedule", async () => {
+  test("starts with the latest slice and persists the next unfinished ID", async () => {
     for (const name of ["a1", "a2", "a3", "a4"]) await addEntry(name, { kind: "group" });
     const tg = fakeTelegram({ a1: "group", a2: "group", a3: "group", a4: "group" });
     const sliced = { ...env, REFRESH_BATCH_SIZE: "2" };
 
     const first = await runRefresh(sliced, T0, tg);
-    expect(first.processed).toEqual(["a1", "a2"]);
+    expect(first.processed).toEqual(["a3", "a4"]);
     const second = await runRefresh(sliced, T0 + REFRESH_INTERVAL_MS, tg);
-    expect(second.processed).toEqual(["a3", "a4"]);
-    expect(await getSiteState(db, "refresh_cursor")).toBeUndefined();
+    expect(second.processed).toEqual(["a1", "a2"]);
+    expect(JSON.parse((await getSiteState(db, "refresh_progress_v1")) ?? "null")).toMatchObject({
+      nextId: 3,
+      cycle: 1,
+      lease: null,
+    });
   });
 
   test("rotates through every slot when the cron fires on its own interval", async () => {
@@ -147,10 +152,70 @@ describe("scheduling", () => {
     await setStatus(await addEntry("muted", { kind: "group" }), "hidden_by_admin");
     const tg = fakeTelegram({ quiet: "channel", busy: "group", gone: "group", muted: "group" });
 
+    // Quiet entries with an already stored avatar retain the every-other-pass policy.
+    await env.DB.prepare("UPDATE entries SET avatar_version='known' WHERE username='quiet'").run();
+    await setSiteState(
+      db,
+      "refresh_progress_v1",
+      JSON.stringify({ nextId: 1, cycle: 1, lastScheduledTime: 0, lease: null }),
+    );
     const odd = await runRefresh(env, T0 + REFRESH_INTERVAL_MS, tg);
     expect(odd.processed).toEqual(["busy"]);
     const even = await runRefresh(env, T0 + 2 * REFRESH_INTERVAL_MS, tg);
     expect(even.processed).toEqual(["quiet", "busy"]);
+  });
+
+  test("new listings do not move an unfinished batch when the batch count grows", async () => {
+    for (const name of ["a1", "a2", "a3", "a4"]) await addEntry(name, { kind: "group" });
+    const tg = fakeTelegram({ a1: "group", a2: "group", a3: "group", a4: "group", a5: "group" });
+    const sliced = { ...env, REFRESH_BATCH_SIZE: "2" };
+    await runRefresh(sliced, T0, tg);
+    await addEntry("a5", { kind: "group" });
+    expect((await runRefresh(sliced, T0 + REFRESH_INTERVAL_MS, tg)).processed).toEqual(["a5"]);
+    expect((await runRefresh(sliced, T0 + 2 * REFRESH_INTERVAL_MS, tg)).processed).toEqual([
+      "a1",
+      "a2",
+    ]);
+  });
+
+  test("a shared budget postpones entries without advancing past them", async () => {
+    await addEntry("a1", { kind: "group" });
+    const tg = fakeTelegram({ a1: "group" });
+    expect((await runRefresh(env, T0, tg, 25)).deferred).toEqual(["a1"]);
+    expect((await runRefresh(env, T0 + REFRESH_INTERVAL_MS, tg)).processed).toEqual(["a1"]);
+  });
+
+  test("429 retries the affected entry on the next tick", async () => {
+    await addEntry("a1", { kind: "group" });
+    const site: Record<string, Behaviour> = { a1: "rate_limited" };
+    const tg = fakeTelegram(site);
+    const limited = await runRefresh(env, T0, tg);
+    expect(limited.processed).toEqual([]);
+    expect(limited.deferred).toEqual(["a1"]);
+    site.a1 = "group";
+    expect((await runRefresh(env, T0 + REFRESH_INTERVAL_MS, tg)).processed).toEqual(["a1"]);
+  });
+
+  test("a failed R2 write retains its checkpoint and publication intent", async () => {
+    await addEntry("a1", { kind: "group" });
+    const tg = fakeTelegram({ a1: "group" });
+    // Avatar errors are deliberately recoverable, so fail the later channel history write.
+    const broken = {
+      ...env,
+      MEDIA: {
+        get: env.MEDIA.get.bind(env.MEDIA),
+        head: env.MEDIA.head.bind(env.MEDIA),
+        put: async () => {
+          throw new Error("R2 unavailable");
+        },
+      },
+    };
+    // A group also appends member history after updating its D1 fields.
+    await expect(runRefresh(broken, T0, tg)).rejects.toThrow("R2 unavailable");
+    const state = JSON.parse((await getSiteState(db, "refresh_progress_v1")) ?? "null");
+    expect(state).toMatchObject({ nextId: 1, lastScheduledTime: 0, lease: null });
+    expect(await getSiteState(db, "dirty_since")).toBe(String(T0));
+    expect((await runRefresh(env, T0, tg)).processed).toEqual(["a1"]);
   });
 });
 
@@ -460,7 +525,7 @@ describe("liveness", () => {
 
     const run = await runRefresh(env, T0, tg);
     expect(run.rowsWritten).toBe(0);
-    expect(run.deferred).toEqual(["later"]);
+    expect(run.deferred).toEqual(["limited", "later"]);
     expect(tg.tme("later")).toHaveLength(0);
     expect(await entry("limited")).toMatchObject({ failCount: 0, liveness: "active" });
   });

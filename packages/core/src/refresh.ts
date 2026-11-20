@@ -6,6 +6,7 @@ import {
   type EntryStats,
   getEntriesByIdRange,
   getMaxEntryId,
+  markDirty,
   recordLivenessResult,
   updateEntryCold,
   upsertEntryStats,
@@ -14,6 +15,7 @@ import { type Liveness, MemberPoint, type PostView, reviewRecipients } from "@tg
 import { type EntrySnapshot, fetchEntrySnapshot } from "@tgbox/telegram";
 import { markDirtyAndDispatch } from "./build.ts";
 import type { CoreContext } from "./context.ts";
+import { claimRefreshProgress, finishRefreshProgress } from "./refresh-progress.ts";
 import { getSettings } from "./settings.ts";
 
 type Fetch = (input: string, init?: RequestInit) => Promise<Response>;
@@ -40,8 +42,7 @@ const DEFAULT_BATCH_SIZE = 6;
 
 /**
  * How often the refresh cron fires. **Must match the every-5-minutes trigger in
- * `apps/bot/wrangler.jsonc`**: the batch slot is derived by dividing the clock by this interval,
- * so a mismatch makes the rotation skip slices and silently strand entries.
+ * `apps/bot/wrangler.jsonc`**. Progress is persisted independently of this interval.
  */
 export const REFRESH_INTERVAL_MS = 5 * MINUTE_MS;
 
@@ -54,7 +55,7 @@ const ENTRY_WORST_CASE = 12;
 // markDirty + last-dispatch read + the GitHub dispatch + the dispatched-at write.
 const DIRTY_DISPATCH_COST = 4;
 // The dirty handling above + settings read + admin summary at the end of the run.
-const FINAL_RESERVE = DIRTY_DISPATCH_COST + 2;
+const FINAL_RESERVE = DIRTY_DISPATCH_COST + 3;
 // Content the cron noticed is less urgent than a person's edit: at most one build every 30 minutes.
 // The flag is cleared by every build, so these changes must not take the transition shortcut —
 // otherwise the first stat drift after a build dispatches again, and so on every few minutes.
@@ -69,7 +70,7 @@ type RefreshResult = RefreshTally & {
   from: number;
   to: number;
   processed: string[];
-  /** entries left for a later slot because of the subrequest budget or a 429 */
+  /** entries left at the checkpoint for the next tick because of the budget or a 429 */
   deferred: string[];
   hidden: string[];
   restored: string[];
@@ -157,104 +158,132 @@ export async function runRefresh(
     dirty: false,
   };
 
-  // Deterministic time slice: no cursor is stored, the slot comes from the clock.
   const maxId = await getMaxEntryId(db);
   result.subrequests++;
   if (maxId === 0) return result;
   const batchSize = batchSizeOf(env);
-  const batches = Math.ceil(maxId / batchSize);
-  // Counted in cron ticks, not wall-clock minutes: with an every-5-minutes trigger the minute of
-  // the hour advances in steps of 5, so `minute % batches` would land on the same slice forever
-  // whenever `batches` shares a factor with 5, and the entries in every other slice would never
-  // be refreshed again while the logs still looked healthy.
-  const tick = Math.floor(scheduledTime / REFRESH_INTERVAL_MS);
-  const slot = tick % batches;
-  // One cycle = one full pass over all slots; low-activity channels are refreshed every other pass.
-  const oddCycle = Math.floor(tick / batches) % 2 === 1;
-  result.from = slot * batchSize + 1;
-  result.to = result.from + batchSize - 1;
+  const claim = await claimRefreshProgress(db, {
+    maxId,
+    batchSize,
+    scheduledTime,
+    now: Date.now(),
+  });
+  result.subrequests += 2;
+  if (!claim) return result;
+  const oddCycle = claim.state.cycle % 2 === 1;
+  result.from = claim.state.nextId;
+  result.to = Math.min(maxId, result.from + batchSize - 1);
 
-  const rows = await getEntriesByIdRange(db, result.from, result.to);
-  result.subrequests++;
-
-  const pending: Pending[] = [];
-  let rateLimited = false;
-  for (const { entry, stats } of rows) {
-    if (entry.status === "removed" || entry.status === "hidden_by_admin") continue;
-    if (oddCycle && (stats?.activityTier === 0 || stats?.activityTier === 1)) continue;
-    if (rateLimited || result.subrequests + ENTRY_WORST_CASE + FINAL_RESERVE > SUBREQUEST_BUDGET) {
-      result.deferred.push(entry.username);
-      continue;
-    }
-
-    const snapshot = await fetchEntrySnapshot(entry.username, {
-      fetch: deps.fetch,
-      now: new Date(now),
-      knownKind: entry.kind,
-      needCreatedAt: entry.tgCreatedAt === null,
-    });
-    result.subrequests += snapshot.subrequests;
-    result.processed.push(entry.username);
-    rateLimited = snapshot.rateLimited;
-
-    if (snapshot.liveness === "active" && snapshot.profile) {
-      const io = { db, fetch: deps.fetch, media: env.MEDIA };
-      await applyActiveSnapshot(io, { entry, stats, snapshot, now, manual: false }, result);
-    }
-
-    const clean =
-      snapshot.liveness === "active" &&
-      entry.status !== "hidden_by_system" &&
-      entry.failCount === 0 &&
-      entry.liveness === "active";
-    if (snapshot.liveness !== "unknown" && !clean) {
-      result.subrequests++;
-      pending.push({ entry, username: entry.username, liveness: snapshot.liveness });
-    }
-  }
-
-  const failures = pending.filter((item) => item.liveness !== "active").length;
-  const allowHide = failures < GUARD_MIN_FAILURES;
-  for (const item of pending) {
-    const outcome = await recordLivenessResult(db, item.entry, {
-      liveness: item.liveness,
-      now,
-      allowHide,
-    });
-    result.rowsWritten += outcome.rowsWritten;
-    if (outcome.transition === "hidden") result.hidden.push(item.username);
-    if (outcome.transition === "restored") result.restored.push(item.username);
-    if (outcome.transition) result.dirty = true;
-  }
-
-  if (result.dirty) {
-    // The whole run already sits in `ctx.waitUntil`, so the dispatch is awaited here.
-    const core: CoreContext = {
-      db,
-      fetch: deps.fetch,
-      now: () => now,
-      config: {
-        GITHUB_REPO: env.GITHUB_REPO ?? "",
-        GITHUB_DISPATCH_TOKEN: env.GITHUB_DISPATCH_TOKEN ?? "",
-      },
-    };
-    await markDirtyAndDispatch(core, {
-      minIntervalMs: REFRESH_DISPATCH_INTERVAL_MS,
-      onTransition: false,
-    });
-    result.subrequests += DIRTY_DISPATCH_COST;
-  }
-  if (result.hidden.length > 0) {
-    // Settings decide the review chat or private copies; only read when there is news.
-    const { chatIds } = reviewRecipients((await getSettings({ db })).bot, env);
+  try {
+    const rows = await getEntriesByIdRange(db, result.from, result.to);
     result.subrequests++;
-    // Private copies beyond the reserved one use whatever is left of the hard limit.
-    for (const chatId of chatIds.slice(0, SUBREQUEST_LIMIT - result.subrequests)) {
-      await notifyAdmins(env.BOT_TOKEN, chatId, deps, pending, result.hidden);
-      result.subrequests++;
+
+    const pending: Pending[] = [];
+    let rateLimited = false;
+    for (const { entry, stats } of rows) {
+      if (entry.status === "removed" || entry.status === "hidden_by_admin") continue;
+      if (
+        oddCycle &&
+        entry.avatarVersion !== null &&
+        (stats?.activityTier === 0 || stats?.activityTier === 1)
+      )
+        continue;
+      if (
+        rateLimited ||
+        result.subrequests + ENTRY_WORST_CASE + FINAL_RESERVE > SUBREQUEST_BUDGET
+      ) {
+        result.deferred.push(entry.username);
+        continue;
+      }
+
+      const snapshot = await fetchEntrySnapshot(entry.username, {
+        fetch: deps.fetch,
+        now: new Date(now),
+        knownKind: entry.kind,
+        needCreatedAt: entry.tgCreatedAt === null,
+      });
+      result.subrequests += snapshot.subrequests;
+      if (snapshot.rateLimited) {
+        rateLimited = true;
+        result.deferred.push(entry.username);
+        continue;
+      }
+      result.processed.push(entry.username);
+
+      if (snapshot.liveness === "active" && snapshot.profile) {
+        const io = { db, fetch: deps.fetch, media: env.MEDIA };
+        await applyActiveSnapshot(io, { entry, stats, snapshot, now, manual: false }, result);
+      }
+
+      const clean =
+        snapshot.liveness === "active" &&
+        entry.status !== "hidden_by_system" &&
+        entry.failCount === 0 &&
+        entry.liveness === "active";
+      if (snapshot.liveness !== "unknown" && !clean) {
+        result.subrequests++;
+        pending.push({ entry, username: entry.username, liveness: snapshot.liveness });
+      }
     }
+
+    const failures = pending.filter((item) => item.liveness !== "active").length;
+    const allowHide = failures < GUARD_MIN_FAILURES;
+    for (const item of pending) {
+      const outcome = await recordLivenessResult(db, item.entry, {
+        liveness: item.liveness,
+        now,
+        allowHide,
+      });
+      result.rowsWritten += outcome.rowsWritten;
+      if (outcome.transition === "hidden") result.hidden.push(item.username);
+      if (outcome.transition === "restored") result.restored.push(item.username);
+      if (outcome.transition) result.dirty = true;
+    }
+
+    if (result.dirty) {
+      // The whole run already sits in `ctx.waitUntil`, so the dispatch is awaited here.
+      const core: CoreContext = {
+        db,
+        fetch: deps.fetch,
+        now: () => now,
+        config: {
+          GITHUB_REPO: env.GITHUB_REPO ?? "",
+          GITHUB_DISPATCH_TOKEN: env.GITHUB_DISPATCH_TOKEN ?? "",
+        },
+      };
+      await markDirtyAndDispatch(core, {
+        minIntervalMs: REFRESH_DISPATCH_INTERVAL_MS,
+        onTransition: false,
+      });
+      result.subrequests += DIRTY_DISPATCH_COST;
+    }
+    if (result.hidden.length > 0) {
+      // Settings decide the review chat or private copies; only read when there is news.
+      const { chatIds } = reviewRecipients((await getSettings({ db })).bot, env);
+      result.subrequests++;
+      // Private copies beyond the reserved one use whatever is left of the hard limit.
+      for (const chatId of chatIds.slice(
+        0,
+        Math.max(0, SUBREQUEST_LIMIT - result.subrequests - 1),
+      )) {
+        await notifyAdmins(env.BOT_TOKEN, chatId, deps, pending, result.hidden);
+        result.subrequests++;
+      }
+    }
+    const deferred = rows.find(({ entry }) => result.deferred.includes(entry.username));
+    await finishRefreshProgress(db, claim, {
+      nextId: deferred?.entry.id ?? result.to + 1,
+      scheduledTime,
+    });
+    result.subrequests++;
+    return result;
+  } catch (error) {
+    // A put or D1 write may have succeeded before a later operation failed. Preserve publication
+    // intent even if a retry now sees the same data, and keep the cursor at this batch.
+    await markDirty(db, now);
+    await finishRefreshProgress(db, claim);
+    throw error;
   }
-  return result;
 }
 
 /**
