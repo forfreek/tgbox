@@ -48,9 +48,10 @@ const en: typeof zh = {
 const zhHant: typeof zh = {
   ...zh,
   heading: "尋找 Telegram 頻道、群組與機器人",
-  lead: "用關鍵字搜尋，或依主題和標籤瀏覽。先看公開簡介、可用的成員資料及部分頻道的貼文預覽，再到 Telegram 核對內容與使用條件。",
-  searchPlaceholder: "搜尋 Telegram 頻道、群組與機器人…",
+  lead: "輸入關鍵字搜尋，或依主題和標籤探索。先查看公開簡介、可用的成員資料及部分頻道的貼文預覽，再前往 Telegram 了解內容與使用規範。",
+  searchPlaceholder: "搜尋頻道、群組或機器人…",
   hotCategories: "依分類瀏覽",
+  latest: "最新收錄",
 };
 
 const dictionaries: Record<SiteLocale, typeof zh> = { zh, "zh-hant": zhHant, en };

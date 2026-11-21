@@ -786,6 +786,12 @@ describe("site build from snapshot data", () => {
         expect(entity.description).toBe(description);
       }
       expect(page).toContain(`<link rel="canonical" href="${siteUrl}/${prefix}">`);
+      if (prefix === "zh-hant/") {
+        expect(page).toContain("輸入關鍵字搜尋");
+        expect(page).toContain('aria-label="搜尋頻道、群組或機器人…"');
+        expect(page).toContain("最新收錄");
+        expect(description).toContain("依主題和標籤尋找感興趣的內容");
+      }
       for (const [lang, route] of [
         ["zh-CN", ""],
         ["zh-Hant", "zh-hant/"],
