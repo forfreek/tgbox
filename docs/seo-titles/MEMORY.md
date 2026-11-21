@@ -10,3 +10,4 @@
 - 用户原目录 C:/Users/123/tgbox 仍有既存修改，本节点只在独立工作树提交。
 - 市场月搜索量、KD、Trends 时序未验证。提醒为 tgsearch-seo，每周一北京时间 10:00。正式观察窗口随每个 URL 的新版 Google 抓取确定。
 - 429 项 web 测试与 311 文件 Astro 检查通过，三语构建断言覆盖动态摘要和 H1。浏览器验证使用开发快照与本地 Pagefind，生产头像与第三方脚本未验证。临时 Windows 静态服务需使用 path.resolve 标准化根路径，否则 startsWith 判断可能把正确文件识别成 404。
+- 节点一为 PR #58，源码提交 87f6115。推送采用账户既有的 16814512+forfreek@users.noreply.github.com 提交地址，避免 GitHub 邮箱隐私保护拒绝。易变 CI、合并和发布状态行动前复核。
