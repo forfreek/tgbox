@@ -220,6 +220,49 @@ describe("scheduling", () => {
 });
 
 describe("writes only on change", () => {
+  test("scheme-relative avatars download over HTTPS and do not interrupt the batch", async () => {
+    await addEntry("gmailbot", { kind: "bot" });
+    await addEntry("following", { kind: "group" });
+    const tg = fakeTelegram({ following: "group" });
+    const calls: string[] = [];
+    let query = "1";
+    const deps = {
+      fetch: async (input: string, init?: RequestInit) => {
+        calls.push(input);
+        if (input === "https://t.me/gmailbot") {
+          return new Response(
+            `<div class="tgme_page"><img class="tgme_page_photo_image" src="//telegram.org/img/tgme/gmailbot.png?${query}"><div class="tgme_page_title">Gmail Bot</div><div class="tgme_page_extra">@gmailbot</div><a class="tgme_action_button_new">Start Bot</a></div>`,
+          );
+        }
+        if (input.startsWith("https://telegram.org/img/tgme/gmailbot.png?")) {
+          return new Response(new Uint8Array([0x89, 0x50, 0x4e, 0x47]), {
+            headers: { "content-type": "image/png" },
+          });
+        }
+        return tg.fetch(input, init);
+      },
+    };
+
+    const first = await runRefresh(env, T0, deps);
+    expect(first.processed).toEqual(["gmailbot", "following"]);
+    const version = (await entry("gmailbot")).avatarVersion;
+    expect(version).toMatch(/^[a-f0-9]{16}$/);
+    const avatar = await env.MEDIA.get("avatars/gmailbot.jpg");
+    expect(avatar?.httpMetadata?.contentType).toBe("image/png");
+    expect(await avatar?.arrayBuffer()).toEqual(new Uint8Array([0x89, 0x50, 0x4e, 0x47]).buffer);
+    expect((await entry("following")).title).toBe("grammY");
+
+    // Telegram query changes keep the existing path-based version and stored avatar.
+    query = "2";
+    const second = await runRefresh(env, T0 + REFRESH_INTERVAL_MS, deps);
+    expect(second.processed).toEqual(["gmailbot", "following"]);
+    expect(second.r2Writes).toBe(0);
+    expect((await entry("gmailbot")).avatarVersion).toBe(version);
+    expect(calls.filter((url) => url.startsWith("https://telegram.org/"))).toEqual([
+      "https://telegram.org/img/tgme/gmailbot.png?1",
+    ]);
+  });
+
   test("second refresh of an unchanged channel writes 0 rows and no R2 objects", async () => {
     const id = await addEntry("telegram");
     const tg = fakeTelegram({ telegram: "channel" });

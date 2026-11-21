@@ -66,7 +66,10 @@ export function parseProfile(html: string, username: string): Profile {
   }
 
   profile.pageShape = "entity";
-  profile.avatarUrl = avatarUrl ? decodeEntities(avatarUrl) : null;
+  // Some Telegram-owned avatars (e.g. Gmail Bot) use a scheme-relative image URL.
+  // Resolve its protocol here so every consumer fingerprints and fetches the same absolute URL.
+  const decodedAvatar = avatarUrl ? decodeEntities(avatarUrl) : null;
+  profile.avatarUrl = decodedAvatar?.replace(/^\/\//, "https://") ?? null;
   const titleHtml = divContent(page, "tgme_page_title");
   profile.title =
     titleHtml === null

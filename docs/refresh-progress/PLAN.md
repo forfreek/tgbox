@@ -1,5 +1,7 @@
 # 收录刷新进度修复
 
+头像 URL 兼容补充节点（2026-11-21）见下文。此前调度节点记录按原日期保存。
+
 日期：2026-11-20，Asia/Shanghai。
 
 ## 问题与范围
@@ -24,3 +26,14 @@
 - 失败会重试整段，D1/R2 副作用沿用既有幂等边界，不承诺跨存储事务。持久游标保证接续，不保证每个条目固定多久内更新；吞吐仍受每批大小、预算及限流影响。
 - 回滚代码会恢复旧取模行为。保留进度键，重新部署修复版可接续；不删除生产状态来模拟恢复。
 - 租约长度依据 [Workers Cron 15 分钟墙钟上限](https://developers.cloudflare.com/workers/platform/limits/#wall-time-limits-by-invocation-type)，检索于 2026-11-20。状态比较交换使用 D1 单条条件更新。
+
+## 头像 URL 兼容补充节点
+
+2026-11-21 用户要求对 Invalid URL 的排查结果提交独立 PR。基线 main 60c3772，工作树 C:/Users/123/tgbox-avatar-url，分支 codex/avatar-url-normalization。
+
+1. 在 parseProfile 解码头像地址后，将 // 开头的协议相对地址补为 HTTPS，所有调用方接收同一地址。已有绝对地址、内联 data 地址和缺头像行为沿用原处理。
+2. 保留按 URL pathname 生成版本、忽略 query 的已有策略，头像下载成功后才更新版本。
+3. 解析回归覆盖 Gmail Bot 实例、HTML entity 参数、绝对 URL 与内联头像。Worker 本地回归覆盖规范化下载、R2 图像字节及类型、D1 版本、同批后续条目，以及仅 query 改变时不重复下载。
+4. 运行 Telegram、core、bot 相关测试和类型检查，独立 PR 的 CI 执行全仓检查。
+
+本节点交付代码和 PR。生产部署、头像补齐与其他资源操作按明确授权执行。合并后的网页构建不等于发布 bot。回滚使用本节点提交的 revert，按授权发布后恢复旧解析行为。

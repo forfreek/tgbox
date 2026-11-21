@@ -3,6 +3,19 @@ import { fixture } from "./fixtures.ts";
 import { parseProfile } from "./profile.ts";
 
 describe("parseProfile", () => {
+  test.each([
+    ["//telegram.org/img/tgme/gmailbot.png?1", "https://telegram.org/img/tgme/gmailbot.png?1"],
+    [
+      "//telegram.org/img/tgme/gmailbot.png?v=1&amp;size=320",
+      "https://telegram.org/img/tgme/gmailbot.png?v=1&size=320",
+    ],
+    ["https://cdn1.telesco.pe/file/avatar.jpg", "https://cdn1.telesco.pe/file/avatar.jpg"],
+    ["data:image/svg+xml;base64,PHN2Zy8+", "data:image/svg+xml;base64,PHN2Zy8+"],
+  ])("normalizes scheme-relative avatars without changing other sources: %s", (src, expected) => {
+    const html = `<div class="tgme_page"><img class="tgme_page_photo_image" src="${src}"><div class="tgme_page_extra">@gmailbot</div><a class="tgme_action_button_new">Start Bot</a></div>`;
+    expect(parseProfile(html, "gmailbot").avatarUrl).toBe(expected);
+  });
+
   test("channel: exact subscriber count, title, description, avatar, verified", () => {
     const profile = parseProfile(fixture("profile-channel.html"), "telegram");
     expect(profile).toMatchObject({

@@ -1,5 +1,9 @@
 # 决策与恢复入口
 
+- 2026-11-21 头像 Invalid URL 来自 Gmail Bot 的协议相对地址 //telegram.org/img/tgme/gmailbot.png?1。页面解析入口补全 HTTPS，可使指纹和下载共享同一绝对地址。保留 pathname 指纹和忽略 query 的行为，R2 下载成功后才更新 D1 版本。
+- 对应分支 codex/avatar-url-normalization，基线 main 60c3772，独立 PR 交付。生产 bot 部署仍需单独核验，网页构建成功不表示 bot 修复生效。
+- 此节点 Telegram 89、core 158、bot 165 项测试及三包类型检查通过。Windows 并行 workerd 内存不足，限制单 worker 和文件串行后复测通过。刷新回归验证 PNG 写入、版本保存、批次后续处理与 query 变化不重复下载。
+
 - 旧刷新调度无持久游标；不能声称“PR 清空了进度”或通过改一个现有游标解决跳段。
 - maxId 变化只改变扫描终点，不应重新映射扫描位置。以条目 ID 保存进度，并在预算/限流延期时回到首条未处理记录。
 - 使用现有 site_state 的单键状态及条件更新，避免引入新资源或迁移。租约防重叠，比较交换防过期所有者覆盖；失败重试允许重复读写，不能假称跨 R2/D1 原子完成。

@@ -1,5 +1,7 @@
 # 当前状态
 
+2026-11-21 新增头像 URL 兼容补充节点，见文末。以下 2026-11-20 调度与数据补齐记录为历史快照。
+
 日期：2026-11-20，Asia/Shanghai。
 
 ## 生产已完成
@@ -26,3 +28,15 @@
 - 源码复核：核对领取/提交的条件更新、异常及过期路径、延期条目位置、低活跃轮次、通知预留及发布 dirty 门禁。相关包测试使用本地 D1/R2 与模拟 fetch；没有执行生产 Cron 或调度版发布。Linux 全仓检查以本 PR CI 为准。
 
 下一步：完成相关包测试、源码复核与独立 PR；生产发布及观察至少两个连续 tick 另待授权。容量增长问题仍独立见 ../build-media/SCALING.md。
+
+## 2026-11-21 头像 URL 兼容修复
+
+- 用户要求将本轮只读排查结果做成独立 PR。工作树 C:/Users/123/tgbox-avatar-url，分支 codex/avatar-url-normalization，基线 main 60c3772。原工作树既有修改保留。
+- 生产异常位于 avatarFingerprint → applyActiveSnapshot → runRefresh。两次保留记录发生于北京时间 11-21 01:25:51 和 13:55:45，生产仍为 bot 版本 74492182-10df-4f8e-aae2-244046499a78（部署于 11-15）。
+- 已核对生产 bundle 的旧调度公式、相邻成功日志与只读 D1 样本，定位到 ID 1003–1008；ID 1007 为 gmailbot，avatar_version 为空。其公开页面头像为 //telegram.org/img/tgme/gmailbot.png?1，解析后直接交给 new URL(url) 会抛错，补全 HTTPS 后真实图片响应为 200 image/png。
+- parseProfile 入口统一补全协议。既有刷新与新收录调用均复用解析结果，无需给指纹、下载分别修补。
+- Telegram 包 7 文件、89 项测试通过，包含 4 个头像来源样例。Worker 刷新文件 25 项测试通过，新增回归核对 HTTPS 下载、PNG 元数据与字节、D1 版本、后续条目处理和 query 改变后的重复刷新。
+- core 全套串行 15 文件、158 项测试通过。Telegram、core、bot 三包类型检查通过，3 个改动源码及测试文件 Biome 与 git diff --check 通过。
+- bot 全套串行 15 文件、165 项测试通过。本地 core 与 bot 首轮并行全套触发 Windows workerd/V8 内存不足及进程异常退出，改为 maxWorkers=1、no-file-parallelism 后全部通过。Linux CI 以独立 PR 最新提交为准。
+- 源码自审确认修复在公共解析入口，刷新、新收录预览均复用规范化结果。已有绝对 URL、data URI 和缺头像行为有解析测试覆盖，头像版本仍按路径生成。
+- 此补充节点的 bot 生产修复与 Gmail Bot 头像入库待发布后验收。生产资料与资源未修改。
