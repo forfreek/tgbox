@@ -1,7 +1,8 @@
 import type { EntryKind, SiteLocale } from "@tgbox/shared";
 
 const zh = {
-  lead: "按分类和标签建立候选清单，查看公开简介、成员数据和频道消息预览，再前往 Telegram 核对内容与使用条件。",
+  heading: "查找 Telegram 频道、群组和机器人",
+  lead: "按关键词搜索，或按分类和标签浏览。查看公开简介、可用的成员资料及部分频道的消息预览，再前往 Telegram 核对内容与使用条件。",
   searchPlaceholder: "搜索 Telegram 频道、群组、机器人…",
   hotCategories: "按分类浏览",
   sponsored: "赞助商推广",
@@ -22,7 +23,8 @@ const zh = {
 };
 
 const en: typeof zh = {
-  lead: "Build a shortlist by category and tag. Review public descriptions, member data and channel post previews, then open Telegram to check the content and usage conditions.",
+  heading: "Find public Telegram channels, groups and bots",
+  lead: "Search by keyword or browse by topic and tag. Check public profiles, available member data and posts from selected channels, then open Telegram to review the content and usage conditions.",
   searchPlaceholder: "Search Telegram channels, groups and bots…",
   hotCategories: "Browse by category",
   sponsored: "Sponsored",
@@ -43,7 +45,15 @@ const en: typeof zh = {
   rankings: "See growth and activity rankings",
 };
 
-const dictionaries: Record<SiteLocale, typeof zh> = { zh, "zh-hant": zh, en };
+const zhHant: typeof zh = {
+  ...zh,
+  heading: "尋找 Telegram 頻道、群組與機器人",
+  lead: "用關鍵字搜尋，或依主題和標籤瀏覽。先看公開簡介、可用的成員資料及部分頻道的貼文預覽，再到 Telegram 核對內容與使用條件。",
+  searchPlaceholder: "搜尋 Telegram 頻道、群組與機器人…",
+  hotCategories: "依分類瀏覽",
+};
+
+const dictionaries: Record<SiteLocale, typeof zh> = { zh, "zh-hant": zhHant, en };
 
 export function homeUi(locale: SiteLocale) {
   return dictionaries[locale];

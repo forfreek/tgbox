@@ -750,6 +750,55 @@ describe("site build from snapshot data", () => {
     expect(gzipSync(readFileSync(path.join(client, stickyModule))).length).toBeLessThan(1024);
   });
 
+  test("home metadata and visible headings describe discovery with the snapshot count", () => {
+    const snapshot = JSON.parse(readFileSync(path.join(work, "site-data.json"), "utf8"));
+    for (const [prefix, title, heading, preview] of [
+      [
+        "",
+        "搜索 Telegram 频道、群组与机器人",
+        "查找 Telegram 频道、群组和机器人",
+        "部分频道的消息预览",
+      ],
+      [
+        "zh-hant/",
+        "搜尋 Telegram 頻道、群組與機器人",
+        "尋找 Telegram 頻道、群組與機器人",
+        "部分頻道的貼文預覽",
+      ],
+      [
+        "en/",
+        "Telegram Directory: Channels, Groups &amp; Bots",
+        "Find public Telegram channels, groups and bots",
+        "selected channels",
+      ],
+    ] as const) {
+      const page = html(prefix);
+      expect(page).toContain(`<title>${title} | TGsearch</title>`);
+      expect(page).toContain(`<meta property="og:title" content="${title} | TGsearch">`);
+      expect(page.match(/<h1\b/g)).toHaveLength(1);
+      const h1 = page.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? "";
+      expect(h1.trim()).toBe(heading);
+      const description = page.match(/<meta name="description" content="([^"]+)"/)?.[1];
+      expect(description).toContain(String(snapshot.stats.total));
+      expect(description).toContain(preview);
+      expect(page).toContain(`<meta property="og:description" content="${description}">`);
+      for (const entity of jsonLd(page) as Record<string, unknown>[]) {
+        expect(entity.description).toBe(description);
+      }
+      expect(page).toContain(`<link rel="canonical" href="${siteUrl}/${prefix}">`);
+      for (const [lang, route] of [
+        ["zh-CN", ""],
+        ["zh-Hant", "zh-hant/"],
+        ["en", "en/"],
+        ["x-default", ""],
+      ]) {
+        expect(page).toContain(
+          `<link rel="alternate" hreflang="${lang}" href="${siteUrl}/${route}">`,
+        );
+      }
+    }
+  });
+
   test("home page has search hero, hot columns backed by JSON pools, latest and CTA", () => {
     for (const prefix of ["", "en/"]) {
       const page = html(prefix);
