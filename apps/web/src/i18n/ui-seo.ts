@@ -258,7 +258,7 @@ const zhHant: typeof zh = {
   home: {
     title: "搜尋 Telegram 頻道、群組與機器人",
     description:
-      "搜尋本站收錄的 {total} 個公開 Telegram 頻道、群組與機器人，依主題和標籤瀏覽。查看簡介、可用的成員資料與部分頻道的貼文預覽，再到 Telegram 查看。",
+      "探索本站收錄的 {total} 個公開 Telegram 頻道、群組與機器人，依主題和標籤尋找感興趣的內容。查看簡介、成員資料與部分頻道的貼文預覽，再前往 Telegram。",
   },
 };
 
