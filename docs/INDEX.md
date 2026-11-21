@@ -1,5 +1,7 @@
 # 项目资料索引
 
+网站标题与关键词优化先读 [当前状态](seo-titles/STATE.md)，实施节点、动态摘要与提醒见 [计划](seo-titles/PLAN.md)，数据链路与可复用决策见 [项目记忆](seo-titles/MEMORY.md)。
+
 收录头像补齐、Cron 跳段证据与持久刷新进度修复见 [当前状态](refresh-progress/STATE.md)、[实施与验收](refresh-progress/PLAN.md)、[决策记录](refresh-progress/MEMORY.md)。生产头像补齐已完成，调度修复是否上线须按 STATE 核验。
 
 构建读取 R2 与 Bot Fight 隔离见 [方案与验收](build-media/PLAN.md)、[当前状态](build-media/STATE.md)、[决策记录](build-media/MEMORY.md)。

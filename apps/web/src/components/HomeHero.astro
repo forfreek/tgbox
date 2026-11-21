@@ -22,14 +22,14 @@ const chips = hotCategories(getSiteData().categories, 6);
   <div
     class="mx-auto flex max-w-3xl flex-col items-center px-4 pt-12 pb-10 text-center sm:px-6 sm:pt-20 sm:pb-14"
   >
-    <h1 data-reveal class="home-wordmark text-[3.75rem] leading-none font-black sm:text-[6.5rem]">
+    <p data-reveal class="home-wordmark text-[3.75rem] leading-none font-black sm:text-[6.5rem]">
       <span aria-hidden="true">TGsearch</span
       ><span class="home-wordmark-dot" aria-hidden="true"></span>
       <span class="sr-only">{t(locale, "site.title")}</span>
-    </h1>
-    <p data-reveal class="mt-4 text-base text-muted-foreground text-balance sm:text-lg">
-      {t(locale, "site.tagline")}
     </p>
+    <h1 data-reveal class="mt-4 text-base font-medium text-foreground text-balance sm:text-lg">
+      {strings.heading}
+    </h1>
     <p data-reveal class="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
       {strings.lead}
     </p>
@@ -38,7 +38,7 @@ const chips = hotCategories(getSiteData().categories, 6);
       type="button"
       data-search-trigger
       data-reveal
-      aria-label={t(locale, "site.search")}
+      aria-label={strings.searchPlaceholder}
       class="group mt-8 flex h-14 w-full max-w-2xl items-center gap-3 rounded-full border border-border bg-card pr-3 pl-5 text-left shadow-float transition-[border-color,box-shadow] duration-200 outline-none hover:border-primary/50 focus-visible:ring-4 focus-visible:ring-outline/40 sm:h-16 sm:pl-6"
     >
       <SearchIcon class="size-5 shrink-0 text-primary sm:size-6" aria-hidden="true" />

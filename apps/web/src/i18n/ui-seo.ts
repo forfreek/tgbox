@@ -11,9 +11,9 @@ const zh = {
   /** Entry names injected into listing descriptions so no two listings read alike. */
   examples: { wrap: "（如{list}）", separator: "、" },
   home: {
-    title: "Telegram 频道、群组与机器人导航",
+    title: "搜索 Telegram 频道、群组与机器人",
     description:
-      "在 TGsearch 按主题查找 {total} 个 Telegram 频道、群组和机器人。结合公开简介、成员数据和频道消息预览筛选候选，再通过条目入口打开 Telegram。",
+      "搜索本站收录的 {total} 个公开 Telegram 频道、群组和机器人，按分类与标签筛选。查看简介、可用成员资料及部分频道的消息预览，再前往 Telegram。",
   },
   kind: {
     channel: {
@@ -125,9 +125,9 @@ const en: typeof zh = {
   pageSuffix: " · Page {n}",
   examples: { wrap: " such as {list}", separator: ", " },
   home: {
-    title: "Telegram Resource Directory",
+    title: "Telegram Directory: Channels, Groups & Bots",
     description:
-      "Find {total} Telegram channels, groups and bots by topic on TGsearch. Review public descriptions, member data and channel post previews, then open an entry in Telegram.",
+      "Search {total} public Telegram channels, groups and bots by topic or tag. Check profiles and member data, and preview posts from selected channels.",
   },
   kind: {
     channel: {
@@ -253,7 +253,16 @@ const en: typeof zh = {
   ],
 };
 
-const dictionaries: Record<SiteLocale, typeof zh> = { zh, "zh-hant": zh, en };
+const zhHant: typeof zh = {
+  ...zh,
+  home: {
+    title: "搜尋 Telegram 頻道、群組與機器人",
+    description:
+      "搜尋本站收錄的 {total} 個公開 Telegram 頻道、群組與機器人，依主題和標籤瀏覽。查看簡介、可用的成員資料與部分頻道的貼文預覽，再到 Telegram 查看。",
+  },
+};
+
+const dictionaries: Record<SiteLocale, typeof zh> = { zh, "zh-hant": zhHant, en };
 
 export function seoUi(locale: SiteLocale) {
   return dictionaries[locale];

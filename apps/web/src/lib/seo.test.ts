@@ -90,7 +90,21 @@ describe("page titles", () => {
       /Telegram Channels List/,
     );
     expect(kindSeo("en", "group", { count: 1, examples: [] }).title).toMatch(/Telegram Groups/);
-    expect(homeSeo("en", { total: 3 }).title).toMatch(/Telegram Resource Directory/);
+    expect(homeSeo("en", { total: 3 }).title).toMatch(
+      /Telegram Directory: Channels, Groups & Bots/,
+    );
+  });
+
+  test("home descriptions keep snapshot counts and localized discovery copy", () => {
+    for (const locale of ["zh", "zh-hant", "en"] as const) {
+      for (const total of [0, 28, 1969]) {
+        const seo = homeSeo(locale, { total });
+        expect(seo.description).toContain(String(total));
+        expect(seo.description).not.toMatch(/\{[^}]+\}/);
+      }
+    }
+    expect(homeSeo("zh-hant", { total: 28 }).title).toContain("搜尋");
+    expect(homeSeo("zh-hant", { total: 28 }).description).toContain("部分頻道的貼文預覽");
   });
 });
 
