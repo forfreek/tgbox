@@ -26,7 +26,7 @@ export default {
         if (batch.queue === "tgbox-ai-summary-dlq") {
           await consumeSummaryDlq(db, parsed.data, Date.now());
         } else {
-          // Real model adapters are introduced in step 4. This node never calls Workers AI.
+          // Experimental adapters remain disconnected until live quality acceptance (step 4).
           await consumeSummaryMessage(db, env.MEDIA, parsed.data, Date.now);
         }
         message.ack();

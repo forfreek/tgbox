@@ -4,7 +4,7 @@
 
 ## 当前状态与授权
 
-步骤一、二已交付。2026-11-22 用户指示“下一步”，本轮实施步骤三数据与异步任务。仅在本地应用迁移并使用模拟模型，生产迁移、Cloudflare 资源操作、真实付费推理及部署按相应授权执行。
+步骤一至三已交付。2026-11-22 用户在讨论暂不合并后指示“下一步”，本轮实施步骤四的代码准备（4A）。继续保留堆叠 PR，不合并、不部署。仅进行本地模拟与离线评测工具验证；真实付费推理、生产迁移及 Cloudflare 资源操作未获本轮具体授权，不执行。
 
 早期审查采用远端 main 的固定提交 cb0d6a658d1dc57c45ef3e6092d9f15c66386b7b。当时原目录 C:/Users/123/tgbox 的分支为 cursor/about-drop-awesome-list，HEAD 为 6fa6b0092837d0d6ca28ef5e8471b2b19df4f87e，含用户未提交改动。步骤二另从 main 建独立工作树。文档中的主线行为不能直接当作原目录 HEAD 或生产部署行为。
 
@@ -24,10 +24,26 @@
 | 真实资料与构造边界样本 | [SOURCE-SAMPLES](SOURCE-SAMPLES.md) |
 | 步骤二 API、指纹与预检边界 | [CONTRACTS](CONTRACTS.md) |
 | 步骤三迁移、队列、预算及回填 | [TASKS](TASKS.md) |
+| 步骤四提示词、候选协议与离线评测 | [MODELS](MODELS.md) |
 
 ## 下一步
 
-当前工作树 C:/Users/123/tgbox-ai-summary-jobs，分支 codex/ai-summary-jobs，基于步骤二 de44705 建立。2026-11-22 核对 PR #61 仍 OPEN，main 仍为 cb0d6a6，因此采用依赖 PR #61 的堆叠交付。步骤三已完成，本地及 Linux CI 通过，PR #62 待审合并，步骤 4–8 未开始。下一步为步骤四“提示词与模型比较”，等待继续指示。
+当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d30297292ee293c46b7f5f26f105ef916d8 建立。2026-11-22 开始前核对 PR #62 仍 OPEN，base 为 codex/ai-summary-contracts，head 仍 33cd2d3。本次 PR 堆叠在 #62 上，不合并父 PR。步骤四整体未完成，下一项是明确授权范围内的真实协议探测和分层质量比较；步骤 5–8 未开始。
+
+## 步骤四代码准备验收
+
+三类提示词、三候选实验适配器、37 条来源标记样本及离线 plan/replay 工具已实现。adapter 未接入 queue handler。默认模型和数据库配置不变，当前不会因本节点开始模型调用。
+
+- 新增模型与评测测试覆盖数据/指令分离、请求协议、拒绝无效/截断/工具调用、引用、版本守卫、单次调用及离线报告。测试仅使用模拟响应，不能作为模型质量证据。
+- 首轮计划实际生成 63 个请求；37 条中 21 条 eligible，其余预检跳过/待审/读源失败，无网络调用。
+- 正式 120 条分层资料尚未建立，没有真实输出、实际费用或默认模型选择，三语和提示注入的语义效果未验收。MODELS 记录余项及建议的有限试跑。
+- pnpm --filter @tgbox/ai-summary test 最终通过 60 项（原有 31、新增 29），仅模拟响应，本地 D1/R2 运行时测试。
+- pnpm typecheck 全部 10 个任务通过，Web 311 文件零错误、警告和提示。
+- pnpm --filter @tgbox/ai-summary build 执行 wrangler deploy --dry-run，1036.56 KiB / gzip 176.92 KiB 打包通过，未部署；未接通的模型模块不进入 Worker 的运行路径。
+- 七个变更代码/fixture 文件 Biome 检查通过；离线 CLI plan/replay 及 EEXIST 禁止覆盖验证通过，mock 报告保存在忽略的 .data 目录。计划 SHA-256 为 a65b834f7b8f3a1e1a429981dee3aa92f826b9818cfdac031537672a1000a790。
+- 源码审查核对三种协议、请求版本、超时传递、零内部重试和指标分母；确认未修改业务调用点、数据迁移或生产配置。文档链接和 PR Linux CI 随交付核验。
+
+以下步骤三及更早记录为历史交付证据，其工作树与授权不能套用本节点。
 
 ## 步骤三本地验收
 
