@@ -1,5 +1,7 @@
 # 项目资料索引
 
+Workers AI联网补充资料的能力、计费前置条件及接入缺口见 [WEB-ENRICHMENT](ai-summary/WEB-ENRICHMENT.md)，目前仅可行性建议，未实施。
+
 最新“像人介绍资源”的案例研究与完整提示词草案见 [PROMPT-RESEARCH](ai-summary/PROMPT-RESEARCH.md)。草案未替换v5，未新增推理。
 
 AI 摘要最新提示词 v5、字数目标及真实前后对照见 [STYLE](ai-summary/STYLE.md)，旧 PILOT/QUALITY 保留各自版本边界。
