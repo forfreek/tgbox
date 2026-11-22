@@ -82,6 +82,17 @@ const LegacyEnvelope = z.object({
   usage: Usage.optional(),
 });
 
+export function summaryTextMetrics(sentences: { zh: string; en: string }[]) {
+  const english = sentences
+    .map((sentence) => sentence.en)
+    .join(" ")
+    .trim();
+  return {
+    zhCharacters: Array.from(sentences.map((sentence) => sentence.zh).join("")).length,
+    englishWords: english ? english.split(/\s+/u).length : 0,
+  };
+}
+
 export function decodeSummaryResponse(raw: unknown, input: unknown, modelName: string) {
   const model = SummaryCandidate.parse(modelName);
   const envelope =
@@ -95,6 +106,10 @@ export function decodeSummaryResponse(raw: unknown, input: unknown, modelName: s
   if (JSON.stringify(parsed).length > MAX_RESPONSE_CHARS) throw new Error("oversized_output");
   const result = validateAiSummaryOutput(parsed, input);
   if (!result.success) throw new Error("invalid_output");
+  if (result.data.status === "ok") {
+    const length = summaryTextMetrics(result.data.sentences);
+    if (length.zhCharacters > 120 || length.englishWords > 90) throw new Error("summary_too_long");
+  }
   return { output: result.data, usage: envelope.usage ?? null };
 }
 

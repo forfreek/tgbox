@@ -1,9 +1,11 @@
 import { env } from "cloudflare:test";
 import { prepareAiSummary } from "@tgbox/shared";
 import { afterEach, describe, expect, test, vi } from "vitest";
+import styleCorpus from "../evaluation/corpus-style-v1.json";
 import corpus from "../evaluation/corpus-v1.json";
 import live from "../evaluation/live-pilot-2026-11-22.json";
 import selection from "../evaluation/pilot-v2.json";
+import styleLive from "../evaluation/style-pilot-2026-11-22.json";
 import {
   EvaluationCorpus,
   evaluationPlan,
@@ -17,6 +19,7 @@ import {
   SUPPORTED_SUMMARY_MODELS,
   SummaryCandidate,
   summaryRequest,
+  summaryTextMetrics,
 } from "../src/models.ts";
 import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION, summaryMessages } from "../src/prompts.ts";
 
@@ -167,20 +170,73 @@ describe("typed prompts and candidate protocols", () => {
 });
 
 describe("offline reproducible evaluation", () => {
-  test("replays the frozen live pilot with exactly its selected cases, model and versions", async () => {
+  test("retains old live outputs but refuses to replay them under revised prompts", async () => {
     const selected = selectEvaluationCorpus(corpus, selection);
     const plan = await evaluationPlan(selected.corpus, selected.models);
-    expect(plan.planHash).toBe(live.final.planHash);
+    expect(plan.planHash).not.toBe(live.final.planHash);
     expect(plan.requests).toHaveLength(10);
     expect(plan.cases).toHaveLength(12);
     expect(SUPPORTED_SUMMARY_MODELS).toEqual([DEFAULT_SUMMARY_MODEL]);
     expect(live.final.model).toBe(DEFAULT_SUMMARY_MODEL);
-    const report = replayEvaluation(plan, live.final.results);
-    expect(report.models[0]).toMatchObject({ completed: 10, valid: 10, firstPassValidRate: 1 });
-    expect(report.rows.every((row) => row.status === "valid" && row.expectedStatusMatches)).toBe(
-      true,
-    );
-    expect(report.qualityAccepted).toBe(false);
+    expect(() => replayEvaluation(plan, live.final.results)).toThrow("plan_hash_mismatch");
+    for (const row of live.final.results.rows) {
+      const sample = plan.cases.find((item) => item.id === row.caseId);
+      expect(decodeSummaryResponse(row.response, sample?.input, row.model).output.status).toBe(
+        sample?.expected,
+      );
+    }
+  });
+
+  test("replays the revised style pilot and preserves safe channel scope and direct bot wording", async () => {
+    const plan = await evaluationPlan(styleCorpus, [DEFAULT_SUMMARY_MODEL]);
+    expect(plan.planHash).toBe(styleLive.final.planHash);
+    const report = replayEvaluation(plan, styleLive.final.results);
+    expect(report.models[0]).toMatchObject({ valid: 10, firstPassValidRate: 1 });
+    for (const row of report.rows) {
+      expect(row.status === "valid" && row.expectedStatusMatches).toBe(true);
+      if (row.status !== "valid" || row.output.status !== "ok") continue;
+      const text = row.output.sentences.map((item) => item.zh).join("");
+      expect(text).not.toMatch(/该群组|该机器人|公开说明称|可见公开内容涉及/);
+      if (row.caseId === "C6") {
+        expect(text).toMatch(/^从公开帖子来看，/);
+        expect(text).toContain("另一则帖子讲解");
+      }
+      expect(summaryTextMetrics(row.output.sentences).zhCharacters).toBeLessThanOrEqual(120);
+    }
+  });
+
+  test("enforces total length across sentences while allowing short factual text", () => {
+    const sentence = { zh: "中".repeat(60), en: "Valid text.", refs: ["profile"] };
+    expect(() =>
+      decodeSummaryResponse(
+        { response: { status: "ok", sentences: [sentence, sentence] } },
+        input,
+        llama,
+      ),
+    ).not.toThrow();
+    expect(() =>
+      decodeSummaryResponse(
+        { response: { status: "ok", sentences: [sentence, { ...sentence, zh: "中".repeat(61) }] } },
+        input,
+        llama,
+      ),
+    ).toThrow("summary_too_long");
+    expect(() =>
+      decodeSummaryResponse(
+        {
+          response: {
+            status: "ok",
+            sentences: [{ ...sentence, en: Array(91).fill("word").join(" ") }],
+          },
+        },
+        input,
+        llama,
+      ),
+    ).toThrow("summary_too_long");
+    expect(summaryTextMetrics([{ zh: "日语交流", en: "Japanese language exchange." }])).toEqual({
+      zhCharacters: 4,
+      englishWords: 3,
+    });
   });
 
   test("preserves real format and semantic failures instead of silently repairing them", async () => {
