@@ -39,6 +39,8 @@
 
 本次风格优化本地验收：Worker 65/65 测试、Worker 类型检查、dry-run 打包、六个代码/fixture 文件格式检查、七份文档80个本地链接和diff空白检查通过。新版本冻结计划哈希与公开证据一致；旧版本响应仍可校验，但不能用新计划重放旧版本。Linux CI 随交付核验。以下真实模型确认属于 v2 历史快照。
 
+prompt-v5 代码提交 eee663b8dc68b85e716828997e0129d1462a5797 的 [Linux CI 45023045895](https://github.com/forfreek/tgbox/actions/runs/45023045895) 全部通过（2m15s，含全仓检查、测试和脚本检查）。后续只补本条交付记录，代码不再变更，真实推理已结束。
+
 ## 步骤四真实模型确认
 
 - 选定 @cf/google/gemma-4-26b-a4b-it、summary-prompt-v2、summary-params-v3；结构化 json_schema、关闭思考模式、temperature=0、max_completion_tokens=1024。GLM 不进入受支持白名单，Llama 本轮未调用。
