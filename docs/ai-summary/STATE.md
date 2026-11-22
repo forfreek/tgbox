@@ -4,7 +4,7 @@
 
 ## 当前状态与授权
 
-步骤一至三已交付。2026-11-22 用户在讨论暂不合并后指示“下一步”，本轮实施步骤四的代码准备（4A）。继续保留堆叠 PR，不合并、不部署。仅进行本地模拟与离线评测工具验证；真实付费推理、生产迁移及 Cloudflare 资源操作未获本轮具体授权，不执行。
+步骤一至三已交付。2026-11-22 用户确认 Workers 付费账户，要求用 10–20 条样本确认模型与提示词，本轮据此完成步骤四的小批真实比较，取消先前 120 条正式评分和 63 次调用门槛。继续保留堆叠 PR，不合并、不部署。真实推理已按本次授权执行，生产迁移和资源创建未执行。
 
 早期审查采用远端 main 的固定提交 cb0d6a658d1dc57c45ef3e6092d9f15c66386b7b。当时原目录 C:/Users/123/tgbox 的分支为 cursor/about-drop-awesome-list，HEAD 为 6fa6b0092837d0d6ca28ef5e8471b2b19df4f87e，含用户未提交改动。步骤二另从 main 建独立工作树。文档中的主线行为不能直接当作原目录 HEAD 或生产部署行为。
 
@@ -25,12 +25,24 @@
 | 步骤二 API、指纹与预检边界 | [CONTRACTS](CONTRACTS.md) |
 | 步骤三迁移、队列、预算及回填 | [TASKS](TASKS.md) |
 | 步骤四提示词、候选协议与离线评测 | [MODELS](MODELS.md) |
+| 已选模型、真实小批证据与版本 | [PILOT](PILOT.md) |
 
 ## 下一步
 
-当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d30297292ee293c46b7f5f26f105ef916d8 建立。2026-11-22 开始前核对 PR #62 仍 OPEN，base 为 codex/ai-summary-contracts，head 仍 33cd2d3。本次 PR 堆叠在 #62 上，不合并父 PR。步骤四整体未完成，下一项是明确授权范围内的真实协议探测和分层质量比较；步骤 5–8 未开始。
+当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d30297292ee293c46b7f5f26f105ef916d8 建立。2026-11-22 本轮核对 PR #63 仍 OPEN/draft，base=codex/ai-summary-jobs、head=cc0e650（追加前）。步骤四模型与提示词选择已完成，下一步为步骤五后台控制及带任务版本守卫的 adapter 接线，等待用户继续；步骤 5–8 未开始。
 
-代码准备以草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63) 交付，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。保留草稿并不代表可直接合并；本轮未执行合并、真实调用、迁移、生产资源操作或部署。
+本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
+
+## 步骤四真实模型确认
+
+- 选定 @cf/google/gemma-4-26b-a4b-it、summary-prompt-v2、summary-params-v3；结构化 json_schema、关闭思考模式、temperature=0、max_completion_tokens=1024。GLM 不进入受支持白名单，Llama 本轮未调用。
+- 12 条来源案例中 10 条进入最终模型、2 条预检跳过。最终 10/10 通过结构与源文核对，8 条摘要、2 条正确 insufficient；既有 OpenCC 转换八句中未见意思或品牌变化。没有详情 HTML/metadata 验收，也没有独立人工发布批准。
+- 共尝试 18 次调用（旧版 8、最终版 10）。旧版首两次连接器超时，送达及计费未知、不重试；之后使用 /ai/run 的 model/input 协议。旧版围栏和 GLM 用途误判保留，未用最终结果覆盖。
+- 16 个已知响应报告约 92.878 Neurons，按 token 标价估算约 $0.001063，两个未知请求不记零，非完整账单。最终调用 p50=1,159ms、p95=2,886ms。
+- 小批取代大样本提案，37 条库只用于离线回归；不继续扩大真实调用。本地运行时回归 63/63 通过，Worker 类型检查通过，dry-run 打包通过（未部署），带 --selection 的计划/真实结果离线复算通过，最终计划哈希与冻结证据一致。八个变更代码/fixture 文件 Biome、七份文档 74 个本地链接、证据标识检查及 diff --check 通过，Linux CI 随交付核验。
+- 具体证据、复现和边界见 PILOT。模型默认选择仅写入源码常量和文档，D1 默认仍 disabled，队列未接 adapter。后台节点须先补齐任务版本传递及领取前配置白名单，不能只校验旧工厂闭包。
+
+以下“代码准备验收”属于真实试跑前历史记录，其中未授权、120 条和步骤四未完成等表述已被本轮用户要求与上方当前结果替代。
 
 ## 步骤四代码准备验收
 

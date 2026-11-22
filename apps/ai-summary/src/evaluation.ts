@@ -23,6 +23,33 @@ export const EvaluationCorpus = z.strictObject({
     ),
 });
 
+export const EvaluationSelection = z.strictObject({
+  version: z.string().min(1),
+  corpusVersion: z.string().min(1),
+  caseIds: z
+    .array(z.string().min(1))
+    .min(1)
+    .max(20)
+    .refine((ids) => new Set(ids).size === ids.length, "Duplicate selected cases"),
+  models: z
+    .array(SummaryCandidate)
+    .min(1)
+    .max(3)
+    .refine((names) => new Set(names).size === names.length, "Duplicate models"),
+});
+
+export function selectEvaluationCorpus(raw: unknown, selectionRaw: unknown) {
+  const corpus = EvaluationCorpus.parse(raw);
+  const selection = EvaluationSelection.parse(selectionRaw);
+  if (selection.corpusVersion !== corpus.version) throw new Error("corpus_version_mismatch");
+  const cases = selection.caseIds.map((id) => {
+    const row = corpus.cases.find((item) => item.id === id);
+    if (!row) throw new Error("unknown_selected_case");
+    return row;
+  });
+  return { corpus: { version: selection.version, cases }, models: selection.models };
+}
+
 export async function evaluationPlan(raw: unknown, names: unknown) {
   const corpus = EvaluationCorpus.parse(raw);
   const models = z

@@ -8,6 +8,9 @@ export const SummaryCandidate = z.enum([
   "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
 ]);
 export type SummaryCandidate = z.infer<typeof SummaryCandidate>;
+// Only this candidate has passed the scoped live source review. Others remain experimental.
+export const DEFAULT_SUMMARY_MODEL = "@cf/google/gemma-4-26b-a4b-it";
+export const SUPPORTED_SUMMARY_MODELS = [DEFAULT_SUMMARY_MODEL] as const;
 export const MAX_COMPLETION_TOKENS = 1024;
 const MAX_RESPONSE_CHARS = 16_384;
 
@@ -46,9 +49,15 @@ export function summaryRequest(raw: unknown, modelName: string) {
       response_format: { type: "json_schema" as const, json_schema: OUTPUT_SCHEMA },
     };
   }
-  // Gemma/GLM model pages and the JSON Mode support list differ. Use plain JSON text
-  // until a separately recorded live probe establishes a supported schema protocol.
-  return { ...common, max_completion_tokens: MAX_COMPLETION_TOKENS };
+  const request = {
+    ...common,
+    max_completion_tokens: MAX_COMPLETION_TOKENS,
+    chat_template_kwargs: { enable_thinking: false },
+  };
+  // Gemma's schema mode is confirmed by the small live pilot. GLM remains experimental.
+  return model === "@cf/google/gemma-4-26b-a4b-it"
+    ? { ...request, response_format: { type: "json_schema" as const, json_schema: OUTPUT_SCHEMA } }
+    : request;
 }
 
 const Count = z.number().int().nonnegative();

@@ -2,10 +2,19 @@ import { env } from "cloudflare:test";
 import { prepareAiSummary } from "@tgbox/shared";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import corpus from "../evaluation/corpus-v1.json";
-import { EvaluationCorpus, evaluationPlan, replayEvaluation } from "../src/evaluation.ts";
+import live from "../evaluation/live-pilot-2026-11-22.json";
+import selection from "../evaluation/pilot-v2.json";
+import {
+  EvaluationCorpus,
+  evaluationPlan,
+  replayEvaluation,
+  selectEvaluationCorpus,
+} from "../src/evaluation.ts";
 import {
   createSummaryModel,
+  DEFAULT_SUMMARY_MODEL,
   decodeSummaryResponse,
+  SUPPORTED_SUMMARY_MODELS,
   SummaryCandidate,
   summaryRequest,
 } from "../src/models.ts";
@@ -73,7 +82,9 @@ describe("typed prompts and candidate protocols", () => {
       expect(request).not.toHaveProperty("max_completion_tokens");
     } else {
       expect(request).toHaveProperty("max_completion_tokens", 1024);
-      expect(request).not.toHaveProperty("response_format");
+      expect(request).toHaveProperty("chat_template_kwargs.enable_thinking", false);
+      if (model === gemma) expect(request).toHaveProperty("response_format.type", "json_schema");
+      else expect(request).not.toHaveProperty("response_format");
     }
     expect(request).not.toHaveProperty("tools");
   });
@@ -156,6 +167,56 @@ describe("typed prompts and candidate protocols", () => {
 });
 
 describe("offline reproducible evaluation", () => {
+  test("replays the frozen live pilot with exactly its selected cases, model and versions", async () => {
+    const selected = selectEvaluationCorpus(corpus, selection);
+    const plan = await evaluationPlan(selected.corpus, selected.models);
+    expect(plan.planHash).toBe(live.final.planHash);
+    expect(plan.requests).toHaveLength(10);
+    expect(plan.cases).toHaveLength(12);
+    expect(SUPPORTED_SUMMARY_MODELS).toEqual([DEFAULT_SUMMARY_MODEL]);
+    expect(live.final.model).toBe(DEFAULT_SUMMARY_MODEL);
+    const report = replayEvaluation(plan, live.final.results);
+    expect(report.models[0]).toMatchObject({ completed: 10, valid: 10, firstPassValidRate: 1 });
+    expect(report.rows.every((row) => row.status === "valid" && row.expectedStatusMatches)).toBe(
+      true,
+    );
+    expect(report.qualityAccepted).toBe(false);
+  });
+
+  test("preserves real format and semantic failures instead of silently repairing them", async () => {
+    const selected = selectEvaluationCorpus(corpus, selection);
+    const plan = await evaluationPlan(selected.corpus, selected.models);
+    const getInput = (id: string) => plan.cases.find((row) => row.id === id)?.input;
+    const fenced = live.baseline.rows.find((row) => row.caseId === "C6" && row.model === gemma);
+    expect(() => decodeSummaryResponse(fenced?.response, getInput("C6"), gemma)).toThrow();
+    const wrongScope = live.baseline.rows.find(
+      (row) => row.caseId === "R-telegramtips" && row.model !== gemma,
+    );
+    const parsedScope = decodeSummaryResponse(
+      wrongScope?.response,
+      getInput("R-telegramtips"),
+      "@cf/zai-org/glm-4.7-flash",
+    );
+    // This real wrong answer passes structural checks: semantic review cannot be skipped.
+    expect(parsedScope.output.status).toBe("ok");
+    expect(plan.cases.find((row) => row.id === "R-telegramtips")?.expected).toBe("insufficient");
+  });
+
+  test("rejects unknown, duplicate and oversized selections and changed corpus versions", () => {
+    expect(() => selectEvaluationCorpus(corpus, { ...selection, caseIds: ["unknown"] })).toThrow(
+      "unknown_selected_case",
+    );
+    expect(() => selectEvaluationCorpus(corpus, { ...selection, caseIds: ["C1", "C1"] })).toThrow();
+    expect(() =>
+      selectEvaluationCorpus(corpus, {
+        ...selection,
+        caseIds: Array.from({ length: 21 }, (_, n) => `${n}`),
+      }),
+    ).toThrow();
+    expect(() => selectEvaluationCorpus(corpus, { ...selection, corpusVersion: "old" })).toThrow(
+      "corpus_version_mismatch",
+    );
+  });
   test("identifies 6 historical, 19 development and 12 additional synthetic cases", () => {
     expect(parsed.cases).toHaveLength(37);
     expect(parsed.cases.filter((row) => row.origin === "historical")).toHaveLength(6);

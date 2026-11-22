@@ -1,9 +1,14 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { evaluationPlan, replayEvaluation } from "./src/evaluation.ts";
+import { parseArgs } from "node:util";
+import { evaluationPlan, replayEvaluation, selectEvaluationCorpus } from "./src/evaluation.ts";
 import { SummaryCandidate } from "./src/models.ts";
 
 // Offline only: no credential reads, network access, database writes or model inference.
-const [mode, corpusPath, outputPath, resultsPath] = process.argv.slice(2);
+const { values, positionals } = parseArgs({
+  allowPositionals: true,
+  options: { selection: { type: "string" } },
+});
+const [mode, corpusPath, outputPath, resultsPath] = positionals;
 if (
   (mode !== "plan" && mode !== "replay") ||
   !corpusPath ||
@@ -11,11 +16,14 @@ if (
   (mode === "replay" && !resultsPath)
 ) {
   throw new Error(
-    "Usage: node evaluate.ts <plan|replay> <corpus.json> <output.json> [results.json]",
+    "Usage: node evaluate.ts <plan|replay> <corpus.json> <output.json> [results.json] [--selection selection.json]",
   );
 }
 const corpus: unknown = JSON.parse(await readFile(corpusPath, "utf8"));
-const plan = await evaluationPlan(corpus, SummaryCandidate.options);
+const selected = values.selection
+  ? selectEvaluationCorpus(corpus, JSON.parse(await readFile(values.selection, "utf8")))
+  : { corpus, models: SummaryCandidate.options };
+const plan = await evaluationPlan(selected.corpus, selected.models);
 const output =
   mode === "replay"
     ? replayEvaluation(plan, JSON.parse(await readFile(resultsPath ?? "", "utf8")))

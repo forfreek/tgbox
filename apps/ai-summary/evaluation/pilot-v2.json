@@ -1,0 +1,19 @@
+{
+  "version": "summary-pilot-v2",
+  "corpusVersion": "summary-eval-v1",
+  "caseIds": [
+    "C1",
+    "C6",
+    "R-telegramtips",
+    "G1",
+    "G6",
+    "H-G1",
+    "B1",
+    "R-foursquare",
+    "B6",
+    "H-B3",
+    "C7",
+    "G2"
+  ],
+  "models": ["@cf/google/gemma-4-26b-a4b-it"]
+}

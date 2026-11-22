@@ -26,7 +26,7 @@ export default {
         if (batch.queue === "tgbox-ai-summary-dlq") {
           await consumeSummaryDlq(db, parsed.data, Date.now());
         } else {
-          // Experimental adapters remain disconnected until live quality acceptance (step 4).
+          // The selected adapter is connected with admin version/quota controls in step 5.
           await consumeSummaryMessage(db, env.MEDIA, parsed.data, Date.now);
         }
         message.ack();
