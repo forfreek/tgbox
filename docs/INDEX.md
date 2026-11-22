@@ -1,5 +1,7 @@
 # 项目资料索引
 
+AI 摘要实际生成质量与页面增值评估见 [QUALITY](ai-summary/QUALITY.md)：结构与源文核对通过不等于内容增强目标通过。
+
 AI 资源摘要模块恢复先读 [STATE](ai-summary/STATE.md)，步骤四已选模型、真实小批结果及提示词版本见 [PILOT](ai-summary/PILOT.md)，接口与离线复算见 [MODELS](ai-summary/MODELS.md)，步骤三数据与异步任务见 [TASKS](ai-summary/TASKS.md)，步骤二契约见 [CONTRACTS](ai-summary/CONTRACTS.md)。按问题读取指定专题，禁止一次性读取全部文档与源码。
 
 头像 URL 协议相对地址导致的 Invalid URL 错误与修复见 [刷新状态](refresh-progress/STATE.md#2026-11-21-头像-url-兼容修复) 和 [补充计划](refresh-progress/PLAN.md#头像-url-兼容补充节点)。
