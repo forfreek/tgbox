@@ -4,7 +4,7 @@
 
 ## 当前状态与授权
 
-已完成源码调用链审查、计划和步骤一。2026-11-22 用户继续授权步骤二，本轮实现共享输入与证据契约，完成本步后等待继续指示。生产迁移、Cloudflare 资源操作、真实付费推理及部署按相应授权执行。
+步骤一、二已交付。2026-11-22 用户指示“下一步”，本轮实施步骤三数据与异步任务。仅在本地应用迁移并使用模拟模型，生产迁移、Cloudflare 资源操作、真实付费推理及部署按相应授权执行。
 
 早期审查采用远端 main 的固定提交 cb0d6a658d1dc57c45ef3e6092d9f15c66386b7b。当时原目录 C:/Users/123/tgbox 的分支为 cursor/about-drop-awesome-list，HEAD 为 6fa6b0092837d0d6ca28ef5e8471b2b19df4f87e，含用户未提交改动。步骤二另从 main 建独立工作树。文档中的主线行为不能直接当作原目录 HEAD 或生产部署行为。
 
@@ -23,10 +23,24 @@
 | 步骤一判定规则与原因 | [SOURCE-RULES](SOURCE-RULES.md) |
 | 真实资料与构造边界样本 | [SOURCE-SAMPLES](SOURCE-SAMPLES.md) |
 | 步骤二 API、指纹与预检边界 | [CONTRACTS](CONTRACTS.md) |
+| 步骤三迁移、队列、预算及回填 | [TASKS](TASKS.md) |
 
 ## 下一步
 
-2026-11-22 步骤 0 和步骤 1 已完成，步骤二代码已实施，步骤 3–8 未开始。步骤二在独立工作树 C:/Users/123/tgbox-ai-summary，分支 codex/ai-summary-contracts，基线 cb0d6a6。本文件记录该工作树交付，不能将进度套用至其他分支。原目录内的文档为前一步快照。下一步为步骤 3“数据与异步任务”，等待用户继续指示。
+当前工作树 C:/Users/123/tgbox-ai-summary-jobs，分支 codex/ai-summary-jobs，基于步骤二 de44705 建立。2026-11-22 核对 PR #61 仍 OPEN，main 仍为 cb0d6a6，因此采用依赖 PR #61 的堆叠交付。步骤三本地已实施，步骤 4–8 未开始。下一步为步骤四“提示词与模型比较”，等待继续指示。
+
+## 步骤三本地验收
+
+- pnpm --filter @tgbox/ai-summary test 通过，30 项本地 D1/R2 与模拟模型测试。
+- pnpm --filter @tgbox/db test 通过，15 文件、74 项既有 DB 测试，包含新迁移。
+- pnpm typecheck 通过，10 个任务，Web 311 文件零错误、零警告；新 Worker 类型检查单独复测通过。
+- pnpm --filter @tgbox/ai-summary build 为 wrangler deploy --dry-run，打包通过，未部署。
+- Drizzle 再生成检查显示 No schema changes，迁移与 schema/snapshot 一致。
+- 本步代码审查发现并修正暂停后任务无法恢复、旧配置观察者可能作废新任务、删除后预算被级联释放三个边界，均有回归测试。
+- 新改动文件的 Biome、专题链接及差异空白检查通过。Windows 全仓 pnpm check 记录 680 项格式诊断，输出受大量既有 CRLF 影响，Linux 完整检查随 PR 验证。
+- 真实模型、生产迁移、队列及 Worker 创建、远端运行状态未验证，Linux CI 待 PR 核验。新应用测试 remoteBindings=false，未调用 AI binding。
+
+以下步骤一、二记录为历史证据，不能当作本步 PR 状态。
 
 本步再次核对远端 main，仍为 cb0d6a6。历史快照内时间为 2026-11-14T17:41:28.739Z，不能视作当前线上事实。步骤一仅变更项目文档，未调用模型或生产抓取，尚未提交或创建 PR。
 
