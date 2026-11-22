@@ -4,6 +4,14 @@
 
 ## 当前状态与授权
 
+2026-11-22 最新交付见 [V7-REVIEW](V7-REVIEW.md)：Gemma + prompt-v7 / params-v3，复用16条来源（全为调优回归，不称独立holdout），14次真实调用、2条预检跳过。混合简介误弃答、重要机器人禁令、官方身份声明三项在本批修复；10条生成、4条insufficient。没有新增来源、搜索、D1/R2查询或更换模型。步骤四按受审草稿范围完成，可进入步骤五；自动公开、最终HTML及SEO效果未验收。
+
+本轮Worker68/68、类型检查、dry-run通过（1036.56KiB / gzip176.92KiB，未部署）；新增冻结计划回归验证当前请求与证据一致、旧v6结果不能混用，并核对三项修复及原有注入/主体边界。十段通过现有OpenCC转换，本批未见用途/否定/品牌/数字变化，非最终页面验收。详细证据和用量见V7-REVIEW。此前文档提交e5cda2e的CI 45028836942已核实通过；本轮CI随提交核验。
+
+本轮交付前复算当前plan/report与冻结证据完全一致、十段繁体一致，三个变更代码/JSON文件Biome、十一份文档144个本地链接及diff空白检查通过。原目录恢复入口已更新，用户业务修改保留；本轮只提交独立模型工作树的代码、证据及文档。
+
+以下v6与更早记录保留当时结论，不能覆盖上述v7最新交付。
+
 2026-11-22 最新完成 [PAGE-VALUE](PAGE-VALUE.md) 六条真实简介审查：三条生成、三条弃答，编辑判断一条可用草稿、两条需改、两条可接受弃答、一条误弃答。生产D1仅SELECT，rows_written=0；只以简介为模型证据，未读R2或刷新Telegram。Gemma v6新增六次真实调用，加上原十条来源共16条；没有更换模型、搜索、修改运行时代码或发布。步骤四编辑验收仍未通过，下一项仅修混合简介误弃答、重要限制取舍和身份归因，不进入步骤五。
 
 本次交付验证：当前请求与六条保存请求逐项一致、SHA-256一致，六条响应经当前解码器离线复算通过；Worker66/66回归通过（只用已存/模拟响应，不新增推理），新JSON的Biome检查、十份文档130个本地链接及diff空白检查通过。未改运行时代码，不重复dry-run或声称完成最终HTML、生产source loader和本批繁体展示验收。
@@ -49,7 +57,7 @@ v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](
 
 ## 下一步
 
-当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d3，草稿 PR #63 的 base=codex/ai-summary-jobs。当前为 prompt-v6 / params-v3，模型仍为 Gemma。真实页面资料对照已完成，下一项按PAGE-VALUE定向修三类问题并复用小批验证，不自动进入步骤五；步骤 5–8 未开始。
+当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三33cd2d3，草稿PR #63的base=codex/ai-summary-jobs。当前prompt-v7 / params-v3、Gemma。步骤四按受审草稿范围完成；下一步为独立后台节点和堆叠PR，先补任务版本传递及领取前配置守卫。步骤5–8尚未实施，本次不顺带执行。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 

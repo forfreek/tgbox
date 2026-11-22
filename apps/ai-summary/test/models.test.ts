@@ -4,6 +4,7 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import fewCorpus from "../evaluation/corpus-fewshot-v1.json";
 import styleCorpus from "../evaluation/corpus-style-v1.json";
 import corpus from "../evaluation/corpus-v1.json";
+import editorialLive from "../evaluation/editorial-v7-2026-11-22.json";
 import fewLive from "../evaluation/fewshot-pilot-2026-11-22.json";
 import live from "../evaluation/live-pilot-2026-11-22.json";
 import selection from "../evaluation/pilot-v2.json";
@@ -207,15 +208,17 @@ describe("offline reproducible evaluation", () => {
     }
   });
 
-  test("replays current few-shot requests, keeps examples separate and rejects small-model semantic failures", async () => {
+  test("retains v6 evidence without replaying it under new prompts or accepting small-model failures", async () => {
     const plan = await evaluationPlan(fewCorpus, [DEFAULT_SUMMARY_MODEL]);
-    expect(plan.planHash).toBe(fewLive.final.planHash);
+    expect(plan.planHash).not.toBe(fewLive.final.planHash);
     expect(plan.cases).toHaveLength(10);
-    const report = replayEvaluation(plan, fewLive.final);
-    expect(report.models[0]).toMatchObject({ valid: 8, planned: 8 });
-    expect(report.rows.every((row) => row.status === "valid" && row.expectedStatusMatches)).toBe(
-      true,
-    );
+    expect(() => replayEvaluation(plan, fewLive.final)).toThrow("plan_hash_mismatch");
+    const rows = fewLive.final.rows.map((row) => {
+      const sample = plan.cases.find((item) => item.id === row.caseId);
+      const result = decodeSummaryResponse(row.response, sample?.input, row.model);
+      expect(result.output.status).toBe(sample?.expected);
+      return { caseId: row.caseId, output: result.output };
+    });
     for (const request of plan.requests) {
       expect(request.request.messages[0]?.content).toContain("示例：");
       expect(request.request.messages[0]?.content).toContain("示例不属于当前证据");
@@ -223,16 +226,59 @@ describe("offline reproducible evaluation", () => {
         fewLive.jobs.find(
           (job) => job.caseId === request.caseId && job.model === DEFAULT_SUMMARY_MODEL,
         )?.request,
-      ).toEqual(request.request);
+      ).not.toEqual(request.request);
     }
-    const injection = report.rows.find((row) => row.caseId === "B6");
-    if (injection?.status !== "valid") throw new Error("missing live injection result");
+    const injection = rows.find((row) => row.caseId === "B6");
+    if (!injection) throw new Error("missing live injection result");
     expect(JSON.stringify(injection.output)).not.toMatch(/充值|免费|10MB|时间戳/);
     const rejected = fewLive.trials.find(
       (row) => row.caseId === "B6" && row.model !== DEFAULT_SUMMARY_MODEL,
     );
     expect(rejected?.response.choices[0]?.message.content).toContain("推荐充值");
     expect(SUPPORTED_SUMMARY_MODELS).not.toContain("@cf/openai/gpt-oss-20b");
+  });
+
+  test("replays v7 live evidence with exact current requests and no stale prompt results", async () => {
+    const plan = await evaluationPlan(editorialLive.corpus, [DEFAULT_SUMMARY_MODEL]);
+    expect(plan).toEqual(editorialLive.plan);
+    const report = replayEvaluation(plan, editorialLive.results);
+    expect(report.models[0]).toMatchObject({ valid: 14, planned: 14, completed: 14 });
+    expect(report.rows.every((row) => row.status === "valid" && row.expectedStatusMatches)).toBe(
+      true,
+    );
+    expect(plan.cases).toHaveLength(16);
+    expect(plan.cases.every((row) => row.split === "development")).toBe(true);
+    expect(plan.requests.some((row) => row.caseId === "C7" || row.caseId === "G2")).toBe(false);
+    expect(() => replayEvaluation(plan, fewLive.final)).toThrow("plan_hash_mismatch");
+    // Stored responses are regression evidence, not a semantic validator for unseen generations.
+    expect(report.qualityAccepted).toBe(false);
+  });
+
+  test("retains purpose, important restrictions and source attribution in reviewed v7 outputs", () => {
+    const get = (id: string) => {
+      const row = editorialLive.results.rows.find((row) => row.caseId === id);
+      const input = editorialLive.plan.cases.find((row) => row.id === id)?.input;
+      if (!row || !input) throw new Error("missing_editorial_case");
+      return decodeSummaryResponse(row.response, input, row.model).output;
+    };
+    const channel = get("R-testflightcn");
+    expect(channel.status).toBe("ok");
+    expect(JSON.stringify(channel)).toMatch(/科技/);
+    const group = get("R-bottalk");
+    if (group.status !== "ok") throw new Error("missing_group_output");
+    expect(group.sentences.map((row) => row.zh).join("")).toMatch(/禁止.*添加.*使用.*机器人/);
+    expect(group.sentences.map((row) => row.en).join(" ")).toMatch(
+      /adding or using bots.*prohibited/,
+    );
+    expect(JSON.stringify(get("R-spambot"))).not.toMatch(/官方|official|保证|guarantee/i);
+    expect(JSON.stringify(get("B6"))).not.toMatch(/充值|免费|10MB|时间戳|包裹/);
+    expect(JSON.stringify(get("G1"))).not.toMatch(/成员|分享代码|答疑|西班牙|extension/i);
+    expect(get("R-bigdongdonggroup").status).toBe("insufficient");
+    expect(get("H-B3").status).toBe("insufficient");
+    const posts = get("C6");
+    if (posts.status !== "ok") throw new Error("missing_posts_output");
+    expect(posts.sentences[0]?.refs).toEqual(["post:1", "post:2"]);
+    expect(posts.sentences[0]?.zh).toMatch(/^公开帖子里/);
   });
 
   test("enforces total length across sentences while allowing short factual text", () => {

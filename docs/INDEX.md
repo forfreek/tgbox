@@ -1,6 +1,6 @@
 # 项目资料索引
 
-最新实际内容质量见 [PAGE-VALUE](ai-summary/PAGE-VALUE.md)：六条真实简介对照发现误弃答、重要禁令遗漏和身份归因问题。保持Gemma v6，步骤四编辑验收未通过，下一项定向修复，不进入后台。
+当前恢复先读 [STATE](ai-summary/STATE.md)，最新为 [V7-REVIEW](ai-summary/V7-REVIEW.md)：Gemma v7在既有16条来源中完成三项定向修复，14次调用符合本批预期，步骤四按受审草稿范围完成。下一节点为后台人工控制，仍不自动发布、合并或部署。以下v6及更早说明为历史。
 
 最新提示词v6、实际输入—输出示例和边界回归见 [FEWSHOT](ai-summary/FEWSHOT.md)。按用户最新要求停止小模型评估，保持Gemma；以下v5及型号比较为历史。
 
