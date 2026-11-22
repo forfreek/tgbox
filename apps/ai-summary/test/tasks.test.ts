@@ -633,6 +633,18 @@ test("settings constraints reject negative quotas", async () => {
   expect((await getSummaryConfig(db)).dailyCalls).toBe(100);
 });
 
+test("pausing an in-flight scan is preserved when its processed page checkpoints", async () => {
+  await entry();
+  await createSummaryRun(db, "pause-in-flight");
+  const run = await claimSummaryRun(db, "pause-in-flight", NOW);
+  if (!run) throw new Error("Missing scan");
+  await env.DB.prepare("UPDATE ai_summary_runs SET status='paused' WHERE id=?").bind(run.id).run();
+  await advanceSummaryRun(db, run, 1, true, NOW);
+  const state = (await db.select().from(aiSummaryRuns)).find((row) => row.id === run.id);
+  expect(state).toMatchObject({ status: "paused", cursor: 1, leaseToken: null });
+  expect(await claimSummaryRun(db, run.id, NOW)).toBeNull();
+});
+
 test("queue handler retries a broken delivery and continues acknowledging poison messages", async () => {
   const msg = await queued(await entry());
   const retry = vi.fn(),

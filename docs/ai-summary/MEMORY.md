@@ -22,7 +22,9 @@
 
 步骤三实际实现见 [TASKS](TASKS.md)。六张新表默认停用生成，attempts 账本按 UTC 日聚合预算，未知模型结果和硬删除均不退款。来源观察 CAS 与当前 D1 资料及配置比对，任务领取和预算在同一 batch。队列消息加 dispatchedAt，发件箱五分钟补发；扫描和模型租约 20 分钟，有界重试。独立 newest 和 rolling 游标覆盖新增与历史，回填固定 ID 上界。候选一律 pending，真实模型适配器留在步骤四，当前 Worker 不调用 Workers AI。公开表、审批和静态消费在后续节点接入，R2/D1 跨存储窗口仍需发布时复核。
 
-本地新运行时测试 30/30、DB 既有测试 74/74、全仓类型检查和 dry-run 打包通过。PR 和 Linux CI 实际状态见 STATE。每次 PR 或追加修改继续同步项目记忆和状态。
+本地新运行时测试及 Linux CI 实际状态见 STATE，DB 既有测试 74/74、全仓类型检查和 dry-run 打包通过。追加回归覆盖回填批次处理中暂停，保存已处理游标时保持 paused，避免检查点把暂停覆盖为 active/completed。每次 PR 或追加修改继续同步项目记忆和状态。
+
+当前运行时回归 31/31 通过。49002fc 的 Linux CI 44999638271 全部通过；后续扫描暂停保护提交的 CI 以 STATE 和 PR 最新状态为准。
 
 步骤三独立交付 [PR #62](https://github.com/forfreek/tgbox/pull/62)，堆叠在 PR #61 分支上，按 #61、#62 顺序审阅合并，合并前重查状态及 base。新 Worker 类型由 Wrangler 生成，仅规范化五处尾随空白。下一步为步骤四，等待继续指示。
 

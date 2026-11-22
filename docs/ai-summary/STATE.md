@@ -33,7 +33,7 @@
 
 交付 [PR #62](https://github.com/forfreek/tgbox/pull/62)，base 为 codex/ai-summary-contracts，依赖 PR #61。先合并 #61，再核对并将 #62 基线切至 main 后按序合并。当前尚未合并，CI 核验结果在下方更新。
 
-- pnpm --filter @tgbox/ai-summary test 通过，30 项本地 D1/R2 与模拟模型测试。
+- pnpm --filter @tgbox/ai-summary test 复测通过 31 项，包含回填处理中暂停时保持 paused 的回归。
 - pnpm --filter @tgbox/db test 通过，15 文件、74 项既有 DB 测试，包含新迁移。
 - pnpm typecheck 通过，10 个任务，Web 311 文件零错误、零警告；新 Worker 类型检查单独复测通过。
 - pnpm --filter @tgbox/ai-summary build 为 wrangler deploy --dry-run，打包通过，未部署。
@@ -42,6 +42,8 @@
 - 新改动文件的 Biome、专题链接及差异空白检查通过。Windows 全仓 pnpm check 记录 680 项格式诊断，输出受大量既有 CRLF 影响，Linux 完整检查随 PR 验证。
 - Wrangler 生成的类型文件含五处尾随空白，已仅规范化空白后复核 diff --check，绑定与类型内容保持生成结果。
 - 真实模型、生产迁移、队列及 Worker 创建、远端运行状态未验证，Linux CI 待 PR 核验。新应用测试 remoteBindings=false，未调用 AI binding。
+
+Linux CI [44999638271](https://github.com/forfreek/tgbox/actions/runs/44999638271) 对 49002fc 完整通过，包含全仓检查、测试和脚本检查。之后追加回填暂停检查点保护及第 31 项测试，本地复测通过，新增提交的 CI 继续核验。
 
 以下步骤一、二记录为历史证据，不能当作本步 PR 状态。
 

@@ -363,7 +363,8 @@ export async function advanceSummaryRun(
   now: number,
 ) {
   await db.$client
-    .prepare(`UPDATE ai_summary_runs SET cursor=?,status=?,lease_token=NULL,lease_until=NULL
+    .prepare(`UPDATE ai_summary_runs SET cursor=?,status=CASE WHEN status='paused' THEN 'paused' ELSE ? END,
+      lease_token=NULL,lease_until=NULL
     WHERE id=? AND lease_token=? AND lease_until>?`)
     .bind(cursor, complete ? "completed" : "active", run.id, run.lease_token, now)
     .run();
