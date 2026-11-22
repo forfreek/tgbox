@@ -29,7 +29,7 @@
 
 ## 下一步
 
-当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d30297292ee293c46b7f5f26f105ef916d8 建立。2026-11-22 本轮核对 PR #63 仍 OPEN/draft，base=codex/ai-summary-jobs、head=cc0e650（追加前）。步骤四模型与提示词选择已完成，下一步为步骤五后台控制及带任务版本守卫的 adapter 接线，等待用户继续；步骤 5–8 未开始。
+当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d30297292ee293c46b7f5f26f105ef916d8 建立。2026-11-22 本轮核对 PR #63 仍 OPEN/draft，base=codex/ai-summary-jobs，模型验证代码 head=b144449。步骤四模型与提示词选择已完成，下一步为步骤五后台控制及带任务版本守卫的 adapter 接线，等待用户继续；步骤 5–8 未开始。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 
@@ -43,6 +43,8 @@
 - 具体证据、复现和边界见 PILOT。模型默认选择仅写入源码常量和文档，D1 默认仍 disabled，队列未接 adapter。后台节点须先补齐任务版本传递及领取前配置白名单，不能只校验旧工厂闭包。
 
 以下“代码准备验收”属于真实试跑前历史记录，其中未授权、120 条和步骤四未完成等表述已被本轮用户要求与上方当前结果替代。
+
+本节点最终代码 b144449a669542ad052e309dda0831531aaa8055 的 [Linux CI 45004530315](https://github.com/forfreek/tgbox/actions/runs/45004530315) 首次在既有 snapshot 的旧表兼容测试触发 5000ms 超时。未修改该测试或业务代码，定向复测 build-site-data.test.ts 28/28 通过；同一代码重跑 CI 后全仓 check、test 和脚本检查全部通过（attempt 2，2m6s）。未复现超时，仍保留首次失败记录。后续仅更新本次交付文档与 PR 描述，不新增模型调用。
 
 ## 步骤四代码准备验收
 
