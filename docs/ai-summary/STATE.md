@@ -34,6 +34,8 @@
 
 ## 步骤二本地验收
 
+2026-11-22 文档追加，将 PR 项目记忆同步要求提升到根 AGENTS.md 全项目规则，并同步原目录总规则和专题记忆。该次仅改文档，执行差异空白与恢复链接检查，业务验证沿用以下记录。
+
 Linux CI 已在提交 e47892a7b7c71eec96c218d12494bff3ee4aaa7d 全部通过，运行 [44996364788](https://github.com/forfreek/tgbox/actions/runs/44996364788)，包含全仓 pnpm check、pnpm test、脚本类型和测试。其后仅补文档记录，代码保持该已验收版本。步骤二交付完成，PR 待审合并，步骤三等待继续指示。
 
 交付 PR 为 [#61](https://github.com/forfreek/tgbox/pull/61)，状态以 GitHub 为准。该 PR 也归档前两步仍仅保存在原目录的专题文档，保留 main 总索引其他入口。尚未合并。首次推送被 GitHub 邮箱隐私保护拒绝，改用仓库主线已有的 GitHub noreply 身份重新生成未发布提交后推送成功。
