@@ -1,5 +1,7 @@
 # 项目资料索引
 
+最新实际内容质量见 [PAGE-VALUE](ai-summary/PAGE-VALUE.md)：六条真实简介对照发现误弃答、重要禁令遗漏和身份归因问题。保持Gemma v6，步骤四编辑验收未通过，下一项定向修复，不进入后台。
+
 最新提示词v6、实际输入—输出示例和边界回归见 [FEWSHOT](ai-summary/FEWSHOT.md)。按用户最新要求停止小模型评估，保持Gemma；以下v5及型号比较为历史。
 
 更大参数候选Llama70B、gpt-oss-120B的八次真实对照见 [LARGER-MODELS](ai-summary/LARGER-MODELS.md)：本批仍有套话，GPT还补写无依据群组活动，暂不更换默认模型。

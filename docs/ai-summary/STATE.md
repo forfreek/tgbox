@@ -4,6 +4,10 @@
 
 ## 当前状态与授权
 
+2026-11-22 最新完成 [PAGE-VALUE](PAGE-VALUE.md) 六条真实简介审查：三条生成、三条弃答，编辑判断一条可用草稿、两条需改、两条可接受弃答、一条误弃答。生产D1仅SELECT，rows_written=0；只以简介为模型证据，未读R2或刷新Telegram。Gemma v6新增六次真实调用，加上原十条来源共16条；没有更换模型、搜索、修改运行时代码或发布。步骤四编辑验收仍未通过，下一项仅修混合简介误弃答、重要限制取舍和身份归因，不进入步骤五。
+
+本次交付验证：当前请求与六条保存请求逐项一致、SHA-256一致，六条响应经当前解码器离线复算通过；Worker66/66回归通过（只用已存/模拟响应，不新增推理），新JSON的Biome检查、十份文档130个本地链接及diff空白检查通过。未改运行时代码，不重复dry-run或声称完成最终HTML、生产source loader和本批繁体展示验收。
+
 2026-11-22 最新指示“不要用更小的了”：保持Gemma，不切换或继续试小型号。提示词已改v6，实际system内附本类型示例和弃答例，约束成员活动、动作主体、示例事实泄漏和来源注入。最新证据FEWSHOT.md：10条来源、Gemma8次均符合本批预期；本轮此前结束的20B8次失败仅留审计，不加入支持名单。Worker66/66、类型检查和dry-run通过。未联网搜索、合并或部署，内容与整页价值验收继续开放。
 
 v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](https://github.com/forfreek/tgbox/actions/runs/45027588408)全仓检查、测试与脚本检查通过（2m13s）。之后只补本文档验收记录，代码和模型调用不再变更。
@@ -45,7 +49,7 @@ v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](
 
 ## 下一步
 
-当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d3，草稿 PR #63 的 base=codex/ai-summary-jobs。当前为 prompt-v5 表达与字数优化，模型仍为 Gemma。下一项继续核对整页价值和编辑发布门槛，不自动进入步骤五；步骤 5–8 未开始。
+当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d3，草稿 PR #63 的 base=codex/ai-summary-jobs。当前为 prompt-v6 / params-v3，模型仍为 Gemma。真实页面资料对照已完成，下一项按PAGE-VALUE定向修三类问题并复用小批验证，不自动进入步骤五；步骤 5–8 未开始。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 
