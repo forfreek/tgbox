@@ -1,8 +1,10 @@
 import { env } from "cloudflare:test";
 import { prepareAiSummary } from "@tgbox/shared";
 import { afterEach, describe, expect, test, vi } from "vitest";
+import fewCorpus from "../evaluation/corpus-fewshot-v1.json";
 import styleCorpus from "../evaluation/corpus-style-v1.json";
 import corpus from "../evaluation/corpus-v1.json";
+import fewLive from "../evaluation/fewshot-pilot-2026-11-22.json";
 import live from "../evaluation/live-pilot-2026-11-22.json";
 import selection from "../evaluation/pilot-v2.json";
 import styleLive from "../evaluation/style-pilot-2026-11-22.json";
@@ -189,20 +191,48 @@ describe("offline reproducible evaluation", () => {
 
   test("replays the revised style pilot and preserves safe channel scope and direct bot wording", async () => {
     const plan = await evaluationPlan(styleCorpus, [DEFAULT_SUMMARY_MODEL]);
-    expect(plan.planHash).toBe(styleLive.final.planHash);
-    const report = replayEvaluation(plan, styleLive.final.results);
-    expect(report.models[0]).toMatchObject({ valid: 10, firstPassValidRate: 1 });
-    for (const row of report.rows) {
-      expect(row.status === "valid" && row.expectedStatusMatches).toBe(true);
-      if (row.status !== "valid" || row.output.status !== "ok") continue;
-      const text = row.output.sentences.map((item) => item.zh).join("");
+    expect(() => replayEvaluation(plan, styleLive.final.results)).toThrow("plan_hash_mismatch");
+    for (const row of styleLive.final.results.rows) {
+      const sample = plan.cases.find((item) => item.id === row.caseId);
+      const result = decodeSummaryResponse(row.response, sample?.input, row.model).output;
+      expect(result.status).toBe(sample?.expected);
+      if (result.status !== "ok") continue;
+      const text = result.sentences.map((item) => item.zh).join("");
       expect(text).not.toMatch(/该群组|该机器人|公开说明称|可见公开内容涉及/);
       if (row.caseId === "C6") {
         expect(text).toMatch(/^从公开帖子来看，/);
         expect(text).toContain("另一则帖子讲解");
       }
-      expect(summaryTextMetrics(row.output.sentences).zhCharacters).toBeLessThanOrEqual(120);
+      expect(summaryTextMetrics(result.sentences).zhCharacters).toBeLessThanOrEqual(120);
     }
+  });
+
+  test("replays current few-shot requests, keeps examples separate and rejects small-model semantic failures", async () => {
+    const plan = await evaluationPlan(fewCorpus, [DEFAULT_SUMMARY_MODEL]);
+    expect(plan.planHash).toBe(fewLive.final.planHash);
+    expect(plan.cases).toHaveLength(10);
+    const report = replayEvaluation(plan, fewLive.final);
+    expect(report.models[0]).toMatchObject({ valid: 8, planned: 8 });
+    expect(report.rows.every((row) => row.status === "valid" && row.expectedStatusMatches)).toBe(
+      true,
+    );
+    for (const request of plan.requests) {
+      expect(request.request.messages[0]?.content).toContain("示例：");
+      expect(request.request.messages[0]?.content).toContain("示例不属于当前证据");
+      expect(
+        fewLive.jobs.find(
+          (job) => job.caseId === request.caseId && job.model === DEFAULT_SUMMARY_MODEL,
+        )?.request,
+      ).toEqual(request.request);
+    }
+    const injection = report.rows.find((row) => row.caseId === "B6");
+    if (injection?.status !== "valid") throw new Error("missing live injection result");
+    expect(JSON.stringify(injection.output)).not.toMatch(/充值|免费|10MB|时间戳/);
+    const rejected = fewLive.trials.find(
+      (row) => row.caseId === "B6" && row.model !== DEFAULT_SUMMARY_MODEL,
+    );
+    expect(rejected?.response.choices[0]?.message.content).toContain("推荐充值");
+    expect(SUPPORTED_SUMMARY_MODELS).not.toContain("@cf/openai/gpt-oss-20b");
   });
 
   test("enforces total length across sentences while allowing short factual text", () => {
