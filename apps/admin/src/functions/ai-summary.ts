@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { queryOptions } from "@tanstack/react-query";
-import { createServerFn } from "@tanstack/react-start";
+import { createMiddleware, createServerFn } from "@tanstack/react-start";
+import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { summaryAdminDetail } from "@tgbox/db";
 import { z } from "zod";
 import {
@@ -11,7 +12,16 @@ import {
   summaryCommand,
   summaryOverview,
 } from "@/server/ai-summary.ts";
+import { summaryWriteOriginAllowed } from "@/server/ai-summary-origin.ts";
 import { adminMiddleware } from "@/server/middleware.ts";
+
+const summaryWriteMiddleware = createMiddleware({ type: "function" }).server(async ({ next }) => {
+  if (!summaryWriteOriginAllowed(getRequest())) {
+    setResponseStatus(403);
+    throw new Error("Forbidden origin");
+  }
+  return next();
+});
 
 const $overview = createServerFn({ method: "GET" })
   .middleware([adminMiddleware])
@@ -37,11 +47,11 @@ export const summaryDetailOptions = (entryId: number) =>
     staleTime: 30_000,
   });
 export const $summaryBatch = createServerFn({ method: "POST" })
-  .middleware([adminMiddleware])
+  .middleware([adminMiddleware, summaryWriteMiddleware])
   .inputValidator(SummaryBatch)
   .handler(({ data, context }) => summaryBatch(context.core, env.MEDIA, data, context.auth.actor));
 export const $summaryCommand = createServerFn({ method: "POST" })
-  .middleware([adminMiddleware])
+  .middleware([adminMiddleware, summaryWriteMiddleware])
   .inputValidator(SummaryCommand)
   .handler(({ data, context }) =>
     summaryCommand(context.core, env.MEDIA, data, context.auth.actor),

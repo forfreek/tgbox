@@ -1,5 +1,7 @@
 # AI 资源摘要模块项目记忆
 
+步骤五复核发现后台框架未配置全局CSRF，新增POST接口不能只依赖既有认证：本节点独立要求Origin与请求origin精确一致，拒绝跨站/无Origin/null及异协议端口，8项回归后Admin111/111。未扩展修改旧接口。
+
 2026-11-22 步骤五独立工作树tgbox-ai-summary-admin，恢复见 [ADMIN](ADMIN.md)。共享ai-summary-config保存已确认Gemma/v7/v3；prompt实际文本与冻结请求不变。消费在领取/预留前白名单校验，adapter每次收job版本，不能只验闭包。新增ai_summary_reviews保存人工三语及批准状态，edit_version/observation_token CAS与锁定阻止在途模型覆盖；人工动作事务性审计含成功稿快照。旧revisions.review_status不是人工批准来源，步骤六应读新表并复核来源。
 
 发现原tick启用后会自动rolling历史扫描，新增auto_scan=false独立开关：仅启用消费不启动全站回填。预检只读、不建任务；批量最多20条，同指纹/版本复用；普通重试只技术失败，insufficient不扣费重跑、旧尝试不退款。批准前重读D1/R2，D1最终事务再校验；R2不能参与该事务，静态消费仍要复核。繁体复用OpenCC在浏览器按需转换，不在Worker里运行字典。
