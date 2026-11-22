@@ -15,7 +15,7 @@
 | 0 计划归档 | 更新执行顺序、来源处理规则、阅读入口与当前状态 | 本地文档链接有效，明确后续步骤未开始 | 已完成 |
 | 1 资料规则与样本 | 核对目标基线，按频道、群组、机器人整理固定来源样本和人工期望结果，细化可生成、跳过、技术失败、来源冲突四种判定 | 每类有充分、缺失、广告噪声、矛盾和抓取失败样例；每条期望包含原因及可用证据，长度不能独自决定是否生成。交付规则与样本记录供确认 | 已完成，待确认 |
 | 2 输入与证据契约 | 实现可复用的规范化、帖子可见性过滤、证据抽样、内容指纹和输入/输出 schema，设计持久原因码 | 本地测试验证标签不能独自证明用途、隐藏内容不入输入、无实质资料可预先跳过、简介短但明确可进入候选、指纹不受浏览量变化影响 | 已完成，本地及 Linux CI 通过，PR #61 待审合并 |
-| 3 数据与异步任务 | 新建本地迁移、状态和修订查询、独立 Worker、持久发件箱、队列消费及回填游标，使用模拟模型 | 实际迁移测试，重复投递和并发不重复发布，失败不阻塞后续；跳过在同指纹/规则下不重跑；资料变化可重新入队；暂停恢复、配额及旧任务隔离通过 | 已实施，本地验收通过，待 PR CI |
+| 3 数据与异步任务 | 新建本地迁移、状态和修订查询、独立 Worker、持久发件箱、队列消费及回填游标，使用模拟模型 | 实际迁移测试，重复投递和并发不重复发布，失败不阻塞后续；跳过在同指纹/规则下不重跑；资料变化可重新入队；暂停恢复、配额及旧任务隔离通过 | 已完成，本地及 Linux CI 通过，PR #62 待审合并 |
 | 4 提示词与模型比较 | 分类型提示词、模型适配器和结果校验，先模拟边界，再在授权范围内测试固定样本 | DELIVERY 质量门槛及实际费用记录；模型可以返回 insufficient，输出冲突或无证据转待审；确定模型及预算后结束，不自动启动全量回填 | 待执行 |
 | 5 后台人工控制 | 展示三语和证据、跳过/失败/待审原因、批量预检、暂停重试、编辑锁定、批准撤回与抽检 | 认证及审计有效，资料不足不会因普通重试持续扣费，人工修订不会被在途任务覆盖，来源更新后的失效状态可见 | 待执行 |
 | 6 静态接入与回退 | 快照读取已批准摘要并复核证据，默认关闭展示，单条缺失/坏结果回退现有首段 | 缺表、跳过、失败、待审、隐藏证据及锁定稿过期均可回退；三语、URL、canonical、hreflang、robots、sitemap 与搜索契约回归；构建不推理 | 待执行 |
@@ -47,7 +47,7 @@
 
 | 节点 | 新增 | 修改 |
 | --- | --- | --- |
-| 数据与任务 | packages/db/migrations/0022_ai_summaries.sql；packages/db/src/ai-summaries.ts；apps/ai-summary 的 Worker、调度、消费者、模型适配器、提示词、wrangler.jsonc、类型与对应测试 | packages/db/src/{schema,index}.ts、迁移元数据、工作区锁文件、必要 CI 检查 |
+| 数据与任务 | 实际为 packages/db/migrations/0022_ai_summary_jobs.sql、packages/db/src/ai-summary.ts、apps/ai-summary 的 Worker、调度、消费者、wrangler.jsonc、类型与对应测试；模型适配器和提示词在步骤四 | packages/db/src/{schema,index}.ts、迁移元数据、工作区锁文件、必要 CI 检查 |
 | 规范化与证据 | packages/shared/src/ai-summary.ts 及纯逻辑测试 | shared 导出、packages/snapshot/src/build-site-data.ts 及测试、packages/shared/src/site-data.ts |
 | 后台审阅 | apps/admin/src/functions/ai-summaries.ts；src/routes/ai-summaries.tsx；src/features/ai-summaries/ | 管理导航、生成路由树、条目入口、现有审计展示 |
 | 静态灰度 | 三语发布、回退和索引回归用例 | scripts/build-site.ts、.github/workflows/build-deploy.yml、apps/web/src/views/DetailPage.astro、lib/seo.ts、相关三语文案；繁转受保护片段按实际需要修改 |

@@ -27,7 +27,7 @@
 
 ## 下一步
 
-当前工作树 C:/Users/123/tgbox-ai-summary-jobs，分支 codex/ai-summary-jobs，基于步骤二 de44705 建立。2026-11-22 核对 PR #61 仍 OPEN，main 仍为 cb0d6a6，因此采用依赖 PR #61 的堆叠交付。步骤三本地已实施，步骤 4–8 未开始。下一步为步骤四“提示词与模型比较”，等待继续指示。
+当前工作树 C:/Users/123/tgbox-ai-summary-jobs，分支 codex/ai-summary-jobs，基于步骤二 de44705 建立。2026-11-22 核对 PR #61 仍 OPEN，main 仍为 cb0d6a6，因此采用依赖 PR #61 的堆叠交付。步骤三已完成，本地及 Linux CI 通过，PR #62 待审合并，步骤 4–8 未开始。下一步为步骤四“提示词与模型比较”，等待继续指示。
 
 ## 步骤三本地验收
 
@@ -41,9 +41,9 @@
 - 本步代码审查发现并修正暂停后任务无法恢复、旧配置观察者可能作废新任务、删除后预算被级联释放三个边界，均有回归测试。
 - 新改动文件的 Biome、专题链接及差异空白检查通过。Windows 全仓 pnpm check 记录 680 项格式诊断，输出受大量既有 CRLF 影响，Linux 完整检查随 PR 验证。
 - Wrangler 生成的类型文件含五处尾随空白，已仅规范化空白后复核 diff --check，绑定与类型内容保持生成结果。
-- 真实模型、生产迁移、队列及 Worker 创建、远端运行状态未验证，Linux CI 待 PR 核验。新应用测试 remoteBindings=false，未调用 AI binding。
+- 真实模型、生产迁移、队列及 Worker 创建、远端运行状态未验证。新应用测试 remoteBindings=false，未调用 AI binding。
 
-Linux CI [44999638271](https://github.com/forfreek/tgbox/actions/runs/44999638271) 对 49002fc 完整通过，包含全仓检查、测试和脚本检查。之后追加回填暂停检查点保护及第 31 项测试，本地复测通过，新增提交的 CI 继续核验。
+Linux CI [44999638271](https://github.com/forfreek/tgbox/actions/runs/44999638271) 对 49002fc 完整通过。追加回填暂停保护后，[44999905516](https://github.com/forfreek/tgbox/actions/runs/44999905516) 对 14d139e3c93eec91a38f30b5a84cd6d94484fa1a 再次完整通过，包含全仓检查、测试和脚本检查。此后仅补充文档验收记录，代码保持该已验收版本。
 
 以下步骤一、二记录为历史证据，不能当作本步 PR 状态。
 
