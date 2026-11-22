@@ -4,6 +4,8 @@
 
 ## 已实现的操作
 
+交付为草稿 [PR #64](https://github.com/forfreek/tgbox/pull/64)，base=codex/ai-summary-models；依赖#61 → #62 → #63 → #64，保持不合并。补充同源校验后浏览器核心流程重新通过，使用原server-function协议头重放跨站Origin收到403；直接省略协议头的请求会进入框架错误路径，不能据此判定Origin检查。
+
 本次新增写接口另加严格Origin同源校验：只允许同协议/主机/端口的POST，缺失、null、跨站及不匹配端口均拒绝；不依赖未配置的全局CSRF中间件，也不修改既有接口。新增8项同源检查后Admin合计111/111，以下“原有103”指加本次校验之前的基线测试数。
 
 后台导航新增 `/ai-summary`。所有读写server function沿用adminMiddleware的Access/Telegram认证，写操作为POST，客户端不能指定actor。界面可按待审、失败、已批准、锁定筛选，列表每页20条；抽检按未检或最早检查优先，不宣称随机抽样。独立详情按需读取，最近20个生成版本倒序，不全量加载历史。查询使用React Query缓存，手动刷新或修改后失效，不高频轮询D1。
