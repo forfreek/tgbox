@@ -38,6 +38,7 @@
 - Drizzle 再生成检查显示 No schema changes，迁移与 schema/snapshot 一致。
 - 本步代码审查发现并修正暂停后任务无法恢复、旧配置观察者可能作废新任务、删除后预算被级联释放三个边界，均有回归测试。
 - 新改动文件的 Biome、专题链接及差异空白检查通过。Windows 全仓 pnpm check 记录 680 项格式诊断，输出受大量既有 CRLF 影响，Linux 完整检查随 PR 验证。
+- Wrangler 生成的类型文件含五处尾随空白，已仅规范化空白后复核 diff --check，绑定与类型内容保持生成结果。
 - 真实模型、生产迁移、队列及 Worker 创建、远端运行状态未验证，Linux CI 待 PR 核验。新应用测试 remoteBindings=false，未调用 AI binding。
 
 以下步骤一、二记录为历史证据，不能当作本步 PR 状态。
