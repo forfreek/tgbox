@@ -1,5 +1,7 @@
 # 项目资料索引
 
+最新“像人介绍资源”的案例研究与完整提示词草案见 [PROMPT-RESEARCH](ai-summary/PROMPT-RESEARCH.md)。草案未替换v5，未新增推理。
+
 AI 摘要最新提示词 v5、字数目标及真实前后对照见 [STYLE](ai-summary/STYLE.md)，旧 PILOT/QUALITY 保留各自版本边界。
 
 AI 摘要实际生成质量与页面增值评估见 [QUALITY](ai-summary/QUALITY.md)：结构与源文核对通过不等于内容增强目标通过。
