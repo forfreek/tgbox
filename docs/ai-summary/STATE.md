@@ -6,7 +6,7 @@
 
 已完成源码调用链审查、计划和步骤一。2026-11-22 用户继续授权步骤二，本轮实现共享输入与证据契约，完成本步后等待继续指示。生产迁移、Cloudflare 资源操作、真实付费推理及部署按相应授权执行。
 
-审查采用当时远端 main 的固定提交 cb0d6a658d1dc57c45ef3e6092d9f15c66386b7b。本目录所在本地分支为 cursor/about-drop-awesome-list，HEAD 为 6fa6b0092837d0d6ca28ef5e8471b2b19df4f87e，含用户未提交改动。文档中的主线行为不能直接当作本地 HEAD 或生产部署行为。
+早期审查采用远端 main 的固定提交 cb0d6a658d1dc57c45ef3e6092d9f15c66386b7b。当时原目录 C:/Users/123/tgbox 的分支为 cursor/about-drop-awesome-list，HEAD 为 6fa6b0092837d0d6ca28ef5e8471b2b19df4f87e，含用户未提交改动。步骤二另从 main 建独立工作树。文档中的主线行为不能直接当作原目录 HEAD 或生产部署行为。
 
 ## 按需读取
 
@@ -32,9 +32,9 @@
 
 本步用 Node 本地脚本检查 25 个案例数量、三类型各五种基本边界覆盖、六个历史来源身份及五份相关文档链接，全部通过。该检查验证样本编制完整性，判定器实现、自动事实判断及模型效果均未测试。
 
-## 实际验证边界
-
 ## 步骤二本地验收
+
+交付 PR 为 [#61](https://github.com/forfreek/tgbox/pull/61)，状态以 GitHub 为准。该 PR 也归档前两步仍仅保存在原目录的专题文档，保留 main 总索引其他入口。尚未合并。首次推送被 GitHub 邮箱隐私保护拒绝，改用仓库主线已有的 GitHub noreply 身份重新生成未发布提交后推送成功。
 
 - pnpm --filter @tgbox/shared test 通过，共 8 文件、198 测试。
 - pnpm --filter @tgbox/shared exec vitest run src/ai-summary.test.ts 通过，新增契约测试 46 项。
