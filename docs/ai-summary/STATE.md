@@ -30,6 +30,8 @@
 
 当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三 33cd2d30297292ee293c46b7f5f26f105ef916d8 建立。2026-11-22 开始前核对 PR #62 仍 OPEN，base 为 codex/ai-summary-contracts，head 仍 33cd2d3。本次 PR 堆叠在 #62 上，不合并父 PR。步骤四整体未完成，下一项是明确授权范围内的真实协议探测和分层质量比较；步骤 5–8 未开始。
 
+代码准备以草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63) 交付，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。保留草稿并不代表可直接合并；本轮未执行合并、真实调用、迁移、生产资源操作或部署。
+
 ## 步骤四代码准备验收
 
 三类提示词、三候选实验适配器、37 条来源标记样本及离线 plan/replay 工具已实现。adapter 未接入 queue handler。默认模型和数据库配置不变，当前不会因本节点开始模型调用。
@@ -41,7 +43,9 @@
 - pnpm typecheck 全部 10 个任务通过，Web 311 文件零错误、警告和提示。
 - pnpm --filter @tgbox/ai-summary build 执行 wrangler deploy --dry-run，1036.56 KiB / gzip 176.92 KiB 打包通过，未部署；未接通的模型模块不进入 Worker 的运行路径。
 - 七个变更代码/fixture 文件 Biome 检查通过；离线 CLI plan/replay 及 EEXIST 禁止覆盖验证通过，mock 报告保存在忽略的 .data 目录。计划 SHA-256 为 a65b834f7b8f3a1e1a429981dee3aa92f826b9818cfdac031537672a1000a790。
-- 源码审查核对三种协议、请求版本、超时传递、零内部重试和指标分母；确认未修改业务调用点、数据迁移或生产配置。文档链接和 PR Linux CI 随交付核验。
+- 源码审查核对三种协议、请求版本、超时传递、零内部重试和指标分母；确认未修改业务调用点、数据迁移或生产配置。六份交付文档 70 个本地链接通过，原目录及步骤三工作树的最新恢复入口已补充并验证，未提交其用户业务改动或把本地路由追加到父 PR。
+
+Linux CI [45002055713](https://github.com/forfreek/tgbox/actions/runs/45002055713) 对代码提交 3c8952fa720b58112cee3896e26c2db443a927db 完整通过（2m10s），含全仓 check、test、脚本类型和测试。后续仅更新本次文档验收和 PR 描述，代码保持该已验收版本。步骤四仍等待真实比较，不因 CI 通过而视为模型质量通过。
 
 以下步骤三及更早记录为历史交付证据，其工作树与授权不能套用本节点。
 
