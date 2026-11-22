@@ -1,5 +1,7 @@
 # 项目资料索引
 
+联网搜索已由用户取消。上一步研究草案与v5的四条真实输出对照见 [COMPARISON](ai-summary/COMPARISON.md)，新草案尚未达到介绍感目标，不替换v5。
+
 Workers AI联网补充资料的能力、计费前置条件及接入缺口见 [WEB-ENRICHMENT](ai-summary/WEB-ENRICHMENT.md)，目前仅可行性建议，未实施。
 
 最新“像人介绍资源”的案例研究与完整提示词草案见 [PROMPT-RESEARCH](ai-summary/PROMPT-RESEARCH.md)。草案未替换v5，未新增推理。
