@@ -34,13 +34,15 @@
 
 ## 步骤二本地验收
 
+Linux CI 已在提交 e47892a7b7c71eec96c218d12494bff3ee4aaa7d 全部通过，运行 [44996364788](https://github.com/forfreek/tgbox/actions/runs/44996364788)，包含全仓 pnpm check、pnpm test、脚本类型和测试。其后仅补文档记录，代码保持该已验收版本。步骤二交付完成，PR 待审合并，步骤三等待继续指示。
+
 交付 PR 为 [#61](https://github.com/forfreek/tgbox/pull/61)，状态以 GitHub 为准。该 PR 也归档前两步仍仅保存在原目录的专题文档，保留 main 总索引其他入口。尚未合并。首次推送被 GitHub 邮箱隐私保护拒绝，改用仓库主线已有的 GitHub noreply 身份重新生成未发布提交后推送成功。
 
 - pnpm --filter @tgbox/shared test 通过，共 8 文件、198 测试。
 - pnpm --filter @tgbox/shared exec vitest run src/ai-summary.test.ts 通过，新增契约测试 46 项。
 - pnpm typecheck 通过，9 个实际执行任务，Web 311 文件零错误和警告。
 - 对本次四个代码/fixture 文件的 Biome 检查通过，专题本地链接检查及 git diff --cached --check 通过。
-- pnpm check 在 Windows 全仓格式检查阶段报告 678 项错误，输出包含已有文件的 CRLF 换行诊断，未进入类型检查；类型检查已单独执行通过。完整 Linux CI 结果待 PR 核验。
+- pnpm check 在 Windows 全仓格式检查阶段报告 678 项错误，输出包含已有文件的 CRLF 换行诊断，未进入类型检查；类型检查已单独执行通过。Linux CI 全仓检查通过。
 - 源码自查覆盖输入上限、可见性顺序、Unicode 截断、抽样稳定、输出引用与数字约束、DB/Node 类型兼容及六条历史原文。发现的跨包 crypto 类型错误已通过注入 digest 并复制 ArrayBuffer 修正，全仓复测通过。
 
 ## 早期审查验证边界
