@@ -24,6 +24,8 @@
 
 本地新运行时测试 30/30、DB 既有测试 74/74、全仓类型检查和 dry-run 打包通过。PR 和 Linux CI 实际状态见 STATE。每次 PR 或追加修改继续同步项目记忆和状态。
 
+步骤三独立交付 [PR #62](https://github.com/forfreek/tgbox/pull/62)，堆叠在 PR #61 分支上，按 #61、#62 顺序审阅合并，合并前重查状态及 base。新 Worker 类型由 Wrangler 生成，仅规范化五处尾随空白。下一步为步骤四，等待继续指示。
+
 2026-11-22 用户明确将 PR 同步项目记忆作为全项目总规则，已写入根 AGENTS.md。每次提交 PR 或追加修改同步 MEMORY、STATE，涉及步骤或范围时更新 PLAN，新增专题或恢复入口变化时更新 INDEX。独立工作树交付后补原入口指向，保留分支历史边界。该规则适用于所有专题。
 
 步骤二在 C:/Users/123/tgbox-ai-summary、codex/ai-summary-contracts 实施，固定 main 基线 cb0d6a6。共享包新增 ai-summary.ts 及测试、六条历史最小字段 fixture，API 通过 shared 根导出。先按 STATE 查实际验收及 PR，再按 [CONTRACTS](CONTRACTS.md) 查接口。预检只负责机械规则，冲突输入使用可信审核标记，历史 R-C1 的语义跳过仍需后续模型/人工判定。哈希用注入的原生 SHA-256 回调兼容 DB 类型环境。步骤三须按决策区分空输入错误与缓存跳过，防止技术失败被同指纹跳过吞掉。

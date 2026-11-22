@@ -31,6 +31,8 @@
 
 ## 步骤三本地验收
 
+交付 [PR #62](https://github.com/forfreek/tgbox/pull/62)，base 为 codex/ai-summary-contracts，依赖 PR #61。先合并 #61，再核对并将 #62 基线切至 main 后按序合并。当前尚未合并，CI 核验结果在下方更新。
+
 - pnpm --filter @tgbox/ai-summary test 通过，30 项本地 D1/R2 与模拟模型测试。
 - pnpm --filter @tgbox/db test 通过，15 文件、74 项既有 DB 测试，包含新迁移。
 - pnpm typecheck 通过，10 个任务，Web 311 文件零错误、零警告；新 Worker 类型检查单独复测通过。
