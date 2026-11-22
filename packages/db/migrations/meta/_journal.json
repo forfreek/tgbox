@@ -155,6 +155,20 @@
       "when": 1795331723737,
       "tag": "0022_ai_summary_jobs",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "6",
+      "when": 1795356788119,
+      "tag": "0023_skinny_angel",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1795357186791,
+      "tag": "0024_classy_hitman",
+      "breakpoints": true
     }
   ]
 }

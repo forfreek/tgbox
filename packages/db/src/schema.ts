@@ -35,6 +35,7 @@ export const aiSummarySettings = sqliteTable(
   {
     id: integer().primaryKey(),
     enabled: integer({ mode: "boolean" }).notNull().default(false),
+    autoScan: integer("auto_scan", { mode: "boolean" }).notNull().default(false),
     model: text().notNull().default("disabled"),
     promptVersion: text("prompt_version").notNull().default("v1"),
     paramsVersion: text("params_version").notNull().default("v1"),
@@ -147,6 +148,27 @@ export const aiSummaryRevisions = sqliteTable(
     createdAt: integer("created_at").notNull(),
   },
   (t) => [index("ai_summary_revisions_entry").on(t.entryId, t.createdAt)],
+);
+
+export const aiSummaryReviews = sqliteTable(
+  "ai_summary_reviews",
+  {
+    entryId: integer("entry_id")
+      .primaryKey()
+      .references(() => entries.id, { onDelete: "cascade" }),
+    revisionId: text("revision_id")
+      .notNull()
+      .references(() => aiSummaryRevisions.id, { onDelete: "cascade" }),
+    zh: text().notNull(),
+    hant: text().notNull(),
+    en: text().notNull(),
+    status: text().notNull().default("draft"),
+    version: integer().notNull(),
+    actor: text().notNull(),
+    updatedAt: integer("updated_at").notNull(),
+    sampledAt: integer("sampled_at"),
+  },
+  (t) => [check("ai_summary_review_status", sql`${t.status} IN ('draft','approved','withdrawn')`)],
 );
 
 export const aiSummaryRuns = sqliteTable(

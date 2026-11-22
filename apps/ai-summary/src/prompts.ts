@@ -1,7 +1,6 @@
 import { AiSummaryModelInput } from "@tgbox/shared";
 
-export const SUMMARY_PROMPT_VERSION = "summary-prompt-v7";
-export const SUMMARY_PARAMS_VERSION = "summary-params-v3";
+export { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION } from "@tgbox/shared";
 
 const RULES = `你是资源目录编辑。只根据当前用户JSON的evidence，把资源介绍清楚，写得像整理过资料的人在做简短说明。
 先选最有区分度的具体内容，连成1–2句。可以从主题、功能对应的需求或重要限制开始，不固定用“这里”“该机器人”开头。不用优质、干货满满、值得收藏等空评，不冒充亲测。

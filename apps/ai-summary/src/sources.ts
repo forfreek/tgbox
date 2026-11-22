@@ -34,21 +34,12 @@ async function postsFor(media: Media, username: string): Promise<AiSummarySource
 }
 
 /** The source token is read before external I/O, so a slow reader cannot overwrite a newer one. */
-export async function observeEntry(
-  db: Db,
-  media: Media,
-  entryId: number,
-  config: SummaryConfig,
-  now: number,
-  priority = 0,
-) {
+export async function readSummaryEvidence(db: Db, media: Media, entryId: number) {
   const previous = await getSummarySource(db, entryId);
   const row = await readSummaryEntry(db, entryId);
   if (row?.status !== "approved" || !row.source_guard) {
-    await invalidateSummarySource(db, entryId, now);
     return null;
   }
-  if (previous?.locked) return null;
   const site = SiteSettings.parse({ ...settingsDefaults.site, ...JSON.parse(row.site) });
   const posts =
     row.kind === "channel" && !row.hide_posts
@@ -74,12 +65,31 @@ export async function observeEntry(
   const fingerprint = await aiSummaryFingerprint(raw, (bytes) =>
     crypto.subtle.digest("SHA-256", bytes),
   );
+  return { ...prepared, fingerprint, guard: row.source_guard, previous };
+}
+
+export async function observeEntry(
+  db: Db,
+  media: Media,
+  entryId: number,
+  config: SummaryConfig,
+  now: number,
+  priority = 0,
+) {
+  const evidence = await readSummaryEvidence(db, media, entryId);
+  if (!evidence) {
+    await invalidateSummarySource(db, entryId, now);
+    return null;
+  }
+  const { previous, guard, fingerprint, input, decision } = evidence;
+  if (previous?.locked) return null;
+  const prepared = { input, decision };
   const accepted = await observeSummarySource(
     db,
     {
       entryId,
       previousToken: previous?.observationToken ?? null,
-      guard: row.source_guard,
+      guard,
       fingerprint,
       ...prepared,
       now,

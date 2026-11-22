@@ -10,6 +10,8 @@ export default defineConfig({
   resolve: { alias: { "@": path.resolve(import.meta.dirname, "src") } },
   plugins: [
     cloudflare({
+      // UI smoke tests use local D1/R2 and must not establish an AI remote proxy.
+      remoteBindings: process.env.TGBOX_LOCAL_ONLY !== "1",
       viteEnvironment: { name: "ssr" },
       // Share the local D1/R2 state with the bot (`wrangler dev --persist-to ../../.data/wrangler`).
       persistState: { path: path.resolve(import.meta.dirname, "../../.data/wrangler") },

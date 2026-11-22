@@ -1,5 +1,7 @@
 # 项目资料索引
 
+当前AI摘要恢复先读 [STATE](ai-summary/STATE.md)，步骤五后台与版本/配额保护见 [ADMIN](ai-summary/ADMIN.md)。工作树tgbox-ai-summary-admin、base为步骤四模型分支；后台节点不合并部署，下一步静态接入。以下步骤四记录保留历史。
+
 当前恢复先读 [STATE](ai-summary/STATE.md)，最新为 [V7-REVIEW](ai-summary/V7-REVIEW.md)：Gemma v7在既有16条来源中完成三项定向修复，14次调用符合本批预期，步骤四按受审草稿范围完成。下一节点为后台人工控制，仍不自动发布、合并或部署。以下v6及更早说明为历史。
 
 最新提示词v6、实际输入—输出示例和边界回归见 [FEWSHOT](ai-summary/FEWSHOT.md)。按用户最新要求停止小模型评估，保持Gemma；以下v5及型号比较为历史。

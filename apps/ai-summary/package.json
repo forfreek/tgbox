@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "license": "AGPL-3.0-only",
   "type": "module",
+  "exports": {
+    "./sources": "./src/sources.ts"
+  },
   "scripts": {
     "build": "wrangler deploy --dry-run --outdir dist",
     "types": "wrangler types",

@@ -1,4 +1,5 @@
 export * from "./ai-summary.ts";
+export * from "./ai-summary-config.ts";
 export * from "./categories.ts";
 export * from "./domain.ts";
 export { type Dictionary, type MessageKey, t } from "./i18n/index.ts";
