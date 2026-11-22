@@ -1,5 +1,7 @@
 # 项目资料索引
 
+更大参数候选Llama70B、gpt-oss-120B的八次真实对照见 [LARGER-MODELS](ai-summary/LARGER-MODELS.md)：本批仍有套话，GPT还补写无依据群组活动，暂不更换默认模型。
+
 联网搜索已由用户取消。上一步研究草案与v5的四条真实输出对照见 [COMPARISON](ai-summary/COMPARISON.md)，新草案尚未达到介绍感目标，不替换v5。
 
 Workers AI联网补充资料的能力、计费前置条件及接入缺口见 [WEB-ENRICHMENT](ai-summary/WEB-ENRICHMENT.md)，目前仅可行性建议，未实施。
