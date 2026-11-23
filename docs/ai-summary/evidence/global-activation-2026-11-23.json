@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-11-23T14:33:17.594Z",
+  "scope": "all",
+  "selectedIds": "",
+  "workerVersion": "09fdef59-abc8-4242-b108-f4c9a733da10",
+  "settingsBefore": {
+    "id": 1,
+    "enabled": 1,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "prompt_version": "summary-prompt-v8",
+    "params_version": "summary-params-v3",
+    "daily_calls": 200,
+    "daily_neurons": 800,
+    "reservation": 100,
+    "max_attempts": 1,
+    "auto_scan": 1
+  },
+  "settingsAfter": {
+    "id": 1,
+    "enabled": 1,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "prompt_version": "summary-prompt-v8",
+    "params_version": "summary-params-v3",
+    "daily_calls": 200,
+    "daily_neurons": 800,
+    "reservation": 100,
+    "max_attempts": 1,
+    "auto_scan": 1
+  },
+  "allSettingsUnchanged": true,
+  "d1ConfigurationWritesByMaintenance": 0,
+  "attemptsLedger": {
+    "calls": 95,
+    "reserved": 9500
+  },
+  "ledgerUnits": "reservation; not actual Workers AI usage",
+  "runsAtActivationSnapshot": []
+}
