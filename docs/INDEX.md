@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-23 最新AI摘要进入七A生产准备审查，先读 [STATE](ai-summary/STATE.md)，具体证据、合并部署影响及分节点执行清单见 [ROLLOUT-PREP](ai-summary/ROLLOUT-PREP.md)。工作树tgbox-ai-summary-rollout，依赖六C#67。七A只读核验和本地检查，尚未合并、迁移、创建资源、部署或线上灰度。
+
 最新六C页面接入见 [STATIC-PAGES](ai-summary/STATIC-PAGES.md)，独立tgbox-ai-summary-pages，base为六B。默认关闭、人工繁中保护、开关前后HTML及实际搜索契约已本地验证；尚未生产启用。恢复先读本工作树STATE。
 
 最新六B数据实现见 [STATIC-DATA](ai-summary/STATIC-DATA.md)，独立tgbox-ai-summary-data，基于六A。公开投影/审批失效、可选隔离导出、快照指纹复核已实现；六C页面尚未接入。恢复先读该工作树STATE。

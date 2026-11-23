@@ -1,5 +1,13 @@
 # AI 资源摘要模块项目记忆
 
+2026-11-23 七A交付完成：草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68)，base=#67，提交1d67f3a31d5affd110b3267e77081108120bb454的 [Linux CI 45116119118](https://github.com/forfreek/tgbox/actions/runs/45116119118) 全部通过（2m30s，全仓check/test及脚本类型/测试）。12份文档294个本地链接及diff通过。后续仅补本交付记录，不改代码/配置；保持不合并、不生产迁移/资源创建/部署/推理。七B具体范围待用户确认。以下核验中为历史记录。
+
+七A交付入口（2026-11-23）：草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68)，base=#67；工作树tgbox-ai-summary-rollout / codex/ai-summary-rollout-plan。原工作树及六C工作树补充索引、状态、记忆恢复路由；12份文档294个本地链接通过。本次只提交文档，保留其他工作树的既有修改。
+
+2026-11-23 七A生产准备见[ROLLOUT-PREP](ROLLOUT-PREP.md)，独立tgbox-ai-summary-rollout、依赖#67。main合并会自动部署Web但不迁移D1、不发布Admin或新Worker；先迁移0022–25再部署使用表的服务。现场只读核验生产最新0021、无AI表/新Worker/两队列、无AI变量，D1两次SELECT均写0行。八表内存迁移/外键/默认关闭验证与2项现有工作流测试通过，非生产演练。
+
+enabled、auto_scan、快照ID白名单、静态DISPLAY是四个层次；白名单不限制后台推理。neurons为固定reservation账本而非实际消费结算，UTC跨日恢复配额。停止生成不撤销静态页，关闭展示需确保最后部署关闭版，防止不取消在途部署的concurrency发布旧启用产物。DLQ可能由部署自动创建，同样需要具体资源授权。#67文档CI首次5秒快照CLI超时已保留，原配置复跑成功。
+
 2026-11-23 六C交付完成：草稿 [PR #67](https://github.com/forfreek/tgbox/pull/67) 依赖#66，代码f1ad243d8a74a2181695d1a8186910ea93032d63的 [Linux CI 45114637565](https://github.com/forfreek/tgbox/actions/runs/45114637565) 全部通过（2m14s，含Web449项、全仓check/test及脚本类型/测试）。十一份文档267个本地链接及diff通过。后续仅补文档记录，代码不变；保持草稿不合并，未生产启用。下一节点七须明确生产授权。以下核验中记录保留当时边界。
 
 六C交付入口（2026-11-23）：草稿 [PR #67](https://github.com/forfreek/tgbox/pull/67)，base=codex/ai-summary-data；独立tgbox-ai-summary-pages。原入口和六B入口均补索引/状态/记忆路由，保留各分支原交付边界。十一份相关文档267个本地链接通过，源码差异无空白错误。
