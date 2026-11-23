@@ -1,5 +1,9 @@
 # AI 资源摘要模块项目记忆
 
+2026-11-23 七B生产部署见[RELEASE-DISABLED](RELEASE-DISABLED.md)，独立tgbox-ai-summary-release、依赖#68。用户在确认不全局改摘要、生成/扫描/展示关闭后ok，已合并#61–67、迁移0022–25、创建指定Worker与两队列、更新既有Admin。最终main6551bd9的CI与Web部署均成功，任务/尝试/公开摘要均0，默认关闭，下一七C等待指示。
+
+Admin远端plain_text与源码默认值有漂移，尤其认证为空默认；部署前把远端值覆盖到忽略的生成配置再keep-vars，部署后核对全部值及secret名称未变。不要以keep-vars单独保证同名默认不会覆盖，不能把部署成功当认证成功。只读未登录访问仍进入原Access登录，未绕过认证。CLI重登录一次网络失败、迁移7500先核验无写入再重试成功，CLI tail超时不能冒称cron有执行记录，均留证据。
+
 2026-11-23 七A交付完成：草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68)，base=#67，提交1d67f3a31d5affd110b3267e77081108120bb454的 [Linux CI 45116119118](https://github.com/forfreek/tgbox/actions/runs/45116119118) 全部通过（2m30s，全仓check/test及脚本类型/测试）。12份文档294个本地链接及diff通过。后续仅补本交付记录，不改代码/配置；保持不合并、不生产迁移/资源创建/部署/推理。七B具体范围待用户确认。以下核验中为历史记录。
 
 七A交付入口（2026-11-23）：草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68)，base=#67；工作树tgbox-ai-summary-rollout / codex/ai-summary-rollout-plan。原工作树及六C工作树补充索引、状态、记忆恢复路由；12份文档294个本地链接通过。本次只提交文档，保留其他工作树的既有修改。

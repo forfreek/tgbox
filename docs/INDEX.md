@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-23 最新七B已按授权生产部署但保持AI关闭，先读[STATE](ai-summary/STATE.md)，实际版本、迁移、零任务核验及限制见[RELEASE-DISABLED](ai-summary/RELEASE-DISABLED.md)。工作树tgbox-ai-summary-release，交付依赖七A#68；七C真实生成、七D展示均未执行。
+
 2026-11-23 最新AI摘要进入七A生产准备审查，先读 [STATE](ai-summary/STATE.md)，具体证据、合并部署影响及分节点执行清单见 [ROLLOUT-PREP](ai-summary/ROLLOUT-PREP.md)。工作树tgbox-ai-summary-rollout，依赖六C#67。七A只读核验和本地检查，尚未合并、迁移、创建资源、部署或线上灰度。
 
 最新六C页面接入见 [STATIC-PAGES](ai-summary/STATIC-PAGES.md)，独立tgbox-ai-summary-pages，base为六B。默认关闭、人工繁中保护、开关前后HTML及实际搜索契约已本地验证；尚未生产启用。恢复先读本工作树STATE。
