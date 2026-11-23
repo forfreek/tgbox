@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+2026-11-23 用户明确取消50条生成限制，全局开启且禁止改配额。当前C:/Users/123/tgbox-ai-summary-global / codex/ai-summary-global，入口[GLOBAL](GLOBAL.md)。显式all范围已实现，89项Worker测试通过；当前生产读回200调用/800预留/100单次/1尝试，必须原样保持。9500纠正为内部预留而非实际神经元；历史8000→10100自动加预算不应发生，已补AGENTS规则。全局部署及最终CI待核验，不代审核发布。
+
 22:11验收补充：autoScan开启后的22:10真实scheduled执行ok，当前Worker版本及800预算读回匹配，累计推理仍95。记录PR #75提交3b76cde的Linux CI45191038949通过，后续仅补定时执行证据；未新增真实推理。两天观察仍进行中，不冒称观察已完成。
 
 2026-11-23 22:07第二批记录[PR #75](https://github.com/forfreek/tgbox/pull/75)已建立，auto_scan已按新授权开启并远端读回确认。本批50条名单、Gemma/v8/params-v3、200 calls/800预留/100单次/1 attempt均保持，配置仅改autoScan。观察至11-25 22:07，不扩围、不代审批。专项本地配额测试2/2、50条状态和仅一个字段变化检查通过；CI以PR最终检查为准。入口[BATCH2](BATCH2.md)，当前工作树tgbox-ai-summary-batch2。

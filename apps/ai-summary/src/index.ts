@@ -1,6 +1,7 @@
 import { createDb } from "@tgbox/db";
-import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION, summaryEntryIds } from "@tgbox/shared";
+import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION } from "@tgbox/shared";
 import { createSummaryModel } from "./models.ts";
+import { summaryGenerationScope } from "./scope.ts";
 import {
   consumeSummaryDlq,
   consumeSummaryMessage,
@@ -20,7 +21,7 @@ export default {
       env.MEDIA,
       env.SUMMARY_QUEUE,
       Date.now,
-      summaryEntryIds(env.AI_SUMMARY_ENTRY_IDS),
+      summaryGenerationScope(env.AI_SUMMARY_SCOPE, env.AI_SUMMARY_ENTRY_IDS),
     );
   },
   async queue(batch, env) {
@@ -40,7 +41,7 @@ export default {
             env.SUMMARY_QUEUE,
             observation.data,
             Date.now,
-            summaryEntryIds(env.AI_SUMMARY_ENTRY_IDS),
+            summaryGenerationScope(env.AI_SUMMARY_SCOPE, env.AI_SUMMARY_ENTRY_IDS),
           );
           message.ack();
         } catch {
@@ -69,7 +70,7 @@ export default {
               paramsVersion: SUMMARY_PARAMS_VERSION,
             }),
             Math.random,
-            summaryEntryIds(env.AI_SUMMARY_ENTRY_IDS),
+            summaryGenerationScope(env.AI_SUMMARY_SCOPE, env.AI_SUMMARY_ENTRY_IDS),
           );
         }
         message.ack();

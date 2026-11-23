@@ -52,10 +52,10 @@ export async function consumeSummaryObservation(
   queue: Sender,
   raw: unknown,
   now: () => number,
-  scope: readonly number[],
+  scope?: readonly number[],
 ) {
   const message = SummaryObserveMessage.parse(raw);
-  if (!scope.includes(message.entryId)) return;
+  if (scope && !scope.includes(message.entryId)) return;
   const config = await getSummaryConfig(db);
   if (!config.enabled) return;
   await observeEntry(db, media, message.entryId, config, now(), 1);
