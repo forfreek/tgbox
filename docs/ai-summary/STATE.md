@@ -1,5 +1,9 @@
 # AI 资源摘要模块状态
 
+2026-11-23 七A交付完成：草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68)，base=#67，提交1d67f3a31d5affd110b3267e77081108120bb454的 [Linux CI 45116119118](https://github.com/forfreek/tgbox/actions/runs/45116119118) 全部通过（2m30s，全仓check/test及脚本类型/测试）。12份文档294个本地链接及diff通过。后续仅补本交付记录，不改代码/配置；保持不合并、不生产迁移/资源创建/部署/推理。七B具体范围待用户确认。以下核验中为历史记录。
+
+七A草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68) 已建立，base=codex/ai-summary-pages（#67），提交1d67f3a；本PR仅5份文档。12份交付/恢复文档294个本地链接和diff检查通过，Linux CI核验中。七B具体资源及迁移/合并/部署范围见ROLLOUT-PREP末节，等待确认后才执行。
+
 2026-11-23 七A生产准备审查完成，见[ROLLOUT-PREP](ROLLOUT-PREP.md)。工作树C:/Users/123/tgbox-ai-summary-rollout / codex/ai-summary-rollout-plan，基于6073368、依赖#67，独立PR交付核验中。生产只读确认最新迁移0021、无AI表/新Worker/两队列，GitHub无AI变量；schema及migration两次SELECT均rows_written=0。没有合并、生产写入、部署或推理。
 
 本地25份SQL内存应用通过，8张AI表及外键/默认关闭检查通过；现有verify-only工作流2项测试通过，merge-tree(main,6073368)无冲突。#67文档提交的CI45114915818首次快照CLI5秒超时，原配置复跑全部通过，失败记录保留，未调整默认超时。下一节点七B的具体迁移/资源/部署须确认，七C生成及七D展示另按范围执行。
