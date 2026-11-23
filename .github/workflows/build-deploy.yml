@@ -38,6 +38,9 @@ env:
   SITE_URL: ${{ vars.SITE_URL }}
   R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
   PUBLIC_BOT_USERNAME: ${{ vars.PUBLIC_BOT_USERNAME }}
+  # Both opt-in flags are empty/off unless explicitly set. No model inference in the build.
+  AI_SUMMARY_ENTRY_IDS: ${{ vars.AI_SUMMARY_ENTRY_IDS }}
+  AI_SUMMARY_DISPLAY: ${{ vars.AI_SUMMARY_DISPLAY }}
   # Optional fine-grained token with Contents: write on TGrpg/awesome-telegram. Without it the
   # awesome list still regenerates on its own daily schedule.
   AWESOME_DISPATCH_TOKEN: ${{ secrets.AWESOME_DISPATCH_TOKEN }}

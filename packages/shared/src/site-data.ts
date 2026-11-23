@@ -53,7 +53,7 @@ export const EntryView = z
      */
     descriptionZh: z.string().nullable().default(null),
     descriptionEn: z.string().nullable().default(null),
-    aiSummary: PublicSummaryText.nullable().optional(),
+    aiSummary: PublicSummaryText.nullable().catch(null).optional(),
     /** detected language code (e.g. "zh", "en"), null when unknown */
     lang: z.string().nullable(),
     verified: z.boolean(),

@@ -1,5 +1,7 @@
 # 项目资料索引
 
+最新六C页面接入见 [STATIC-PAGES](ai-summary/STATIC-PAGES.md)，独立tgbox-ai-summary-pages，base为六B。默认关闭、人工繁中保护、开关前后HTML及实际搜索契约已本地验证；尚未生产启用。恢复先读本工作树STATE。
+
 最新六B数据实现见 [STATIC-DATA](ai-summary/STATIC-DATA.md)，独立tgbox-ai-summary-data，基于六A。公开投影/审批失效、可选隔离导出、快照指纹复核已实现；六C页面尚未接入。恢复先读该工作树STATE。
 
 步骤六目前为接入前契约审查，见 [STATIC-CONTRACT](ai-summary/STATIC-CONTRACT.md)。独立tgbox-ai-summary-static，公开投影、可选导出和人工繁中保护尚未实现；步骤六不能标完成。恢复先读本工作树STATE。

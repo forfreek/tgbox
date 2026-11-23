@@ -4,6 +4,24 @@ import path from "node:path";
 import { expect, test } from "vitest";
 import { convertTraditionalPages, toTraditionalPage } from "./hant.ts";
 
+test("only the plain-text approved AI paragraph is kept byte-for-byte", () => {
+  const paragraph =
+    '<p data-ai-summary data-pagefind-ignore data-ai-summary-preserve="true">「后台」品牌 &amp; &lt;script&gt;\nhttps://example.com/电报 😀</p>';
+  const result = toTraditionalPage(`<title>频道</title><p>机器人</p>${paragraph}<p>其他介绍</p>`);
+  expect(result).toContain(paragraph);
+  expect(result).toContain("<title>頻道</title><p>機器人</p>");
+  expect(result).toContain("<p>其他介紹</p>");
+});
+test("a forged marker in escaped text or a node containing markup cannot suppress conversion", () => {
+  expect(
+    toTraditionalPage('<p data-ai-summary data-ai-summary-preserve="true"><b>机器人</b></p>'),
+  ).toContain("機器人");
+  expect(toTraditionalPage('<p data-ai-summary-preserve="true">机器人</p>')).toContain("機器人");
+  expect(
+    toTraditionalPage("<p>&lt;p data-ai-summary-preserve=&quot;true&quot;&gt;机器人&lt;/p&gt;</p>"),
+  ).toContain("機器人");
+});
+
 test("page text, attributes and inline data are converted to Traditional", () => {
   const page = toTraditionalPage(
     '<html lang="zh-Hant"><title>频道导航</title><meta content="机器人与群组">' +
