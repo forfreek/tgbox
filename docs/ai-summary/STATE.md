@@ -4,6 +4,10 @@
 
 ## 当前状态与授权
 
+2026-11-23 用户明确开始六C，独立C:/Users/123/tgbox-ai-summary-pages / codex/ai-summary-pages，基于六B687854d、base=codex/ai-summary-data。代码及本地页面契约已实现，见 [STATIC-PAGES](STATIC-PAGES.md)：展示开关默认关闭，三语完整有效才显示；人工繁中仅保护AI纯文本p，原事实/简介及metadata保留，新增段不入Pagefind。无新模型推理、迁移、生产构建或部署，灰度未执行。
+
+本地全套Web448项在串行/15000ms预算下通过，后增关闭重建用例定向8项通过；新类型检查全仓10项通过（Web314文件0错误/警告/提示）。Windows首次并行构建/测试有Astro缓存EPERM及旧链接检查超时，保留失败，仓库默认超时未改。默认449项等待Linux CI核验。浏览器三语、特殊字符、桌面/手机、搜索结果与筛选项已验证；不声称所有Pagefind辅助打包文件字节一致。
+
 六B交付完成：最终代码3dccaff7376c9e953cc88a6e26869e177041c245的[Linux CI 45110073662](https://github.com/forfreek/tgbox/actions/runs/45110073662)全部通过（2m20s，全仓检查、测试、脚本类型/测试，含默认52项快照）。十三份文档278个本地链接及diff通过；草稿PR #66不合并。之后仅补文档记录，不改变代码或新增推理。
 
 导出边界补充：可选输出路径不可用时，finally清理也不能反向阻断主构建；已加入清理失败兜底，Node导出测试当前2项通过。快照52项默认设置由本节点最终Linux CI核验。
@@ -89,7 +93,7 @@ v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](
 
 ## 下一步
 
-当前工作树C:/Users/123/tgbox-ai-summary-data，分支codex/ai-summary-data，base=codex/ai-summary-static（#65）。六B草稿PR #66数据实现、本地验收与最终代码Linux CI通过。下一节点六C接正文、保护人工繁中、验证HTML/metadata及Pagefind契约；六C、灰度和历史回填未执行。
+当前工作树C:/Users/123/tgbox-ai-summary-pages，分支codex/ai-summary-pages，base=codex/ai-summary-data（#66）。六C本地实现与页面验收完成，草稿PR及Linux CI交付核验中。下一节点步骤七小批灰度，须先明确授权合并、生产迁移、资源配置及部署范围；本轮不执行灰度或历史回填。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 

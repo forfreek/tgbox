@@ -66,6 +66,8 @@ const searchDirective: AstroIntegration = {
 };
 
 export default defineConfig({
+  // Allows concurrent build-contract tests to keep Astro's mutable cache isolated.
+  cacheDir: process.env.TGBOX_BUILD_CACHE_DIR,
   site: process.env.SITE_URL ?? "http://localhost:4321",
   output: "static",
   // Images and sessions would add bindings we don't use on the free plan.

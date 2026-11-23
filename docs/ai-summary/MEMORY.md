@@ -1,5 +1,9 @@
 # AI 资源摘要模块项目记忆
 
+2026-11-23 六C实现见 [STATIC-PAGES](STATIC-PAGES.md)，tgbox-ai-summary-pages，base六B。AI_SUMMARY_DISPLAY严格1才渲染六B已校验三语DTO，工作流只传变量默认空，原事实段/简介/metadata不替换，新增AI段Pagefind忽略。Astro插值只作文本，hant仅跳过带AI+preserve双标记的纯文本p；不保护整页/script、无占位符碰撞。EntryView坏AI字段catch(null)，不掩盖其他资源错误。关闭→开启→复用开启缓存关闭重建的HTML已回到原样；正文、品牌、URL及人工混排不被OpenCC重写。
+
+Pagefind实际token index/fragment字节一致，完整HTML剔除AI段后逐页相同，浏览器搜索/filters也相同、AI测试词0命中；filter/entry辅助打包可能顺序不同，不能误称全目录哈希一致。首次并行缓存EPERM与5秒旧链接超时保留，独立缓存配置+本地串行15秒预算448项通过，后加回退重建测试定向8项通过；默认449项留Linux CI。无新模型调用或生产操作，下一阶段七的迁移/资源/灰度需明确授权，当前不合并。
+
 六B最终代码3dccaff的Linux CI 45110073662全仓检查、测试及脚本检查通过（2m20s，默认快照52项通过），此前9eeb192的CI45109800262也通过。Windows本地5秒旧支付测试超时保留，不能将放宽到15秒串行复测冒称默认本地通过。十三文档278链接验证通过，后续仅补记录，六C仍未实施。
 
 六B可选导出隔离还包括finally清理错误：不能在catch降级后又因清理失败抛出而终止主构建。两项Node回归覆盖部分文件和不可用路径，旧部分文件不复用。

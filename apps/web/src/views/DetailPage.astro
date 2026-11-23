@@ -23,6 +23,7 @@ import { htmlLang, localizePath } from "@/i18n/locale.ts";
 import { kindTitles, ui } from "@/i18n/ui.ts";
 import { detailUi } from "@/i18n/ui-detail.ts";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { approvedSummaryText } from "@/lib/ai-summary.ts";
 import { activitySegments } from "@/lib/detail-trend.ts";
 import { fill, formatDate, formatNumber } from "@/lib/format.ts";
 import { breadcrumbJsonLd, entryJsonLd } from "@/lib/json-ld.ts";
@@ -106,6 +107,11 @@ const facts = {
   updated: formatDate(entry.updatedAt, locale),
 };
 const summary = entrySummary(locale, facts);
+const approvedIntro = approvedSummaryText(
+  entry.aiSummary,
+  locale,
+  process.env.AI_SUMMARY_DISPLAY === "1",
+);
 const seo = detailSeo(locale, {
   facts,
   kind: entry.kind,
@@ -310,6 +316,9 @@ const statCell =
           </header>
 
           {/* Auto-written from the stats beside it, so the page opens with a sentence, not a table. */}
+          {approvedIntro && <p data-ai-summary data-pagefind-ignore
+            data-ai-summary-preserve={locale==='zh-hant'?'true':undefined}
+            class="mt-6 text-[0.95rem] leading-relaxed break-words whitespace-pre-line text-foreground/85">{approvedIntro}</p>}
           <p data-entry-summary class="mt-6 text-[0.95rem] leading-relaxed text-foreground/80">
             {summary}
           </p>
