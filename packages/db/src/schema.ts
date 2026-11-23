@@ -30,6 +30,138 @@ import {
 
 // Timestamps are unix epoch milliseconds (integer columns).
 
+export const aiSummarySettings = sqliteTable(
+  "ai_summary_settings",
+  {
+    id: integer().primaryKey(),
+    enabled: integer({ mode: "boolean" }).notNull().default(false),
+    model: text().notNull().default("disabled"),
+    promptVersion: text("prompt_version").notNull().default("v1"),
+    paramsVersion: text("params_version").notNull().default("v1"),
+    dailyCalls: integer("daily_calls").notNull().default(100),
+    dailyNeurons: integer("daily_neurons").notNull().default(10000),
+    reservation: integer().notNull().default(100),
+    maxAttempts: integer("max_attempts").notNull().default(3),
+  },
+  (t) => [
+    check(
+      "ai_summary_settings_valid",
+      sql`${t.id} = 1 AND ${t.dailyCalls} >= 0 AND ${t.dailyNeurons} >= 0 AND ${t.reservation} > 0 AND ${t.maxAttempts} BETWEEN 1 AND 10`,
+    ),
+  ],
+);
+
+export const aiSummarySources = sqliteTable("ai_summary_sources", {
+  entryId: integer("entry_id")
+    .primaryKey()
+    .references(() => entries.id, { onDelete: "cascade" }),
+  generation: integer().notNull(),
+  fingerprint: text().notNull(),
+  input: text().notNull(),
+  decision: text().notNull(),
+  sourceGuard: text("source_guard").notNull(),
+  observationToken: text("observation_token").notNull(),
+  locked: integer({ mode: "boolean" }).notNull().default(false),
+  editVersion: integer("edit_version").notNull().default(0),
+  updatedAt: integer("updated_at").notNull(),
+});
+
+export const aiSummaryJobs = sqliteTable(
+  "ai_summary_jobs",
+  {
+    id: text().primaryKey(),
+    entryId: integer("entry_id")
+      .notNull()
+      .references(() => entries.id, { onDelete: "cascade" }),
+    generation: integer().notNull(),
+    fingerprint: text().notNull(),
+    input: text().notNull(),
+    sourceGuard: text("source_guard").notNull(),
+    model: text().notNull(),
+    promptVersion: text("prompt_version").notNull(),
+    paramsVersion: text("params_version").notNull(),
+    editVersion: integer("edit_version").notNull(),
+    status: text().notNull(),
+    reason: text(),
+    priority: integer().notNull().default(0),
+    attempts: integer().notNull().default(0),
+    dueAt: integer("due_at").notNull(),
+    dispatchedAt: integer("dispatched_at"),
+    leaseToken: text("lease_token"),
+    leaseUntil: integer("lease_until"),
+    createdAt: integer("created_at").notNull(),
+    updatedAt: integer("updated_at").notNull(),
+  },
+  (t) => [
+    uniqueIndex("ai_summary_job_variant").on(
+      t.entryId,
+      t.generation,
+      t.model,
+      t.promptVersion,
+      t.paramsVersion,
+    ),
+    index("ai_summary_jobs_due").on(t.status, t.dueAt, t.priority),
+    index("ai_summary_jobs_entry").on(t.entryId, t.generation),
+    check(
+      "ai_summary_job_status",
+      sql`${t.status} IN ('pending','queued','running','retry_wait','succeeded','skipped','blocked','superseded','failed')`,
+    ),
+  ],
+);
+
+/** Reservations are immutable, including calls whose outcome was lost on Worker termination. */
+export const aiSummaryAttempts = sqliteTable(
+  "ai_summary_attempts",
+  {
+    token: text().primaryKey(),
+    // Preserve quota reservations when a resource/job is permanently deleted.
+    jobId: text("job_id").notNull(),
+    attempt: integer().notNull(),
+    day: text().notNull(),
+    neurons: integer().notNull(),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => [
+    index("ai_summary_attempts_day").on(t.day),
+    uniqueIndex("ai_summary_attempt_number").on(t.jobId, t.attempt),
+    check("ai_summary_attempt_positive", sql`${t.neurons} > 0 AND ${t.attempt} > 0`),
+  ],
+);
+
+export const aiSummaryRevisions = sqliteTable(
+  "ai_summary_revisions",
+  {
+    id: text().primaryKey(),
+    jobId: text("job_id")
+      .notNull()
+      .unique()
+      .references(() => aiSummaryJobs.id, { onDelete: "cascade" }),
+    entryId: integer("entry_id")
+      .notNull()
+      .references(() => entries.id, { onDelete: "cascade" }),
+    generation: integer().notNull(),
+    editVersion: integer("edit_version").notNull(),
+    input: text().notNull(),
+    output: text().notNull(),
+    reviewStatus: text("review_status").notNull().default("pending"),
+    createdAt: integer("created_at").notNull(),
+  },
+  (t) => [index("ai_summary_revisions_entry").on(t.entryId, t.createdAt)],
+);
+
+export const aiSummaryRuns = sqliteTable(
+  "ai_summary_runs",
+  {
+    id: text().primaryKey(),
+    cursor: integer().notNull().default(0),
+    upperBound: integer("upper_bound").notNull(),
+    status: text().notNull().default("active"),
+    leaseToken: text("lease_token"),
+    leaseUntil: integer("lease_until"),
+  },
+  (t) => [check("ai_summary_run_status", sql`${t.status} IN ('active','paused','completed')`)],
+);
+
 export const categories = sqliteTable(
   "categories",
   {

@@ -5,6 +5,7 @@ export * from "./admin-blacklist.ts";
 export * from "./admin-entries.ts";
 export * from "./admin-review.ts";
 export * from "./admin-taxonomy.ts";
+export * from "./ai-summary.ts";
 export * from "./app.ts";
 export * from "./clicks.ts";
 export * from "./friend-links.ts";
