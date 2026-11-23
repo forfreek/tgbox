@@ -1,5 +1,7 @@
 # 项目资料索引
 
+AI 资源摘要模块恢复先读 [STATE](ai-summary/STATE.md)，当前步骤二输入与证据契约见 [CONTRACTS](ai-summary/CONTRACTS.md)。按问题读取指定专题，禁止一次性读取全部文档与源码。
+
 头像 URL 协议相对地址导致的 Invalid URL 错误与修复见 [刷新状态](refresh-progress/STATE.md#2026-11-21-头像-url-兼容修复) 和 [补充计划](refresh-progress/PLAN.md#头像-url-兼容补充节点)。
 
 网站标题与关键词优化先读 [当前状态](seo-titles/STATE.md)，实施节点、动态摘要与提醒见 [计划](seo-titles/PLAN.md)，数据链路与可复用决策见 [项目记忆](seo-titles/MEMORY.md)。

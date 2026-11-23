@@ -1,0 +1,55 @@
+{
+  "commit": "cb0d6a658d1dc57c45ef3e6092d9f15c66386b7b",
+  "sourcePath": "docs/content-review/evidence/2026-11-15-public-entries.json",
+  "generatedAt": "2026-11-14T17:41:28.739Z",
+  "entries": [
+    {
+      "username": "telegramtips",
+      "kind": "channel",
+      "title": "Telegram Tips",
+      "description": "Telegram stands for freedom and privacy and has many easy to use features.",
+      "category": "software",
+      "tags": ["free", "official"]
+    },
+    {
+      "username": "cocoon",
+      "kind": "channel",
+      "title": "Cocoon",
+      "description": "",
+      "category": "ai",
+      "tags": ["llm", "official"]
+    },
+    {
+      "username": "binanceexchange",
+      "kind": "group",
+      "title": "Binance English",
+      "description": "Binance announcements: @binance_announcements\n\nOther Languages: Please type /communities in the chat to find our other communities.",
+      "category": "crypto",
+      "tags": ["exchange"]
+    },
+    {
+      "username": "gouwu",
+      "kind": "group",
+      "title": "免费VPN加速器交流🔥🔥🔥",
+      "description": "",
+      "category": "vpn",
+      "tags": ["free"]
+    },
+    {
+      "username": "spambot",
+      "kind": "bot",
+      "title": "Spam Info Bot",
+      "description": "The official Spam Info Bot by Telegram. Helps users with limited accounts regain the full functionality.",
+      "category": "tools",
+      "tags": ["free", "official", "security"]
+    },
+    {
+      "username": "foursquare",
+      "kind": "bot",
+      "title": "Foursquare",
+      "description": "This bot can help you find restaurants and other places nearby and send their addresses to friends.",
+      "category": "search",
+      "tags": ["free", "official"]
+    }
+  ]
+}
