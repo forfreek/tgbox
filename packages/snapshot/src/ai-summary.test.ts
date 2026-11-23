@@ -52,7 +52,9 @@ test("disabled/empty/invalid whitelist stays off; explicit IDs cannot expand to 
   expect(summaryEntryIds("1,x")).toEqual([]);
   expect(summaryEntryIds("0")).toEqual([]);
   expect(summaryEntryIds("1, 2,1")).toEqual([1, 2]);
-  expect(summaryEntryIds(Array(21).fill("1").join(","))).toEqual([]);
+  const fifty = Array.from({ length: 50 }, (_, i) => i + 1);
+  expect(summaryEntryIds(fifty.join(","))).toEqual(fifty);
+  expect(summaryEntryIds([...fifty, 51].join(","))).toEqual([]);
 });
 test("snapshot emits only whitelisted verified text and no private projection metadata", async () => {
   const f = await fixture();
@@ -72,6 +74,33 @@ test("snapshot emits only whitelisted verified text and no private projection me
   });
   expect(on.entries.find((e) => e.username === "channel_two")?.aiSummary).toBeNull();
   expect(JSON.stringify(on)).not.toMatch(/fingerprint|contractVersion|actor|revision_id/);
+});
+
+test("all 50 approved rollout projections are consumed, including IDs beyond the old 20 limit", async () => {
+  const f = await fixture();
+  try {
+    for (let id = 3; id <= 51; id++) {
+      f.db
+        .prepare(
+          "INSERT INTO entries(id,username,kind,category_id,title,description,listed_at,updated_at) SELECT ?,?,'bot',category_id,title,description,listed_at,updated_at FROM entries WHERE id=1",
+        )
+        .run(id, `rollout_${id}_bot`);
+      const source = await snapshotSummarySource(f.db, id, f.read);
+      const fingerprint = await aiSummaryFingerprint(source, (b) =>
+        crypto.subtle.digest("SHA-256", b),
+      );
+      f.db
+        .prepare("INSERT INTO ai_summary_public(entry_id,zh,hant,en,fingerprint) VALUES(?,?,?,?,?)")
+        .run(id, "分享软件说明。", "分享軟體說明。", "Shares software instructions.", fingerprint);
+    }
+    const ids = Array.from({ length: 51 }, (_, i) => i + 1);
+    const summaries = await readPublicSummaries(f.db, ids, f.read);
+    expect(summaries.size).toBe(50);
+    expect(summaries.has(50)).toBe(true);
+    expect(summaries.has(51)).toBe(false);
+  } finally {
+    f.db.close();
+  }
 });
 test("stats and views do not invalidate but changed visible posts do", async () => {
   const f = await fixture();

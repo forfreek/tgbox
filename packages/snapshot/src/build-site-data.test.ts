@@ -441,14 +441,15 @@ describe("snapshot CLI", () => {
         "--media-dir",
         writeFixtureMedia(dir),
       ],
-      { encoding: "utf8" },
+      // Cold Node/SQLite startup shares CI CPU with the Worker suites.
+      { encoding: "utf8", timeout: 15_000 },
     );
 
     const data = SiteData.parse(JSON.parse(readFileSync(out, "utf8")));
     expect(data.stats.total).toBe(10);
     expect(entry(data, "techdaily").posts).toEqual(fixturePosts);
     expect(stdout).toContain("10 entries");
-  });
+  }, 20_000);
 });
 
 describe("post visibility", () => {

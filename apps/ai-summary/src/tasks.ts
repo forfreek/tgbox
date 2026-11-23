@@ -39,8 +39,36 @@ export type SummaryModel = (
 type Media = Pick<R2Bucket, "get">;
 type Sender = { sendBatch(messages: { body: SummaryMessage }[]): Promise<unknown> };
 
-export async function dispatchSummaryOutbox(db: Db, queue: Sender, now: number) {
-  const jobs = await takeSummaryOutbox(db, now, 2);
+export const SummaryObserveMessage = z.strictObject({
+  v: z.literal(1),
+  action: z.literal("observe"),
+  entryId: z.number().int().positive(),
+});
+
+/** Explicit initial backfill; use the same fresh-source/idempotency path as the cron. */
+export async function consumeSummaryObservation(
+  db: Db,
+  media: Media,
+  queue: Sender,
+  raw: unknown,
+  now: () => number,
+  scope: readonly number[],
+) {
+  const message = SummaryObserveMessage.parse(raw);
+  if (!scope.includes(message.entryId)) return;
+  const config = await getSummaryConfig(db);
+  if (!config.enabled) return;
+  await observeEntry(db, media, message.entryId, config, now(), 1);
+  await dispatchSummaryOutbox(db, queue, now(), scope);
+}
+
+export async function dispatchSummaryOutbox(
+  db: Db,
+  queue: Sender,
+  now: number,
+  scope?: readonly number[],
+) {
+  const jobs = await takeSummaryOutbox(db, now, 2, scope);
   if (jobs.length === 0) return 0;
   // Marking before send is intentional. A crash or ambiguous send is recovered after the dispatch lease.
   await queue.sendBatch(
@@ -65,8 +93,10 @@ export async function consumeSummaryMessage(
   now: () => number,
   model?: SummaryModel,
   random = Math.random,
+  scope?: readonly number[],
 ) {
   const message = SummaryMessage.parse(raw);
+  if (scope && !scope.includes(message.entryId)) return;
   let job = await getSummaryJob(db, message.jobId);
   if (
     job?.status !== "queued" ||
@@ -196,12 +226,34 @@ export async function scanSummaryRun(
   );
 }
 
-export async function tickSummaryTasks(db: Db, media: Media, queue: Sender, now: () => number) {
+export async function tickSummaryTasks(
+  db: Db,
+  media: Media,
+  queue: Sender,
+  now: () => number,
+  scope?: readonly number[],
+) {
   const config = await getSummaryConfig(db);
   if (!config.enabled) return;
+  if (scope && scope.length === 0) return;
   await recoverSummaryLeases(db, now());
   if (!config.autoScan) {
-    await dispatchSummaryOutbox(db, queue, now());
+    await dispatchSummaryOutbox(db, queue, now(), scope);
+    return;
+  }
+  if (scope) {
+    // Two fixed IDs per five-minute slot: a 50-entry pass takes 125 minutes.
+    const start = (Math.floor(now() / 300_000) * 2) % scope.length;
+    for (let offset = 0; offset < Math.min(2, scope.length); offset++) {
+      const id = scope[(start + offset) % scope.length];
+      if (id === undefined) continue;
+      try {
+        await observeEntry(db, media, id, config, now());
+      } catch {
+        console.error("ai_summary_source_error", { entryId: id });
+      }
+    }
+    await dispatchSummaryOutbox(db, queue, now(), scope);
     return;
   }
   // Newest IDs get a separate cursor and priority. Rolling passes cover older rows and edits.

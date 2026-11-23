@@ -3,6 +3,13 @@ import { AiSummaryModelInput, AiSummaryOutput } from "@tgbox/shared";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/coss/ui/button.tsx";
 import { Card } from "@/components/coss/ui/card.tsx";
+import {
+  Dialog,
+  DialogHeader,
+  DialogPopup,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/coss/ui/dialog.tsx";
 import { Input } from "@/components/coss/ui/input.tsx";
 import { Textarea } from "@/components/coss/ui/textarea.tsx";
 import {
@@ -70,7 +77,7 @@ export function SummaryPage() {
   const query = useQuery(summaryOverviewOptions(filter, before));
   const command = useMutation({
     mutationFn: (data: SummaryAction) => $summaryCommand({ data }),
-    onSuccess: () => setNotice("已保存。批准的内容将在后续网站接入后使用。"),
+    onSuccess: () => setNotice("已保存。白名单内已批准的内容将在后续网站构建后生效。"),
     onError: (e) => {
       setNotice(e.message);
       noticeRef.current?.focus();
@@ -101,143 +108,185 @@ export function SummaryPage() {
     );
   const busy = command.isPending || batch.isPending;
   return (
-    <div className="flex flex-col gap-6">
-      <p ref={noticeRef} tabIndex={-1} role="status" className="whitespace-pre-wrap text-sm">
-        {notice}
-      </p>
-      <ConfigForm
-        key={JSON.stringify(query.data.config)}
-        view={query.data}
-        busy={busy}
-        save={(data) => command.mutate(data)}
-      />
-      <section aria-labelledby="summary-list-heading" className="flex flex-col gap-3">
-        <h2 id="summary-list-heading" className="font-semibold">
-          资源与任务
-        </h2>
-        <div className="flex flex-wrap items-end gap-3">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="summary-filter">状态</label>
-            <select
-              id="summary-filter"
-              name="filter"
-              className={selectStyle}
-              value={filter}
-              onChange={(e) => {
-                setFilter(e.target.value as typeof filter);
+    <Dialog
+      open={entryId !== null}
+      onOpenChange={(open) => {
+        if (!open) setEntryId(null);
+      }}
+    >
+      <div className="flex flex-col gap-6">
+        <p
+          ref={entryId === null ? noticeRef : undefined}
+          tabIndex={-1}
+          role="status"
+          className="whitespace-pre-wrap text-sm"
+        >
+          {notice}
+        </p>
+        <ConfigForm
+          key={JSON.stringify(query.data.config)}
+          view={query.data}
+          busy={busy}
+          save={(data) => command.mutate(data)}
+        />
+        <section aria-labelledby="summary-list-heading" className="flex flex-col gap-3">
+          <h2 id="summary-list-heading" className="font-semibold">
+            资源与任务
+          </h2>
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="summary-filter">状态</label>
+              <select
+                id="summary-filter"
+                name="filter"
+                className={selectStyle}
+                value={filter}
+                onChange={(e) => {
+                  setFilter(e.target.value as typeof filter);
+                  setBefore(Number.MAX_SAFE_INTEGER);
+                  setSelected([]);
+                }}
+              >
+                {filters.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={busy || selected.length === 0}
+              onClick={() => batch.mutate(false)}
+            >
+              预检所选（{selected.length}/20）
+            </Button>
+            <Button
+              type="button"
+              disabled={busy || selected.length === 0}
+              onClick={() => batch.mutate(true)}
+            >
+              生成所选草稿
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => client.invalidateQueries({ queryKey: ["aiSummary"] })}
+            >
+              刷新
+            </Button>
+          </div>
+          <p className="text-muted-foreground text-sm">
+            预检不调用模型；生成只加入异步任务，暂停时不会推理。短简介或重复内容可不发布。每日预算按
+            UTC 重置。
+          </p>
+          <div className="flex flex-col gap-2">
+            {query.data.list.rows.map((row) => (
+              <Card key={row.id} className="flex flex-wrap gap-3 p-4 sm:flex-row sm:items-center">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="entry"
+                    value={row.id}
+                    checked={selected.includes(row.id)}
+                    onChange={(e) =>
+                      setSelected((ids) =>
+                        e.target.checked
+                          ? [...ids, row.id].slice(0, 20)
+                          : ids.filter((id) => id !== row.id),
+                      )
+                    }
+                  />
+                  <span>选择 #{row.id}</span>
+                </label>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">
+                    {row.title} <span className="text-muted-foreground">@{row.username}</span>
+                  </p>
+                  <p className="text-sm">
+                    {states[row.review_status ?? ""] ?? states[row.job_status ?? ""] ?? "尚未生成"}
+                    {row.locked ? " · 已锁定" : ""}
+                    {row.reason ? ` · ${reasons[row.reason] ?? row.reason}` : ""}
+                  </p>
+                </div>
+                <DialogTrigger
+                  render={<Button type="button" variant="outline" />}
+                  onClick={() => {
+                    setNotice("");
+                    setEntryId(row.id);
+                  }}
+                >
+                  查看与审核
+                </DialogTrigger>
+                {row.job_status === "failed" || row.job_status === "retry_wait" ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={busy}
+                    onClick={() => command.mutate({ action: "retry", entryId: row.id })}
+                  >
+                    重试技术失败
+                  </Button>
+                ) : null}
+              </Card>
+            ))}
+          </div>
+          {query.data.list.rows.length === 0 ? <p>没有符合条件的资源。</p> : null}
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={before === Number.MAX_SAFE_INTEGER}
+              onClick={() => {
                 setBefore(Number.MAX_SAFE_INTEGER);
                 setSelected([]);
               }}
             >
-              {filters.map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
+              回到第一页
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={!query.data.list.next}
+              onClick={() => {
+                if (query.data.list.next) setBefore(query.data.list.next);
+                setSelected([]);
+              }}
+            >
+              下一页
+            </Button>
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={busy || selected.length === 0}
-            onClick={() => batch.mutate(false)}
-          >
-            预检所选（{selected.length}/20）
-          </Button>
-          <Button
-            type="button"
-            disabled={busy || selected.length === 0}
-            onClick={() => batch.mutate(true)}
-          >
-            生成所选草稿
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => client.invalidateQueries({ queryKey: ["aiSummary"] })}
-          >
-            刷新
-          </Button>
-        </div>
-        <p className="text-muted-foreground text-sm">
-          预检不调用模型；生成只加入异步任务，暂停时不会推理。短简介或重复内容可不发布。每日预算按
-          UTC 重置。
-        </p>
-        <div className="flex flex-col gap-2">
-          {query.data.list.rows.map((row) => (
-            <Card key={row.id} className="flex flex-wrap gap-3 p-4 sm:flex-row sm:items-center">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="entry"
-                  value={row.id}
-                  checked={selected.includes(row.id)}
-                  onChange={(e) =>
-                    setSelected((ids) =>
-                      e.target.checked
-                        ? [...ids, row.id].slice(0, 20)
-                        : ids.filter((id) => id !== row.id),
-                    )
-                  }
-                />
-                <span>选择 #{row.id}</span>
-              </label>
-              <div className="min-w-0 flex-1">
-                <p className="font-medium">
-                  {row.title} <span className="text-muted-foreground">@{row.username}</span>
-                </p>
-                <p className="text-sm">
-                  {states[row.review_status ?? ""] ?? states[row.job_status ?? ""] ?? "尚未生成"}
-                  {row.locked ? " · 已锁定" : ""}
-                  {row.reason ? ` · ${reasons[row.reason] ?? row.reason}` : ""}
-                </p>
-              </div>
-              <Button type="button" variant="outline" onClick={() => setEntryId(row.id)}>
-                查看与审核
-              </Button>
-              {row.job_status === "failed" || row.job_status === "retry_wait" ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={busy}
-                  onClick={() => command.mutate({ action: "retry", entryId: row.id })}
-                >
-                  重试技术失败
-                </Button>
-              ) : null}
-            </Card>
-          ))}
-        </div>
-        {query.data.list.rows.length === 0 ? <p>没有符合条件的资源。</p> : null}
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            disabled={before === Number.MAX_SAFE_INTEGER}
-            onClick={() => {
-              setBefore(Number.MAX_SAFE_INTEGER);
-              setSelected([]);
-            }}
-          >
-            回到第一页
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={!query.data.list.next}
-            onClick={() => {
-              if (query.data.list.next) setBefore(query.data.list.next);
-              setSelected([]);
-            }}
-          >
-            下一页
-          </Button>
-        </div>
-      </section>
-      {entryId !== null ? (
-        <Detail key={entryId} entryId={entryId} busy={busy} act={(data) => command.mutate(data)} />
-      ) : null}
-    </div>
+        </section>
+        <DialogPopup
+          bottomStickOnMobile={false}
+          className="max-h-[calc(100dvh-2rem)] max-w-6xl"
+          closeProps={{ "aria-label": "关闭摘要审核" }}
+        >
+          <DialogHeader className="shrink-0 pr-12">
+            <DialogTitle>摘要查看与审核{entryId !== null ? ` · #${entryId}` : ""}</DialogTitle>
+          </DialogHeader>
+          <div className="min-h-0 overflow-y-auto overscroll-contain px-6 pb-6">
+            <p
+              ref={entryId !== null ? noticeRef : undefined}
+              tabIndex={-1}
+              role="status"
+              className="whitespace-pre-wrap text-sm"
+            >
+              {notice}
+            </p>
+            {entryId !== null ? (
+              <Detail
+                key={entryId}
+                entryId={entryId}
+                busy={busy}
+                act={(data) => command.mutate(data)}
+              />
+            ) : null}
+          </div>
+        </DialogPopup>
+      </div>
+    </Dialog>
   );
 }
 function ConfigForm({
@@ -511,7 +560,7 @@ function Draft({
           ))}
         </div>
         <p className="text-muted-foreground text-sm">
-          核对事实、重要限制及整页重复内容。中文最多120字，英文最多90词。保存会撤销旧批准；批准仅表示审核通过，暂不改变网站展示。
+          核对事实、重要限制及整页重复内容。中文最多120字，英文最多90词。保存会撤销旧批准；白名单内已批准的内容将在后续网站构建后展示。
         </p>
         <Button type="submit" disabled={busy || !evidence.success}>
           保存三语草稿并锁定

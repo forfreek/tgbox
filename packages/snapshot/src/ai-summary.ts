@@ -8,6 +8,7 @@ import {
   PublicSummaryText,
   prepareAiSummary,
   SiteSettings,
+  SUMMARY_ROLLOUT_LIMIT,
   settingsDefaults,
 } from "@tgbox/shared";
 
@@ -55,7 +56,7 @@ export async function readPublicSummaries(
   const summaries = new Map<number, ReturnType<typeof PublicSummaryText.parse>>();
   if (!ids?.length || !projectionDb) return summaries;
   // Per-ID reads avoid loading unselected texts. Any optional AI failure leaves the old summary.
-  for (const id of new Set(ids.slice(0, 20))) {
+  for (const id of new Set(ids.slice(0, SUMMARY_ROLLOUT_LIMIT))) {
     if (!Number.isSafeInteger(id) || id <= 0) continue;
     try {
       const row = projectionDb
