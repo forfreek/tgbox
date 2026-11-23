@@ -1,5 +1,13 @@
 # AI 资源摘要模块状态
 
+22:11验收补充：autoScan开启后的22:10真实scheduled执行ok，当前Worker版本及800预算读回匹配，累计推理仍95。记录PR #75提交3b76cde的Linux CI45191038949通过，后续仅补定时执行证据；未新增真实推理。两天观察仍进行中，不冒称观察已完成。
+
+2026-11-23 22:07第二批记录[PR #75](https://github.com/forfreek/tgbox/pull/75)已建立，auto_scan已按新授权开启并远端读回确认。本批50条名单、Gemma/v8/params-v3、200 calls/800预留/100单次/1 attempt均保持，配置仅改autoScan。观察至11-25 22:07，不扩围、不代审批。专项本地配额测试2/2、50条状态和仅一个字段变化检查通过；CI以PR最终检查为准。入口[BATCH2](BATCH2.md)，当前工作树tgbox-ai-summary-batch2。
+
+第二批实际已完成：38成功/11跳过/1失败，44次新增调用，未人工干预结果。2026-11-23 22:04用户继续要求补记录后开自动化、观察两天且设置不变；最新生产预算已被管理员改为800预留/日（每次100），调用上限200。需保留最新值，仅开启当前50条auto_scan。源码确认任一配额不足只阻止新推理，次日北京时间08:00重试，扫描及正常网站不停；详见[BATCH2](BATCH2.md)。
+
+2026-11-23 用户明确要求新增50条由模型自动完成、不人工干预。当前C:/Users/123/tgbox-ai-summary-batch2 / codex/ai-summary-batch2，基于已合并#74的main e4700a7。生产Worker/Admin已同步v8，名单为新的50条；19:03已入队，完成统计待核验。仅启用队列消费、auto_scan=false，保留原人工稿与静态展示名单，不编辑/挑选/代批准本批输出。入口[BATCH2](BATCH2.md)。
+
 交付边界复核：两条推理输入均来自已归档证据，没有重新读取远端生成来源；生产设置仅另行SELECT核验，未写配置或业务表。保持草稿#74，CI以其最终检查为准。
 
 候选[PR #74](https://github.com/forfreek/tgbox/pull/74)已建立，draft、base=main、head=codex/ai-summary-prompt-v8。代码3632a91本地86项测试、类型检查及dry-run通过，最终CI从PR核验。2026-11-23只读复核生产仍Gemma/v7/params-v3、enabled/auto_scan=1；本节点未切换或重跑。入口[PROMPT-V8](PROMPT-V8.md)。
