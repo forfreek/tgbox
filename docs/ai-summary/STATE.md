@@ -1,5 +1,9 @@
 # AI 资源摘要模块状态
 
+v8候选本地交付核验：Worker86/86、Worker/Admin类型检查及dry-run通过，冻结的两次真实请求/响应可离线复核；C6仍偏逐项描述，不标全面质量通过。下一项仅独立草稿PR及CI，保持不合并、不部署、不切换生产v7配置、不重跑50条。
+
+2026-11-23 用户确认加入资源整体介绍边界。当前C:/Users/123/tgbox-ai-summary-prompt-v8 / codex/ai-summary-prompt-v8，基于main b5f154e，入口[PROMPT-V8](PROMPT-V8.md)。共用规则、频道说明和冲突示例已更新，版本v8；Gemma/params-v3不变。两次定向真实测试：#1940不再列片名，C6仍有逐项描述痕迹，质量限制保留。未改生产v7或重跑50条，PR/最终检查待完成。
+
 上线观察记录[PR #73](https://github.com/forfreek/tgbox/pull/73)，base=main，当前工作树C:/Users/123/tgbox-ai-summary-observe50、codex/ai-summary-observe50。48份既有模型响应、18页HTML证据和本节点文档链接已离线核验；本PR只改docs，不追加模型调用或部署。后续观察与抽检从[OBSERVE50](OBSERVE50.md)恢复，保持固定50条，不扩围。
 
 2026-11-23 七D上线验收完成：#72已进入main，上线代码基线e34e7a3，主分支CI45154564097及部署45154564101成功，Web版本f4ddf5a4-b2dd-44b5-baf1-3cce5b6638a9。固定50条自动生成开启，36草稿/13跳过/1失败，新增40调用；3份人工批准仅在名单内展示，新稿未自动批准。18页三语200、原事实段落保留、9页AI/9页回退，canonical/hreflang/description与启用前一致。详细证据、后台Access验证限制及回退见[OBSERVE50](OBSERVE50.md)。当前工作树tgbox-ai-summary-observe50，观察记录PR #73；下一步抽检待审草稿并观察，不扩全站。
