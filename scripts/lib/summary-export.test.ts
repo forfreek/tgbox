@@ -6,6 +6,19 @@ import path from "node:path";
 import { test } from "node:test";
 import { optionalSummaryExport } from "./summary-export.ts";
 
+test("an unusable optional output path also falls back when cleanup fails", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "summary-export-directory-"));
+  let called = false;
+  assert.equal(
+    await optionalSummaryExport(directory, () => {
+      called = true;
+    }),
+    "",
+  );
+  assert.equal(called, false);
+  await access(directory);
+});
+
 test("optional export discards partial output on failure and removes stale files", async () => {
   const file = path.join(await mkdtemp(path.join(tmpdir(), "summary-export-")), "optional.sql");
   await writeFile(file, "stale");

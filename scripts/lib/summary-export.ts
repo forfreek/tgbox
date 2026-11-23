@@ -12,6 +12,8 @@ export async function optionalSummaryExport(
     console.warn("AI summary projection unavailable; using existing summaries");
     return "";
   } finally {
-    await rm(file, { force: true });
+    await rm(file, { force: true }).catch(() => {
+      console.warn("Optional AI export cleanup failed; file will not be reused");
+    });
   }
 }
