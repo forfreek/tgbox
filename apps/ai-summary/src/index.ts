@@ -1,10 +1,12 @@
 import { createDb } from "@tgbox/db";
-import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION } from "@tgbox/shared";
+import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION, summaryEntryIds } from "@tgbox/shared";
 import { createSummaryModel } from "./models.ts";
 import {
   consumeSummaryDlq,
   consumeSummaryMessage,
+  consumeSummaryObservation,
   SummaryMessage,
+  SummaryObserveMessage,
   tickSummaryTasks,
 } from "./tasks.ts";
 
@@ -13,11 +15,40 @@ export default {
     return new Response("Not found", { status: 404 });
   },
   async scheduled(_controller, env) {
-    await tickSummaryTasks(createDb(env.DB), env.MEDIA, env.SUMMARY_QUEUE, Date.now);
+    await tickSummaryTasks(
+      createDb(env.DB),
+      env.MEDIA,
+      env.SUMMARY_QUEUE,
+      Date.now,
+      summaryEntryIds(env.AI_SUMMARY_ENTRY_IDS),
+    );
   },
   async queue(batch, env) {
     const db = createDb(env.DB);
     for (const message of batch.messages) {
+      const observation = SummaryObserveMessage.safeParse(message.body);
+      if (observation.success) {
+        if (batch.queue === "tgbox-ai-summary-dlq") {
+          console.error("ai_summary_observation_dlq", { entryId: observation.data.entryId });
+          message.ack();
+          continue;
+        }
+        try {
+          await consumeSummaryObservation(
+            db,
+            env.MEDIA,
+            env.SUMMARY_QUEUE,
+            observation.data,
+            Date.now,
+            summaryEntryIds(env.AI_SUMMARY_ENTRY_IDS),
+          );
+          message.ack();
+        } catch {
+          console.error("ai_summary_observation_error", { entryId: observation.data.entryId });
+          message.retry({ delaySeconds: 60 });
+        }
+        continue;
+      }
       const parsed = SummaryMessage.safeParse(message.body);
       if (!parsed.success) {
         console.error("ai_summary_invalid_message", { messageId: message.id });
@@ -37,6 +68,8 @@ export default {
               promptVersion: SUMMARY_PROMPT_VERSION,
               paramsVersion: SUMMARY_PARAMS_VERSION,
             }),
+            Math.random,
+            summaryEntryIds(env.AI_SUMMARY_ENTRY_IDS),
           );
         }
         message.ack();

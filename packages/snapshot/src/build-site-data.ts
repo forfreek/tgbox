@@ -12,6 +12,7 @@ import {
   ProductKind,
   SiteData,
   SiteSettings,
+  SUMMARY_ROLLOUT_LIMIT,
   settingsDefaults,
   shouldHidePost,
 } from "@tgbox/shared";
@@ -218,7 +219,7 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
       };
     });
 
-    const summaryIds = new Set(options.summaryEntryIds?.slice(0, 20));
+    const summaryIds = new Set(options.summaryEntryIds?.slice(0, SUMMARY_ROLLOUT_LIMIT));
     for (const entry of entries)
       if (summaryIds.has(entry.id)) cachedPostKeys.add(`posts/${entry.username}.json`);
     const media = await loadMedia(entries);

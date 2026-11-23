@@ -1,5 +1,9 @@
 # 项目资料索引
 
+七D主分支集成PR #72，base已核验main；#71仅合入旧堆叠base。部署及50条任务正在执行，最新结果查本工作树[STATE](ai-summary/STATE.md)与[ROLLOUT50](ai-summary/ROLLOUT50.md)。
+
+2026-11-23 最新七D固定50条灰度及审核弹层见[ROLLOUT50](ai-summary/ROLLOUT50.md)，先读[STATE](ai-summary/STATE.md)。工作树tgbox-ai-summary-rollout50，依赖#70；本地已验证，PR及生产上线待执行。保留人工审核，禁止全站扩散。
+
 2026-11-23 七C固定12条真实生成与审阅见[LIVE-PILOT](ai-summary/LIVE-PILOT.md)，恢复先读[STATE](ai-summary/STATE.md)。工作树tgbox-ai-summary-live-pilot，依赖#69；10次调用，7草稿/3弃答/2预检跳过，3草稿需编辑，生成已关闭，页面未启用。保留并行管理员审批，不自动代为批准或展示。
 
 2026-11-23 最新七B已按授权生产部署但保持AI关闭，先读[STATE](ai-summary/STATE.md)，实际版本、迁移、零任务核验及限制见[RELEASE-DISABLED](ai-summary/RELEASE-DISABLED.md)。工作树tgbox-ai-summary-release，交付依赖七A#68；七C真实生成、七D展示均未执行。

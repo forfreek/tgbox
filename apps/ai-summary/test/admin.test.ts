@@ -439,7 +439,7 @@ test("queue passes versions to the model and the entry point uses the adapter wi
           { body: next, id: "mocked-ai", timestamp: new Date(NOW), attempts: 1, ack, retry },
         ],
       },
-      env,
+      { ...env, AI_SUMMARY_ENTRY_IDS: String(second) },
     );
     expect(spy).toHaveBeenCalledOnce();
     expect(ack).toHaveBeenCalledOnce();

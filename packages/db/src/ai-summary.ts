@@ -209,7 +209,7 @@ export async function setSummaryLocked(db: Db, entryId: number, locked: boolean,
 }
 
 /** Queued messages lost or expired at the broker are redispatched from the durable outbox. */
-export async function takeSummaryOutbox(db: Db, now: number, limit = 5) {
+export async function takeSummaryOutbox(db: Db, now: number, limit = 5, scope?: readonly number[]) {
   const rows = await db.$client
     .prepare(`UPDATE ai_summary_jobs SET status='queued',dispatched_at=?,updated_at=?
     WHERE id IN (SELECT j.id FROM ai_summary_jobs j JOIN ai_summary_sources s ON s.entry_id=j.entry_id
@@ -217,9 +217,18 @@ export async function takeSummaryOutbox(db: Db, now: number, limit = 5) {
       WHERE j.status IN ('pending','queued','retry_wait') AND j.due_at<=?
       AND (j.dispatched_at IS NULL OR j.dispatched_at<=?) AND j.generation=s.generation AND s.locked=0
       AND c.enabled=1 AND j.model=c.model AND j.prompt_version=c.prompt_version AND j.params_version=c.params_version
+      AND (? IS NULL OR j.entry_id IN (SELECT value FROM json_each(?)))
       ORDER BY j.priority DESC,j.due_at,j.id LIMIT ?)
     RETURNING id,entry_id,generation,fingerprint`)
-    .bind(now, now, now, now - DISPATCH_LEASE_MS, Math.min(20, Math.max(1, limit)))
+    .bind(
+      now,
+      now,
+      now,
+      now - DISPATCH_LEASE_MS,
+      scope ? JSON.stringify(scope) : null,
+      scope ? JSON.stringify(scope) : null,
+      Math.min(20, Math.max(1, limit)),
+    )
     .all<{ id: string; entry_id: number; generation: number; fingerprint: string }>();
   return rows.results;
 }

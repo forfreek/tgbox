@@ -27,6 +27,7 @@ import { observeEntry } from "../src/sources.ts";
 import {
   consumeSummaryDlq,
   consumeSummaryMessage,
+  consumeSummaryObservation,
   dispatchSummaryOutbox,
   type SummaryMessage,
   scanSummaryRun,
@@ -39,6 +40,80 @@ const output = {
   status: "ok",
   sentences: [{ zh: "支持语音转为文字。", en: "Converts voice to text.", refs: ["profile"] }],
 };
+
+test("a fixed 50-entry rollout scans and consumes only its scope without repeating inference", async () => {
+  const scope: number[] = [];
+  for (let i = 0; i < 50; i++) scope.push(await entry(`rollout_${i}_bot`));
+  const outside = await entry("outside_rollout_bot");
+  await observe(outside);
+  const model = vi.fn(async () => output);
+  const sendBatch = vi.fn(async (rows: { body: SummaryMessage }[]) => {
+    for (const row of rows) {
+      expect(scope).toContain(row.body.entryId);
+      await consumeSummaryMessage(
+        db,
+        env.MEDIA,
+        row.body,
+        () => row.body.dispatchedAt,
+        model,
+        Math.random,
+        scope,
+      );
+    }
+  });
+  for (let slot = 0; slot < 26; slot++) {
+    await tickSummaryTasks(db, env.MEDIA, { sendBatch }, () => NOW + slot * 300_000, scope);
+  }
+  expect(model).toHaveBeenCalledTimes(50);
+  expect(await db.select().from(aiSummaryRuns)).toEqual([]);
+  expect((await db.select().from(aiSummaryJobs)).find((j) => j.entryId === outside)?.status).toBe(
+    "pending",
+  );
+  expect(await db.select().from(aiSummaryAttempts)).toHaveLength(50);
+}, 30_000);
+
+test("empty scope blocks scanning, dispatch and forged outside-scope delivery", async () => {
+  const msg = await queued(await entry());
+  const sendBatch = vi.fn(async () => {});
+  const model = vi.fn(async () => output);
+  await tickSummaryTasks(db, env.MEDIA, { sendBatch }, () => NOW, []);
+  await consumeSummaryMessage(db, env.MEDIA, msg, () => NOW, model, Math.random, []);
+  await consumeSummaryMessage(db, env.MEDIA, msg, () => NOW, model, Math.random, [msg.entryId + 1]);
+  expect(sendBatch).not.toHaveBeenCalled();
+  expect(model).not.toHaveBeenCalled();
+  expect(await db.select().from(aiSummaryRuns)).toEqual([]);
+  expect(await db.select().from(aiSummaryAttempts)).toEqual([]);
+});
+
+test("bootstrap observes fresh sources only within scope and is idempotent across duplicate deliveries", async () => {
+  const id = await entry();
+  const outside = await entry("bootstrap_outside_bot");
+  const sendBatch = vi.fn(async () => {});
+  const queue = { sendBatch };
+  for (const target of [outside, id, id]) {
+    await consumeSummaryObservation(
+      db,
+      env.MEDIA,
+      queue,
+      { v: 1, action: "observe", entryId: target },
+      () => NOW,
+      [id],
+    );
+  }
+  expect(await getSummarySource(db, outside)).toBeUndefined();
+  expect(await db.select().from(aiSummaryJobs)).toHaveLength(1);
+  expect(sendBatch).toHaveBeenCalledOnce();
+  await env.DB.prepare("UPDATE ai_summary_settings SET enabled=0 WHERE id=1").run();
+  await consumeSummaryObservation(
+    db,
+    env.MEDIA,
+    queue,
+    { v: 1, action: "observe", entryId: outside },
+    () => NOW,
+    [outside],
+  );
+  expect(await getSummarySource(db, outside)).toBeUndefined();
+});
 
 beforeEach(async () => {
   await env.DB.batch([
@@ -674,7 +749,7 @@ test("queue handler retries a broken delivery and continues acknowledging poison
         },
       ],
     },
-    { ...env, DB: brokenDb },
+    { ...env, DB: brokenDb, AI_SUMMARY_ENTRY_IDS: String(msg.entryId) },
   );
   expect(retry).toHaveBeenCalledWith({ delaySeconds: 60 });
   expect(ack).not.toHaveBeenCalled();

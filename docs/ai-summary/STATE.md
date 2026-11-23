@@ -1,5 +1,15 @@
 # AI 资源摘要模块状态
 
+主分支集成[PR #72](https://github.com/forfreek/tgbox/pull/72)已建立并核验base=main，head=codex/ai-summary-rollout50；包含#71全部改动及实际生产配置记录。固定50条已异步运行，新结果不自动批准，Web展示仍未开启。
+
+七D代码43e8230的[Linux CI45152821110](https://github.com/forfreek/tgbox/actions/runs/45152821110)全仓检查/测试及脚本检查通过。#71仍按旧堆叠base合入七C分支，尚未进入main，须补主分支集成PR。已部署Admin583144cf-8033-4114-9406-2ccb43ecf853、摘要Worker0d6f8cad-1f36-4897-9a1b-da69f72df9c2；认证变量/6个密钥名保持，Worker固定50条核对通过。已使用实际summaryCommand及旧值CAS开启enabled/auto_scan，配额保留200/8000/100/1；首次50条observe队列已提交，生成结果及Web展示待验收。
+
+七D CI45151835753及45152213122均由既有snapshot CLI默认5秒超时失败（实际6.4秒/5.5秒），其他已完成检查通过，未部署。对该子进程单项设置15秒硬截止、测试20秒，保留全部数据断言，重验后继续CI。
+
+七D[PR #71](https://github.com/forfreek/tgbox/pull/71)已建立，base=codex/ai-summary-live-pilot（#70）。补齐快照公开投影读取的50条边界，新增第21–50条实际消费回归；Linux CI核验中。生产仍未开启本轮。
+
+2026-11-23 七D授权固定50条自动生成及小范围展示，并修复页底审核交互。当前C:/Users/123/tgbox-ai-summary-rollout50 / codex/ai-summary-rollout50，依赖#70；入口[ROLLOUT50](ROLLOUT50.md)。本地实现与验证完成，PR/CI及生产部署开启待执行。保留人工审核，不自动批准，不扩大全站；以下旧12条记录不覆盖最新授权。
+
 2026-11-23 七C交付完成：草稿[PR #70](https://github.com/forfreek/tgbox/pull/70)依赖#69，提交054c4f5b75e9759781f0b1408844c92918c69b16的[Linux CI45146761495](https://github.com/forfreek/tgbox/actions/runs/45146761495)全仓检查/测试及脚本检查通过（2m18s）。Worker81项、离线证据验证、12份文档310个本地链接及diff通过。后续仅补文档记录，不追加推理或生产变更；保持不合并、不部署、不启用展示。3条草稿需编辑，七D等待继续指示。以下核验中记录保留历史。
 
 七C草稿[PR #70](https://github.com/forfreek/tgbox/pull/70)已建立，base=codex/ai-summary-release（#69），提交054c4f5，仅证据JSON及5份文档；Worker81/81、离线证据验证、12份文档310本地链接和diff通过，Linux CI核验中。没有运行时代码/配置改动或新增部署，不为CI重复真实推理。

@@ -1,5 +1,15 @@
 # AI 资源摘要模块项目记忆
 
+七D主分支集成PR #72已明确核验base=main，#71仅为旧堆叠base交付。恢复先查#72和ROLLOUT50，不能只看#71已合并就认定main含灰度代码。
+
+七D上线：Admin部署先将远端7个plain_text变量覆盖到ignored生成配置，再--keep-vars，部署后逐值及secret名称集合比对，不能只依赖keep-vars保住同名配置值。摘要Worker部署显式--var传固定50条。开启采用真实summaryCommand/config CAS，保留管理员已调配额。#71误保留旧堆叠base，主分支集成须另立PR并核验目标分支；不把合并状态等同main已包含代码。
+
+七D CI两次证实完整CLI冷启动在并行Worker负载下超过5秒，给该单项execFileSync增加15秒硬截止及20秒测试时限，而非放宽全局或跳过断言。快照测试失败须区分超时与数据断言错误。
+
+七D#71复核：白名单解析、帖子预载及公开投影逐ID读取必须统一SUMMARY_ROLLOUT_LIMIT，不能只改解析器；新增50份带新鲜指纹的投影消费回归，防止第21–50条被静默截断。
+
+2026-11-23 七D入口[ROLLOUT50](ROLLOUT50.md)：扫描、outbox派发及消费三层共用固定50条名单，空/非法名单关闭，生产不能直接开启旧全站扫描路径。共用解析器packages/shared/src/ai-summary-rollout.ts；首次observe队列消息复用真实source loader和幂等任务。保留人工审核/锁定及当前管理员配额，构建不推理。审核复用现有Dialog，反馈留在弹层。实际验证及易变版本见专题，不将格式通过等同人工批准。
+
 2026-11-23 七C交付完成：草稿[PR #70](https://github.com/forfreek/tgbox/pull/70)依赖#69，提交054c4f5b75e9759781f0b1408844c92918c69b16的[Linux CI45146761495](https://github.com/forfreek/tgbox/actions/runs/45146761495)全仓检查/测试及脚本检查通过（2m18s）。Worker81项、离线证据验证、12份文档310个本地链接及diff通过。后续仅补文档记录，不追加推理或生产变更；保持不合并、不部署、不启用展示。3条草稿需编辑，七D等待继续指示。以下核验中记录保留历史。
 
 七C交付入口（2026-11-23）：草稿[PR #70](https://github.com/forfreek/tgbox/pull/70)，base=#69，独立tgbox-ai-summary-live-pilot。证据在evaluation/production-pilot-2026-11-23.json，完整审阅见LIVE-PILOT。Worker81项、离线证据与12份文档310个本地链接通过；记录管理员并行审批，不能归为维护进程自动批准。
