@@ -943,7 +943,42 @@
       "model": "@cf/google/gemma-4-26b-a4b-it",
       "promptVersion": "summary-prompt-v7",
       "paramsVersion": "summary-params-v3",
-      "input": "{\"schemaVersion\":1,\"policyVersion\":\"source-policy-v1\",\"kind\":\"channel\",\"title\":\"Techno-Tricksters\",\"username\":\"technotricksters\",\"category\":\"ai\",\"tags\":[\"ai-agent\",\"english\",\"llm\"],\"evidence\":[{\"ref\":\"profile\",\"text\":\"Innovations 🚀, AI 🤖 & Rock'n'Roll 🎸 For collaboration, ping 🤝\",\"date\":null},{\"ref\":\"post:2147\",\"text\":\"Swiss researchers taught a five-tonne John Deere loader to balance on two wheels without an operator. The AI first learned the manoeuvres in simulation, then the team transferred those skills to the real machine. The loader can lift itself onto two wheels, balance, drive over bumps, spin in place and control its bucket autonomously. That’s a lot of metal to trust with a balancing act. Source #Robotics\",\"date\":\"2026-11-22T19:01:20.000Z\"},{\"ref\":\"post:2145\",\"text\":\"Pika Labs has introduced a way to direct AI video while it’s being generated. Called Pika Enact, it lets you adjust a scene as it keeps playing, rather than just describe what you want at the start. • Drag actors and objects into new positions with your mouse without stopping the scene. • Give actors voice or text instructions, rehearse dialogue and change their emotions. They remember your directions. • Move the camera with your mouse to change angles, move closer or circle the scene on the f…\",\"date\":\"2026-11-22T11:05:17.000Z\"},{\"ref\":\"post:2144\",\"text\":\"The Claude Code team has published a guide to making AI prove its code works—not just say “done.” The advice puts verification at the centre of AI-assisted coding: • Ask for evidence that the code works, rather than trusting a completion message. • Run the app and check it as an ordinary user would. • Look for hidden bugs and test unusual scenarios. • Don’t let the AI rewrite tests to fit its own code. • Bring in a human after three failed attempts. According to the guide, AI already writes an…\",\"date\":\"2026-11-21T19:04:21.000Z\"},{\"ref\":\"post:2143\",\"text\":\"HeyGen’s new Avatar 6 creates a digital double you can give scripts for new videos. You upload 30 seconds of video, a few photos and a voice recording. HeyGen says the model captures your appearance, voice and movements, then uses them to generate your on-screen performance. You can steer that performance in a few ways: • Gestures, emotions and facial expressions adapt to the meaning of the script. • Prompts change the delivery style. • Professional mode, templates and tags inside the script o…\",\"date\":\"2026-11-21T11:05:11.000Z\"}]}",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "Techno-Tricksters",
+        "username": "technotricksters",
+        "category": "ai",
+        "tags": ["ai-agent", "english", "llm"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Innovations 🚀, AI 🤖 & Rock'n'Roll 🎸 For collaboration, ping 🤝",
+            "date": null
+          },
+          {
+            "ref": "post:2147",
+            "text": "Swiss researchers taught a five-tonne John Deere loader to balance on two wheels without an operator. The AI first learned the manoeuvres in simulation, then the team transferred those skills to the real machine. The loader can lift itself onto two wheels, balance, drive over bumps, spin in place and control its bucket autonomously. That’s a lot of metal to trust with a balancing act. Source #Robotics",
+            "date": "2026-11-22T19:01:20.000Z"
+          },
+          {
+            "ref": "post:2145",
+            "text": "Pika Labs has introduced a way to direct AI video while it’s being generated. Called Pika Enact, it lets you adjust a scene as it keeps playing, rather than just describe what you want at the start. • Drag actors and objects into new positions with your mouse without stopping the scene. • Give actors voice or text instructions, rehearse dialogue and change their emotions. They remember your directions. • Move the camera with your mouse to change angles, move closer or circle the scene on the f…",
+            "date": "2026-11-22T11:05:17.000Z"
+          },
+          {
+            "ref": "post:2144",
+            "text": "The Claude Code team has published a guide to making AI prove its code works—not just say “done.” The advice puts verification at the centre of AI-assisted coding: • Ask for evidence that the code works, rather than trusting a completion message. • Run the app and check it as an ordinary user would. • Look for hidden bugs and test unusual scenarios. • Don’t let the AI rewrite tests to fit its own code. • Bring in a human after three failed attempts. According to the guide, AI already writes an…",
+            "date": "2026-11-21T19:04:21.000Z"
+          },
+          {
+            "ref": "post:2143",
+            "text": "HeyGen’s new Avatar 6 creates a digital double you can give scripts for new videos. You upload 30 seconds of video, a few photos and a voice recording. HeyGen says the model captures your appearance, voice and movements, then uses them to generate your on-screen performance. You can steer that performance in a few ways: • Gestures, emotions and facial expressions adapt to the meaning of the script. • Prompts change the delivery style. • Professional mode, templates and tags inside the script o…",
+            "date": "2026-11-21T11:05:11.000Z"
+          }
+        ]
+      },
       "output": null,
       "locked": 0,
       "approvedProjection": 0
@@ -1424,7 +1459,16 @@
       "model": "@cf/google/gemma-4-26b-a4b-it",
       "promptVersion": "summary-prompt-v7",
       "paramsVersion": "summary-params-v3",
-      "input": "{\"schemaVersion\":1,\"policyVersion\":\"source-policy-v1\",\"kind\":\"group\",\"title\":\"明日方舟脚臭\",\"username\":\"mingrifangzhoujiaochou\",\"category\":\"interest\",\"tags\":[\"anime\",\"free\"],\"evidence\":[]}",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "明日方舟脚臭",
+        "username": "mingrifangzhoujiaochou",
+        "category": "interest",
+        "tags": ["anime", "free"],
+        "evidence": []
+      },
       "output": null,
       "locked": 0,
       "approvedProjection": 0

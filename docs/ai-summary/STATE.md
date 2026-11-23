@@ -1,6 +1,8 @@
 # AI 资源摘要模块状态
 
-2026-11-23 七D上线验收完成：#72已进入main=e34e7a3，主分支CI45154564097及部署45154564101成功，Web版本f4ddf5a4-b2dd-44b5-baf1-3cce5b6638a9。固定50条自动生成开启，36草稿/13跳过/1失败，新增40调用；3份人工批准仅在名单内展示，新稿未自动批准。18页三语200、原事实段落保留、9页AI/9页回退，canonical/hreflang/description与启用前一致。详细证据、后台Access验证限制及回退见[OBSERVE50](OBSERVE50.md)。当前工作树tgbox-ai-summary-observe50，观察记录PR待建立；下一步抽检待审草稿并观察，不扩全站。
+上线观察记录[PR #73](https://github.com/forfreek/tgbox/pull/73)，base=main，当前工作树C:/Users/123/tgbox-ai-summary-observe50、codex/ai-summary-observe50。48份既有模型响应、18页HTML证据和本节点文档链接已离线核验；本PR只改docs，不追加模型调用或部署。后续观察与抽检从[OBSERVE50](OBSERVE50.md)恢复，保持固定50条，不扩围。
+
+2026-11-23 七D上线验收完成：#72已进入main，上线代码基线e34e7a3，主分支CI45154564097及部署45154564101成功，Web版本f4ddf5a4-b2dd-44b5-baf1-3cce5b6638a9。固定50条自动生成开启，36草稿/13跳过/1失败，新增40调用；3份人工批准仅在名单内展示，新稿未自动批准。18页三语200、原事实段落保留、9页AI/9页回退，canonical/hreflang/description与启用前一致。详细证据、后台Access验证限制及回退见[OBSERVE50](OBSERVE50.md)。当前工作树tgbox-ai-summary-observe50，观察记录PR #73；下一步抽检待审草稿并观察，不扩全站。
 
 2026-11-23 七D固定50条已完成首批生成，36草稿/13跳过/1失败，本轮新增40次调用；未自动批准，人工已批准仍3条。代码通过#72进入main，后续恢复C:/Users/123/tgbox-ai-summary-observe50 / codex/ai-summary-observe50，实际证据和限制见[OBSERVE50](OBSERVE50.md)。此节点只记录上线验收，不改代码或扩大范围；Web部署和18页核验待追加。
 

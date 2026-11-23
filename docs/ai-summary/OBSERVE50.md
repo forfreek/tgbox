@@ -2,6 +2,8 @@
 
 恢复入口：C:/Users/123/tgbox-ai-summary-observe50 / codex/ai-summary-observe50，基于主分支e34e7a3。此节点只补实际生产证据和项目记忆，不改运行时代码、不追加推理、不扩围。实施和回退细节见[ROLLOUT50](ROLLOUT50.md)。
 
+观察记录[PR #73](https://github.com/forfreek/tgbox/pull/73)以main为目标；本节点离线核验50条记录、48份响应、18页HTML及指定文档本地链接通过。
+
 ## 代码及部署链
 
 #68、#69、#70已按顺序进入main。#71曾合入旧堆叠base；已通过[主分支集成#72](https://github.com/forfreek/tgbox/pull/72)补齐，并核验main包含43e8230的全部代码，main=e34e7a3e053d1e420552d7b924258da562fbbb17。

@@ -1,5 +1,7 @@
 # 项目资料索引
 
+上线记录PR #73（仅docs），后续从[OBSERVE50](ai-summary/OBSERVE50.md)恢复观察与抽检；代码#72已上线，保持固定50条，不自动批准新稿。
+
 七D已完成50条上线及18页三语验收，最新见[OBSERVE50](ai-summary/OBSERVE50.md)，先读本工作树[STATE](ai-summary/STATE.md)。代码#72、Web部署45154564101成功；36草稿/13跳过/1失败，保留3份人工批准，当前观察记录工作树tgbox-ai-summary-observe50。机器证据仅按需定位读取，不自动扩围。
 
 2026-11-23 七D最新上线观察入口[STATE](ai-summary/STATE.md)、[OBSERVE50](ai-summary/OBSERVE50.md)，工作树tgbox-ai-summary-observe50。50条首批36草稿/13跳过/1失败，新增40调用；保留3条人工批准，未自动批准新稿。Web最终验收待追加，按需读取机器证据。
