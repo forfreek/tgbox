@@ -1,8 +1,12 @@
 # AI 资源摘要模块状态
 
+2026-11-23 六C交付完成：草稿 [PR #67](https://github.com/forfreek/tgbox/pull/67) 依赖#66，代码f1ad243d8a74a2181695d1a8186910ea93032d63的 [Linux CI 45114637565](https://github.com/forfreek/tgbox/actions/runs/45114637565) 全部通过（2m14s，含Web449项、全仓check/test及脚本类型/测试）。十一份文档267个本地链接及diff通过。后续仅补文档记录，代码不变；保持草稿不合并，未生产启用。下一节点七须明确生产授权。以下核验中记录保留当时边界。
+
 记录日期为 2026-11-23，时区为 Asia/Shanghai。
 
 ## 当前状态与授权
+
+六C草稿 [PR #67](https://github.com/forfreek/tgbox/pull/67) 已建立，base=codex/ai-summary-data（#66），当前工作树tgbox-ai-summary-pages / codex/ai-summary-pages。代码f1ad243，Linux CI核验中；十一份交付与恢复文档267个本地链接及diff检查通过。保留草稿，不合并部署。
 
 2026-11-23 用户明确开始六C，独立C:/Users/123/tgbox-ai-summary-pages / codex/ai-summary-pages，基于六B687854d、base=codex/ai-summary-data。代码及本地页面契约已实现，见 [STATIC-PAGES](STATIC-PAGES.md)：展示开关默认关闭，三语完整有效才显示；人工繁中仅保护AI纯文本p，原事实/简介及metadata保留，新增段不入Pagefind。无新模型推理、迁移、生产构建或部署，灰度未执行。
 
