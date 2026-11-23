@@ -52,7 +52,9 @@ test("disabled/empty/invalid whitelist stays off; explicit IDs cannot expand to 
   expect(summaryEntryIds("1,x")).toEqual([]);
   expect(summaryEntryIds("0")).toEqual([]);
   expect(summaryEntryIds("1, 2,1")).toEqual([1, 2]);
-  expect(summaryEntryIds(Array(21).fill("1").join(","))).toEqual([]);
+  const fifty = Array.from({ length: 50 }, (_, i) => i + 1);
+  expect(summaryEntryIds(fifty.join(","))).toEqual(fifty);
+  expect(summaryEntryIds([...fifty, 51].join(","))).toEqual([]);
 });
 test("snapshot emits only whitelisted verified text and no private projection metadata", async () => {
   const f = await fixture();

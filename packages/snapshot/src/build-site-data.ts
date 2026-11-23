@@ -218,7 +218,7 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
       };
     });
 
-    const summaryIds = new Set(options.summaryEntryIds?.slice(0, 20));
+    const summaryIds = new Set(options.summaryEntryIds?.slice(0, 50));
     for (const entry of entries)
       if (summaryIds.has(entry.id)) cachedPostKeys.add(`posts/${entry.username}.json`);
     const media = await loadMedia(entries);

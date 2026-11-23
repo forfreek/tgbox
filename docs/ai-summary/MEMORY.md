@@ -1,5 +1,7 @@
 # AI 资源摘要模块项目记忆
 
+2026-11-23 七D入口[ROLLOUT50](ROLLOUT50.md)：扫描、outbox派发及消费三层共用固定50条名单，空/非法名单关闭，生产不能直接开启旧全站扫描路径。共用解析器packages/shared/src/ai-summary-rollout.ts；首次observe队列消息复用真实source loader和幂等任务。保留人工审核/锁定及当前管理员配额，构建不推理。审核复用现有Dialog，反馈留在弹层。实际验证及易变版本见专题，不将格式通过等同人工批准。
+
 2026-11-23 七C交付完成：草稿[PR #70](https://github.com/forfreek/tgbox/pull/70)依赖#69，提交054c4f5b75e9759781f0b1408844c92918c69b16的[Linux CI45146761495](https://github.com/forfreek/tgbox/actions/runs/45146761495)全仓检查/测试及脚本检查通过（2m18s）。Worker81项、离线证据验证、12份文档310个本地链接及diff通过。后续仅补文档记录，不追加推理或生产变更；保持不合并、不部署、不启用展示。3条草稿需编辑，七D等待继续指示。以下核验中记录保留历史。
 
 七C交付入口（2026-11-23）：草稿[PR #70](https://github.com/forfreek/tgbox/pull/70)，base=#69，独立tgbox-ai-summary-live-pilot。证据在evaluation/production-pilot-2026-11-23.json，完整审阅见LIVE-PILOT。Worker81项、离线证据与12份文档310个本地链接通过；记录管理员并行审批，不能归为维护进程自动批准。
