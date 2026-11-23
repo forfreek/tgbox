@@ -1,0 +1,27 @@
+{
+  "at": "2026-11-23T14:07:04.824Z",
+  "before": {
+    "id": 1,
+    "enabled": true,
+    "autoScan": false,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "promptVersion": "summary-prompt-v8",
+    "paramsVersion": "summary-params-v3",
+    "dailyCalls": 200,
+    "dailyNeurons": 800,
+    "reservation": 100,
+    "maxAttempts": 1
+  },
+  "after": {
+    "id": 1,
+    "enabled": true,
+    "autoScan": true,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "promptVersion": "summary-prompt-v8",
+    "paramsVersion": "summary-params-v3",
+    "dailyCalls": 200,
+    "dailyNeurons": 800,
+    "reservation": 100,
+    "maxAttempts": 1
+  }
+}
