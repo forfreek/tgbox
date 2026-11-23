@@ -1,5 +1,13 @@
 # AI 资源摘要模块状态
 
+2026-11-23 七B交付完成：草稿[PR #69](https://github.com/forfreek/tgbox/pull/69)依赖#68，提交6c57d7755b176c97642dbf5b2d69b5c3dff4a99c的[Linux CI45118458822](https://github.com/forfreek/tgbox/actions/runs/45118458822)全部通过（1m45s）。最终main部署/CI成功，12份文档304个本地链接及diff通过；后续仅补文档，不新增生产操作。生成、扫描及展示继续关闭，首次真实cron日志未捕获，七C前须先核验；七C/七D等待继续指示。以下核验中保留历史边界。
+
+七B记录草稿[PR #69](https://github.com/forfreek/tgbox/pull/69)已建立，base=codex/ai-summary-rollout-plan（#68），提交6c57d77；仅5份文档，12份相关文档304本地链接及diff通过，文档PR CI核验中。生产应用代码与main一致，生成/扫描/展示保持关闭，不因文档交付追加生产操作。
+
+2026-11-23 用户确认七B具体范围并在明确“生产部署、不开全局摘要”后回复ok，已执行：#61–#67合并，main6551bd9；D1迁移0022–25、两队列及摘要Worker、既有Admin更新完成。见[RELEASE-DISABLED](RELEASE-DISABLED.md)。enabled=0/auto_scan=0/model=disabled，任务/尝试/公开摘要均0；AI构建变量未设置。无真实推理、全站回填或AI展示。
+
+当前C:/Users/123/tgbox-ai-summary-release / codex/ai-summary-release，基于七A1e02419、交付base=codex/ai-summary-rollout-plan（#68）。最终main CI45117657530及网站部署45117657499成功，三语6页只读浏览器复核通过、Admin变量/认证保留；首次真实cron执行日志尚待补核验。独立交付PR及文档核验中。七C/七D等待后续指示。
+
 2026-11-23 七A交付完成：草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68)，base=#67，提交1d67f3a31d5affd110b3267e77081108120bb454的 [Linux CI 45116119118](https://github.com/forfreek/tgbox/actions/runs/45116119118) 全部通过（2m30s，全仓check/test及脚本类型/测试）。12份文档294个本地链接及diff通过。后续仅补本交付记录，不改代码/配置；保持不合并、不生产迁移/资源创建/部署/推理。七B具体范围待用户确认。以下核验中为历史记录。
 
 七A草稿 [PR #68](https://github.com/forfreek/tgbox/pull/68) 已建立，base=codex/ai-summary-pages（#67），提交1d67f3a；本PR仅5份文档。12份交付/恢复文档294个本地链接和diff检查通过，Linux CI核验中。七B具体资源及迁移/合并/部署范围见ROLLOUT-PREP末节，等待确认后才执行。
@@ -105,7 +113,7 @@ v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](
 
 ## 下一步
 
-当前工作树C:/Users/123/tgbox-ai-summary-rollout，分支codex/ai-summary-rollout-plan，base=codex/ai-summary-pages（#67）。七A准备审查和本地检查完成；下一节点七B为保持AI关闭的迁移、资源与部署，具体操作清单待确认；七C固定样本推理和七D展示/回退尚未执行，不自动历史回填。
+当前工作树C:/Users/123/tgbox-ai-summary-release，分支codex/ai-summary-release，base=#68。七B生产基础能力已部署且生成/扫描/展示关闭；待完成本节点证据归档和交付核验。下一项七C固定样本生成审阅，须用户继续指示；七D白名单展示与全量历史回填均未执行。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 
