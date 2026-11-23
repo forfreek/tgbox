@@ -36,4 +36,8 @@ UI使用虚构本地D1/R2、remoteBindings=false、独立无界面Edge/Playwrigh
 
 当前管理员配额200次/日、8000预留Neurons、每次100、maxAttempts=1，保留其调整。预留值不是Cloudflare实际账单。上线结果待追加。
 
+本地补验快照CLI28/28通过。43e8230的Linux CI45152821110全仓检查/测试、脚本检查通过。#71仍按旧堆叠base合入前置分支，没有进入main，需集成PR补齐，不跳过目标分支核验。
+
+已部署摘要Worker0d6f8cad-1f36-4897-9a1b-da69f72df9c2、Admin583144cf-8033-4114-9406-2ccb43ecf853。Worker名单与机器记录50条完全一致；Admin远端7个plain_text值及6个secret名称集合一致。实际summaryCommand经D1 API传输执行配置CAS并审计，开启enabled/auto_scan，保留当前配额；首次50条observe提交原队列。此处还不表示Web展示验收完成。
+
 回退：后台关闭enabled，必要时关闭auto_scan；GitHub AI_SUMMARY_DISPLAY改0并重建。清空Worker名单可停止扫描/派发/消费。单条撤回后重建；不删除原简介、生成历史或人工编辑，不恢复整个D1。代码回滚用部署前版本；旧Worker没有名单保护，回滚前必须关enabled/auto_scan。

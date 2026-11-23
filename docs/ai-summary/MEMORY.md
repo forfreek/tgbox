@@ -1,5 +1,7 @@
 # AI 资源摘要模块项目记忆
 
+七D上线：Admin部署先将远端7个plain_text变量覆盖到ignored生成配置，再--keep-vars，部署后逐值及secret名称集合比对，不能只依赖keep-vars保住同名配置值。摘要Worker部署显式--var传固定50条。开启采用真实summaryCommand/config CAS，保留管理员已调配额。#71误保留旧堆叠base，主分支集成须另立PR并核验目标分支；不把合并状态等同main已包含代码。
+
 七D CI两次证实完整CLI冷启动在并行Worker负载下超过5秒，给该单项execFileSync增加15秒硬截止及20秒测试时限，而非放宽全局或跳过断言。快照测试失败须区分超时与数据断言错误。
 
 七D#71复核：白名单解析、帖子预载及公开投影逐ID读取必须统一SUMMARY_ROLLOUT_LIMIT，不能只改解析器；新增50份带新鲜指纹的投影消费回归，防止第21–50条被静默截断。

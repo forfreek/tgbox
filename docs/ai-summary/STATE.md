@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+七D代码43e8230的[Linux CI45152821110](https://github.com/forfreek/tgbox/actions/runs/45152821110)全仓检查/测试及脚本检查通过。#71仍按旧堆叠base合入七C分支，尚未进入main，须补主分支集成PR。已部署Admin583144cf-8033-4114-9406-2ccb43ecf853、摘要Worker0d6f8cad-1f36-4897-9a1b-da69f72df9c2；认证变量/6个密钥名保持，Worker固定50条核对通过。已使用实际summaryCommand及旧值CAS开启enabled/auto_scan，配额保留200/8000/100/1；首次50条observe队列已提交，生成结果及Web展示待验收。
+
 七D CI45151835753及45152213122均由既有snapshot CLI默认5秒超时失败（实际6.4秒/5.5秒），其他已完成检查通过，未部署。对该子进程单项设置15秒硬截止、测试20秒，保留全部数据断言，重验后继续CI。
 
 七D[PR #71](https://github.com/forfreek/tgbox/pull/71)已建立，base=codex/ai-summary-live-pilot（#70）。补齐快照公开投影读取的50条边界，新增第21–50条实际消费回归；Linux CI核验中。生产仍未开启本轮。
