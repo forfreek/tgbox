@@ -15,6 +15,7 @@ import {
   settingsDefaults,
   shouldHidePost,
 } from "@tgbox/shared";
+import { readPublicSummaries } from "./ai-summary.ts";
 
 export type BuildSiteDataOptions = {
   /** Exported D1 database: a SQLite file, or a `.sql` dump as produced by `wrangler d1 export`. */
@@ -26,6 +27,10 @@ export type BuildSiteDataOptions = {
   /** Authenticated build input reader. Undefined means the object does not exist. */
   readMedia?: (key: string) => Promise<unknown>;
   now: Date;
+  /** Explicit whitelist, absent/empty disables summary consumption. */
+  summaryEntryIds?: readonly number[];
+  /** Optional independent public-only SQL export; parse failures disable just AI consumption. */
+  summaryDbPath?: string;
 };
 
 const RELATED_LIMIT = 6;
@@ -69,13 +74,28 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
   const mediaBaseUrl = options.mediaBaseUrl?.replace(/\/+$/, "");
 
   const isSqlDump = dbPath.endsWith(".sql");
+  const mediaCache = new Map<string, Promise<unknown>>();
+  const cachedPostKeys = new Set<string>();
   const db = isSqlDump
     ? new DatabaseSync(":memory:")
     : new DatabaseSync(dbPath, { readOnly: true });
+  let projectionDb: DatabaseSync | null = options.summaryDbPath ? null : db;
   try {
     if (isSqlDump) db.exec(await readFile(dbPath, "utf8"));
+    if (options.summaryDbPath && options.summaryEntryIds?.length) {
+      const optional = new DatabaseSync(":memory:");
+      try {
+        optional.exec("PRAGMA foreign_keys=OFF");
+        optional.exec(await readFile(options.summaryDbPath, "utf8"));
+        projectionDb = optional;
+      } catch {
+        optional.close();
+        console.warn("Invalid optional AI projection; using existing summaries");
+      }
+    }
     return await build(db);
   } finally {
+    if (projectionDb && projectionDb !== db) projectionDb.close();
     db.close();
   }
 
@@ -198,6 +218,9 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
       };
     });
 
+    const summaryIds = new Set(options.summaryEntryIds?.slice(0, 20));
+    for (const entry of entries)
+      if (summaryIds.has(entry.id)) cachedPostKeys.add(`posts/${entry.username}.json`);
     const media = await loadMedia(entries);
 
     const categoryRows = db
@@ -293,6 +316,13 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
     const usernamesOf = (kind: EntryKind) =>
       entries.filter((e) => e.kind === kind).map((e) => e.username);
 
+    const summaries = await readPublicSummaries(
+      db,
+      options.summaryEntryIds,
+      readMedia,
+      projectionDb,
+    );
+    mediaCache.clear();
     return SiteData.parse({
       generatedAt: now.toISOString(),
       stats: {
@@ -321,6 +351,7 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
       // zod strips the internal id/categoryId fields.
       entries: entries.map((entry) => ({
         ...entry,
+        aiSummary: summaries.get(entry.id) ?? null,
         posts: visiblePosts(entry),
         memberHistory: media.get(entry.username)?.memberHistory ?? [],
         related: {
@@ -436,8 +467,17 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
     return media;
   }
 
+  function readMedia(key: string): Promise<unknown> {
+    if (!cachedPostKeys.has(key)) return readMediaUncached(key);
+    let pending = mediaCache.get(key);
+    if (!pending) {
+      pending = readMediaUncached(key);
+      mediaCache.set(key, pending);
+    }
+    return pending;
+  }
   /** Returns parsed JSON, or undefined when the object doesn't exist. */
-  async function readMedia(key: string): Promise<unknown> {
+  async function readMediaUncached(key: string): Promise<unknown> {
     if (mediaDir) {
       try {
         return JSON.parse(await readFile(path.join(mediaDir, key), "utf8"));

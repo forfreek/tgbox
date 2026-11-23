@@ -169,6 +169,13 @@
       "when": 1795357186791,
       "tag": "0024_classy_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "6",
+      "when": 1795405945300,
+      "tag": "0025_tough_black_crow",
+      "breakpoints": true
     }
   ]
 }

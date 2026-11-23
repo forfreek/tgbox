@@ -2,11 +2,13 @@
 //   local (default): node scripts/build-site.ts [--persist-to .data/wrangler] [--media-dir .data/media]
 //   CI:              node scripts/build-site.ts --remote (authenticated R2 input; public URL is output only)
 import { existsSync } from "node:fs";
-import { mkdir, readdir, rm } from "node:fs/promises";
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { parseArgs } from "node:util";
+import { summaryEntryIds } from "../packages/snapshot/src/summary-options.ts";
 import { repoRoot, run, wrangler } from "./lib/run.ts";
+import { optionalSummaryExport } from "./lib/summary-export.ts";
 
 // Only what the snapshot reads. D1 export refuses databases with virtual tables (entries_fts),
 // and leaving out submissions/blacklist/orders/credentials/bot_chats keeps private data out of CI
@@ -67,6 +69,7 @@ await mkdir(dataDir, { recursive: true });
 
 // 1. Export D1
 let dbFile: string;
+let summaryDbFile: string | undefined;
 if (values.remote) {
   dbFile = path.join(dataDir, "tgbox.sql");
   await rm(dbFile, { force: true });
@@ -81,6 +84,28 @@ if (values.remote) {
     ...tables,
     "--skip-confirmation",
   ]);
+  if (summaryEntryIds(process.env.AI_SUMMARY_ENTRY_IDS).length) {
+    const extra = await optionalSummaryExport(
+      path.join(dataDir, "ai-summary-public.sql"),
+      (file) => {
+        wrangler([
+          "d1",
+          "export",
+          "tgbox",
+          "--remote",
+          "--output",
+          file,
+          "--table",
+          "ai_summary_public",
+          "--skip-confirmation",
+        ]);
+      },
+    );
+    if (extra) {
+      summaryDbFile = path.join(dataDir, "ai-summary-input.sql");
+      await writeFile(summaryDbFile, extra);
+    }
+  }
 } else {
   // `wrangler d1 export --local` has no --persist-to, so copy the persisted Miniflare database directly.
   const d1Dir = path.resolve(repoRoot, values["persist-to"], "v3/d1/miniflare-D1DatabaseObject");
@@ -111,6 +136,7 @@ run("node", [
   dbFile,
   "--out",
   siteData,
+  ...(summaryDbFile ? ["--summary-db", summaryDbFile] : []),
   ...(mediaDir ? ["--media-dir", path.resolve(repoRoot, mediaDir)] : []),
   ...(!mediaDir && values.remote ? ["--media-source", "r2"] : []),
   ...(values["media-base-url"] ? ["--media-base-url", values["media-base-url"]] : []),

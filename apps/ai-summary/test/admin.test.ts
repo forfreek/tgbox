@@ -281,6 +281,70 @@ test("changed R2 evidence cannot be approved even while the manual draft is lock
   expect((await summaryAdminDetail(db, id)).review?.status).toBe("draft");
 });
 
+test("public projection follows approval/edit/withdraw atomically and only content changes dirty the site", async () => {
+  const { id, revision } = await draft();
+  if (!revision) throw new Error("Missing draft");
+  await edit(id, revision.id);
+  await env.DB.prepare("DELETE FROM site_state WHERE key='dirty_since'").run();
+  const act = async (action: "approve" | "withdraw" | "sample") =>
+    summaryCommand(
+      core,
+      env.MEDIA,
+      { action, ...(await base(id)), ...(action === "approve" ? { revisionId: revision.id } : {}) },
+      actor,
+    );
+  await act("approve");
+  const row = await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?")
+    .bind(id)
+    .first();
+  expect(Object.keys(row ?? {}).sort()).toEqual(
+    ["entry_id", "zh", "hant", "en", "fingerprint", "contract_version"].sort(),
+  );
+  expect(row?.hant).toBe("將語音轉為文字。");
+  expect(
+    await env.DB.prepare("SELECT value FROM site_state WHERE key='dirty_since'").first(),
+  ).not.toBeNull();
+  await env.DB.prepare("DELETE FROM site_state WHERE key='dirty_since'").run();
+  await act("approve");
+  await act("sample");
+  expect(
+    await env.DB.prepare("SELECT value FROM site_state WHERE key='dirty_since'").first(),
+  ).toBeNull();
+  await edit(id, revision.id);
+  expect(
+    await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?").bind(id).first(),
+  ).toBeNull();
+  await act("approve");
+  await act("withdraw");
+  expect(
+    await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?").bind(id).first(),
+  ).toBeNull();
+});
+
+test("projection write failure rolls back approval and source fencing together", async () => {
+  const { id, revision } = await draft();
+  if (!revision) throw new Error("Missing draft");
+  await edit(id, revision.id);
+  const old = await base(id);
+  await env.DB.exec(
+    "CREATE TRIGGER reject_projection BEFORE INSERT ON ai_summary_public BEGIN SELECT RAISE(ABORT,'test_failure'); END;",
+  );
+  try {
+    await expect(
+      summaryCommand(
+        core,
+        env.MEDIA,
+        { action: "approve", ...old, revisionId: revision.id },
+        actor,
+      ),
+    ).rejects.toThrow();
+    expect((await summaryAdminDetail(db, id)).review?.status).toBe("draft");
+    expect(await base(id)).toEqual(old);
+  } finally {
+    await env.DB.exec("DROP TRIGGER reject_projection");
+  }
+});
+
 test("insufficient results cannot be ordinarily retried or approved", async () => {
   const id = await entry();
   const msg = await queued(id);

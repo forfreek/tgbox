@@ -1,5 +1,7 @@
 # AI 资源摘要模块项目记忆
 
+2026-11-23 六B实现见 [STATIC-DATA](STATIC-DATA.md)，工作树tgbox-ai-summary-data、base六A。公开ai_summary_public只有六列，无actor/私有稿；审批投影与dirty在同一D1事务，编辑/撤回删除，重复批准/抽检不重复标脏。可选SQL必须独立SQLite读取，禁止拼入主SQL，否则部分/损坏可选导出会拖垮正常构建。白名单AI_SUMMARY_ENTRY_IDS默认空/非法关闭，最多20，未接正文。来源哈希复用worker规范化与完整可见证据，不哈希预览；只缓存选中频道本次R2帖子读取并在复核后释放，坏行逐条null，DTO不传指纹与审计。六C需保护人工繁中、核对HTML/metadata/Pagefind，尚未实现。
+
 六A草稿PR #65依赖#64，仅记录公开投影/缺表降级/繁中保护契约，五文档106本地链接与diff检查通过。后续实现另建六B分支/PR，不在本设计节点混入运行时代码。
 
 2026-11-23 步骤六A关键边界见 [STATIC-CONTRACT](STATIC-CONTRACT.md)：scripts/build-site.ts是公开表导出白名单，禁止将含actor/待审历史的审核任务表整表加入；拟独立批准内容投影，编辑/撤回事务删除且标dirty。新表缺失须在可选导出阶段降级，不能只靠snapshot.hasTable，因为强制wrangler导出先失败。当前hant.ts整体转换HTML/JSON，人工繁中需独立保护并校验；构建复核同一规范化来源指纹，不用只哈希简介或截断预览。此为未实现契约，六B/六C另PR，静态回退需重建发布，不承诺即时关闭。

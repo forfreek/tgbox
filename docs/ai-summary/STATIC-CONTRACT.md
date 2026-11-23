@@ -1,5 +1,7 @@
 # 步骤六A：静态接入前的契约审查
 
+后续六B实现见 [STATIC-DATA](STATIC-DATA.md)。本文件保留六A设计时的计划边界，公开投影/隔离快照已在六B实现，页面及人工繁中保护仍未实现。
+
 2026-11-23，Asia/Shanghai。本文件是接入前设计决策，以下新增表、字段和开关均为待实现方案，不代表源码已具备。工作树tgbox-ai-summary-static、分支codex/ai-summary-static，基于步骤五6f653ae。保持Gemma/v7/v3，不增加推理。
 
 ## 实际入口与发现

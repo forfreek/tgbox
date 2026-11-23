@@ -3,6 +3,7 @@ import { writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
 import { buildSiteData, projectedStaticFileCount } from "./build-site-data.ts";
 import { createR2MediaReader } from "./r2-media.ts";
+import { summaryEntryIds } from "./summary-options.ts";
 
 // Cloudflare static assets allow 20,000 files; leave headroom for assets and non-entry pages.
 const STATIC_FILE_WARNING = 18_000;
@@ -14,6 +15,7 @@ const { values } = parseArgs({
     "media-base-url": { type: "string" },
     "media-dir": { type: "string" },
     "media-source": { type: "string" },
+    "summary-db": { type: "string" },
   },
 });
 
@@ -40,6 +42,8 @@ const data = await (async () => {
       mediaDir: values["media-dir"],
       readMedia: r2?.read,
       now: new Date(),
+      summaryEntryIds: summaryEntryIds(process.env.AI_SUMMARY_ENTRY_IDS),
+      summaryDbPath: values["summary-db"],
     });
   } finally {
     r2?.close();

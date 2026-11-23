@@ -4,6 +4,10 @@
 
 ## 当前状态与授权
 
+2026-11-23 用户明确“开始”实施六B，独立C:/Users/123/tgbox-ai-summary-data / codex/ai-summary-data，基于六A2ceeb34、base=codex/ai-summary-static。公开投影、审批/撤回事务与dirty标记、可选独立SQL导出、快照白名单及来源指纹复核已实现，见 [STATIC-DATA](STATIC-DATA.md)。仅数据节点，六C页面/繁中/搜索契约未实施；无生产迁移、资源操作、部署或模型调用。
+
+本地Worker81项、快照新增定向14项、可选导出1项通过；全仓10项typecheck和脚本类型通过，Worker dry-run通过。Windows默认快照的既有支付测试出现5秒超时，串行15000ms预算全套50项通过，后增两项隔离SQL测试也通过；最终默认全套52项待Linux CI核验。具体限制/证据见STATIC-DATA，不把文档或打包当作最终页面验收。
+
 六A已提交草稿 [PR #65](https://github.com/forfreek/tgbox/pull/65)，base=codex/ai-summary-admin（#64）。五份文档106个本地链接及diff检查通过；本次仅文档，不运行应用测试、不把CI视作六B/六C实现验收。下一项为六B独立数据接入节点，步骤六整体仍未完成。
 
 2026-11-23 开始步骤六，独立C:/Users/123/tgbox-ai-summary-static / codex/ai-summary-static，基于步骤五6f653ae。接入前发现审核私有表不能直接进入公开导出，以及整体OpenCC会影响人工繁中，先完成六A契约审查，见 [STATIC-CONTRACT](STATIC-CONTRACT.md)。本轮仅文档，无运行时代码、迁移、模型调用、构建或部署；六B数据接入和六C页面验收未实施，不将步骤六标完成。
