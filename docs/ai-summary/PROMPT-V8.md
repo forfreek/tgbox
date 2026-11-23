@@ -14,7 +14,7 @@
 
 ## 两次真实定向测试
 
-只复用既有#1940归档输入及原C6纯帖子输入；没有新抓Telegram、读写远端D1/R2或网页搜索。直接使用Cloudflare API传输当前summaryRequest生成的请求，各1次，无隐藏重试。证据按需见[冻结请求与响应](../../apps/ai-summary/evaluation/editorial-v8-boundary-2026-11-23.json)。
+只复用既有#1940归档输入及原C6纯帖子输入；没有重新抓取Telegram或读取远端D1/R2生成来源，没有网页搜索或远端写入。仅另行SELECT核对生产模型/提示词/开关配置。直接使用Cloudflare API传输当前summaryRequest生成的请求，各1次，无隐藏重试。证据按需见[冻结请求与响应](../../apps/ai-summary/evaluation/editorial-v8-boundary-2026-11-23.json)。
 
 - #1940：输出改为网盘影视资源的整体用途，保留夸克网盘、4K、电影/剧集/动漫等类别，仅引用profile；中英不含原三部片名或US series，无人工改写。
 - C6仅帖子：仍能生成ok并引用两个post；没有把两个工具的功能合并给同一工具，但仍逐项描述两种工具，整体归纳/语气未完全达到理想。此结果如实保留，不声称v8全类型质量已验收。

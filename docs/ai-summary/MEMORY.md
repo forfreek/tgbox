@@ -1,5 +1,7 @@
 # AI 资源摘要模块项目记忆
 
+v8证据口径：归档来源复用与生产配置SELECT应分别记录，不能把“无新来源读取/无远端写入”笼统写成“没有D1读取”。本轮只读配置核验不进入模型证据。
+
 v8草稿PR #74，以main为base；源文件位于tgbox-ai-summary-prompt-v8/apps/ai-summary/src/prompts.ts。只读复核生产仍v7/params-v3开启50条观察，不能因源码候选改成v8就声称线上已采用新规则。后续先读PROMPT-V8，再按需查两条冻结证据。
 
 v8局部验收：86项离线测试、Worker/Admin类型检查和dry-run通过；直接API两次usage约40.0091 Neurons，不与生产D1预留台账混算。新规则及改后示例使频道system由2304增至2693字符。后续恢复时先看PROMPT-V8的C6剩余问题和生产版本协调边界。

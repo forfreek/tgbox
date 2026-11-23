@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+交付边界复核：两条推理输入均来自已归档证据，没有重新读取远端生成来源；生产设置仅另行SELECT核验，未写配置或业务表。保持草稿#74，CI以其最终检查为准。
+
 候选[PR #74](https://github.com/forfreek/tgbox/pull/74)已建立，draft、base=main、head=codex/ai-summary-prompt-v8。代码3632a91本地86项测试、类型检查及dry-run通过，最终CI从PR核验。2026-11-23只读复核生产仍Gemma/v7/params-v3、enabled/auto_scan=1；本节点未切换或重跑。入口[PROMPT-V8](PROMPT-V8.md)。
 
 v8候选本地交付核验：Worker86/86、Worker/Admin类型检查及dry-run通过，冻结的两次真实请求/响应可离线复核；C6仍偏逐项描述，不标全面质量通过。下一项仅独立草稿PR及CI，保持不合并、不部署、不切换生产v7配置、不重跑50条。
