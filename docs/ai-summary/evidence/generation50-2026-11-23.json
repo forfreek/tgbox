@@ -1,0 +1,2361 @@
+{
+  "capturedAt": "2026-11-23T10:15:41.795Z",
+  "initialGlobalAttempts": 10,
+  "finalGlobalAttempts": 50,
+  "newCalls": 40,
+  "entries": [
+    {
+      "id": 1997,
+      "username": "niuniuban123",
+      "kind": "channel",
+      "jobId": "a7517220-82c1-405d-b197-30807c4262ac",
+      "generation": 1,
+      "sourceGeneration": 3,
+      "fingerprint": "sha256:9584cad55aac29c30502db12f8c566d1e49b0e9e58be7a063257ca8ad1445898",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "牛牛搬｜频道搬运｜群组内容搬运｜AI改文案",
+        "username": "niuniuban123",
+        "category": "software",
+        "tags": ["chinese"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "♻️频道/群组内容搬运，支持关键词过滤、AI改文案和图文/视频水印 👀会员频道公开预览 💻Windows桌面软件，仅用于自有或已获授权内容 👩🏻 💻唯一客服：",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "该 Windows 桌面软件支持频道或群组内容搬运，具备关键词过滤、AI 改写文案以及添加图文或视频水印的功能，且仅限用于自有或已获授权的内容。",
+            "en": "This Windows desktop software supports migrating channel or group content, featuring keyword filtering, AI copywriting, and image/video watermarking; it is intended only for self-owned or authorized content.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 1,
+      "approvedProjection": 1,
+      "derivedHant": "該 Windows 桌面軟件支持頻道或群組內容搬運，具備關鍵詞過濾、AI 改寫文案以及添加圖文或視頻水印的功能，且僅限用於自有或已獲授權的內容。"
+    },
+    {
+      "id": 1994,
+      "username": "ammarthefucker6",
+      "kind": "channel",
+      "jobId": "494fd538-963c-4658-9074-0d4a2ec91fd8",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:a09864b078d158bc39afbd7778fa8cb7d5645d18009bd0b6b35b2cedda29765a",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "ammar_the_fucker",
+        "username": "ammarthefucker6",
+        "category": "games",
+        "tags": ["games"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Best dota 2 player ever to play this game AND WILL EVER",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1993,
+      "username": "nofehh",
+      "kind": "channel",
+      "jobId": "0f1d0785-b6d4-470a-9883-55252eb5be80",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:72a4d6fc304de1c8180ef70567865d73eb54ece9514da249c8fb9154138fe410",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "نوفه",
+        "username": "nofehh",
+        "category": "news",
+        "tags": ["daily-news", "finance"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "پایگاه خبری تحلیلی نوفه 👨 💻 www.nofeh.ir",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1992,
+      "username": "waltwallletbot",
+      "kind": "bot",
+      "jobId": "a2ab87fe-17c0-4c81-9e92-4f58a9eb3783",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:85d02b3c480e92b1ccd1548cbfa8ddf817770a533c38d90ba2e96071736ec7fd",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Walt (ex. Wallet)",
+        "username": "waltwallletbot",
+        "category": "crypto",
+        "tags": ["english", "exchange", "finance", "open-source", "ton"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Smart Web3 wallet, DeFi analytics, multi-chain portfolio tracking and on-chain intelligence.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供Web3钱包功能、DeFi数据分析、多链资产组合追踪及链上情报。",
+            "en": "Provides Web3 wallet functionality, DeFi analytics, multi-chain portfolio tracking, and on-chain intelligence.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供Web3錢包功能、DeFi數據分析、多鏈資產組合追蹤及鏈上情報。"
+    },
+    {
+      "id": 1991,
+      "username": "anonymous_people_bot",
+      "kind": "bot",
+      "jobId": "8dc3d2d5-ea1d-4b57-b08c-cab936315d81",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:30746c4f8312ec7fdf41afb8c582c2f343adc29aa574dae6df903ec7443e6a1e",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Nexus worldchat",
+        "username": "anonymous_people_bot",
+        "category": "messaging",
+        "tags": ["english", "free", "windows"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Chat anonymously with people around the world. Play games, earn badges, stay safe.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "与世界各地的人进行匿名聊天，并可以玩游戏和获取徽章。",
+            "en": "Chat anonymously with people around the world, play games, and earn badges.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "與世界各地的人進行匿名聊天，並可以玩遊戲和獲取徽章。"
+    },
+    {
+      "id": 1990,
+      "username": "aclas_college_bot",
+      "kind": "bot",
+      "jobId": "cdfa2589-5c58-4826-b02c-0357392c0dec",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:a797729102d9c64e675877f56e99372ff2cc65beea46bb9a50a4aa0b725d6e5d",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "aclas_college_bot",
+        "username": "aclas_college_bot",
+        "category": "productivity",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "100% online degrees from $89, 5,980+ students in 150+ countries. Course-opening email within 1–2 business days.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供起步价为 89 美元的 100% 在线学位课程，课程开启邮件会在 1-2 个工作日内发送。",
+            "en": "Offers 100% online degrees starting from $89, with course-opening emails sent within 1–2 business days.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供起步價為 89 美元的 100% 在線學位課程，課程開啟郵件會在 1-2 個工作日內發送。"
+    },
+    {
+      "id": 1988,
+      "username": "moneytapeasybot",
+      "kind": "bot",
+      "jobId": "6ec8a778-e575-4663-9be0-2575b17f2029",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:d14722fabe34d04855fcfaedba048335c855a01b2bd30c618a9702e06a056b19",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "MoneyTap",
+        "username": "moneytapeasybot",
+        "category": "productivity",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "💰 MoneyTap — простой учёт личных расходов в Telegram. Записывай траты за секунды и контролируй свои деньги!",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "在 Telegram 中记录个人支出。",
+            "en": "Tracks personal expenses within Telegram.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "在 Telegram 中記錄個人支出。"
+    },
+    {
+      "id": 1986,
+      "username": "etyenechatbot",
+      "kind": "bot",
+      "jobId": "eabc7b7d-ca0c-4e35-8df7-833767d4f13a",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:9f55f6f4c6887faf385745da1840f7c3c0b0a6775a8b60b95156bd919cf7a172",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "ET YENE CHAT",
+        "username": "etyenechatbot",
+        "category": "messaging",
+        "tags": ["english", "free", "open-source"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Anonymous chat made simple. CREATED BY:",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1985,
+      "username": "torcidasr",
+      "kind": "group",
+      "jobId": "0754b720-1330-4477-9e18-52bb6788216c",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:7260f878c8ba7a977bf459511b591fb0b43b4c3b19c0d01e59a36694857ab495",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "REAÇÕES DOS TORCEDORES",
+        "username": "torcidasr",
+        "category": "interest",
+        "tags": [],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "⚽ BRIGA GERAL — TODAS AS TORCIDAS🔥 Aqui é o espaço para resenha, zoeira, debates, memes e notícias sobre futebol brasileiro. Todas as torcidas são bem-vindas! 📋 REGRAS DO GRUPO 🚫 Proibido enviar links ou divulgar outros grupos. 🚫 Proibido spam, flo",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "用于巴西足球的闲聊、恶搞、辩论、迷因及新闻讨论，欢迎所有球迷群体；禁止发送链接或推广其他群组。",
+            "en": "A space for banter, jokes, debates, memes, and news about Brazilian football, welcoming all fan groups; sending links or promoting other groups is prohibited.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "用於巴西足球的閒聊、惡搞、辯論、迷因及新聞討論，歡迎所有球迷群體；禁止發送鏈接或推廣其他群組。"
+    },
+    {
+      "id": 1984,
+      "username": "tamil_frnds_zone",
+      "kind": "group",
+      "jobId": "9b7ef130-714b-42c6-909c-ae251200a257",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:de6fcce380ab81fdef376a2e6fa420dd3ef46465fbab24a66f492a824231f7d9",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "𝑻𝑨𝑴𝑰𝑳_𝑭𝑹𝑰𝑬𝑵𝑫𝑺_ 𝒁𝑶𝑵𝑬",
+        "username": "tamil_frnds_zone",
+        "category": "chat",
+        "tags": ["free", "music"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "✦ 𝐙𝐎𝐍𝐄 𝐂𝐎𝐃𝐄 ✦ ✿ ┊ 𝐑𝐄𝐒𝐏𝐄𝐂𝐓 𝐀𝐋𝐋 ✿ ┊ 𝐍𝐎 𝐃𝐌 / 𝐏𝐌 ✿ ┊ 𝐍𝐎 𝐋𝐈𝐍𝐊𝐒 𝐈𝐍 𝐁𝐈𝐎 ✿ ┊ 𝐍𝐎 𝐅𝐈𝐆𝐇𝐓𝐒 ✿ ┊ 𝐍𝐎 𝐒𝐏𝐀𝐌 ✿ ┊ 𝐒𝐓𝐀𝐘 𝐁𝐎𝐍𝐃𝐄𝐃 ✿ ┊ 𝐑𝐄𝐏𝐎𝐑𝐓 @ 𝐀𝐃𝐌𝐈𝐍",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1982,
+      "username": "qunsoucn_bot",
+      "kind": "bot",
+      "jobId": "1c6bd216-12d7-4acd-9cf5-02257a3047e3",
+      "generation": 1,
+      "sourceGeneration": 3,
+      "fingerprint": "sha256:e6611d27e3a4e52d6dd056c9ef4169b923a36996d55e9f083088bcfee0325278",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "群搜🔍中文群频道搜索",
+        "username": "qunsoucn_bot",
+        "category": "search",
+        "tags": ["anime", "chinese", "free"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "🧭 群搜 QunSou｜中文社区搜索导航 🔎 群组 · 频道 · 机器人，一站搜索 ✅ 人工审核 · 优质收录 🌐 三端数据实时同步",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "用于搜索中文社区内的群组、频道及机器人。",
+            "en": "Searches for groups, channels, and bots within Chinese communities.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 1,
+      "approvedProjection": 1,
+      "derivedHant": "用於搜索中文社區內的群組、頻道及機器人。"
+    },
+    {
+      "id": 1981,
+      "username": "xunqunseagroup",
+      "kind": "group",
+      "jobId": "130ced7a-0162-4615-aad0-4580a2ef624d",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:9495a8e2eac8ef6f3b1ac3a8f0c1c207487cfcb3b0ccd1c2babb64c5c3f7cbff",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "寻群目录｜东南亚关键词搜群",
+        "username": "xunqunseagroup",
+        "category": "local",
+        "tags": ["free"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "东南亚中文搜群，10,000+ 条公开群组、频道和原帖。查夜生活、成人向、博彩资讯和本地商家。进群发「西港 KTV」或「吉隆坡 锅在黔边」，机器人直接回链接。",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供东南亚中文搜群服务，包含超过10,000条公开群组、频道和原帖，涵盖夜生活、成人向、博彩资讯及本地商家。可通过发送特定关键词如「西港 KTV」或「吉隆坡 锅在黔边」获取机器人回复的链接。",
+            "en": "Provides Southeast Asian Chinese group searching for over 10,000 public groups, channels, and posts, covering nightlife, adult content, gambling information, and local businesses. Users can receive links via bot responses by sending keywords like '西港 KTV' or '吉隆坡 锅在黔边'.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供東南亞中文搜群服務，包含超過10,000條公開群組、頻道和原帖，涵蓋夜生活、成人向、博彩資訊及本地商家。可通過發送特定關鍵詞如「西港 KTV」或「吉隆坡 鍋在黔邊」獲取機器人回覆的鏈接。"
+    },
+    {
+      "id": 1980,
+      "username": "femboyxo",
+      "kind": "channel",
+      "jobId": "4839093b-c31b-4675-ae55-52f38ba1bdc7",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:ec3882543c9ff10d6d9fbbb33a0899a022e832bba12dc7ab86009bfe5f67ce49",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "Femboy",
+        "username": "femboyxo",
+        "category": "life",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Femboy XO ♡ Welcome to Femboy World! Femboy Memes • Pictures • Anime Daily Femboy Content ♡ #Femboy #FemboyXO #FemboyMemes",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "分享 Femboy 相关的迷因、图片以及每日动漫内容。",
+            "en": "Shares Femboy memes, pictures, and daily anime content.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "分享 Femboy 相關的迷因、圖片以及每日動漫內容。"
+    },
+    {
+      "id": 1979,
+      "username": "bikeng_radar_bot",
+      "kind": "bot",
+      "jobId": "bc72279a-81bb-40c5-b984-2f6fa5ac463e",
+      "generation": 1,
+      "sourceGeneration": 5,
+      "fingerprint": "sha256:d9aca78d3248a4f99f70a704407d99e79554a81cfd024caf2649fa870f368b9f",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "避坑雷达",
+        "username": "bikeng_radar_bot",
+        "category": "trading",
+        "tags": ["chinese", "on-chain"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "BSC 打狗避坑数据：新币出生推送、钱包评分查询、钱包黑名单。不承诺收益，只提供数据。",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供 BSC 链上新币出生推送、钱包评分查询及钱包黑名单数据。",
+            "en": "Provides BSC on-chain data including new token launches, wallet scoring, and wallet blacklists.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 1,
+      "approvedProjection": 1,
+      "derivedHant": "提供 BSC 鏈上新幣出生推送、錢包評分查詢及錢包黑名單數據。"
+    },
+    {
+      "id": 1978,
+      "username": "bikeng_radar",
+      "kind": "channel",
+      "jobId": "bb0bec16-4d48-4c26-afaa-98da2323f9e5",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:468a728bd86d30c1f3eb7c82d1bec9141a997d404eec1867d3f5f47ad3262b6b",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "避坑雷达·免费版",
+        "username": "bikeng_radar",
+        "category": "crypto",
+        "tags": ["chinese", "finance", "on-chain"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "BSC打狗避坑雷达｜four.meme / flap 新币出生监测 · 钱包黑名单（前向验证）· 土狗风险数据警告。不喊单、不带单，只报数据。实时版 + 钱包评分查询 👉 ｜29 USDT/月",
+            "date": null
+          },
+          {
+            "ref": "post:943",
+            "text": "🆕 新币出生 · BSC 平台：Flap 合约：0x602db3ec34f001dfd0d2f140dc22b9e54e4f7777 时间：18:00:09 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:05.000Z"
+          },
+          {
+            "ref": "post:942",
+            "text": "🆕 新币出生 · BSC 平台：Four.meme 合约：0xf3517ad4d0a6ba3d49fa402de3da3756c82affff 时间：18:00:02 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:04.000Z"
+          },
+          {
+            "ref": "post:941",
+            "text": "🆕 新币出生 · BSC 平台：Four.meme 合约：0x7d9c65f81f2385f5e055033c084cff2c3751ffff 时间：17:59:51 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:03.000Z"
+          },
+          {
+            "ref": "post:940",
+            "text": "🆕 新币出生 · BSC 平台：Four.meme 合约：0xee609867ca92ec2272b033160d462431d99dffff 时间：17:59:51 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:01.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供 BSC 平台新币出生监测、钱包黑名单前向验证及土狗风险数据警告。公开帖子里包含 BSC 平台（如 Four.meme 和 Flap）新币出生的合约地址与时间信息。",
+            "en": "Provides monitoring of new coin births on the BSC platform, wallet blacklist forward verification, and risk data warnings for meme coins. Available posts include contract addresses and timestamps for new coins on BSC platforms like Four.meme and Flap.",
+            "refs": ["profile", "post:943", "post:942", "post:941", "post:940"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供 BSC 平臺新幣出生監測、錢包黑名單前向驗證及土狗風險數據警告。公開帖子裡包含 BSC 平臺（如 Four.meme 和 Flap）新幣出生的合約地址與時間信息。"
+    },
+    {
+      "id": 1977,
+      "username": "aftermidnighnn",
+      "kind": "channel",
+      "jobId": "b5bb80d3-c4d4-43cb-be0d-fba497532562",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:ffa4b79b3ada68c41962042fcd6e6427723d9af0485d3882a4091d5e6cb1696e",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "بعدازنیمه شب🌃",
+        "username": "aftermidnighnn",
+        "category": "blog",
+        "tags": [],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "«اینجا حرف هایی می مونن که نیمه شب به دنیا میان»",
+            "date": null
+          },
+          {
+            "ref": "post:12",
+            "text": "نارنگی پوست کندن رو همه بلدن،ببین کی برات اَنار دون میکنه.",
+            "date": "2026-11-20T08:46:57.000Z"
+          },
+          {
+            "ref": "post:11",
+            "text": "من خیلی خوشحال میشم یکی توییت میزنه ماشین خریدم خونه خریدم ویزا گرفتم سرطانو شکست دادم شمع جواب داد و...واقعا دلم غنج میره براتون",
+            "date": "2026-11-19T17:03:16.000Z"
+          },
+          {
+            "ref": "post:9",
+            "text": "شدشد نشد راستش دیگه حوصله ندارم بشه جهان یادگاراست ومارفتنی",
+            "date": "2026-11-19T09:22:56.000Z"
+          },
+          {
+            "ref": "post:8",
+            "text": "این دختر عشقمههه",
+            "date": "2026-11-18T21:01:56.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1976,
+      "username": "bdwp_ysk",
+      "kind": "channel",
+      "jobId": "4f0db343-d87b-413e-926e-4eec1e5fb7ca",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:7360298c3f380ffe1ad24bdbc8869913a75dad58008d460f7778818078ef13e8",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "百度网盘4K影视库 - 蓝光电影/热播电视剧/爆款短剧/综艺动漫全集",
+        "username": "bdwp_ysk",
+        "category": "cloud-drive",
+        "tags": ["anime", "movies", "music", "short-drama", "tv-series"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "全网优质百度网盘影视合集站，专注整理4K蓝光原盘、最新院线大片、爆款短剧、国产热播电视剧全集，以及高分美剧韩剧、热门综艺与经典动漫。全站资源画质超清、分类齐全，支持百度云手机电脑端在线流畅播放与一键高速转存，持续更新中，欢迎订阅收藏！",
+            "date": null
+          },
+          {
+            "ref": "post:291",
+            "text": "Telegram必备的搜索引擎，极速极搜点击开始 jsjs帮你精准找到，想要的群组、频道、视频、音乐 👉",
+            "date": "2026-11-22T20:20:24.000Z"
+          },
+          {
+            "ref": "post:290",
+            "text": "🎬 不着边际的你 / 밑도 끝도 없이, 너다 (2026) 全9集完结 主演：郑容和 / 洪承熙 / 李伊庚 / 朴柔娜 信息：2026-10-24 首播 ｜ 日韩剧 画质：1080P 高清（全9集打包） 📖 简介：吴海拉在一场意外中醒来，深信自己进入了她最喜爱的韩剧世界，并决定要保护剧中的男主角严泰峰。泰峰是一位顶尖的爱情剧演员，但他隐瞒了一个致命的弱点：只要接吻就会昏倒。因此，他一直避开现实中的感情关系——直到海拉以「自荐保镖」的身份闯入并打乱了他的生活。随着虚构与现实的界线开始模糊，两人建立了意想不到的羁绊。透过彼此，他们开始以从未想像过的方式面对爱情。 #不着边际的你 #剧情 #喜剧 #Sci-Fi & Fantasy #2026新剧 #全集 #百度网盘 📢 更多4K影视日更请关注：百度网盘4K影视库 - 蓝光电影/热播电视剧/爆款短剧/综艺动漫全集",
+            "date": "2026-11-22T17:15:37.000Z"
+          },
+          {
+            "ref": "post:289",
+            "text": "🎬 最后的餐桌 / 파이널 테이블 (2026) 全9集完结 主演：安孝燮 / 洪华妍 / 张栗 / 郑幼贞 信息：评分 8.9 ｜ 2026-10-24 首播 ｜ 日韩剧 画质：1080P 高清（全9集打包） 📖 简介：为角逐韩国顶尖厨师称号，来自世界各地的韩国厨师齐聚烹饪大赛“餐桌：K主厨2026”，各展厨艺，也揭开各自的人生故事。 #最后的餐桌 #剧情 #2026新剧 #全集 #百度网盘 📢 更多4K影视日更请关注：百度网盘4K影视库 - 蓝光电影/热播电视剧/爆款短剧/综艺动漫全集",
+            "date": "2026-11-22T16:45:20.000Z"
+          },
+          {
+            "ref": "post:288",
+            "text": "🎬 百日谎言 / 100일의 거짓말 (2026) 全13集完结 主演：金裕贞 / 朴珍荣 / 金贤珠 / 李茂生 信息：评分 8.6 ｜ 2026-10-10 首播 ｜ 日韩剧 画质：1080P 高清（全13集打包） 📖 简介：天才扒手佳景在朝鲜总督府伪装就业100天，作为假密探活跃在朝鲜，最后成为真正的密探的过程以及与朝鲜翻译官泰雄展开浪漫爱情故事的谍报罗曼史电视剧。 #百日谎言 #动作冒险 #剧情 #2026新剧 #全集 #百度网盘 📢 更多4K影视日更请关注：百度网盘4K影视库 - 蓝光电影/热播电视剧/爆款短剧/综艺动漫全集",
+            "date": "2026-11-22T16:14:51.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "该频道简介自称整理了 4K 蓝光原盘、院线大片、短剧、国产及海外电视剧、综艺与动漫等百度网盘资源。公开帖子展示了多部日韩剧的 1080P 高清打包资源。",
+            "en": "The profile describes it as a collection of Baidu Netdisk resources, including 4K Blu-ray originals, movies, short dramas, TV series, variety shows, and anime. Available posts feature 1080P high-definition packages for various Korean and Japanese dramas.",
+            "refs": ["profile", "post:290", "post:289", "post:288"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "該頻道簡介自稱整理了 4K 藍光原盤、院線大片、短劇、國產及海外電視劇、綜藝與動漫等百度網盤資源。公開帖子展示了多部日韓劇的 1080P 高清打包資源。"
+    },
+    {
+      "id": 1975,
+      "username": "alyp_4k",
+      "kind": "channel",
+      "jobId": "79d25974-bd8a-46d5-acc8-c4098e4f26fa",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:29264d2b4882f7a83f4167eb399d991768b2180a79e2251bd83edcb558ab2c0a",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "阿里云盘4K资源仓【蓝光原盘·热播新剧·短剧动漫·纪录片】",
+        "username": "alyp_4k",
+        "category": "video",
+        "tags": ["anime", "chinese", "cloud-drive", "movies", "tv-series"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "精选高画质阿里云盘影视资源仓库，主打4K超清蓝光原盘、院线口碑新片、全网爆款短剧、当红国产剧、欧美日韩剧集及高分纪录片与动漫。所有资源秒传不限速，支持手机电视大屏在线原画播放，每日持续上新，点击订阅不迷路！",
+            "date": null
+          },
+          {
+            "ref": "post:103",
+            "text": "Telegram必备的搜索引擎，极速极搜点击开始 jsjs帮你精准找到，想要的群组、频道、视频、音乐 👉",
+            "date": "2026-11-21T19:25:14.000Z"
+          },
+          {
+            "ref": "post:102",
+            "text": "🎬 老板 / The Boss (2016) 主演：梅丽莎·麦卡西 / 克里斯汀·贝尔 / 彼特·丁拉基 / 凯西·贝茨 信息：评分 5.8 ｜ 2016-04-07 上映 ｜ 欧美电影 画质：4K 高清 📖 简介：由于童年缺失亲生父母的关爱，从小在寄养家庭长大的米歇尔养成了“独立”“自负”“不相信他人”的个性，面对其他人，都是一副“老娘最牛”的姿态，对合作伙伴、下属皆是一张高傲的嘴脸，所以当她因内幕交易被判入狱8个月后，没有人站出来为她说话，甚至在出狱后，也没有人愿意伸出援手。然而，曾经被她无视的助理、单身母亲克莱尔（克里斯汀·贝尔 饰）却成为她唯一的救命稻草。米歇尔利用克莱尔的同情心，在对方的家中落脚，并重新摆出了曾经的老板姿态。在一次被强迫去替克莱尔开家长会后，米歇尔在学校中突然发现了“商机”——带领一群乳臭未干的奇葩少女卖起了克莱尔制作的布朗尼蛋糕，并将所取得的一部分利润用作这些少女的大学基金。随着生意越做越火，米歇尔引起了前任男友兼现任敌手雷诺（彼特·丁拉基 饰）的注意，为了复仇，雷诺从中作梗挑拨克莱尔与米歇尔的关系，这让米歇尔极度不满，又变回了曾经那个自私、偏执的个性。…",
+            "date": "2026-11-21T17:20:03.000Z"
+          },
+          {
+            "ref": "post:101",
+            "text": "🎬 警报战 / Alarum (2025) 主演：斯科特·伊斯特伍德 / 西尔维斯特·史泰龙 / 薇拉·菲茨杰拉德 / 麦克·柯尔特 信息：评分 5.6 ｜ 2025-01-16 上映 ｜ 欧美电影 画质：1080P 高清 📖 简介：在中央情报局发现两名流氓间谍的下落后，他们不仅离开了网络，而且结为夫妻，所有的地狱都被一个国际间谍组织联盟释放到他们冬季蜜月的树林小屋度假胜地，他们想要一颗“飞行丸”，又名硬盘，他们都怀疑这两人可能加入了一个被称为“阿拉拉姆。 #警报战 #动作 #犯罪 #惊悚 #2025电影 #阿里云盘 📢 更多4K影视日更请关注：阿里云盘4K资源仓【蓝光原盘·热播新剧·短剧动漫·纪录片】",
+            "date": "2026-11-21T16:55:32.000Z"
+          },
+          {
+            "ref": "post:100",
+            "text": "🎬 金刚：骷髅岛 / Kong: Skull Island (2017) 主演：汤姆·希德勒斯顿 / 塞缪尔·杰克逊 / 约翰·古德曼 / 布丽·拉尔森 信息：评分 6.6 ｜ 2017-03-08 上映 ｜ 国产电影 画质：4K 高清 📖 简介：1973年，一支由科研人员、军人、探险家和战地摄影记者组成的队伍前往南太平洋上一座从未被外界真正了解的神秘岛屿——骷髅岛。他们原本以为这只是一次科学考察，却在进入岛屿后惊醒了统治这里的巨兽金刚，一场突如其来的袭击让探险队四散失联。随着众人深入这片与世隔绝的土地，他们发现骷髅岛不仅生活着大量未知的史前生物，也隐藏着一个与外界隔绝已久的部落。与此同时，他们逐渐意识到，金刚并非这座岛上真正最危险的存在，而此次探险背后也另有目的…… #金刚：骷髅岛 #动作 #冒险 #奇幻 #2017电影 #阿里云盘 📢 更多4K影视日更请关注：阿里云盘4K资源仓【蓝光原盘·热播新剧·短剧动漫·纪录片】",
+            "date": "2026-11-21T16:31:20.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "该频道简介自称提供高画质阿里云盘影视资源，涵盖4K蓝光原盘、院线新片、短剧、各类剧集、纪录片与动漫。公开帖子中包含 4K 或 1080P 画质的欧美及国产电影。",
+            "en": "The profile describes it as a high-quality Aliyun Drive video resource repository, featuring 4K Blu-ray originals, new releases, short dramas, various series, documentaries, and anime. Available posts include movies in 4K or 1080P resolution.",
+            "refs": ["profile", "post:102", "post:101", "post:100"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "該頻道簡介自稱提供高畫質阿里雲盤影視資源，涵蓋4K藍光原盤、院線新片、短劇、各類劇集、紀錄片與動漫。公開帖子中包含 4K 或 1080P 畫質的歐美及國產電影。"
+    },
+    {
+      "id": 1973,
+      "username": "duopan_ys",
+      "kind": "channel",
+      "jobId": "4bf622b3-af28-4896-bb2b-ef3233a918bd",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:d0e6a08b6bcd793493a8c602b5dd4fb05156120801761376048c6611fe7a2b1f",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "阿里网盘/夸克网盘/百度网盘/123云盘/115/迅雷/光鸭 全网影视库",
+        "username": "duopan_ys",
+        "category": "cloud-drive",
+        "tags": ["anime", "chinese", "movies", "short-drama", "tv-series"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "全网最全多网盘影视资源聚合分享站，一站式覆盖123云盘、阿里云盘、百度网盘、迅雷云盘、夸克网盘、光鸭云盘及115网盘。每日同步更新4K蓝光原盘电影、热门电视剧、爆款短剧、综艺与动漫，多线路任选高速转存，点击订阅永不迷路！",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "该站聚合分享 123 云盘、阿里云盘、百度网盘、迅雷云盘、夸克网盘、光鸭云盘及 115 网盘的影视资源，内容涵盖 4K 蓝光原盘电影、电视剧、短剧、综艺与动漫。",
+            "en": "This site aggregates film and television resources across 123, Aliyun, Baidu, Xunlei, Quark, Guangya, and 115 cloud drives, covering 4K Blu-ray movies, TV series, short dramas, variety shows, and anime.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "該站聚合分享 123 雲盤、阿里雲盤、百度網盤、迅雷雲盤、夸克網盤、光鴨雲盤及 115 網盤的影視資源，內容涵蓋 4K 藍光原盤電影、電視劇、短劇、綜藝與動漫。"
+    },
+    {
+      "id": 1972,
+      "username": "conexiaconsultas",
+      "kind": "group",
+      "jobId": "e55a49d7-7d57-41f8-9531-b9726dcb7fd6",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:25d6c89f26efbf38e17551c346df9974c22792894ff8934645401935227808b7",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "CONEXIA | CONSULTA DE PLACAS GRÁTIS",
+        "username": "conexiaconsultas",
+        "category": "other",
+        "tags": ["free"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "🚗 CONEXIA AUTO | PLACAS GRÁTIS 🔎 Consulte dados básicos do veículo gratuitamente. ✅ Envie só a placa. 🤖 Resposta automática, 24h. 📌 Somente placas. Proibidos spam, anúncios e conversas. 🚀 Consulta completa:",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "通过发送车牌号免费查询车辆基础数据，提供24小时自动回复；群内仅限查询车牌，禁止发送垃圾信息、广告及进行交谈。",
+            "en": "Provides free basic vehicle data queries by sending only the license plate with 24-hour automated responses; only license plates are allowed, and spam, ads, or conversations are prohibited.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "通過發送車牌號免費查詢車輛基礎數據，提供24小時自動回覆；群內僅限查詢車牌，禁止發送垃圾信息、廣告及進行交談。"
+    },
+    {
+      "id": 1971,
+      "username": "technotricksters",
+      "kind": "channel",
+      "jobId": "56f15c85-ff9a-46fc-8eeb-cb56eb303d7b",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:c9ea684b20e06387b502f285b1bcf5312eee7e9898cb36f4973f3cbd2ab9bb07",
+      "status": "failed",
+      "reason": "inference_failed",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": "{\"schemaVersion\":1,\"policyVersion\":\"source-policy-v1\",\"kind\":\"channel\",\"title\":\"Techno-Tricksters\",\"username\":\"technotricksters\",\"category\":\"ai\",\"tags\":[\"ai-agent\",\"english\",\"llm\"],\"evidence\":[{\"ref\":\"profile\",\"text\":\"Innovations 🚀, AI 🤖 & Rock'n'Roll 🎸 For collaboration, ping 🤝\",\"date\":null},{\"ref\":\"post:2147\",\"text\":\"Swiss researchers taught a five-tonne John Deere loader to balance on two wheels without an operator. The AI first learned the manoeuvres in simulation, then the team transferred those skills to the real machine. The loader can lift itself onto two wheels, balance, drive over bumps, spin in place and control its bucket autonomously. That’s a lot of metal to trust with a balancing act. Source #Robotics\",\"date\":\"2026-11-22T19:01:20.000Z\"},{\"ref\":\"post:2145\",\"text\":\"Pika Labs has introduced a way to direct AI video while it’s being generated. Called Pika Enact, it lets you adjust a scene as it keeps playing, rather than just describe what you want at the start. • Drag actors and objects into new positions with your mouse without stopping the scene. • Give actors voice or text instructions, rehearse dialogue and change their emotions. They remember your directions. • Move the camera with your mouse to change angles, move closer or circle the scene on the f…\",\"date\":\"2026-11-22T11:05:17.000Z\"},{\"ref\":\"post:2144\",\"text\":\"The Claude Code team has published a guide to making AI prove its code works—not just say “done.” The advice puts verification at the centre of AI-assisted coding: • Ask for evidence that the code works, rather than trusting a completion message. • Run the app and check it as an ordinary user would. • Look for hidden bugs and test unusual scenarios. • Don’t let the AI rewrite tests to fit its own code. • Bring in a human after three failed attempts. According to the guide, AI already writes an…\",\"date\":\"2026-11-21T19:04:21.000Z\"},{\"ref\":\"post:2143\",\"text\":\"HeyGen’s new Avatar 6 creates a digital double you can give scripts for new videos. You upload 30 seconds of video, a few photos and a voice recording. HeyGen says the model captures your appearance, voice and movements, then uses them to generate your on-screen performance. You can steer that performance in a few ways: • Gestures, emotions and facial expressions adapt to the meaning of the script. • Prompts change the delivery style. • Professional mode, templates and tags inside the script o…\",\"date\":\"2026-11-21T11:05:11.000Z\"}]}",
+      "output": null,
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1970,
+      "username": "asemooh",
+      "kind": "channel",
+      "jobId": "2c4d3b1d-6e73-4346-ac58-157920da04f8",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:d6ac3777a48f8d0326a1a264f0d51417ed666a6050c47dfa9372326c45d3a9ba",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "Asemooh | Ghana News & Trending",
+        "username": "asemooh",
+        "category": "news",
+        "tags": ["daily-news", "memes", "movies", "tv-series"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "🇬🇭 Asemooh – Ghana's Trending News Hub! Breaking Ghanaian news, politics, celebrity gossip, entertainment, viral videos and African stories. 🔥 The stories everyone is talking about! 📲 Join our community:",
+            "date": null
+          },
+          {
+            "ref": "post:387",
+            "text": "🚨 JUST IN: PURPORTED WHATSAPP VOICE NOTES OF LATE OHEMAA GMB SURFACE ONLINE! 😳💔 Fresh controversy has emerged following the circulation of audio recordings allegedly linked to the late Ohemaa GMB. The recordings have sparked conversations online, with many people reacting to their contents. What do you make of this development? 👀 Watch the video and share your thoughts in the comments. 💬 What is your reaction? 🔄 Share this post to keep others informed. Follow ASE MOOH | GHANA NEWS & TRENDI…",
+            "date": "2026-11-22T16:49:14.000Z"
+          },
+          {
+            "ref": "post:386",
+            "text": "🚨💔 OHEMAA GMB: VIDEO SHOWS HER ROOM AFTER HER BODY WAS REPORTEDLY CARRIED AWAY! Emotions are running high as footage allegedly showing the room of former Ghana's Most Beautiful contestant Ohemaa GMB circulates online following reports of her death. The video captures the state of the room, leaving many people shocked and raising more questions about the circumstances surrounding the tragic reports. Ghanaians are demanding answers as more details emerge. 💔 May her soul rest in peace if the re…",
+            "date": "2026-11-22T12:39:14.000Z"
+          },
+          {
+            "ref": "post:385",
+            "text": "FACT OF THE DAY💡 Silent discos are dance parties where participants wear wireless headphones to listen to music instead of using traditional loudspeakers. Some events allow participants to switch between different DJs or music genres using their headphones. #FOTD",
+            "date": "2026-11-22T05:30:03.000Z"
+          },
+          {
+            "ref": "post:384",
+            "text": "🚨 SAD NEWS: Reports indicate that former Ghana’s Most Beautiful contestant Ohemaa GMB has reportedly been found dead in her room. Her landlord claims that police visited the scene and retrieved her body. Ghana is awaiting further details surrounding this developing story. May her family find strength during this difficult time. 🕊️ What do you make of this heartbreaking report? #Asemooh #OhemaaGMB #GhanaNews #BreakingNews #TrendingNews",
+            "date": "2026-11-21T17:09:07.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "该频道简介自称是加纳的热门新闻中心，涵盖加纳新闻、政治、名人八卦、娱乐、病毒式视频及非洲故事。公开帖子包含关于加纳新闻动态的报道以及每日事实分享。",
+            "en": "The profile describes the channel as a hub for trending Ghanaian news, politics, celebrity gossip, entertainment, viral videos, and African stories. Available posts include reports on Ghanaian news developments and daily facts.",
+            "refs": ["profile", "post:387", "post:386", "post:385", "post:384"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "該頻道簡介自稱是加納的熱門新聞中心，涵蓋加納新聞、政治、名人八卦、娛樂、病毒式視頻及非洲故事。公開帖子包含關於加納新聞動態的報道以及每日事實分享。"
+    },
+    {
+      "id": 1969,
+      "username": "shelftoscreenbot",
+      "kind": "bot",
+      "jobId": "c9f143f6-b688-41a6-b937-60b944493fdf",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:97de106b713bc52d0f2a049b6e6d84ff8af8facf6a1ff828cd041cf9e8e45106",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Shelf to Screen - Product Video Ads",
+        "username": "shelftoscreenbot",
+        "category": "tools",
+        "tags": ["ai-video", "aigc", "design", "free", "photography"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Product photo → video ad in ~1 minute. Ready styles or your own idea. First preview free.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "将产品照片转换为视频广告，可在约1分钟内完成，支持使用预设风格或自定义创意；首次预览免费。",
+            "en": "Converts product photos into video ads in approximately 1 minute using ready styles or custom ideas; the first preview is free.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "將產品照片轉換為視頻廣告，可在約1分鐘內完成，支持使用預設風格或自定義創意；首次預覽免費。"
+    },
+    {
+      "id": 1968,
+      "username": "usd_radar_bot",
+      "kind": "bot",
+      "jobId": "a3c553b1-1fde-481e-9add-01787c297c9a",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:b323a71027bd49e49e373308041385f3ddcee56a5561c0fc76d96fdab44f06f4",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Si Радар | Доллар USD/RUB",
+        "username": "usd_radar_bot",
+        "category": "trading",
+        "tags": ["finance"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Графики, цена и уведомления по фьючерсу Si (доллар/рубль, USD/RUB) на Мосбирже. Бета — бесплатно.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供莫斯科交易所 Si 期货（美元/卢布，USD/RUB）的价格图表、价格信息及通知。目前处于 Beta 测试阶段，可免费使用。",
+            "en": "Provides charts, prices, and notifications for Si futures (USD/RUB) on the Moscow Exchange. Currently in beta and free to use.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供莫斯科交易所 Si 期貨（美元/盧布，USD/RUB）的價格圖表、價格信息及通知。目前處於 Beta 測試階段，可免費使用。"
+    },
+    {
+      "id": 1967,
+      "username": "catmeme_channel",
+      "kind": "channel",
+      "jobId": "9baf44bd-f142-4af6-8ca3-e19d997aeede",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:8d5a329b6a7c69c8f5f3a53b01135989b990ba910219463de147a48f0f6e4ffc",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "Cat Meme",
+        "username": "catmeme_channel",
+        "category": "fun",
+        "tags": ["memes", "pets"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Смешные кошачьи мемы, публикуем регулярно.",
+            "date": null
+          },
+          {
+            "ref": "post:50",
+            "text": "Всё хорошо. Я просто такой.",
+            "date": "2026-11-18T22:50:41.000Z"
+          },
+          {
+            "ref": "post:49",
+            "text": "Когда папу взяли на родительское собрание.",
+            "date": "2026-11-18T16:54:31.000Z"
+          },
+          {
+            "ref": "post:48",
+            "text": "Ужин в пять. Сейчас 16:58. Кот уже подал жалобу.",
+            "date": "2026-11-18T14:20:23.000Z"
+          },
+          {
+            "ref": "post:47",
+            "text": "Ваш сын хулиганит в школе… Он и дома так делает — просто я вам не звоню.",
+            "date": "2026-11-18T14:18:09.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "发布各种有趣的猫咪表情包。",
+            "en": "Publishes funny cat memes.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "發佈各種有趣的貓咪表情包。"
+    },
+    {
+      "id": 1965,
+      "username": "screenshotsitbot",
+      "kind": "bot",
+      "jobId": "aba1334f-9ab1-499a-b2f7-9798b1740c0f",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:7dc6bf95b7487b67cad0a21b4b7e7d7a187bd525e5edf4be8cbae99233bd0da9",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Screenshot It",
+        "username": "screenshotsitbot",
+        "category": "tools",
+        "tags": ["free", "movies"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "The fastest bot to generate screenshots, sample videos, and extract media info from any Telegram video or MKV document!",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "用于从 Telegram 视频或 MKV 文档中生成截图、样本视频并提取媒体信息。",
+            "en": "Generates screenshots, sample videos, and extracts media info from Telegram videos or MKV documents.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "用於從 Telegram 視頻或 MKV 文檔中生成截圖、樣本視頻並提取媒體信息。"
+    },
+    {
+      "id": 1964,
+      "username": "vaseteman_bot",
+      "kind": "bot",
+      "jobId": "d3a14dea-6493-4a21-bbce-bd80eed84c5a",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:a9a972fc27b508c6a6bcdd0d01314ba8b482ba02bc301a67395126fdda04031f",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "VaseteMan",
+        "username": "vaseteman_bot",
+        "category": "trading",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "VaseteMan | Connecting Buyers & Sellers Worldwide – Smartly واسطه من | ارتباط بین المللی هوشمند بین خریدار و فروشنده",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1963,
+      "username": "whatsmusicbot",
+      "kind": "bot",
+      "jobId": "9c0f83dc-98b7-467d-905f-652c810531e7",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:9e314ea9fea61bc02355bc341f8fa9a04b2174bd11501fb8ba27e04ce6ceeebf",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "whatsmusicbot",
+        "username": "whatsmusicbot",
+        "category": "tools",
+        "tags": ["android"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "واتس موزیکم, آهنگی که میخوای رو بهت میدم راهنمای ربات تبلیغات",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1961,
+      "username": "tha_zone_trade09",
+      "kind": "channel",
+      "jobId": "03181752-eee9-430c-bc96-3868aa3be40f",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:c18bdb14fc941e1aea532c6632eb5e9973e019f3a8e693397995e324ec6f6e0a",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "𝗧𝗛𝗘 𝗧𝗥𝗔𝗗𝗜𝗡𝗚 𝗭𝗢𝗡𝗘™",
+        "username": "tha_zone_trade09",
+        "category": "crypto",
+        "tags": ["english", "exchange", "finance", "quant", "ton"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "💰𝑨𝒍𝒍 𝑷𝑨𝑰𝑹 𝑭𝑹𝑬𝑬 𝑺𝑰𝑮𝑵𝑨𝑳𝑺💰 ♥️𝑮𝑩𝑷𝑼𝑺𝑫 ✅𝑿𝑨𝑼𝑼𝑺𝑫 🎴𝑬𝑼𝑹𝑼𝑺D ♥️♥️💯💯",
+            "date": null
+          },
+          {
+            "ref": "post:957",
+            "text": "✔️GOLD SELL NOW 3576 78 ✔️TP¹ 3572 ✔️TP² 3569 ✔️TP³ 3565 ✔️TP⁴ 3561 💥SL_ 3588 😄😄😄😄😄😄",
+            "date": "2026-11-20T12:21:16.000Z"
+          },
+          {
+            "ref": "post:954",
+            "text": "✔️GOLD SELL NOW 3735 37 ✔️TP¹ 3731 ✔️TP² 3728 ✔️TP³ 3724 ✔️TP⁴ 3720 💥SL_ 3748 😄😄😄😄😄😄",
+            "date": "2026-11-19T12:20:55.000Z"
+          },
+          {
+            "ref": "post:950",
+            "text": "💎 LONG-TERM TRADING – REAL RESULTS! Patience, experience & the right strategy make a difference! 📈 This is the result of my long-term GOLD SELL trades. I believe in smart trading, proper market analysis and disciplined risk management. 🔥 Want to grow your trading journey with professional guidance? ✅ Expert GOLD Market Analysis ✅ Powerful Trading Strategies ✅ Entry, TP & SL Updates ✅ Personal Account Management ✅ Long-Term Trading Support Don't just trade randomly. Learn to trade with a pro…",
+            "date": "2026-11-19T09:17:55.000Z"
+          },
+          {
+            "ref": "post:948",
+            "text": "🚨 ATTENTION ALL TRADERS – GOLD MARKET UPDATE 🚨 Is your trading account running in loss? Have you lost a significant amount of your capital? Don't lose hope! We have 10 years of professional trading experience, advanced market analysis and risk management strategies. ✅ Already booked profits in our trades. ✅ Professional account management. ✅ Advanced Gold (XAUUSD) analysis. ✅ Smart risk management and capital growth strategies. ✅ Personalized support for running-loss accounts. 💎 No matter how bi",
+            "date": "2026-11-18T13:17:50.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "简介自称提供免费的 GBPUSD、XAUUSD 及 EURUSD 交易信号。公开帖子里包含黄金（XAUUSD）的交易指令，包括入场点、止盈（TP）及止损（SL）位。",
+            "en": "The profile claims to provide free trading signals for GBPUSD, XAUUSD, and EURUSD. Available posts include gold (XAUUSD) trading instructions with entry, take profit (TP), and stop loss (SL) levels.",
+            "refs": ["profile", "post:957", "post:954"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "簡介自稱提供免費的 GBPUSD、XAUUSD 及 EURUSD 交易信號。公開帖子裡包含黃金（XAUUSD）的交易指令，包括入場點、止盈（TP）及止損（SL）位。"
+    },
+    {
+      "id": 1960,
+      "username": "autossey_auto",
+      "kind": "channel",
+      "jobId": "79fb2d21-f5b8-4995-a074-bbc253c758b9",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:cc48aa476fccbc60996cea25d998e8ed8def7f48135160a5cbc9a4b430acc1a9",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "Авто из Китая под заказ | AUTOSSEY",
+        "username": "autossey_auto",
+        "category": "life",
+        "tags": [],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Новые автомобили и авто с пробегом из Китая. Подбор модели и комплектации, проверка перед отправкой, экспорт и организация доставки. Новые предложения и обзоры моделей. Запросить расчёт: · autossey.ru",
+            "date": null
+          },
+          {
+            "ref": "post:30",
+            "text": "Новый NX7 — это уже не «переделанный бензиновый Nissan», а отдельная архитектура под подключаемый гибрид. По факту: • 4785×1932×1665 мм, база 2815 мм — это уровень среднеразмерного SUV, пять мест; • 1.5 л атмосферный двигатель + электромотор 170 кВт; • батарея CATL LFP 40,9 кВт·ч, только на электричестве по циклу CLTC — 320 км; • суммарный запас хода — около 1666 км; • городской NOA (автопилот в городе), лидар — опционально, чип Qualcomm 8295P; • «AI-сиденья» с активной адаптивной поддержкой. Ч…",
+            "date": "2026-11-21T06:00:46.000Z"
+          },
+          {
+            "ref": "post:29",
+            "text": "🔥 Dongfeng Nissan NX7 — лучший выбор подключаемого гибрида до 150 000 юаней! Ищете идеальный баланс между экономией топлива, комфортом и современными технологиями? Встречайте Dongfeng Nissan NX7! 🚙💨Этот подключаемый гибрид (PHEV) ломает стереотипы. Впечатляющий запас хода на чистом электричестве, роскошный салон и передовые ассистенты вождения — и всё это по невероятной цене! ✨ Главные фишки: ✅ Запас хода на чистой электротяге до 320 км (по циклу CLTC)! ✅ Инновационные сиденья AI Zero-G: масс…",
+            "date": "2026-11-19T06:00:45.000Z"
+          },
+          {
+            "ref": "post:25",
+            "text": "Ищете надежный кроссовер по отличной цене? У нас в наличии огромный выбор новых Mazda (CX-30, CX-50 и другие)! 🔥 Почему стоит брать у нас? ✅ Все автомобили абсолютно новые (2026 г.в.), без пробега по РФ. ✅ Полный пакет документов, легальная таможенная очистка (ДТП нет, юридически чистые). Подробнее · Связаться с Autossey",
+            "date": "2026-11-17T02:05:57.000Z"
+          },
+          {
+            "ref": "post:24",
+            "text": "Changan Hunter Plus, бензиновый пикап с турбодвигателем 2.0T. ■ Есть версии 2WD / 4WD с понижающей передачей. ■ Высокий клиренс, большая грузоподъёмность, подходит для бездорожья и рабочих задач. ■ Бензин доступен на всех АЗС России, нет ограничений по зарядке. ■ Надежный, выносливый автомобиль для работы и путешествий.",
+            "date": "2026-11-14T06:00:45.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供中国新车与二手车的选型、检查、出口及物流组织服务。公开帖子里包含对 Dongfeng Nissan NX7、Mazda 系列及 Changan Hunter Plus 等车型的介绍与参数说明。",
+            "en": "Provides model selection, inspection, export, and delivery services for new and used cars from China. Available posts include reviews and specifications for models such as the Dongfeng Nissan NX7, Mazda series, and Changan Hunter Plus.",
+            "refs": ["profile", "post:30", "post:29", "post:25", "post:24"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供中國新車與二手車的選型、檢查、出口及物流組織服務。公開帖子裡包含對 Dongfeng Nissan NX7、Mazda 系列及 Changan Hunter Plus 等車型的介紹與參數說明。"
+    },
+    {
+      "id": 1959,
+      "username": "mingrifangzhoujiaochou",
+      "kind": "group",
+      "jobId": "97f7d036-81e3-4fe0-97ee-a8d184d5dfe4",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:c1993b74bca00b4421c97d21362a44e8e640d466700ae57c410ea8287d22c35d",
+      "status": "skipped",
+      "reason": "no_substantive_evidence",
+      "attempts": 0,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": "{\"schemaVersion\":1,\"policyVersion\":\"source-policy-v1\",\"kind\":\"group\",\"title\":\"明日方舟脚臭\",\"username\":\"mingrifangzhoujiaochou\",\"category\":\"interest\",\"tags\":[\"anime\",\"free\"],\"evidence\":[]}",
+      "output": null,
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1958,
+      "username": "mltb_official_support",
+      "kind": "group",
+      "jobId": "33c71cae-2e1e-4b3a-8027-2d6a9fa280ca",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:f786ed9fef766b59fc1e29bd6e1fbdf662c7e63af35d4520d1afcfdebb227729",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "MLTB Official Group",
+        "username": "mltb_official_support",
+        "category": "tech",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Official Group For MLTB Project Github Repository: Official Channel: Please keep the chat clean, no unnecessary messages or meta questions.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "MLTB 项目 GitHub 仓库的官方群组；要求保持聊天环境整洁，禁止发送无关消息或元问题。",
+            "en": "The official group for the MLTB project GitHub repository; users are requested to keep the chat clean and avoid unnecessary messages or meta questions.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "MLTB 項目 GitHub 倉庫的官方群組；要求保持聊天環境整潔，禁止發送無關消息或元問題。"
+    },
+    {
+      "id": 1957,
+      "username": "mltb_official_channel",
+      "kind": "channel",
+      "jobId": "04fcbb57-580b-43a3-8471-98a3568b797a",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:5ccee51948d8eec71a038eb925d6b3cabb095c827fe0461868395717379d7b83",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "MLTB Official Channel",
+        "username": "mltb_official_channel",
+        "category": "tech",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Github Repository: Official Group: Official Channel: Updates and New Features Guide for the MLTB Repository",
+            "date": null
+          },
+          {
+            "ref": "post:403",
+            "text": "use -up bh to upload to buzzheavier.com or u can set it as default_upload: gd or rc or bh",
+            "date": "2026-05-28T23:22:43.000Z"
+          },
+          {
+            "ref": "post:402",
+            "text": "new update from bhadoo This will fix the path issues",
+            "date": "2026-05-10T20:13:13.000Z"
+          },
+          {
+            "ref": "post:398",
+            "text": "❤️Sending you holy wishes on the auspicious occasion of Eid-al-Fitr!❤️",
+            "date": "2026-03-20T12:17:50.000Z"
+          },
+          {
+            "ref": "post:397",
+            "text": "Wishing you a peaceful and blessed Ramadan. May Allah's grace be with you. As you observe the fasts and prayers, may this Ramadan be a time of health and happiness for you. Wishing you a Ramadan that brings with it the treasure of divine blessings and spiritual growth.",
+            "date": "2026-02-17T18:29:15.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供 MLTB 仓库的更新与新功能指南。公开帖子里提到可以通过设置 default_upload 为 gd、rc 或 bh，或使用 -up bh 将文件上传至 buzzheavier.com。",
+            "en": "Provides updates and new features guides for the MLTB repository. Available posts mention setting default_upload to gd, rc, or bh, or using -up bh to upload to buzzheavier.com.",
+            "refs": ["profile", "post:403"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供 MLTB 倉庫的更新與新功能指南。公開帖子裡提到可以通過設置 default_upload 為 gd、rc 或 bh，或使用 -up bh 將文件上傳至 buzzheavier.com。"
+    },
+    {
+      "id": 1956,
+      "username": "shieldgramxbot",
+      "kind": "bot",
+      "jobId": "0fe23b15-7401-4f76-aae7-350d78a0d880",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:d0c6b2b5f7eedc1d3401c9bed1656a6492c25a51d1a5ab1a53c0411df5149d48",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Shield Gram",
+        "username": "shieldgramxbot",
+        "category": "group-admin",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "🛡️ All-in-one Telegram group guardian! Keep your community spam-free, secure, and engaging automatically. 🔒✨",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1955,
+      "username": "alphioai",
+      "kind": "group",
+      "jobId": "f2631394-2d2a-484a-819a-4034579bfb8d",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:9a12990f590186fcb187df5d59abc556f9b07468cfc274496592907fe7534724",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "Alphio AI Community",
+        "username": "alphioai",
+        "category": "crypto",
+        "tags": ["ai-agent", "airdrop", "crypto", "free", "on-chain"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Alphio | AI-Powered Social Trading 🤖 Research & trade with AI Agents in one place 📈 Markets: Meme tokens, Perps, Stocks & Prediction 🏆 Copy top traders & track live buy/sell activity 🔒 Non-custodial & secure 🚀 Trade now:",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "通过AI Agent进行研究与交易，涵盖Meme代币、永续合约、股票及预测市场；支持复制顶尖交易员的操作并追踪实时买卖活动。",
+            "en": "Research and trade using AI Agents across meme tokens, perps, stocks, and prediction markets; supports copying top traders and tracking live buy/sell activity.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "通過AI Agent進行研究與交易，涵蓋Meme代幣、永續合約、股票及預測市場；支持複製頂尖交易員的操作並追蹤實時買賣活動。"
+    },
+    {
+      "id": 1954,
+      "username": "roog_community",
+      "kind": "group",
+      "jobId": "fee07078-c452-4368-a58f-05d045b84ee5",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:a2f161b859f7fbfb1f297e9be8a94ddc3c06b8f52998f20f6e7bf1db6e1cb476",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "Roogoo Community",
+        "username": "roog_community",
+        "category": "vcc",
+        "tags": ["chinese", "free"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "ROOG Community ： 私聊Roogoo客服",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1953,
+      "username": "hutaocards_chat",
+      "kind": "group",
+      "jobId": "d18aaff7-8975-4773-be59-053b749a4f12",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:e672f49bc7838a26db63892b4aba64625ededa6c04684b579a15ee9e30adc7ca",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "HutaoCards Chat",
+        "username": "hutaocards_chat",
+        "category": "vcc",
+        "tags": ["chinese"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "胡桃卡，您便捷的支付方式 官方网站:",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1952,
+      "username": "winwithpickr_bot",
+      "kind": "bot",
+      "jobId": "688f70c7-94f4-4940-af8e-e19984a7b1b5",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:9adcca07fc2718389aa4aead964ed715b81cf9186dc77075f904b5f6bc1d0903",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "winwithpickr",
+        "username": "winwithpickr_bot",
+        "category": "group-admin",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Verifiable giveaway picker. Provably fair winners with seeded randomness anchored to Solana.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "用于进行可验证的抽奖，通过锚定在 Solana 上的种子随机数确保结果公平。",
+            "en": "A verifiable giveaway picker that ensures provably fair winners using seeded randomness anchored to Solana.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "用於進行可驗證的抽獎，通過錨定在 Solana 上的種子隨機數確保結果公平。"
+    },
+    {
+      "id": 1951,
+      "username": "autoacceptorbot",
+      "kind": "bot",
+      "jobId": "3ce85956-4104-4d55-bfcc-df03c8d7eee4",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:c623e264560236dbab33291607c3ef1376bb762ab4f85a24e24614f63b27f9f3",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Auto Accept Request Bot",
+        "username": "autoacceptorbot",
+        "category": "group-admin",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "I can Approve your Join Requests Automatically Just add me as Admin and you are good to Go..",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "通过将机器人添加为管理员来实现自动批准入群申请。",
+            "en": "Automatically approves join requests when added as an admin.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "通過將機器人添加為管理員來實現自動批准入群申請。"
+    },
+    {
+      "id": 1950,
+      "username": "botlist",
+      "kind": "channel",
+      "jobId": "3dcdc1a5-b1d2-4981-b08c-d6de3d450605",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:d586a456340bb792d918ed9edd4537632734380891698c96c8394fb6b98bf3c2",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "BOTLIST",
+        "username": "botlist",
+        "category": "nav",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "•The best Telegram bots in a list• •Los mejores bots de Telegram en una lista• Use in inline mode to send individual categories and more... Send your bot's in: Envía tus bots en: 🤖",
+            "date": null
+          },
+          {
+            "ref": "post:799",
+            "text": "• • 2021-12-07 1886 bots",
+            "date": "2020-10-18T18:48:40.000Z"
+          },
+          {
+            "ref": "post:798",
+            "text": "•Share your bots to the using the hashtag #new followed by the bot's name• •Comparte tus bots en el escribiendo el hashtag #new seguido por el nombre del Bot• 🔝ℹ️First message - Introduction 🇬🇧 🔝ℹ️Primer mensaje - Introducción 🇪🇸 •🌀Miscellaneous - Miscelaneo •👥📢Social •🙋👋🏼Promoting - Divulgación •🛍💳Shopping - Compras •😂🎭Humor •🎰🎮Gaming - Juegos •🏋🚀HTML5 Games - Juegos HTML5 •🤖Bot creating - Creación de Bots •🐾⚒Sticker pack creation - Creación de packs de Stickers •👾💫…",
+            "date": "2020-10-18T18:48:39.000Z"
+          },
+          {
+            "ref": "post:797",
+            "text": "ℹ️⬇️ ------------------------------- 🔎 = Inline Bot 🔹 = Officialized by Telegram 🚮 = Bot spams a lot 💤 = Bot is currently unavailable ------------------------------- 🇬🇧 Inline bots work from any chat by writing the bots name followed by a command or search term. E.g: cats 🇪🇸 Los bots en línea funcionan desde cualquier chat, escribiendo el nombre del bot, seguido del término de búsqueda o comando. Ej: gatos ------------------------------- 🔎 = Bot en línea 🔹 = Oficializado por Telegra…",
+            "date": "2020-10-18T18:48:36.000Z"
+          },
+          {
+            "ref": "post:796",
+            "text": "•🛠⚙Tools - Herramientas \\_Robot 🔎 🇬🇧 🆕 🇬🇧 🔎 🔎 🔎 🔎 🔎 🔎 🆕 🆕 …",
+            "date": "2020-09-28T23:28:30.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "该频道以列表形式整理了 Telegram 机器人，涵盖游戏、购物、工具及机器人创建等类别。用户可以通过内联模式（inline mode）发送特定类别，分享机器人时需使用 #new 标签后跟机器人名称。",
+            "en": "This channel lists Telegram bots across categories such as gaming, shopping, tools, and bot creation. Users can send specific categories via inline mode and share bots using the hashtag #new followed by the bot's name.",
+            "refs": ["profile", "post:798", "post:797"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "該頻道以列表形式整理了 Telegram 機器人，涵蓋遊戲、購物、工具及機器人創建等類別。用戶可以通過內聯模式（inline mode）發送特定類別，分享機器人時需使用 #new 標籤後跟機器人名稱。"
+    },
+    {
+      "id": 1949,
+      "username": "botlistchat",
+      "kind": "group",
+      "jobId": "e25d0640-81b6-4e1d-8b6f-47bc51976690",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:afee0c7b72f96af885368f4dfd2ac9dbfe63e3d7e6f6e35297f6ad12dc8bf80d",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "BotList Chat 👥💬",
+        "username": "botlistchat",
+        "category": "chat",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Share your bots, comment, test and have fun! Rules: Speak in English, Don't spam/advertise channels or groups that aren't bot related, respect other members, use common sense. 🌟 🤖 📔",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "分享机器人并进行评论与测试；要求使用英语交流，禁止发布非机器人相关的频道或群组广告。",
+            "en": "Share bots, comment, and test; members are required to speak in English and must not advertise non-bot related channels or groups.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "分享機器人並進行評論與測試；要求使用英語交流，禁止發佈非機器人相關的頻道或群組廣告。"
+    },
+    {
+      "id": 1948,
+      "username": "chat_internationalbot",
+      "kind": "bot",
+      "jobId": "dcc745f7-3c9a-4933-a9e8-dda84a3a8d31",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:f3f44d2b4a3cd647c05fd9a0bd2a7f838a62dd987c648e9be1a9e09d0bcee091",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Chat International",
+        "username": "chat_internationalbot",
+        "category": "messaging",
+        "tags": ["english", "free"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "💬 Meet new people. Make real connections.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1947,
+      "username": "tavexa_mini_bot",
+      "kind": "bot",
+      "jobId": "293b233c-5923-4f93-bf2d-1ebd76580d20",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:d18f4bc56375a727962b25515453051aa61641ff8da54bcb08812e20ca88c65b",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Tavexa Mini",
+        "username": "tavexa_mini_bot",
+        "category": "crypto",
+        "tags": ["airdrop", "crypto", "free"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Mine TVX in Telegram ⚡ 4-hour sessions, daily streaks, crews. Early miners get +100%.",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "在 Telegram 上挖掘 TVX 代币，支持 4 小时结算周期、每日连续签到及加入队伍功能。",
+            "en": "Mine TVX on Telegram with 4-hour sessions, daily streaks, and crews.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "在 Telegram 上挖掘 TVX 代幣，支持 4 小時結算週期、每日連續簽到及加入隊伍功能。"
+    },
+    {
+      "id": 1945,
+      "username": "jiemiyanjiusuo6",
+      "kind": "channel",
+      "jobId": "ea90d958-6c89-4758-b4fe-f8d7964fe792",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:f8f6b8cebecc8742b3019d91f443c89b0b8decd07e839ced32114ec56da2f223",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "项目骗局揭秘--保罗",
+        "username": "jiemiyanjiusuo6",
+        "category": "blog",
+        "tags": ["chinese"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "网络项目案例与骗局观察 关注 Telegram 安全、数字资产风险与行业信息。 频道含案例分析、付费咨询、商业合作及推广，请区分阅读；内容不构成收益或资金安全保证。 联系 ｜双向",
+            "date": null
+          },
+          {
+            "ref": "post:192",
+            "text": "#贷款代还 #项目解析 #骗局揭秘 #黑灰产业链 寻找靠谱项目和投稿联系下方飞机 双向联系",
+            "date": "2026-11-22T22:12:58.000Z"
+          },
+          {
+            "ref": "post:191",
+            "text": "#AI数据投毒 #项目解析 #骗局揭秘 #黑灰产业链 寻找靠谱项目和投稿联系下方飞机 双向联系",
+            "date": "2026-11-21T21:10:58.000Z"
+          },
+          {
+            "ref": "post:190",
+            "text": "保罗供需频道已建立，点击下方链接进入 保罗供需：限时免费让所有用户可以免费发布自己的需求，比如你需要找项目做，你有什么经验，想找什么样的项目，然后留下你个人的飞机号。或者是你自己有项目需要人，你需要什么的人来做你的项目。 限时免费！！！ 限时免费！！！ 限时免费！！！",
+            "date": "2026-11-20T23:43:00.000Z"
+          },
+          {
+            "ref": "post:189",
+            "text": "#修图兼职 #项目解析 #骗局揭秘 #黑灰产业链 寻找靠谱项目和投稿联系下方飞机 双向联系",
+            "date": "2026-11-20T20:54:58.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "观察网络项目案例、骗局及数字资产风险，内容包含案例分析。公开帖子里涉及 AI 数据投毒、贷款代还、修图兼职等项目解析。",
+            "en": "Observes online project cases, scams, and digital asset risks through case studies. Available posts include analyses of projects such as AI data poisoning, loan repayment, and photo editing part-time work.",
+            "refs": ["profile", "post:192", "post:191", "post:189"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "觀察網絡項目案例、騙局及數字資產風險，內容包含案例分析。公開帖子裡涉及 AI 數據投毒、貸款代還、修圖兼職等項目解析。"
+    },
+    {
+      "id": 1944,
+      "username": "fotomagic_studio_bot",
+      "kind": "bot",
+      "jobId": "9685021f-2059-4c00-b0d6-b07feef00172",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:00c78b33109bab10d5c7dc6a4edcf631f2eb7333a72167de681a26fdf4e582c8",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "FotoMagic Studio | AI Фотосессия и Аватарки",
+        "username": "fotomagic_studio_bot",
+        "category": "ai",
+        "tags": ["ai-art", "aigc", "free", "photography"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Превращаем твои обычные фото в профессиональные фотосессии и волшебные образы за 1 минуту! ✨",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "将普通照片转换为专业摄影风格或奇幻形象。",
+            "en": "Converts ordinary photos into professional photoshoots and magical images.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "將普通照片轉換為專業攝影風格或奇幻形象。"
+    },
+    {
+      "id": 1943,
+      "username": "fuwuqicheeseee",
+      "kind": "channel",
+      "jobId": "ffb9d360-cd4e-4395-abf0-70d963123866",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:8b49ad92d6d0a7f9d53b850f7dc79c858a398cea520c315a8f651b9ecc9cd102",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "香港服务器|提供24小时测试",
+        "username": "fuwuqicheeseee",
+        "category": "tech",
+        "tags": ["chinese", "vps"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "全球服务器购买|服务器免费测试 不定时分享 VPS、云服务器、独立服务器、GPU 服务器优惠与服务器知识 📍香港服务器｜日本服务器｜新加坡服务器｜美国服务器等全球节点，匿名服务器、教程与行业资讯 联系销售: #服务器 #IDC服务器 #企业IP #IP #加速IP #服务器解决方案 #香港服务器 #海外服务器",
+            "date": null
+          },
+          {
+            "ref": "post:347",
+            "text": "🚨 服务器 Ping 通，但网站打不开？ Ping 通 ≠ 网站正常 可能是 Web 服务、端口、防火墙、DNS、SSL 或程序 的问题。 ⚙️ 具体排查步骤，看下方图片。 💎 服务器故障排查 / 配置咨询 ✅ 私聊 #服务器Ping #网站打不开 #服务器故障 #Nginx #Linux #VPS #IDC",
+            "date": "2026-11-17T03:00:20.000Z"
+          },
+          {
+            "ref": "post:346",
+            "text": "🚨 Linux 服务器 CPU 100%？先别急着重启！ 👨 💻 服务器突然卡顿、负载飙升？ 🥳 4 个快速排查命令： 🔹 top — 查看 CPU 占用及异常进程 🔹 ps aux --sort=-%cpu — 找出高 CPU 进程 🔹 free -h — 检查内存使用情况 🔹 uptime — 查看系统负载 ⚠️ 常见原因： 程序异常｜数据库慢查询｜高并发｜后台任务 🛠 具体原因与排查步骤，查看下方图解！ 💡 先定位问题，再决定是否需要升级服务器！ 📌 建议收藏，服务器故障时用得上！ ━━━━━━━━━━━━━━ 💎 服务器性能优化 / 配置咨询 💬 点击私聊 #Linux #CPU100 #CPU占用过高 #Linux命令 #服务器运维 #服务器故障 #服务器卡顿 #VPS #IDC #独立服务器 #性能优化 #运维教程 #Linux教程 #服务器监控",
+            "date": "2026-11-17T02:53:00.000Z"
+          },
+          {
+            "ref": "post:345",
+            "text": "🚨 网站出现 502、503、504？一张图教你解决！ 👨 💻 网站突然打不开？先别急着换服务器！ 🔴 502 — 网关错误 🟢 503 — 服务不可用 🟠 504 — 网关超时 ⚙️ 常见原因、解决方法及排查命令，全部整理在图中！ 💎 遇到网站故障或服务器性能问题？ 👉🏻 免费咨询 · 按需推荐 🥳 立即私聊 ━━━━━━━━━━━━━━ #502错误 #503错误 #504错误 #网站打不开 #网站故障 #服务器故障 #服务器运维 #Nginx #PHPFPM #Linux服务器 #VPS #独立服务器 #WordPress #网站优化 #建站教程",
+            "date": "2026-11-17T02:41:20.000Z"
+          },
+          {
+            "ref": "post:344",
+            "text": "🚀 免费帮你分析服务器配置！ 👨 💻 ✅ 建站 / 服务器升级 / 网站迁移 ✅ WordPress / 企业官网 ✅ WooCommerce / 电商独立站 ✅ 多站点部署 / 网站运营 ✅ CPU、内存、带宽升级 ━━━━━━━━━━━━━━ 📍 服务器地区： 香港 / 美国 / 日本等 ⚙️ 网站需求： 类型、访问量、配置 💰 预算范围： 月付预算 💎 免费分析 · 按需推荐 · 不强制购买 ✉️ 咨询 / 购买： #服务器 #VPS #独立服务器 #建站服务器",
+            "date": "2026-11-17T02:29:53.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "简介自称提供全球服务器购买与免费测试，涵盖香港、日本、新加坡及美国等节点；公开帖子里包含关于服务器故障排查（如 Ping 通但网站打不开、CPU 占用过高、502/503/504 错误）及服务器配置分析的内容。",
+            "en": "The profile describes it as providing global server purchases and free testing across nodes like Hong Kong, Japan, Singapore, and the US. Available posts include server troubleshooting (e.g., connectivity vs. website access, high CPU usage, 502/503/504 errors) and server configuration analysis.",
+            "refs": ["profile", "post:347", "post:346", "post:345", "post:344"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "簡介自稱提供全球服務器購買與免費測試，涵蓋香港、日本、新加坡及美國等節點；公開帖子裡包含關於服務器故障排查（如 Ping 通但網站打不開、CPU 佔用過高、502/503/504 錯誤）及服務器配置分析的內容。"
+    },
+    {
+      "id": 1942,
+      "username": "watchdogapp",
+      "kind": "bot",
+      "jobId": "cb1faea5-1e55-441b-a185-898e37cedac4",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:8284bc4db2639b3c427e0f9f0b2a15247099dcb35db933c8798a5f1d1cfdb301",
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Watchdog |سگ نگهبان 🐕 🦺",
+        "username": "watchdogapp",
+        "category": "group-admin",
+        "tags": ["chinese", "english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Official Channel: support & Report :",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "locked": 0,
+      "approvedProjection": 0
+    },
+    {
+      "id": 1941,
+      "username": "htx_chineseofficial",
+      "kind": "group",
+      "jobId": "e849b2a8-46fd-4f6e-9d96-066268b2407d",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:eaa795e98feadacc70cf7c7f5cc3c6817b7c201e187d7645e84590ccb6070e85",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "火币HTX官方中文群",
+        "username": "htx_chineseofficial",
+        "category": "crypto",
+        "tags": ["chinese", "exchange"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "本群为火币HTX唯一官方中文电报群！ 官网网址： 英文： www.htx.com 中文： www.htx.com/zh-cn 注册链接：www.htx.com.ec/invite/zh-cn/1f?invite_code=65ws8223 TG群内没有HTX官方客服！ 官方客服仅在官网/APP内，私信/群内所谓客服均为诈骗！ 风险提示：请勿相信任何推荐项目、虚假宣传、私信、推荐平台，或被拉到其他交流群等！",
+            "date": null
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "简介自称是火币HTX的官方中文电报群；群内没有官方客服，私信或群内的客服均为诈骗。",
+            "en": "The profile describes it as the official Chinese Telegram group for HTX; there are no official customer service representatives in the group, and any service staff in private messages or the group are scams.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "簡介自稱是火幣HTX的官方中文電報群；群內沒有官方客服，私信或群內的客服均為詐騙。"
+    },
+    {
+      "id": 1940,
+      "username": "wpysquark_cn",
+      "kind": "channel",
+      "jobId": "33a112e7-e705-4ddb-99fb-a410d1efc31e",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:37aff1ffd64148f70bfc1942ff8ab7cf35077f9cbe044029e3fb7ce0e6417b9b",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "夸克网盘影视资源|4K高清电影|热门电视剧|短剧|动漫日更分享",
+        "username": "wpysquark_cn",
+        "category": "cloud-drive",
+        "tags": ["anime", "chinese", "movies", "short-drama", "tv-series"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "每日同步更新全网热门影视资源，涵盖院线新片、4K蓝光电影、国产热播电视剧、美剧、韩剧、日漫、热门短剧及高分纪录片。所有资源均提供夸克网盘高速转存链接，手机电脑在线流畅观看，免费分享！",
+            "date": null
+          },
+          {
+            "ref": "post:457",
+            "text": "Telegram必备的搜索引擎，极速极搜点击开始 jsjs帮你精准找到，想要的群组、频道、视频、音乐 👉",
+            "date": "2026-11-21T17:46:03.000Z"
+          },
+          {
+            "ref": "post:448",
+            "text": "🎬 第36个故事 / 第36個故事 (2010) 主演：桂纶镁 / 林辰唏 / 张翰 / Yuli Ma 信息：评分 6.7 ｜ 2010-05-14 上映 ｜ 国产电影 📖 简介：浓密的行道树拥抱着安静的街道，路旁的\"朵儿咖啡馆\"亮起温暖的灯光，咖啡馆的主人是一对年轻的姊妹－朵儿和蔷儿。因为喜欢咖啡和甜点，朵儿利用工作积蓄下来的存款以及家人的资助，和妹妹蔷儿打造了一间风格别具的\"朵儿咖啡馆\"。在她想像的蓝图中，她自己就是这间咖啡馆的招牌，就像同心圆一样，她的好朋友会带来另外一群好朋友捧场，她的人缘也将转化为店里一波又一波的人气。 果然，开幕当天来了好多的朋友，带来好多有趣的贺礼，朵儿高兴极了，说要让这家店长长久久经营下去。言犹在耳，开店之后的营运状况却让人大失所望，连续几天客人稀落，空荡的店面对照着满仓库的贺礼更显冷清，朵儿的好人缘反倒成了仓储的负担。 出师不利的朵儿和蔷儿，在一次偶然的对话中，开启一场\"以物易物\"的活动，在这间咖啡馆里，唯一能用金钱买到的只有咖啡，客人如果想要拥有其他东西，就必须拿出等价的物品和主人交换。因此，客人可以用无敌铁金刚公仔换到一张老相片、可以用清水沟…",
+            "date": "2026-11-21T04:48:46.000Z"
+          },
+          {
+            "ref": "post:447",
+            "text": "🎬 杀人依赖 / 살인의뢰 (2015) 主演：金相庆 / 金成均 / 朴成雄 / 尹胜雅 信息：评分 5.7 ｜ 2015-03-12 上映 ｜ 日韩电影 画质：1080P 高清 📖 简介：连环杀人案中失去妹妹的警察泰秀（金相庆 饰）在雨夜潜伏侦查一起肇事逃逸案的过程中，意外抓获了犯案多起的连环杀人嫌疑犯姜川（朴圣雄 饰），而悲剧也由此开始。泰秀意外得知姜川正是杀害自己妹妹的凶手，为了找到妹妹的尸首，泰秀竟跪了下来...而在指认现场的时候，另一个痛失爱妻的男人盛贤（金成钧 饰）悲愤现身...... #杀人依赖 #犯罪 #剧情 #惊悚 #2015电影 #夸克网盘 📢 更多4K影视日更请关注：夸克网盘影视|高清电影|热门电影|日更影视频道",
+            "date": "2026-11-21T04:28:14.000Z"
+          },
+          {
+            "ref": "post:444",
+            "text": "🎬 雅嘎疑云 / YAGA (2026) 全6集完结 主演：诺亚·雷德 / 克拉克·巴茨科 / 哈德森·威廉姆斯 / 凯瑞-安·莫斯 信息：评分 7.0 ｜ 2026-10-23 首播 ｜ 欧美剧 画质：4K 高清（全6集打包） 📖 简介：改编自凯特·桑德勒创作的同名舞台剧，并重新演绎巴巴雅嘎的民间传说。私家侦探拉普来到一座海滨小镇，调查大型渔业企业继承人亨利·朴的失踪案。随着调查深入，他与当地警探卡森及迷人的大学教授凯瑟琳发生冲突，并逐渐陷入充满神秘嫌疑人、隐秘生活与古老魔法的迷局。 #雅嘎疑云 #剧情 #Sci-Fi & Fantasy #悬疑 #2026新剧 #全集 #夸克网盘 📢 更多4K影视日更请关注：夸克网盘影视|高清电影|热门电影|日更影视频道",
+            "date": "2026-11-20T23:57:19.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "简介自称每日同步更新涵盖院线新片、4K蓝光电影、国产及海外剧集、动漫、短剧和纪录片等影视资源，并提供夸克网盘转存链接。公开帖子里包含电影《第36个故事》、日韩电影《杀人依赖》以及欧美剧《雅嘎疑云》的相关信息。",
+            "en": "The profile describes it as providing daily updates of film and TV resources, including new releases, 4K Blu-ray movies, domestic and overseas series, anime, short dramas, and documentaries via Quark Drive links. Available posts include information on the film \"The 36th Story,\" the Korean film \"Salinui Ui,\" and the US series \"YAGA.\"",
+            "refs": ["profile", "post:448", "post:447", "post:444"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "簡介自稱每日同步更新涵蓋院線新片、4K藍光電影、國產及海外劇集、動漫、短劇和紀錄片等影視資源，並提供夸克網盤轉存鏈接。公開帖子裡包含電影《第36個故事》、日韓電影《殺人依賴》以及歐美劇《雅嘎疑雲》的相關信息。"
+    },
+    {
+      "id": 1939,
+      "username": "safetystationinfo",
+      "kind": "channel",
+      "jobId": "8e6766ee-3790-4817-8eb5-2763c713e8be",
+      "generation": 1,
+      "sourceGeneration": 1,
+      "fingerprint": "sha256:68d48d2c74d83834d64e3b7253d3a716a4877b3884d886832b6f817a2f89f04e",
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "promptVersion": "summary-prompt-v7",
+      "paramsVersion": "summary-params-v3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "🍵✈️Info",
+        "username": "safetystationinfo",
+        "category": "news",
+        "tags": ["chinese"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "本頻道旨在提供即時車站查票資訊，以供參考之用，並不保證/承諾其準確性。 本頻道立場：愛國愛黨🇨🇳 ，始終如一 乘搭港鐵，必須使用正確有效車票。 違者會被徵收HKD 1,000（輕鐵則為HKD 370）附加費 任何情況下，本頻度均不會對任發佈之資訊內容所引致之直接及間接損失承擔任何責任。 查票資料報料渠道 報料格式 #車站 時間 最近出口 閘外/外 查票職員數量（有圖更佳） 示例： #沙田 2359 A出口 閘內2黃捉入 （+圖片）",
+            "date": null
+          },
+          {
+            "ref": "post:34712",
+            "text": "#西營盤 #SaiYingPun Ticket Inspection 1814 1818 🅰 2黃捉入⚠️ BC 2黃捉入⚠️ #Afro 🧑🏻 🦱team",
+            "date": "2026-11-22T10:15:57.000Z"
+          },
+          {
+            "ref": "post:34711",
+            "text": "#南昌 #NamCheong Ticket Inspection 1710 1900 🅰🅱2黃捉入⚠️ CD 2黃捉入⚠️ 2129 🆎3黃捉出入‼️ 有 #查飛廣播📣 #Ivana 🍠team",
+            "date": "2026-11-22T09:14:21.000Z"
+          },
+          {
+            "ref": "post:34710",
+            "text": "#第一城 #CityOne Ticket Inspection 1700 CD 2黃捉入⚠️ 有cam",
+            "date": "2026-11-22T09:08:36.000Z"
+          },
+          {
+            "ref": "post:34709",
+            "text": "#兆康 #SiuHong Ticket Inspection 1328 2黃捉入有cam⚠️",
+            "date": "2026-11-22T05:55:41.000Z"
+          }
+        ]
+      },
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供即時車站查票資訊，公開帖子里包含车站名称、时间、出口、查票人员数量及是否有摄像头等报料内容。",
+            "en": "Provides real-time station ticket inspection information; public posts include station names, times, exits, number of inspectors, and whether cameras are present.",
+            "refs": ["profile", "post:34712", "post:34711", "post:34710", "post:34709"]
+          }
+        ]
+      },
+      "locked": 0,
+      "approvedProjection": 0,
+      "derivedHant": "提供即時車站查票資訊，公開帖子裡包含車站名稱、時間、出口、查票人員數量及是否有攝像頭等報料內容。"
+    }
+  ],
+  "validation": {
+    "outputs": 48,
+    "ok": 36,
+    "insufficient": 12,
+    "hantLatinNumbersPreserved": true,
+    "semanticQuality": "not individually approved; machine contract validation is not editorial approval"
+  }
+}

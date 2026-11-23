@@ -1,5 +1,9 @@
 # 项目资料索引
 
+七D已完成50条上线及18页三语验收，最新见[OBSERVE50](ai-summary/OBSERVE50.md)，先读本工作树[STATE](ai-summary/STATE.md)。代码#72、Web部署45154564101成功；36草稿/13跳过/1失败，保留3份人工批准，当前观察记录工作树tgbox-ai-summary-observe50。机器证据仅按需定位读取，不自动扩围。
+
+2026-11-23 七D最新上线观察入口[STATE](ai-summary/STATE.md)、[OBSERVE50](ai-summary/OBSERVE50.md)，工作树tgbox-ai-summary-observe50。50条首批36草稿/13跳过/1失败，新增40调用；保留3条人工批准，未自动批准新稿。Web最终验收待追加，按需读取机器证据。
+
 七D主分支集成PR #72，base已核验main；#71仅合入旧堆叠base。部署及50条任务正在执行，最新结果查本工作树[STATE](ai-summary/STATE.md)与[ROLLOUT50](ai-summary/ROLLOUT50.md)。
 
 2026-11-23 最新七D固定50条灰度及审核弹层见[ROLLOUT50](ai-summary/ROLLOUT50.md)，先读[STATE](ai-summary/STATE.md)。工作树tgbox-ai-summary-rollout50，依赖#70；本地已验证，PR及生产上线待执行。保留人工审核，禁止全站扩散。

@@ -1,5 +1,9 @@
 # AI 资源摘要模块状态
 
+2026-11-23 七D上线验收完成：#72已进入main=e34e7a3，主分支CI45154564097及部署45154564101成功，Web版本f4ddf5a4-b2dd-44b5-baf1-3cce5b6638a9。固定50条自动生成开启，36草稿/13跳过/1失败，新增40调用；3份人工批准仅在名单内展示，新稿未自动批准。18页三语200、原事实段落保留、9页AI/9页回退，canonical/hreflang/description与启用前一致。详细证据、后台Access验证限制及回退见[OBSERVE50](OBSERVE50.md)。当前工作树tgbox-ai-summary-observe50，观察记录PR待建立；下一步抽检待审草稿并观察，不扩全站。
+
+2026-11-23 七D固定50条已完成首批生成，36草稿/13跳过/1失败，本轮新增40次调用；未自动批准，人工已批准仍3条。代码通过#72进入main，后续恢复C:/Users/123/tgbox-ai-summary-observe50 / codex/ai-summary-observe50，实际证据和限制见[OBSERVE50](OBSERVE50.md)。此节点只记录上线验收，不改代码或扩大范围；Web部署和18页核验待追加。
+
 主分支集成[PR #72](https://github.com/forfreek/tgbox/pull/72)已建立并核验base=main，head=codex/ai-summary-rollout50；包含#71全部改动及实际生产配置记录。固定50条已异步运行，新结果不自动批准，Web展示仍未开启。
 
 七D代码43e8230的[Linux CI45152821110](https://github.com/forfreek/tgbox/actions/runs/45152821110)全仓检查/测试及脚本检查通过。#71仍按旧堆叠base合入七C分支，尚未进入main，须补主分支集成PR。已部署Admin583144cf-8033-4114-9406-2ccb43ecf853、摘要Worker0d6f8cad-1f36-4897-9a1b-da69f72df9c2；认证变量/6个密钥名保持，Worker固定50条核对通过。已使用实际summaryCommand及旧值CAS开启enabled/auto_scan，配额保留200/8000/100/1；首次50条observe队列已提交，生成结果及Web展示待验收。
