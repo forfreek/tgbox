@@ -2,6 +2,8 @@
 
 用户确认将#1940暴露的内容取舍边界加入提示词，不要求列出全文。实现文件为`apps/ai-summary/src/prompts.ts`。工作树C:/Users/123/tgbox-ai-summary-prompt-v8，分支codex/ai-summary-prompt-v8，基于main的b5f154e。
 
+交付[草稿PR #74](https://github.com/forfreek/tgbox/pull/74)，base已核验main；本地验证通过，CI结果从PR检查项读取。本轮只读核对生产仍使用v7及params-v3，未执行版本切换。
+
 ## 改动
 
 共用事实规则增加：介绍资源整体用途，帖子只用于归纳主题、形式、功能，不列具体片名/文章标题/演员/剧情/评分，不把个别帖子当长期特征，简中和英文均不能缩放原文地区或对象范围。频道规则再次强调，不用作品清单填充简介。
