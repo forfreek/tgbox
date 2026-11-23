@@ -1,5 +1,7 @@
 # AI 资源摘要模块项目记忆
 
+2026-11-23 步骤六A关键边界见 [STATIC-CONTRACT](STATIC-CONTRACT.md)：scripts/build-site.ts是公开表导出白名单，禁止将含actor/待审历史的审核任务表整表加入；拟独立批准内容投影，编辑/撤回事务删除且标dirty。新表缺失须在可选导出阶段降级，不能只靠snapshot.hasTable，因为强制wrangler导出先失败。当前hant.ts整体转换HTML/JSON，人工繁中需独立保护并校验；构建复核同一规范化来源指纹，不用只哈希简介或截断预览。此为未实现契约，六B/六C另PR，静态回退需重建发布，不承诺即时关闭。
+
 步骤五代码05de52c的Linux CI 45034415096全部通过，后续只补交付记录。下一节点静态快照与dirty/build失效接入，不把后台批准等同已发布或无需重验来源。
 
 步骤五交付草稿PR #64，base=codex/ai-summary-models（#63），本节点代码在独立tgbox-ai-summary-admin。浏览器正常流程与伪造跨站Origin的HTTP重放已验证，后者403；测试需携带原server-function协议头，裸JSON请求500属于框架协议不匹配，不能当CSRF结果。生产与公开展示未执行。

@@ -4,6 +4,8 @@
 
 ## 当前状态与授权
 
+2026-11-23 开始步骤六，独立C:/Users/123/tgbox-ai-summary-static / codex/ai-summary-static，基于步骤五6f653ae。接入前发现审核私有表不能直接进入公开导出，以及整体OpenCC会影响人工繁中，先完成六A契约审查，见 [STATIC-CONTRACT](STATIC-CONTRACT.md)。本轮仅文档，无运行时代码、迁移、模型调用、构建或部署；六B数据接入和六C页面验收未实施，不将步骤六标完成。
+
 步骤五交付完成：代码05de52cfdebd1d07739e19a685cb51a6d6a5c0a5的[Linux CI 45034415096](https://github.com/forfreek/tgbox/actions/runs/45034415096)全仓检查/测试及脚本检查通过；本地变更文件Biome、diff检查及十一份文档236个本地链接通过。草稿PR #64保持未合并，后续仅补本交付记录，不改变代码或新增推理。
 
 本节点草稿 [PR #64](https://github.com/forfreek/tgbox/pull/64) 已创建，base=codex/ai-summary-models，当前工作树/分支为tgbox-ai-summary-admin / codex/ai-summary-admin，依赖顺序#61 → #62 → #63 → #64。追加同源校验后的UI核心流程重新通过；携带正常server-function协议头、伪造跨站Origin的重放请求返回403，未改变稿件。Linux代码CI已通过。
