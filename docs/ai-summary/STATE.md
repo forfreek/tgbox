@@ -1,5 +1,9 @@
 # AI 资源摘要模块状态
 
+2026-11-23 七A生产准备审查完成，见[ROLLOUT-PREP](ROLLOUT-PREP.md)。工作树C:/Users/123/tgbox-ai-summary-rollout / codex/ai-summary-rollout-plan，基于6073368、依赖#67，独立PR交付核验中。生产只读确认最新迁移0021、无AI表/新Worker/两队列，GitHub无AI变量；schema及migration两次SELECT均rows_written=0。没有合并、生产写入、部署或推理。
+
+本地25份SQL内存应用通过，8张AI表及外键/默认关闭检查通过；现有verify-only工作流2项测试通过，merge-tree(main,6073368)无冲突。#67文档提交的CI45114915818首次快照CLI5秒超时，原配置复跑全部通过，失败记录保留，未调整默认超时。下一节点七B的具体迁移/资源/部署须确认，七C生成及七D展示另按范围执行。
+
 2026-11-23 六C交付完成：草稿 [PR #67](https://github.com/forfreek/tgbox/pull/67) 依赖#66，代码f1ad243d8a74a2181695d1a8186910ea93032d63的 [Linux CI 45114637565](https://github.com/forfreek/tgbox/actions/runs/45114637565) 全部通过（2m14s，含Web449项、全仓check/test及脚本类型/测试）。十一份文档267个本地链接及diff通过。后续仅补文档记录，代码不变；保持草稿不合并，未生产启用。下一节点七须明确生产授权。以下核验中记录保留当时边界。
 
 记录日期为 2026-11-23，时区为 Asia/Shanghai。
@@ -97,7 +101,7 @@ v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](
 
 ## 下一步
 
-当前工作树C:/Users/123/tgbox-ai-summary-pages，分支codex/ai-summary-pages，base=codex/ai-summary-data（#66）。六C本地实现与页面验收完成，草稿PR及Linux CI交付核验中。下一节点步骤七小批灰度，须先明确授权合并、生产迁移、资源配置及部署范围；本轮不执行灰度或历史回填。
+当前工作树C:/Users/123/tgbox-ai-summary-rollout，分支codex/ai-summary-rollout-plan，base=codex/ai-summary-pages（#67）。七A准备审查和本地检查完成；下一节点七B为保持AI关闭的迁移、资源与部署，具体操作清单待确认；七C固定样本推理和七D展示/回退尚未执行，不自动历史回填。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 
