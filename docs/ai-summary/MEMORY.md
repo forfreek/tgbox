@@ -1,5 +1,11 @@
 # AI 资源摘要模块项目记忆
 
+生产观察记录PR #73仅docs（含按需JSON证据），运行时代码及线上部署来自#72；文档合并不应触发新增推理或网站部署。后续从OBSERVE50读取结果汇总，再按entries.id定位证据。实际离线检查覆盖50条记录、48输出、18页及本节点文档链接；其他流程仍沿用#72的代码测试结果，不为文档重复真实模型测试。
+
+七D生产验收完成（2026-11-23）：主分支CI/部署成功，18页对照证明名单内已批准显示、未批准/不足/名单外回退、原事实及SEO链接不变，详见OBSERVE50及按需证据。HTTP探针要数独立p[data-ai-summary]，不能把繁体data-ai-summary-preserve算成第二段。后台Access仍阻止匿名访问，未绕过；本地同版交互与远端版本/认证核验须分别陈述。
+
+2026-11-23 七D实际运行入口[OBSERVE50](OBSERVE50.md)：50条范围首批36ok/13skip/1failed，40次新增调用，保留3份人工投影，未批准新稿。模型结构校验不等于编辑质量认可。人工编辑会推进sourceGeneration以挡在途任务，统计历史job/revision不能强制job.generation=source.generation，否则会漏掉3条锁定批准稿。观察scheduled日志的eventType为scheduled而非cron。实际Web验收待追加。
+
 七D主分支集成PR #72已明确核验base=main，#71仅为旧堆叠base交付。恢复先查#72和ROLLOUT50，不能只看#71已合并就认定main含灰度代码。
 
 七D上线：Admin部署先将远端7个plain_text变量覆盖到ignored生成配置，再--keep-vars，部署后逐值及secret名称集合比对，不能只依赖keep-vars保住同名配置值。摘要Worker部署显式--var传固定50条。开启采用真实summaryCommand/config CAS，保留管理员已调配额。#71误保留旧堆叠base，主分支集成须另立PR并核验目标分支；不把合并状态等同main已包含代码。
