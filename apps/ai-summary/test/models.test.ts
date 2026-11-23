@@ -5,6 +5,7 @@ import fewCorpus from "../evaluation/corpus-fewshot-v1.json";
 import styleCorpus from "../evaluation/corpus-style-v1.json";
 import corpus from "../evaluation/corpus-v1.json";
 import editorialLive from "../evaluation/editorial-v7-2026-11-22.json";
+import boundaryLive from "../evaluation/editorial-v8-boundary-2026-11-23.json";
 import fewLive from "../evaluation/fewshot-pilot-2026-11-22.json";
 import live from "../evaluation/live-pilot-2026-11-22.json";
 import selection from "../evaluation/pilot-v2.json";
@@ -61,6 +62,35 @@ describe("typed prompts and candidate protocols", () => {
       "unsupported_summary_version",
     );
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  test("rejects production v7 jobs before inference under the revised v8 adapter", () => {
+    const spy = vi.spyOn(env.AI, "run");
+    expect(() =>
+      createSummaryModel(env.AI, { ...versions, promptVersion: "summary-prompt-v7" }),
+    ).toThrow("unsupported_summary_version");
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  test("replays exact v8 boundary requests and keeps 1940 focused on channel purpose", () => {
+    expect(boundaryLive.promptVersion).toBe(SUMMARY_PROMPT_VERSION);
+    for (const row of boundaryLive.cases) {
+      expect(summaryRequest(row.input, row.model)).toEqual(row.request);
+      const output = decodeSummaryResponse(row.response, row.input, row.model).output;
+      expect(output.status).toBe("ok");
+      if (output.status !== "ok") throw new Error("Missing boundary output");
+      const text = output.sentences.map((s) => `${s.zh} ${s.en}`).join(" ");
+      if (row.id === "1940") {
+        expect(text).not.toMatch(
+          /第36个故事|杀人依赖|雅嘎疑云|The 36th Story|Salinui Ui|YAGA|US series|American|United States/i,
+        );
+        expect(text).toMatch(/夸克网盘/);
+        expect(text).toMatch(/4K/);
+        expect(output.sentences.flatMap((s) => s.refs)).toEqual(["profile"]);
+      } else {
+        expect(output.sentences.flatMap((s) => s.refs)).toEqual(["post:1", "post:2"]);
+      }
+    }
   });
   test.each(["channel", "group", "bot"] as const)(
     "keeps %s evidence in JSON data, never system instructions",
@@ -238,20 +268,24 @@ describe("offline reproducible evaluation", () => {
     expect(SUPPORTED_SUMMARY_MODELS).not.toContain("@cf/openai/gpt-oss-20b");
   });
 
-  test("replays v7 live evidence with exact current requests and no stale prompt results", async () => {
+  test("retains v7 evidence without replaying it as v8 results", async () => {
     const plan = await evaluationPlan(editorialLive.corpus, [DEFAULT_SUMMARY_MODEL]);
-    expect(plan).toEqual(editorialLive.plan);
-    const report = replayEvaluation(plan, editorialLive.results);
-    expect(report.models[0]).toMatchObject({ valid: 14, planned: 14, completed: 14 });
-    expect(report.rows.every((row) => row.status === "valid" && row.expectedStatusMatches)).toBe(
-      true,
-    );
+    expect(plan.promptVersion).toBe("summary-prompt-v8");
+    expect(plan.planHash).not.toBe(editorialLive.plan.planHash);
+    expect(plan.requests).not.toEqual(editorialLive.plan.requests);
+    expect(() => replayEvaluation(plan, editorialLive.results)).toThrow("plan_hash_mismatch");
+    expect(editorialLive.results.rows).toHaveLength(14);
+    for (const row of editorialLive.results.rows) {
+      const sample = editorialLive.plan.cases.find((item) => item.id === row.caseId);
+      expect(decodeSummaryResponse(row.response, sample?.input, row.model).output.status).toBe(
+        sample?.expected,
+      );
+    }
     expect(plan.cases).toHaveLength(16);
     expect(plan.cases.every((row) => row.split === "development")).toBe(true);
     expect(plan.requests.some((row) => row.caseId === "C7" || row.caseId === "G2")).toBe(false);
     expect(() => replayEvaluation(plan, fewLive.final)).toThrow("plan_hash_mismatch");
     // Stored responses are regression evidence, not a semantic validator for unseen generations.
-    expect(report.qualityAccepted).toBe(false);
   });
 
   test("retains purpose, important restrictions and source attribution in reviewed v7 outputs", () => {

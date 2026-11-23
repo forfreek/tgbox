@@ -1,5 +1,9 @@
 # 项目资料索引
 
+提示词边界候选草稿PR #74，代码入口tgbox-ai-summary-prompt-v8/apps/ai-summary/src/prompts.ts，恢复先读本工作树STATE及PROMPT-V8。生产保持v7，未部署候选或重新回填50条。
+
+最新提示词边界增补见[PROMPT-V8](ai-summary/PROMPT-V8.md)，先读[STATE](ai-summary/STATE.md)。工作树tgbox-ai-summary-prompt-v8；加入整体介绍/不列单篇片名边界并修正示例，#1940定向实测改善，C6仍有归纳限制。当前仅候选，生产v7/50条灰度保持。
+
 上线记录PR #73（仅docs），后续从[OBSERVE50](ai-summary/OBSERVE50.md)恢复观察与抽检；代码#72已上线，保持固定50条，不自动批准新稿。
 
 七D已完成50条上线及18页三语验收，最新见[OBSERVE50](ai-summary/OBSERVE50.md)，先读本工作树[STATE](ai-summary/STATE.md)。代码#72、Web部署45154564101成功；36草稿/13跳过/1失败，保留3份人工批准，当前观察记录工作树tgbox-ai-summary-observe50。机器证据仅按需定位读取，不自动扩围。
