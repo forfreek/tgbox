@@ -1,4 +1,4 @@
-import { validateAiSummaryOutput } from "@tgbox/shared";
+import { SUMMARY_MODEL, type SummaryVersions, validateAiSummaryOutput } from "@tgbox/shared";
 import { z } from "zod";
 import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION, summaryMessages } from "./prompts.ts";
 
@@ -9,7 +9,7 @@ export const SummaryCandidate = z.enum([
 ]);
 export type SummaryCandidate = z.infer<typeof SummaryCandidate>;
 // Only this candidate has passed the scoped live source review. Others remain experimental.
-export const DEFAULT_SUMMARY_MODEL = "@cf/google/gemma-4-26b-a4b-it";
+export const DEFAULT_SUMMARY_MODEL = SUMMARY_MODEL;
 export const SUPPORTED_SUMMARY_MODELS = [DEFAULT_SUMMARY_MODEL] as const;
 export const MAX_COMPLETION_TOKENS = 1024;
 const MAX_RESPONSE_CHARS = 16_384;
@@ -123,7 +123,12 @@ export function createSummaryModel(
     versions.paramsVersion !== SUMMARY_PARAMS_VERSION
   )
     throw new Error("unsupported_summary_version");
-  return async (input: unknown, modelName: string) => {
+  return async (input: unknown, modelName: string, jobVersions: SummaryVersions = versions) => {
+    if (
+      jobVersions.promptVersion !== SUMMARY_PROMPT_VERSION ||
+      jobVersions.paramsVersion !== SUMMARY_PARAMS_VERSION
+    )
+      throw new Error("unsupported_summary_version");
     const model = SummaryCandidate.parse(modelName);
     const request = summaryRequest(input, model);
     // Abort propagates to the binding. One invocation only; queue retry owns the budget.

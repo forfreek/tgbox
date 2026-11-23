@@ -13,7 +13,12 @@ import {
   recoverSummaryLeases,
   takeSummaryOutbox,
 } from "@tgbox/db";
-import { AiSummaryModelInput, validateAiSummaryOutput } from "@tgbox/shared";
+import {
+  AiSummaryModelInput,
+  type SummaryVersions,
+  supportedSummaryConfig,
+  validateAiSummaryOutput,
+} from "@tgbox/shared";
 import { z } from "zod";
 import { observeEntry } from "./sources.ts";
 
@@ -29,6 +34,7 @@ export type SummaryMessage = z.infer<typeof SummaryMessage>;
 export type SummaryModel = (
   input: z.infer<typeof AiSummaryModelInput>,
   model: string,
+  versions: SummaryVersions,
 ) => Promise<unknown>;
 type Media = Pick<R2Bucket, "get">;
 type Sender = { sendBatch(messages: { body: SummaryMessage }[]): Promise<unknown> };
@@ -83,6 +89,17 @@ export async function consumeSummaryMessage(
     );
     return;
   }
+  if (!supportedSummaryConfig(config) || !supportedSummaryConfig(job)) {
+    await deferSummaryJob(
+      db,
+      job.id,
+      message.dispatchedAt,
+      now(),
+      "unsupported_config",
+      now() + 300_000,
+    );
+    return;
+  }
   const fresh = await observeEntry(db, media, job.entryId, config, now(), job.priority);
   if (!fresh) return;
   if (fresh.decision.status === "retry_wait") {
@@ -107,7 +124,13 @@ export async function consumeSummaryMessage(
   job = claimed;
   try {
     const input = AiSummaryModelInput.parse(JSON.parse(job.input));
-    const result = validateAiSummaryOutput(await model(input, job.model), input);
+    const result = validateAiSummaryOutput(
+      await model(input, job.model, {
+        promptVersion: job.promptVersion,
+        paramsVersion: job.paramsVersion,
+      }),
+      input,
+    );
     if (!result.success) throw new Error("invalid_output");
     // Re-observe D1 and R2 after inference. The final SQL also checks D1 inside its transaction.
     const latestConfig = await getSummaryConfig(db);
@@ -177,6 +200,10 @@ export async function tickSummaryTasks(db: Db, media: Media, queue: Sender, now:
   const config = await getSummaryConfig(db);
   if (!config.enabled) return;
   await recoverSummaryLeases(db, now());
+  if (!config.autoScan) {
+    await dispatchSummaryOutbox(db, queue, now());
+    return;
+  }
   // Newest IDs get a separate cursor and priority. Rolling passes cover older rows and edits.
   await createSummaryRun(db, "newest", true);
   await createSummaryRun(db, "rolling");

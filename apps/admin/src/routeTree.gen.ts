@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddRouteImport } from './routes/add'
+import { Route as AiSummaryRouteImport } from './routes/ai-summary'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as BlacklistRouteImport } from './routes/blacklist'
 import { Route as EntriesRouteImport } from './routes/entries'
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AddRoute = AddRouteImport.update({
   id: '/add',
   path: '/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiSummaryRoute = AiSummaryRouteImport.update({
+  id: '/ai-summary',
+  path: '/ai-summary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuditRoute = AuditRouteImport.update({
@@ -80,6 +86,7 @@ const UsersRoute = UsersRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
+  '/ai-summary': typeof AiSummaryRoute
   '/audit': typeof AuditRoute
   '/blacklist': typeof BlacklistRoute
   '/entries': typeof EntriesRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
+  '/ai-summary': typeof AiSummaryRoute
   '/audit': typeof AuditRoute
   '/blacklist': typeof BlacklistRoute
   '/entries': typeof EntriesRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/add': typeof AddRoute
+  '/ai-summary': typeof AiSummaryRoute
   '/audit': typeof AuditRoute
   '/blacklist': typeof BlacklistRoute
   '/entries': typeof EntriesRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/add'
+    | '/ai-summary'
     | '/audit'
     | '/blacklist'
     | '/entries'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/add'
+    | '/ai-summary'
     | '/audit'
     | '/blacklist'
     | '/entries'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/add'
+    | '/ai-summary'
     | '/audit'
     | '/blacklist'
     | '/entries'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddRoute: typeof AddRoute
+  AiSummaryRoute: typeof AiSummaryRoute
   AuditRoute: typeof AuditRoute
   BlacklistRoute: typeof BlacklistRoute
   EntriesRoute: typeof EntriesRoute
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/add'
       fullPath: '/add'
       preLoaderRoute: typeof AddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-summary': {
+      id: '/ai-summary'
+      path: '/ai-summary'
+      fullPath: '/ai-summary'
+      preLoaderRoute: typeof AiSummaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audit': {
@@ -258,6 +278,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddRoute: AddRoute,
+  AiSummaryRoute: AiSummaryRoute,
   AuditRoute: AuditRoute,
   BlacklistRoute: BlacklistRoute,
   EntriesRoute: EntriesRoute,

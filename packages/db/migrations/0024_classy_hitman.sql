@@ -1,0 +1,1 @@
+ALTER TABLE `ai_summary_settings` ADD `auto_scan` integer DEFAULT false NOT NULL;

@@ -1,4 +1,6 @@
 import { createDb } from "@tgbox/db";
+import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION } from "@tgbox/shared";
+import { createSummaryModel } from "./models.ts";
 import {
   consumeSummaryDlq,
   consumeSummaryMessage,
@@ -26,8 +28,16 @@ export default {
         if (batch.queue === "tgbox-ai-summary-dlq") {
           await consumeSummaryDlq(db, parsed.data, Date.now());
         } else {
-          // The selected adapter is connected with admin version/quota controls in step 5.
-          await consumeSummaryMessage(db, env.MEDIA, parsed.data, Date.now);
+          await consumeSummaryMessage(
+            db,
+            env.MEDIA,
+            parsed.data,
+            Date.now,
+            createSummaryModel(env.AI, {
+              promptVersion: SUMMARY_PROMPT_VERSION,
+              paramsVersion: SUMMARY_PARAMS_VERSION,
+            }),
+          );
         }
         message.ack();
       } catch {

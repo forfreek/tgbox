@@ -4,6 +4,20 @@
 
 ## 当前状态与授权
 
+步骤五交付完成：代码05de52cfdebd1d07739e19a685cb51a6d6a5c0a5的[Linux CI 45034415096](https://github.com/forfreek/tgbox/actions/runs/45034415096)全仓检查/测试及脚本检查通过；本地变更文件Biome、diff检查及十一份文档236个本地链接通过。草稿PR #64保持未合并，后续仅补本交付记录，不改变代码或新增推理。
+
+本节点草稿 [PR #64](https://github.com/forfreek/tgbox/pull/64) 已创建，base=codex/ai-summary-models，当前工作树/分支为tgbox-ai-summary-admin / codex/ai-summary-admin，依赖顺序#61 → #62 → #63 → #64。追加同源校验后的UI核心流程重新通过；携带正常server-function协议头、伪造跨站Origin的重放请求返回403，未改变稿件。Linux代码CI已通过。
+
+2026-11-22 用户“好的，看是”按上下文“好的，开始”推进步骤五。已在独立工作树C:/Users/123/tgbox-ai-summary-admin、codex/ai-summary-admin实现后台控制，基于2a121b7，堆叠草稿PR #64，base=codex/ai-summary-models。详细实现、迁移、验证及限制见 [ADMIN](ADMIN.md)。模型/提示词保持Gemma v7/params-v3，本节点无新增真实推理。
+
+已实现认证后台、配置CAS及配额、最多20条预检/异步生成、技术失败重试、三语编辑并锁定、批准撤回及抽检。人工稿独立存储，成功人工动作含审计快照；来源和编辑版本保护在途任务。新增auto_scan默认false，将队列消费与全站扫描分开，避免提前回填。领取前限制受支持组合、每次调用显式传递并核对job版本，queue已接adapter；D1默认仍disabled，未做生产迁移、创建资源或部署。
+
+实际验证：Worker79/79、Admin111/111、DB74/74；全仓10项typecheck（Web311文件0错误/警告/提示）、Admin build和Worker dry-run通过。新迁移仅本地与测试应用。Playwright/Edge用虚构本地条目走通保存配置、预检、三语预览、编辑锁定、批准、抽检、撤回，桌面/390px手机无应用错误或横向溢出。Windows全仓check遇既有696项CRLF格式错误，未改无关源码；定向变更文件和Linux代码CI已通过，不将其冒称全仓本地check通过。
+
+以下模型工作树和早期授权为历史边界，不能覆盖本节点最新位置与实施记录。
+
+交付复核补充：框架全局CSRF中间件未配置，已对本次新增POST操作独立实施严格Origin同源校验，并新增8项回归，Admin当前111/111；原有接口不变。Worker及DB测试数不变。
+
 2026-11-22 用户确认“可以了，暂时保持这个版本”：暂定Gemma 4 26B A4B、prompt-v7 / params-v3，不继续调提示词或追加模型试跑。用户本轮询问下一步计划，不等同授权立即实现步骤五；当前仅维护决策与计划文档。
 
 2026-11-22 最新交付见 [V7-REVIEW](V7-REVIEW.md)：Gemma + prompt-v7 / params-v3，复用16条来源（全为调优回归，不称独立holdout），14次真实调用、2条预检跳过。混合简介误弃答、重要机器人禁令、官方身份声明三项在本批修复；10条生成、4条insufficient。没有新增来源、搜索、D1/R2查询或更换模型。步骤四按受审草稿范围完成，可进入步骤五；自动公开、最终HTML及SEO效果未验收。
@@ -61,7 +75,7 @@ v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](
 
 ## 下一步
 
-当前工作树 C:/Users/123/tgbox-ai-summary-models，分支 codex/ai-summary-models，基于步骤三33cd2d3，草稿PR #63的base=codex/ai-summary-jobs。当前prompt-v7 / params-v3、Gemma。步骤四按受审草稿范围完成；下一步为独立后台节点和堆叠PR，先补任务版本传递及领取前配置守卫。步骤5–8尚未实施，本次不顺带执行。
+当前工作树C:/Users/123/tgbox-ai-summary-admin，分支codex/ai-summary-admin，base=codex/ai-summary-models（#63）。步骤五代码及本地验收完成，独立草稿PR #64及代码CI通过。下一节点为步骤六静态消费已批准且有效的三语人工稿、失效标记与构建开关/回退；本次不顺带实施。步骤六至八未执行。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 

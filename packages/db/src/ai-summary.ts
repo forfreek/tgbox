@@ -1,5 +1,5 @@
 import type { AiSummaryModelInput, AiSummaryPreflight } from "@tgbox/shared";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import type { Db } from "./access.ts";
 import {
   aiSummaryJobs,
@@ -41,6 +41,7 @@ export type SummaryEntry = {
 const guardQuery = `SELECT json_array(r.id,r.status,r.kind,r.title,r.username,r.description,
   r.category,r.hide_posts,r.tags,r.hidden,json_extract(r.site,'$.postBlocklist'))
   FROM (${summaryEntryQuery}) r WHERE r.id = ? AND r.status = 'approved'`;
+export const summarySourceGuardQuery = guardQuery;
 
 export async function readSummaryEntry(db: Db, entryId: number) {
   return db.$client
@@ -62,7 +63,12 @@ export function getSummaryJob(db: Db, id: string) {
   return db.select().from(aiSummaryJobs).where(eq(aiSummaryJobs.id, id)).get();
 }
 export function listSummaryRevisions(db: Db, entryId: number) {
-  return db.select().from(aiSummaryRevisions).where(eq(aiSummaryRevisions.entryId, entryId));
+  return db
+    .select()
+    .from(aiSummaryRevisions)
+    .where(eq(aiSummaryRevisions.entryId, entryId))
+    .orderBy(desc(aiSummaryRevisions.createdAt), desc(aiSummaryRevisions.id))
+    .limit(20);
 }
 
 export async function getSummaryUsage(db: Db, now: number) {

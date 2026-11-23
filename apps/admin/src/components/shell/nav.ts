@@ -9,6 +9,7 @@ import {
   RocketIcon,
   ScrollTextIcon,
   SettingsIcon,
+  SparklesIcon,
   TagsIcon,
   UsersIcon,
 } from "lucide-react";
@@ -25,7 +26,8 @@ export type NavItem = {
     | "/blacklist"
     | "/friend-links"
     | "/audit"
-    | "/settings";
+    | "/settings"
+    | "/ai-summary";
   label: string;
   icon: LucideIcon;
   /** shown in the mobile bottom bar (the rest live under "更多") */
@@ -44,4 +46,5 @@ export const navItems: NavItem[] = [
   { to: "/blacklist", label: "黑名单", icon: BanIcon, primary: false },
   { to: "/audit", label: "操作日志", icon: ScrollTextIcon, primary: false },
   { to: "/settings", label: "设置", icon: SettingsIcon, primary: false },
+  { to: "/ai-summary", label: "AI 摘要", icon: SparklesIcon, primary: false },
 ];

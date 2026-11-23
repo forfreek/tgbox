@@ -1,5 +1,17 @@
 # AI 资源摘要模块项目记忆
 
+步骤五代码05de52c的Linux CI 45034415096全部通过，后续只补交付记录。下一节点静态快照与dirty/build失效接入，不把后台批准等同已发布或无需重验来源。
+
+步骤五交付草稿PR #64，base=codex/ai-summary-models（#63），本节点代码在独立tgbox-ai-summary-admin。浏览器正常流程与伪造跨站Origin的HTTP重放已验证，后者403；测试需携带原server-function协议头，裸JSON请求500属于框架协议不匹配，不能当CSRF结果。生产与公开展示未执行。
+
+步骤五复核发现后台框架未配置全局CSRF，新增POST接口不能只依赖既有认证：本节点独立要求Origin与请求origin精确一致，拒绝跨站/无Origin/null及异协议端口，8项回归后Admin111/111。未扩展修改旧接口。
+
+2026-11-22 步骤五独立工作树tgbox-ai-summary-admin，恢复见 [ADMIN](ADMIN.md)。共享ai-summary-config保存已确认Gemma/v7/v3；prompt实际文本与冻结请求不变。消费在领取/预留前白名单校验，adapter每次收job版本，不能只验闭包。新增ai_summary_reviews保存人工三语及批准状态，edit_version/observation_token CAS与锁定阻止在途模型覆盖；人工动作事务性审计含成功稿快照。旧revisions.review_status不是人工批准来源，步骤六应读新表并复核来源。
+
+发现原tick启用后会自动rolling历史扫描，新增auto_scan=false独立开关：仅启用消费不启动全站回填。预检只读、不建任务；批量最多20条，同指纹/版本复用；普通重试只技术失败，insufficient不扣费重跑、旧尝试不退款。批准前重读D1/R2，D1最终事务再校验；R2不能参与该事务，静态消费仍要复核。繁体复用OpenCC在浏览器按需转换，不在Worker里运行字典。
+
+本节点79项Worker（含11项后台本地D1/R2回归）、111项Admin、74项DB通过；全仓typecheck、Admin build及Worker dry-run通过。桌面/手机UI用虚构本地条目走通核心流程；Browser插件缺失用Playwright/Edge，默认headless shell缺失改用本机Edge，未安装浏览器。Windows全仓check受既有CRLF阻断，不能报通过，后续以定向格式和Linux CI核验。没有新模型试跑、生产迁移或部署；队列adapter虽接线但默认仍disabled，approve不触发构建/公开。下一步静态消费、dirty/build与回退另节点。
+
 2026-11-22 用户确认暂时保持当前版本：Gemma 4 26B A4B + prompt-v7 / params-v3。后续以该组合实现后台审核控制，除非出现具体缺陷或用户调整要求，不继续为文风追加试跑。本次只确认下一步计划，不启动后台、生产迁移或部署。
 
 2026-11-22 最新 [V7-REVIEW](V7-REVIEW.md)：prompt-v7通过“用途先提取、重要禁令优先、身份/效果省略或归因”及三类异题示例修复v6真实问题。复用16条来源/14次调用，全部development，不冒称独立holdout。十四条结构/状态及本批逐句源文核对通过，10段OpenCC未见关键信息变化，68项回归/类型/dry-run通过。保持Gemma、不搜索、不扩大来源；步骤四以受审草稿为界完成，可进后台，不能宣称自动公开、母语编辑、整页或SEO效果验收。完整请求/plan及响应在editorial-v7证据；自动report的qualityAccepted仍为false，编辑结论由本审查另记，非自动评分器。以下v6未过结论为当时快照。

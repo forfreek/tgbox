@@ -51,7 +51,7 @@ beforeEach(async () => {
     env.DB.prepare("DELETE FROM ai_summary_attempts"),
     env.DB.prepare("DELETE FROM settings"),
     env.DB.prepare(
-      "UPDATE ai_summary_settings SET enabled=1,model='test-model',daily_calls=100,daily_neurons=10000,reservation=100,max_attempts=3,prompt_version='v1',params_version='v1' WHERE id=1",
+      "UPDATE ai_summary_settings SET enabled=1,auto_scan=1,model='@cf/google/gemma-4-26b-a4b-it',daily_calls=100,daily_neurons=10000,reservation=100,max_attempts=3,prompt_version='summary-prompt-v7',params_version='summary-params-v3' WHERE id=1",
     ),
   ]);
   const keys = await env.MEDIA.list();
