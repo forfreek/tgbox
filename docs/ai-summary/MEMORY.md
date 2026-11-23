@@ -1,5 +1,9 @@
 # AI 资源摘要模块项目记忆
 
+2026-11-23 七B交付完成：草稿[PR #69](https://github.com/forfreek/tgbox/pull/69)依赖#68，提交6c57d7755b176c97642dbf5b2d69b5c3dff4a99c的[Linux CI45118458822](https://github.com/forfreek/tgbox/actions/runs/45118458822)全部通过（1m45s）。最终main部署/CI成功，12份文档304个本地链接及diff通过；后续仅补文档，不新增生产操作。生成、扫描及展示继续关闭，首次真实cron日志未捕获，七C前须先核验；七C/七D等待继续指示。以下核验中保留历史边界。
+
+七B交付入口（2026-11-23）：草稿[PR #69](https://github.com/forfreek/tgbox/pull/69)，base=#68，独立tgbox-ai-summary-release。12份相关文档304个本地链接及diff通过，原入口/七A入口路由同步。仅生产应用代码已按授权合并，#68和#69文档PR未合并。
+
 2026-11-23 七B生产部署见[RELEASE-DISABLED](RELEASE-DISABLED.md)，独立tgbox-ai-summary-release、依赖#68。用户在确认不全局改摘要、生成/扫描/展示关闭后ok，已合并#61–67、迁移0022–25、创建指定Worker与两队列、更新既有Admin。最终main6551bd9的CI与Web部署均成功，任务/尝试/公开摘要均0，默认关闭，下一七C等待指示。
 
 Admin远端plain_text与源码默认值有漂移，尤其认证为空默认；部署前把远端值覆盖到忽略的生成配置再keep-vars，部署后核对全部值及secret名称未变。不要以keep-vars单独保证同名默认不会覆盖，不能把部署成功当认证成功。只读未登录访问仍进入原Access登录，未绕过认证。CLI重登录一次网络失败、迁移7500先核验无写入再重试成功，CLI tail超时不能冒称cron有执行记录，均留证据。

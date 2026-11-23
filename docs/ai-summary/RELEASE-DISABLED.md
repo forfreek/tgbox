@@ -34,7 +34,7 @@
 1. 原Wrangler令牌过期，首次OAuth回调网络fetch失败；用户要求重试，第二次授权成功。未读取旧凭据，也未要求用户提供密钥。
 2. 第一次迁移返回Cloudflare7500内部错误；只读确认仍停留0021、AI表不存在后原命令重试成功。最终读回四份迁移名、关闭设置、计数及外键；不盲目重复可能部分成功的迁移。
 3. 七A文档追加提交1e02419的CI45116469119也发生快照CLI5000ms超时，原配置复跑成功。所有失败保留，未改仓库超时；最终main CI另已成功。
-4. CLI live tail连接ETIMEDOUT退出；只读遥测查询在登记初期未取到新Worker事件，不把空查询视为cron成功。定时触发登记及代码关闭保护已核验，首次真实执行证据待补核验；查询使用dry=true，未保存额外日志查询对象。
+4. CLI live tail连接ETIMEDOUT退出；只读遥测查询在登记初期未取到新Worker事件，不把空查询视为cron成功。定时触发登记及代码关闭保护已核验，首次真实执行证据待补核验；查询使用dry=true，未保存额外日志查询对象。[Cloudflare说明](https://developers.cloudflare.com/workers/configuration/cron-triggers/)新cron传播可达15分钟，不能将初期无事件直接判为故障，也不能据此宣称执行成功。
 
 ## 回退入口与下一步
 
