@@ -1,8 +1,18 @@
 # AI 资源摘要模块状态
 
-记录日期为 2026-11-22，时区为 Asia/Shanghai。
+记录日期为 2026-11-23，时区为 Asia/Shanghai。
 
 ## 当前状态与授权
+
+六B交付完成：最终代码3dccaff7376c9e953cc88a6e26869e177041c245的[Linux CI 45110073662](https://github.com/forfreek/tgbox/actions/runs/45110073662)全部通过（2m20s，全仓检查、测试、脚本类型/测试，含默认52项快照）。十三份文档278个本地链接及diff通过；草稿PR #66不合并。之后仅补文档记录，不改变代码或新增推理。
+
+导出边界补充：可选输出路径不可用时，finally清理也不能反向阻断主构建；已加入清理失败兜底，Node导出测试当前2项通过。快照52项默认设置由本节点最终Linux CI核验。
+
+六B草稿 [PR #66](https://github.com/forfreek/tgbox/pull/66)已创建，base=codex/ai-summary-static（#65），本工作树tgbox-ai-summary-data / codex/ai-summary-data。代码9eeb192，Linux CI核验中；下一节点六C页面/繁中/搜索回归，本轮不继续跨节点实施。
+
+2026-11-23 用户明确“开始”实施六B，独立C:/Users/123/tgbox-ai-summary-data / codex/ai-summary-data，基于六A2ceeb34、base=codex/ai-summary-static。公开投影、审批/撤回事务与dirty标记、可选独立SQL导出、快照白名单及来源指纹复核已实现，见 [STATIC-DATA](STATIC-DATA.md)。仅数据节点，六C页面/繁中/搜索契约未实施；无生产迁移、资源操作、部署或模型调用。
+
+本地Worker81项、快照新增定向14项、可选导出1项通过；全仓10项typecheck和脚本类型通过，Worker dry-run通过。Windows默认快照的既有支付测试出现5秒超时，串行15000ms预算全套50项通过，后增两项隔离SQL测试也通过；最终默认全套52项待Linux CI核验。具体限制/证据见STATIC-DATA，不把文档或打包当作最终页面验收。
 
 六A已提交草稿 [PR #65](https://github.com/forfreek/tgbox/pull/65)，base=codex/ai-summary-admin（#64）。五份文档106个本地链接及diff检查通过；本次仅文档，不运行应用测试、不把CI视作六B/六C实现验收。下一项为六B独立数据接入节点，步骤六整体仍未完成。
 
@@ -79,7 +89,7 @@ v6代码提交4f9e5fd87e46f9262121bc954d6c6b6fee53b705的[Linux CI 45027588408](
 
 ## 下一步
 
-当前工作树C:/Users/123/tgbox-ai-summary-admin，分支codex/ai-summary-admin，base=codex/ai-summary-models（#63）。步骤五代码及本地验收完成，独立草稿PR #64及代码CI通过。下一节点为步骤六静态消费已批准且有效的三语人工稿、失效标记与构建开关/回退；本次不顺带实施。步骤六至八未执行。
+当前工作树C:/Users/123/tgbox-ai-summary-data，分支codex/ai-summary-data，base=codex/ai-summary-static（#65）。六B草稿PR #66数据实现、本地验收与最终代码Linux CI通过。下一节点六C接正文、保护人工繁中、验证HTML/metadata及Pagefind契约；六C、灰度和历史回填未执行。
 
 本节点继续更新草稿 [PR #63](https://github.com/forfreek/tgbox/pull/63)，base=codex/ai-summary-jobs，依赖顺序 #61 → #62 → #63。本轮仅执行小批真实推理，不合并父 PR，不迁移或部署。
 

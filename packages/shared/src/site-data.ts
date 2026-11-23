@@ -53,6 +53,7 @@ export const EntryView = z
      */
     descriptionZh: z.string().nullable().default(null),
     descriptionEn: z.string().nullable().default(null),
+    aiSummary: PublicSummaryText.nullable().optional(),
     /** detected language code (e.g. "zh", "en"), null when unknown */
     lang: z.string().nullable(),
     verified: z.boolean(),
@@ -196,3 +197,5 @@ export const SiteData = z.object({
   friendLinks: z.array(FriendLink).default([]),
 });
 export type SiteData = z.infer<typeof SiteData>;
+
+import { PublicSummaryText } from "./ai-summary-public.ts";

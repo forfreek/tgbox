@@ -150,6 +150,18 @@ export const aiSummaryRevisions = sqliteTable(
   (t) => [index("ai_summary_revisions_entry").on(t.entryId, t.createdAt)],
 );
 
+/** Public build projection. No actor, private revisions, prompts or source bodies. */
+export const aiSummaryPublic = sqliteTable("ai_summary_public", {
+  entryId: integer("entry_id")
+    .primaryKey()
+    .references(() => entries.id, { onDelete: "cascade" }),
+  zh: text().notNull(),
+  hant: text().notNull(),
+  en: text().notNull(),
+  fingerprint: text().notNull(),
+  contractVersion: integer("contract_version").notNull().default(1),
+});
+
 export const aiSummaryReviews = sqliteTable(
   "ai_summary_reviews",
   {

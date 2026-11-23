@@ -1,5 +1,7 @@
 # 项目资料索引
 
+最新六B数据实现见 [STATIC-DATA](ai-summary/STATIC-DATA.md)，独立tgbox-ai-summary-data，基于六A。公开投影/审批失效、可选隔离导出、快照指纹复核已实现；六C页面尚未接入。恢复先读该工作树STATE。
+
 步骤六目前为接入前契约审查，见 [STATIC-CONTRACT](ai-summary/STATIC-CONTRACT.md)。独立tgbox-ai-summary-static，公开投影、可选导出和人工繁中保护尚未实现；步骤六不能标完成。恢复先读本工作树STATE。
 
 当前AI摘要恢复先读 [STATE](ai-summary/STATE.md)，步骤五后台与版本/配额保护见 [ADMIN](ai-summary/ADMIN.md)。工作树tgbox-ai-summary-admin、base为步骤四模型分支；后台节点不合并部署，下一步静态接入。以下步骤四记录保留历史。

@@ -1,5 +1,7 @@
 # 步骤五：后台人工控制
 
+后续六B已接入批准公开投影与dirty标记，见 [STATIC-DATA](STATIC-DATA.md)。以下步骤五“批准不触发dirty”的说明属于当时边界；六C公开页面展示仍未实现。
+
 2026-11-22，Asia/Shanghai。工作树C:/Users/123/tgbox-ai-summary-admin，分支codex/ai-summary-admin，基于步骤四2a121b7；PR的base为codex/ai-summary-models。模型保持Gemma 4 26B A4B、prompt-v7 / params-v3，没有新增模型试跑或修改提示词文本。
 
 ## 已实现的操作

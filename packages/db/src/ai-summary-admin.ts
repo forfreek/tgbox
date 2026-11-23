@@ -215,6 +215,43 @@ export async function changeSummaryReview(
       .bind(now, data.entryId, token),
   );
   statements.push(audit(db, actor, `ai_summary.${data.action}`, String(data.entryId), token, now));
+  if (data.action === "approve") {
+    const candidate = `SELECT r.entry_id,r.zh,r.hant,r.en,s.fingerprint FROM ai_summary_reviews r
+      JOIN ai_summary_sources s ON s.entry_id=r.entry_id WHERE s.observation_token=? AND r.status='approved'`;
+    statements.push(
+      db.$client
+        .prepare(`INSERT INTO site_state(key,value)
+      SELECT 'dirty_since',? WHERE EXISTS(SELECT 1 FROM (${candidate}) n LEFT JOIN ai_summary_public p ON p.entry_id=n.entry_id
+        WHERE p.entry_id IS NULL OR p.zh IS NOT n.zh OR p.hant IS NOT n.hant OR p.en IS NOT n.en
+        OR p.fingerprint IS NOT n.fingerprint OR p.contract_version!=1) ON CONFLICT(key) DO NOTHING`)
+        .bind(String(now), token),
+    );
+    statements.push(
+      db.$client
+        .prepare(`INSERT INTO ai_summary_public(entry_id,zh,hant,en,fingerprint,contract_version)
+      SELECT entry_id,zh,hant,en,fingerprint,1 FROM (${candidate}) WHERE true
+      ON CONFLICT(entry_id) DO UPDATE SET zh=excluded.zh,hant=excluded.hant,en=excluded.en,
+      fingerprint=excluded.fingerprint,contract_version=1
+      WHERE ai_summary_public.zh IS NOT excluded.zh OR ai_summary_public.hant IS NOT excluded.hant
+      OR ai_summary_public.en IS NOT excluded.en OR ai_summary_public.fingerprint IS NOT excluded.fingerprint
+      OR ai_summary_public.contract_version!=1`)
+        .bind(token),
+    );
+  } else if (data.action === "edit" || data.action === "withdraw") {
+    statements.push(
+      db.$client
+        .prepare(`INSERT INTO site_state(key,value) SELECT 'dirty_since',?
+      WHERE EXISTS(SELECT 1 FROM ai_summary_public p JOIN ai_summary_sources s ON s.entry_id=p.entry_id
+      WHERE s.observation_token=?) ON CONFLICT(key) DO NOTHING`)
+        .bind(String(now), token),
+    );
+    statements.push(
+      db.$client
+        .prepare(`DELETE FROM ai_summary_public WHERE entry_id=?
+      AND EXISTS(SELECT 1 FROM ai_summary_sources WHERE observation_token=?)`)
+        .bind(data.entryId, token),
+    );
+  }
   const result = await db.$client.batch(statements);
   return result[0]?.meta.changes === 1;
 }
