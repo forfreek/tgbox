@@ -1,0 +1,582 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-23",
+  "evidenceArchivedAt": "2026-11-23T09:19:05.063Z",
+  "scope": "Production fixed 12-entry pilot; no site display or automatic approval",
+  "model": "@cf/google/gemma-4-26b-a4b-it",
+  "promptVersion": "summary-prompt-v7",
+  "paramsVersion": "summary-params-v3",
+  "method": "Existing source/admin/task functions via authenticated Cloudflare API transport; system maintenance audit actor; actual deployed queue consumer ran inference",
+  "stats": {
+    "entries": 12,
+    "preflightSkipped": 2,
+    "modelAttempts": 10,
+    "generated": 7,
+    "modelInsufficient": 3,
+    "technicalFailures": 0,
+    "reservedNeurons": 1000,
+    "providerUsageCaptured": false,
+    "actualBill": null
+  },
+  "finalSettings": {
+    "enabled": 0,
+    "auto_scan": 0,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "daily_calls": 20,
+    "daily_neurons": 2000,
+    "reservation": 100,
+    "max_attempts": 1
+  },
+  "scanRuns": 0,
+  "interactiveReviewsSnapshot": [
+    {
+      "entry_id": 1979,
+      "status": "approved",
+      "version": 2,
+      "zh": "提供 BSC 链上新币出生推送、钱包评分查询及钱包黑名单数据。",
+      "hant": "提供 BSC 鏈上新幣出生推送、錢包評分查詢及錢包黑名單數據。",
+      "en": "Provides BSC on-chain data including new token launches, wallet scoring, and wallet blacklists.",
+      "updated_at": 1795425343821
+    },
+    {
+      "entry_id": 1982,
+      "status": "approved",
+      "version": 2,
+      "zh": "用于搜索中文社区内的群组、频道及机器人。",
+      "hant": "用於搜索中文社區內的群組、頻道及機器人。",
+      "en": "Searches for groups, channels, and bots within Chinese communities.",
+      "updated_at": 1795425312678
+    },
+    {
+      "entry_id": 1997,
+      "status": "approved",
+      "version": 2,
+      "zh": "该 Windows 桌面软件支持频道或群组内容搬运，具备关键词过滤、AI 改写文案以及添加图文或视频水印的功能，且仅限用于自有或已获授权的内容。",
+      "hant": "該 Windows 桌面軟件支持頻道或群組內容搬運，具備關鍵詞過濾、AI 改寫文案以及添加圖文或視頻水印的功能，且僅限用於自有或已獲授權的內容。",
+      "en": "This Windows desktop software supports migrating channel or group content, featuring keyword filtering, AI copywriting, and image/video watermarking; it is intended only for self-owned or authorized content.",
+      "updated_at": 1795425261190
+    }
+  ],
+  "publicRowsAtSnapshot": 3,
+  "notes": [
+    "Hant is derived locally using existing @tgbox/hant, not an additional model call.",
+    "Output is persisted validated Worker output, not the raw provider envelope.",
+    "Interactive admin approvals are independent concurrent actions; this runner never edited or approved reviews.",
+    "Editorial corrections are proposals only; not saved to production."
+  ],
+  "entries": [
+    {
+      "entryId": 1949,
+      "jobId": "e25d0640-81b6-4e1d-8b6f-47bc51976690",
+      "kind": "group",
+      "username": "botlistchat",
+      "title": "BotList Chat 👥💬",
+      "fingerprint": "sha256:afee0c7b72f96af885368f4dfd2ac9dbfe63e3d7e6f6e35297f6ad12dc8bf80d",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "BotList Chat 👥💬",
+        "username": "botlistchat",
+        "category": "chat",
+        "tags": ["english"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Share your bots, comment, test and have fun! Rules: Speak in English, Don't spam/advertise channels or groups that aren't bot related, respect other members, use common sense. 🌟 🤖 📔",
+            "date": null
+          }
+        ]
+      },
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "分享机器人并进行评论与测试；要求使用英语交流，禁止发布非机器人相关的频道或群组广告。",
+            "en": "Share bots, comment, and test; members are required to speak in English and must not advertise non-bot related channels or groups.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "displayDraft": {
+        "zh": "分享机器人并进行评论与测试；要求使用英语交流，禁止发布非机器人相关的频道或群组广告。",
+        "hant": "分享機器人並進行評論與測試；要求使用英語交流，禁止發佈非機器人相關的頻道或群組廣告。",
+        "en": "Share bots, comment, and test; members are required to speak in English and must not advertise non-bot related channels or groups."
+      },
+      "editorial": {
+        "verdict": "usable_draft",
+        "note": "分享、评论及测试机器人和英语交流/非机器人广告限制均保留，未补开发活动。"
+      }
+    },
+    {
+      "entryId": 1978,
+      "jobId": "bb0bec16-4d48-4c26-afaa-98da2323f9e5",
+      "kind": "channel",
+      "username": "bikeng_radar",
+      "title": "避坑雷达·免费版",
+      "fingerprint": "sha256:468a728bd86d30c1f3eb7c82d1bec9141a997d404eec1867d3f5f47ad3262b6b",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "避坑雷达·免费版",
+        "username": "bikeng_radar",
+        "category": "crypto",
+        "tags": ["chinese", "finance", "on-chain"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "BSC打狗避坑雷达｜four.meme / flap 新币出生监测 · 钱包黑名单（前向验证）· 土狗风险数据警告。不喊单、不带单，只报数据。实时版 + 钱包评分查询 👉 ｜29 USDT/月",
+            "date": null
+          },
+          {
+            "ref": "post:943",
+            "text": "🆕 新币出生 · BSC 平台：Flap 合约：0x602db3ec34f001dfd0d2f140dc22b9e54e4f7777 时间：18:00:09 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:05.000Z"
+          },
+          {
+            "ref": "post:942",
+            "text": "🆕 新币出生 · BSC 平台：Four.meme 合约：0xf3517ad4d0a6ba3d49fa402de3da3756c82affff 时间：18:00:02 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:04.000Z"
+          },
+          {
+            "ref": "post:941",
+            "text": "🆕 新币出生 · BSC 平台：Four.meme 合约：0x7d9c65f81f2385f5e055033c084cff2c3751ffff 时间：17:59:51 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:03.000Z"
+          },
+          {
+            "ref": "post:940",
+            "text": "🆕 新币出生 · BSC 平台：Four.meme 合约：0xee609867ca92ec2272b033160d462431d99dffff 时间：17:59:51 交易： 延迟 60 秒版 · 实时 feed + 黑名单预警在",
+            "date": "2026-11-20T10:02:01.000Z"
+          }
+        ]
+      },
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供 BSC 平台新币出生监测、钱包黑名单前向验证及土狗风险数据警告。公开帖子里包含 BSC 平台（如 Four.meme 和 Flap）新币出生的合约地址与时间信息。",
+            "en": "Provides monitoring of new coin births on the BSC platform, wallet blacklist forward verification, and risk data warnings for meme coins. Available posts include contract addresses and timestamps for new coins on BSC platforms like Four.meme and Flap.",
+            "refs": ["profile", "post:943", "post:942", "post:941", "post:940"]
+          }
+        ]
+      },
+      "displayDraft": {
+        "zh": "提供 BSC 平台新币出生监测、钱包黑名单前向验证及土狗风险数据警告。公开帖子里包含 BSC 平台（如 Four.meme 和 Flap）新币出生的合约地址与时间信息。",
+        "hant": "提供 BSC 平臺新幣出生監測、錢包黑名單前向驗證及土狗風險數據警告。公開帖子裡包含 BSC 平臺（如 Four.meme 和 Flap）新幣出生的合約地址與時間信息。",
+        "en": "Provides monitoring of new coin births on the BSC platform, wallet blacklist forward verification, and risk data warnings for meme coins. Available posts include contract addresses and timestamps for new coins on BSC platforms like Four.meme and Flap."
+      },
+      "editorial": {
+        "verdict": "needs_edit",
+        "note": "事实有引文，但原简介“不喊单、不带单”未保留，英文new coin births生硬，技术术语堆叠；需压缩并补边界。",
+        "proposedZh": "分享 BSC 新币监测、钱包黑名单及风险数据。公开帖子列出新币合约地址和时间；频道只报数据，不喊单、不带单。",
+        "proposedEn": "Shares BSC new-token monitoring, wallet blacklists, and risk data. Public posts list contract addresses and timestamps; the channel reports data without trade calls or trading guidance.",
+        "proposedHant": "分享 BSC 新幣監測、錢包黑名單及風險數據。公開帖子列出新幣合約地址和時間；頻道只報數據，不喊單、不帶單。"
+      }
+    },
+    {
+      "entryId": 1979,
+      "jobId": "bc72279a-81bb-40c5-b984-2f6fa5ac463e",
+      "kind": "bot",
+      "username": "bikeng_radar_bot",
+      "title": "避坑雷达",
+      "fingerprint": "sha256:d9aca78d3248a4f99f70a704407d99e79554a81cfd024caf2649fa870f368b9f",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "避坑雷达",
+        "username": "bikeng_radar_bot",
+        "category": "trading",
+        "tags": ["chinese", "on-chain"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "BSC 打狗避坑数据：新币出生推送、钱包评分查询、钱包黑名单。不承诺收益，只提供数据。",
+            "date": null
+          }
+        ]
+      },
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供 BSC 链上新币出生推送、钱包评分查询及钱包黑名单数据。",
+            "en": "Provides BSC on-chain data including new token launches, wallet scoring, and wallet blacklists.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "displayDraft": {
+        "zh": "提供 BSC 链上新币出生推送、钱包评分查询及钱包黑名单数据。",
+        "hant": "提供 BSC 鏈上新幣出生推送、錢包評分查詢及錢包黑名單數據。",
+        "en": "Provides BSC on-chain data including new token launches, wallet scoring, and wallet blacklists."
+      },
+      "editorial": {
+        "verdict": "needs_edit",
+        "note": "未捏造功能，但遗漏原简介“不承诺收益，只提供数据”的边界；拟稿补回，不把它认定为风险保证。",
+        "proposedZh": "可查看 BSC 新币推送、钱包评分和钱包黑名单；只提供数据，不承诺收益。",
+        "proposedEn": "Provides BSC new-token alerts, wallet scores, and wallet blacklists. It supplies data and does not promise returns.",
+        "proposedHant": "可查看 BSC 新幣推送、錢包評分和錢包黑名單；只提供數據，不承諾收益。"
+      }
+    },
+    {
+      "entryId": 1982,
+      "jobId": "1c6bd216-12d7-4acd-9cf5-02257a3047e3",
+      "kind": "bot",
+      "username": "qunsoucn_bot",
+      "title": "群搜🔍中文群频道搜索",
+      "fingerprint": "sha256:e6611d27e3a4e52d6dd056c9ef4169b923a36996d55e9f083088bcfee0325278",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "群搜🔍中文群频道搜索",
+        "username": "qunsoucn_bot",
+        "category": "search",
+        "tags": ["anime", "chinese", "free"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "🧭 群搜 QunSou｜中文社区搜索导航 🔎 群组 · 频道 · 机器人，一站搜索 ✅ 人工审核 · 优质收录 🌐 三端数据实时同步",
+            "date": null
+          }
+        ]
+      },
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "用于搜索中文社区内的群组、频道及机器人。",
+            "en": "Searches for groups, channels, and bots within Chinese communities.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "displayDraft": {
+        "zh": "用于搜索中文社区内的群组、频道及机器人。",
+        "hant": "用於搜索中文社區內的群組、頻道及機器人。",
+        "en": "Searches for groups, channels, and bots within Chinese communities."
+      },
+      "editorial": {
+        "verdict": "usable_low_increment",
+        "note": "未沿用“优质/人工审核/实时”承诺，但内容较短、与原简介重复度高，结构合规不等于值得额外展示。"
+      }
+    },
+    {
+      "entryId": 1984,
+      "jobId": "9b7ef130-714b-42c6-909c-ae251200a257",
+      "kind": "group",
+      "username": "tamil_frnds_zone",
+      "title": "𝑻𝑨𝑴𝑰𝑳_𝑭𝑹𝑰𝑬𝑵𝑫𝑺_ 𝒁𝑶𝑵𝑬",
+      "fingerprint": "sha256:de6fcce380ab81fdef376a2e6fa420dd3ef46465fbab24a66f492a824231f7d9",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "𝑻𝑨𝑴𝑰𝑳_𝑭𝑹𝑰𝑬𝑵𝑫𝑺_ 𝒁𝑶𝑵𝑬",
+        "username": "tamil_frnds_zone",
+        "category": "chat",
+        "tags": ["free", "music"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "✦ 𝐙𝐎𝐍𝐄 𝐂𝐎𝐃𝐄 ✦ ✿ ┊ 𝐑𝐄𝐒𝐏𝐄𝐂𝐓 𝐀𝐋𝐋 ✿ ┊ 𝐍𝐎 𝐃𝐌 / 𝐏𝐌 ✿ ┊ 𝐍𝐎 𝐋𝐈𝐍𝐊𝐒 𝐈𝐍 𝐁𝐈𝐎 ✿ ┊ 𝐍𝐎 𝐅𝐈𝐆𝐇𝐓𝐒 ✿ ┊ 𝐍𝐎 𝐒𝐏𝐀𝐌 ✿ ┊ 𝐒𝐓𝐀𝐘 𝐁𝐎𝐍𝐃𝐄𝐃 ✿ ┊ 𝐑𝐄𝐏𝐎𝐑𝐓 @ 𝐀𝐃𝐌𝐈𝐍",
+            "date": null
+          }
+        ]
+      },
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "displayDraft": null,
+      "editorial": {
+        "verdict": "appropriate_abstention",
+        "note": "只有装饰字体群规，不能凭标题或分类编造讨论主题和成员活动。"
+      }
+    },
+    {
+      "entryId": 1985,
+      "jobId": "0754b720-1330-4477-9e18-52bb6788216c",
+      "kind": "group",
+      "username": "torcidasr",
+      "title": "REAÇÕES DOS TORCEDORES",
+      "fingerprint": "sha256:7260f878c8ba7a977bf459511b591fb0b43b4c3b19c0d01e59a36694857ab495",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "REAÇÕES DOS TORCEDORES",
+        "username": "torcidasr",
+        "category": "interest",
+        "tags": [],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "⚽ BRIGA GERAL — TODAS AS TORCIDAS🔥 Aqui é o espaço para resenha, zoeira, debates, memes e notícias sobre futebol brasileiro. Todas as torcidas são bem-vindas! 📋 REGRAS DO GRUPO 🚫 Proibido enviar links ou divulgar outros grupos. 🚫 Proibido spam, flo",
+            "date": null
+          }
+        ]
+      },
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "用于巴西足球的闲聊、恶搞、辩论、迷因及新闻讨论，欢迎所有球迷群体；禁止发送链接或推广其他群组。",
+            "en": "A space for banter, jokes, debates, memes, and news about Brazilian football, welcoming all fan groups; sending links or promoting other groups is prohibited.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "displayDraft": {
+        "zh": "用于巴西足球的闲聊、恶搞、辩论、迷因及新闻讨论，欢迎所有球迷群体；禁止发送链接或推广其他群组。",
+        "hant": "用於巴西足球的閒聊、惡搞、辯論、迷因及新聞討論，歡迎所有球迷群體；禁止發送鏈接或推廣其他群組。",
+        "en": "A space for banter, jokes, debates, memes, and news about Brazilian football, welcoming all fan groups; sending links or promoting other groups is prohibited."
+      },
+      "editorial": {
+        "verdict": "needs_style_edit",
+        "note": "用途和禁外链规则有来源；中文“用于…恶搞、辩论、迷因”显直译，宜改自然介绍，不补成员活跃度。",
+        "proposedZh": "围绕巴西足球聊新闻、段子和表情包，也欢迎不同球队的球迷参与讨论；群内禁止发链接或宣传其他群组。",
+        "proposedEn": "Fans of different teams can discuss Brazilian football, news, jokes, and memes here. Posting links or promoting other groups is prohibited.",
+        "proposedHant": "圍繞巴西足球聊新聞、段子和表情包，也歡迎不同球隊的球迷參與討論；群內禁止發鏈接或宣傳其他群組。"
+      }
+    },
+    {
+      "entryId": 1987,
+      "jobId": "1d0e73de-b373-48c7-ad62-f49cbcd3ec84",
+      "kind": "bot",
+      "username": "earnbotrewards_bot",
+      "title": "EarnBot – Tasks & Rewards",
+      "fingerprint": "sha256:b1dcb78c1312d20b6b556dc19e13858203a6bae70ed2b18628d46510c15db136",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "EarnBot – Tasks & Rewards",
+        "username": "earnbotrewards_bot",
+        "category": "games",
+        "tags": [],
+        "evidence": []
+      },
+      "status": "skipped",
+      "reason": "no_substantive_evidence",
+      "attempts": 0,
+      "output": null,
+      "displayDraft": null,
+      "editorial": {
+        "verdict": "appropriate_preflight_skip",
+        "note": "无简介，不能用EarnBot标题推断任务奖励与赚钱承诺。"
+      }
+    },
+    {
+      "entryId": 1989,
+      "jobId": "56671d78-7244-4ffe-af92-710509305962",
+      "kind": "channel",
+      "username": "animaweb4",
+      "title": "Deal Hub",
+      "fingerprint": "sha256:fe946952dcea1c6275e95db74920d198ddeb75fe9e8d461e4982b3348767af61",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "Deal Hub",
+        "username": "animaweb4",
+        "category": "deals",
+        "tags": [],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Subscribe",
+            "date": null
+          }
+        ]
+      },
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "displayDraft": null,
+      "editorial": {
+        "verdict": "appropriate_abstention",
+        "note": "简介仅Subscribe且R2没有公开帖子对象，不能用标题Deal Hub补优惠信息。"
+      }
+    },
+    {
+      "entryId": 1992,
+      "jobId": "a2ab87fe-17c0-4c81-9e92-4f58a9eb3783",
+      "kind": "bot",
+      "username": "waltwallletbot",
+      "title": "Walt (ex. Wallet)",
+      "fingerprint": "sha256:85d02b3c480e92b1ccd1548cbfa8ddf817770a533c38d90ba2e96071736ec7fd",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "bot",
+        "title": "Walt (ex. Wallet)",
+        "username": "waltwallletbot",
+        "category": "crypto",
+        "tags": ["english", "exchange", "finance", "open-source", "ton"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "Smart Web3 wallet, DeFi analytics, multi-chain portfolio tracking and on-chain intelligence.",
+            "date": null
+          }
+        ]
+      },
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "提供Web3钱包功能、DeFi数据分析、多链资产组合追踪及链上情报。",
+            "en": "Provides Web3 wallet functionality, DeFi analytics, multi-chain portfolio tracking, and on-chain intelligence.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "displayDraft": {
+        "zh": "提供Web3钱包功能、DeFi数据分析、多链资产组合追踪及链上情报。",
+        "hant": "提供Web3錢包功能、DeFi數據分析、多鏈資產組合追蹤及鏈上情報。",
+        "en": "Provides Web3 wallet functionality, DeFi analytics, multi-chain portfolio tracking, and on-chain intelligence."
+      },
+      "editorial": {
+        "verdict": "usable_low_increment",
+        "note": "用途有来源且未补转账/交易或安全保证，但基本是原简介翻译压缩，独立信息增量低。"
+      }
+    },
+    {
+      "entryId": 1993,
+      "jobId": "0f1d0785-b6d4-470a-9883-55252eb5be80",
+      "kind": "channel",
+      "username": "nofehh",
+      "title": "نوفه",
+      "fingerprint": "sha256:72a4d6fc304de1c8180ef70567865d73eb54ece9514da249c8fb9154138fe410",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "نوفه",
+        "username": "nofehh",
+        "category": "news",
+        "tags": ["daily-news", "finance"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "پایگاه خبری تحلیلی نوفه 👨 💻 www.nofeh.ir",
+            "date": null
+          }
+        ]
+      },
+      "status": "skipped",
+      "reason": "model_insufficient",
+      "attempts": 1,
+      "output": {
+        "status": "insufficient",
+        "sentences": []
+      },
+      "displayDraft": null,
+      "editorial": {
+        "verdict": "conservative_abstention",
+        "note": "仅有波斯语新闻分析平台泛化定位；弃答偏保守，不能据此断言完全没有用途或确认语言能力不足。本轮不追加推理。"
+      }
+    },
+    {
+      "entryId": 1995,
+      "jobId": "8ddf1221-7781-41e8-96a8-62323a52e2c3",
+      "kind": "group",
+      "username": "ai_virtualcard1",
+      "title": "AIcrad虚拟卡官方群组",
+      "fingerprint": "sha256:6a441317ea532a2e043af535a219e79807d9ced0b22b8cbc48ae34c11392bcd3",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "group",
+        "title": "AIcrad虚拟卡官方群组",
+        "username": "ai_virtualcard1",
+        "category": "vcc",
+        "tags": [],
+        "evidence": []
+      },
+      "status": "skipped",
+      "reason": "no_substantive_evidence",
+      "attempts": 0,
+      "output": null,
+      "displayDraft": null,
+      "editorial": {
+        "verdict": "appropriate_preflight_skip",
+        "note": "无简介和可用群组消息，不从“官方”标题推断服务或身份。"
+      }
+    },
+    {
+      "entryId": 1997,
+      "jobId": "a7517220-82c1-405d-b197-30807c4262ac",
+      "kind": "channel",
+      "username": "niuniuban123",
+      "title": "牛牛搬｜频道搬运｜群组内容搬运｜AI改文案",
+      "fingerprint": "sha256:9584cad55aac29c30502db12f8c566d1e49b0e9e58be7a063257ca8ad1445898",
+      "input": {
+        "schemaVersion": 1,
+        "policyVersion": "source-policy-v1",
+        "kind": "channel",
+        "title": "牛牛搬｜频道搬运｜群组内容搬运｜AI改文案",
+        "username": "niuniuban123",
+        "category": "software",
+        "tags": ["chinese"],
+        "evidence": [
+          {
+            "ref": "profile",
+            "text": "♻️频道/群组内容搬运，支持关键词过滤、AI改文案和图文/视频水印 👀会员频道公开预览 💻Windows桌面软件，仅用于自有或已获授权内容 👩🏻 💻唯一客服：",
+            "date": null
+          }
+        ]
+      },
+      "status": "succeeded",
+      "reason": null,
+      "attempts": 1,
+      "output": {
+        "status": "ok",
+        "sentences": [
+          {
+            "zh": "该 Windows 桌面软件支持频道或群组内容搬运，具备关键词过滤、AI 改写文案以及添加图文或视频水印的功能，且仅限用于自有或已获授权的内容。",
+            "en": "This Windows desktop software supports migrating channel or group content, featuring keyword filtering, AI copywriting, and image/video watermarking; it is intended only for self-owned or authorized content.",
+            "refs": ["profile"]
+          }
+        ]
+      },
+      "displayDraft": {
+        "zh": "该 Windows 桌面软件支持频道或群组内容搬运，具备关键词过滤、AI 改写文案以及添加图文或视频水印的功能，且仅限用于自有或已获授权的内容。",
+        "hant": "該 Windows 桌面軟件支持頻道或群組內容搬運，具備關鍵詞過濾、AI 改寫文案以及添加圖文或視頻水印的功能，且僅限用於自有或已獲授權的內容。",
+        "en": "This Windows desktop software supports migrating channel or group content, featuring keyword filtering, AI copywriting, and image/video watermarking; it is intended only for self-owned or authorized content."
+      },
+      "editorial": {
+        "verdict": "usable_draft",
+        "note": "功能、Windows平台及授权内容限制均有来源；英文migrating/copywriting可进一步改为content copying/text rewriting。文风偏说明书，非独立页面增值证明。"
+      }
+    }
+  ]
+}
