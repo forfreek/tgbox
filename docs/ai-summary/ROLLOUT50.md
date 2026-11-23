@@ -30,6 +30,8 @@ UI使用虚构本地D1/R2、remoteBindings=false、独立无界面Edge/Playwrigh
 
 ## 生产记录及回退
 
+首两次Linux CI45151835753、45152213122被既有snapshot CLI的5秒限时阻断，实际约6.4秒/5.5秒。该单项增加子进程15秒硬截止、测试20秒，保留全部断言；上线须等后续CI通过。
+
 部署前核验：Admin70e805f9-27f9-4d70-a601-35b529ef0989，摘要Worker ff4d5366-55fe-41f5-b84b-75fa7295e7af，Web6eeabb69-8272-486e-816c-31a9ab59fc8a；D1 bookmark 000012e5-00000000-0000512c-948263d32551069df5b864e250c5d5c0。
 
 当前管理员配额200次/日、8000预留Neurons、每次100、maxAttempts=1，保留其调整。预留值不是Cloudflare实际账单。上线结果待追加。

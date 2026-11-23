@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+七D CI45151835753及45152213122均由既有snapshot CLI默认5秒超时失败（实际6.4秒/5.5秒），其他已完成检查通过，未部署。对该子进程单项设置15秒硬截止、测试20秒，保留全部数据断言，重验后继续CI。
+
 七D[PR #71](https://github.com/forfreek/tgbox/pull/71)已建立，base=codex/ai-summary-live-pilot（#70）。补齐快照公开投影读取的50条边界，新增第21–50条实际消费回归；Linux CI核验中。生产仍未开启本轮。
 
 2026-11-23 七D授权固定50条自动生成及小范围展示，并修复页底审核交互。当前C:/Users/123/tgbox-ai-summary-rollout50 / codex/ai-summary-rollout50，依赖#70；入口[ROLLOUT50](ROLLOUT50.md)。本地实现与验证完成，PR/CI及生产部署开启待执行。保留人工审核，不自动批准，不扩大全站；以下旧12条记录不覆盖最新授权。
