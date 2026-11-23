@@ -85,6 +85,52 @@ test("empty scope blocks scanning, dispatch and forged outside-scope delivery", 
   expect(await db.select().from(aiSummaryAttempts)).toEqual([]);
 });
 
+test("global entry point discovers resources outside the old selected scope without changing quotas", async () => {
+  const first = await entry("global_first_bot");
+  const second = await entry("global_second_bot");
+  const before = await getSummaryConfig(db);
+  const sendBatch = vi.fn(async () => {});
+  await worker.scheduled({} as ScheduledController, {
+    ...env,
+    AI_SUMMARY_SCOPE: "all",
+    AI_SUMMARY_ENTRY_IDS: "",
+    SUMMARY_QUEUE: { sendBatch } as unknown as Queue,
+  });
+  expect((await db.select().from(aiSummaryJobs)).map((j) => j.entryId).sort()).toEqual(
+    [first, second].sort(),
+  );
+  expect(sendBatch).toHaveBeenCalledOnce();
+  expect(await getSummaryConfig(db)).toEqual(before);
+  expect(await db.select().from(aiSummaryAttempts)).toEqual([]);
+  expect(await db.select().from(aiSummaryRuns)).toHaveLength(2);
+});
+
+test("global observation and consumption still respect daily quota without raising it", async () => {
+  const id = await entry("global_budget_bot");
+  await env.DB.prepare("UPDATE ai_summary_settings SET daily_neurons=0 WHERE id=1").run();
+  const messages: SummaryMessage[] = [];
+  await consumeSummaryObservation(
+    db,
+    env.MEDIA,
+    {
+      sendBatch: async (rows) => {
+        messages.push(...rows.map((row) => row.body));
+      },
+    },
+    { v: 1, action: "observe", entryId: id },
+    () => NOW,
+  );
+  const model = vi.fn(async () => output);
+  for (const msg of messages) await consumeSummaryMessage(db, env.MEDIA, msg, () => NOW, model);
+  expect(model).not.toHaveBeenCalled();
+  expect(await db.select().from(aiSummaryAttempts)).toEqual([]);
+  expect((await getSummaryConfig(db)).dailyNeurons).toBe(0);
+  expect((await db.select().from(aiSummaryJobs))[0]).toMatchObject({
+    status: "retry_wait",
+    reason: "quota_or_policy",
+  });
+});
+
 test("bootstrap observes fresh sources only within scope and is idempotent across duplicate deliveries", async () => {
   const id = await entry();
   const outside = await entry("bootstrap_outside_bot");

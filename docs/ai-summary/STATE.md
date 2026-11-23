@@ -1,5 +1,11 @@
 # AI 资源摘要模块状态
 
+22:32全局生成已部署，Worker09fdef59-abc8-4242-b108-f4c9a733da10，远端scope=all、selected IDs空。D1完整配置逐字段与部署前一致，200调用/800预留/100单次/1尝试保持，未写settings表；9500仅累计预留，非真实消耗。首次扫描按*/5分钟定时器启动，实际运行证据从PR #76追加验收读取，当前不冒称全站生成已完成。源码及执行记录见GLOBAL；观察窗口沿用11-25晚。
+
+全局生成[PR #76](https://github.com/forfreek/tgbox/pull/76)，base=main。代码af731ed的Linux CI45194532044全仓检查/测试和脚本检查通过；Worker89项、类型检查、dry-run及文档检查通过。全局部署已发起，未执行D1配置写入；设置读回逐字段与部署前一致。实际版本/全局开关与首轮游标继续核验，入口GLOBAL。
+
+2026-11-23 用户明确取消50条生成限制，全局开启且禁止改配额。当前C:/Users/123/tgbox-ai-summary-global / codex/ai-summary-global，入口[GLOBAL](GLOBAL.md)。显式all范围已实现，89项Worker测试通过；当前生产读回200调用/800预留/100单次/1尝试，必须原样保持。9500纠正为内部预留而非实际神经元；历史8000→10100自动加预算不应发生，已补AGENTS规则。全局部署及最终CI待核验，不代审核发布。
+
 22:11验收补充：autoScan开启后的22:10真实scheduled执行ok，当前Worker版本及800预算读回匹配，累计推理仍95。记录PR #75提交3b76cde的Linux CI45191038949通过，后续仅补定时执行证据；未新增真实推理。两天观察仍进行中，不冒称观察已完成。
 
 2026-11-23 22:07第二批记录[PR #75](https://github.com/forfreek/tgbox/pull/75)已建立，auto_scan已按新授权开启并远端读回确认。本批50条名单、Gemma/v8/params-v3、200 calls/800预留/100单次/1 attempt均保持，配置仅改autoScan。观察至11-25 22:07，不扩围、不代审批。专项本地配额测试2/2、50条状态和仅一个字段变化检查通过；CI以PR最终检查为准。入口[BATCH2](BATCH2.md)，当前工作树tgbox-ai-summary-batch2。
