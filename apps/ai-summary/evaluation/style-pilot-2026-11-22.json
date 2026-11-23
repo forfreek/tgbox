@@ -1,0 +1,1441 @@
+{
+  "date": "2026-11-22",
+  "selectedModel": "@cf/google/gemma-4-26b-a4b-it",
+  "uniqueSourceCases": 14,
+  "actualCalls": 30,
+  "notes": [
+    "14 unique cases across revisions, including 2 explicitly synthetic rich inputs.",
+    "Revision v3 lost channel scope; v4 changed the actor to the tool. Both failures retained.",
+    "Soft length targets do not justify filler. Final rich cases below 60 characters remain exceptions, not counted as target-compliant.",
+    "No publication or deployment; editorial page-value acceptance remains open."
+  ],
+  "stages": [
+    {
+      "version": "v3",
+      "planHash": "a6a40ebc32a3b239a8c448d9c49928a560dd3a3f8f866acc8a9102b9d0e723fa",
+      "promptVersion": "summary-prompt-v3",
+      "paramsVersion": "summary-params-v3",
+      "rows": [
+        {
+          "caseId": "C1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1118,
+          "rawSha256": "edb93d62dee2c14296f373d7962cd35b4d7a8dd3de4a426084f64f5aa5ca2272",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"分享开源软件的安装指南。\",\"en\":\"Shares installation guides for open-source software.\",\"refs\":[\"profile\"]}]}",
+                  "refusal": null,
+                  "annotations": null,
+                  "audio": null,
+                  "function_call": null,
+                  "reasoning": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "stop_reason": null,
+                "token_ids": null,
+                "routed_experts": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 716,
+              "completion_tokens": 35,
+              "total_tokens": 751,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.46363639831543
+            }
+          }
+        },
+        {
+          "caseId": "C6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1881,
+          "rawSha256": "311b331341e5d3cbc6048ac927ac3dd42fc7df27a4b6ea020fff48f88bad91f4",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"分享开源工具甲、乙的更新动态、安装步骤与配置示例。\",\"en\":\"Shares updates, installation steps, and configuration examples for open-source tools A and B.\",\"refs\":[\"post:2\",\"post:1\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 792,
+              "completion_tokens": 59,
+              "total_tokens": 851,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.809090614318848
+            }
+          }
+        },
+        {
+          "caseId": "R-telegramtips",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 769,
+          "rawSha256": "98e6a5f8172d067d063493d6e5525923bcf4ace4e51c25be4d6e7ed839cd3aee",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 725,
+              "completion_tokens": 10,
+              "total_tokens": 735,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 6.863636493682861
+            }
+          }
+        },
+        {
+          "caseId": "G1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1248,
+          "rawSha256": "57971ac8789293cea87e034446e54ffcf53e192ca5af19a0a1949168c16cdc79",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"讨论 Python 编程与代码调试。\",\"en\":\"Discuss Python programming and code debugging.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 714,
+              "completion_tokens": 34,
+              "total_tokens": 748,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.418181896209717
+            }
+          }
+        },
+        {
+          "caseId": "G6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 728,
+          "rawSha256": "bee7d79db1624ea640ba84693c0c650f71f2c97e4515de2c286102d7951ce46a",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"进行日语交流。\",\"en\":\"Engage in Japanese language exchange.\",\"refs\":[\"profile\"]}]}",
+                  "refusal": null,
+                  "annotations": null,
+                  "audio": null,
+                  "function_call": null,
+                  "reasoning": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "stop_reason": null,
+                "token_ids": null,
+                "routed_experts": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 710,
+              "completion_tokens": 30,
+              "total_tokens": 740,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.272727012634277
+            }
+          }
+        },
+        {
+          "caseId": "H-G1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2116,
+          "rawSha256": "13c05ab6e30c61f83771c384d467bd6c262be68f22ac39e735d8df22563618ab",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"讨论阿拉伯语学习的群组。\",\"en\":\"A group for discussing Arabic language learning.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 717,
+              "completion_tokens": 35,
+              "total_tokens": 752,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.472727298736572
+            }
+          }
+        },
+        {
+          "caseId": "B1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1782,
+          "rawSha256": "4786680008e0afbbf23c72aa56ec1d757b66ace421c9f0e14373ebfe26c6cc8c",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将 PDF 文件转换成图片。\",\"en\":\"Converts PDF files into images.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 723,
+              "completion_tokens": 34,
+              "total_tokens": 757,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.5
+            }
+          }
+        },
+        {
+          "caseId": "R-foursquare",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 9350,
+          "rawSha256": "dc74117c752e8cfae9d82022f578ac46e4d8ade6ed2d15bc2123b339485e7687",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"用于查找附近的餐厅及其他地点，并能将地址发送给好友。\",\"en\":\"Find nearby restaurants and other places, and send their addresses to friends.\",\"refs\":[\"profile\"]}]}",
+                  "refusal": null,
+                  "annotations": null,
+                  "audio": null,
+                  "function_call": null,
+                  "reasoning": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "stop_reason": null,
+                "token_ids": null,
+                "routed_experts": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 737,
+              "completion_tokens": 49,
+              "total_tokens": 786,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.03636360168457
+            }
+          }
+        },
+        {
+          "caseId": "B6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2150,
+          "rawSha256": "a5cde137d4c6e75da995b5c3512b32dc7c3ea2ee7fd4afc916e725a0dec7390e",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将语音转换为文字。\",\"en\":\"Converts speech to text.\",\"refs\":[\"profile\"]}]}",
+                  "refusal": null,
+                  "annotations": null,
+                  "audio": null,
+                  "function_call": null,
+                  "reasoning": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "stop_reason": null,
+                "token_ids": null,
+                "routed_experts": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 738,
+              "completion_tokens": 31,
+              "total_tokens": 769,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.5545454025268555
+            }
+          }
+        },
+        {
+          "caseId": "H-B3",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1436,
+          "rawSha256": "2f37216d074233a063830443150e29354a6b80aeb62357c7251d5a8e4750bd42",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 729,
+              "completion_tokens": 10,
+              "total_tokens": 739,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 6.900000095367432
+            }
+          }
+        }
+      ]
+    },
+    {
+      "version": "v4",
+      "planHash": "c809900bb80664b2f5b683f6e99ac1ab8a6c1d40171e8720054e5649c2a20a26",
+      "promptVersion": "summary-prompt-v4",
+      "paramsVersion": "summary-params-v3",
+      "rows": [
+        {
+          "caseId": "C6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 3205,
+          "rawSha256": "02f8d25323e1178026d98800279e6285b69b7a72c92d252fd6043fa7a307d972",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"从公开帖子来看，开源工具甲增加了离线导出功能，开源工具乙则分享了安装步骤与配置示例。\",\"en\":\"The available posts cover the addition of an offline export feature to open-source tool A, and the installation steps and configuration examples for open-source tool B.\",\"refs\":[\"post:1\",\"post:2\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 894,
+              "completion_tokens": 83,
+              "total_tokens": 977,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 10.390909194946289
+            }
+          }
+        },
+        {
+          "caseId": "G1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2148,
+          "rawSha256": "ca1325553e52ad7c717e00408e90e2af7a65842436f0e3b5fed233c1c2469666",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"讨论 Python 编程与代码调试。\",\"en\":\"Discuss Python programming and code debugging.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 756,
+              "completion_tokens": 34,
+              "total_tokens": 790,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.799999713897705
+            }
+          }
+        },
+        {
+          "caseId": "G6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1473,
+          "rawSha256": "2e4073c47dfc5c172fc06e13a661ea3a22050eabfde0b78d493d406beb432caf",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"日语交流\",\"en\":\"Japanese language exchange.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 751,
+              "completion_tokens": 25,
+              "total_tokens": 776,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.509090423583984
+            }
+          }
+        },
+        {
+          "caseId": "B1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2026,
+          "rawSha256": "51b85be2ec7cbc17a527023c4c3f6b2c21e95e1c9a3861c7ce497e15fb847db0",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"把 PDF 文件转换成图片。\",\"en\":\"Convert PDF files into images.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 765,
+              "completion_tokens": 32,
+              "total_tokens": 797,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.827272415161133
+            }
+          }
+        },
+        {
+          "caseId": "R-foursquare",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2340,
+          "rawSha256": "b848e81632aa355ac66d12a80cf3e73055a503185ae72eb6e4dcb2380613862b",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"用于查找附近的餐厅及其他地点，并能将地址发送给好友。\",\"en\":\"Find nearby restaurants and other places, and send their addresses to friends.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 778,
+              "completion_tokens": 49,
+              "total_tokens": 827,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.409090995788574
+            }
+          }
+        },
+        {
+          "caseId": "B6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1611,
+          "rawSha256": "8970fedabf17f47ceda9e26404b1588bd3d24d24323f69c3175718e6e5fab79a",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将语音转换为文字。\",\"en\":\"Converts speech to text.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 779,
+              "completion_tokens": 31,
+              "total_tokens": 810,
+              "prompt_tokens_details": {
+                "cached_tokens": 576
+              },
+              "neurons": 5.309088230133057
+            }
+          }
+        },
+        {
+          "caseId": "R-telegramtips",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 798,
+          "rawSha256": "d46c1a5d2bf9cff4905e7cabef4a23575f037dd40c0740e1bdfeaf14d35d34bf",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 827,
+              "completion_tokens": 10,
+              "total_tokens": 837,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.790909290313721
+            }
+          }
+        },
+        {
+          "caseId": "H-B3",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 505,
+          "rawSha256": "3ee07ef2b6dc0f9c6dd368536f70b5923f550ab3aeddcb8c0c54928710cd9f83",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}",
+                  "refusal": null,
+                  "annotations": null,
+                  "audio": null,
+                  "function_call": null,
+                  "reasoning": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "stop_reason": null,
+                "token_ids": null,
+                "routed_experts": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 772,
+              "completion_tokens": 10,
+              "total_tokens": 782,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.290909290313721
+            }
+          }
+        },
+        {
+          "caseId": "S-C1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1949,
+          "rawSha256": "333705b2fe2ec7cba9c58ec87ea1741de9916dbbe18e728a039a455c285e3395",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"分享开源图像编辑工具的操作教程，涵盖图层管理、批量调整图片尺寸及导出设置，并配有用于练习的示例文件。\",\"en\":\"Shares tutorials for open-source image editing tools, covering layer management, batch resizing, and export settings, with accompanying sample files for practice.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 844,
+              "completion_tokens": 77,
+              "total_tokens": 921,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 9.772727012634277
+            }
+          }
+        },
+        {
+          "caseId": "S-B1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2595,
+          "rawSha256": "f4bbc8a2605037fb15e6ae938fb728bc00f42d26c60ad18f32948c5816df8705",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将 PDF 文档转换为 JPG 或 PNG 图片，支持提取指定页码，并将多页图片打包成 ZIP 压缩包。单个文件上限 20MB，不支持加密文档。\",\"en\":\"Converts PDF documents to JPG or PNG images, allowing for specific page extraction and bundling multiple pages into a ZIP archive. Supports files up to 20MB; encrypted documents are not supported.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 800,
+              "completion_tokens": 98,
+              "total_tokens": 898,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 9.945454597473145
+            }
+          }
+        }
+      ]
+    },
+    {
+      "version": "v5",
+      "planHash": "b875b1704fcb431cc3db19c4e01922c96cd096e422a9c1a29b63a450155fa5c8",
+      "promptVersion": "summary-prompt-v5",
+      "paramsVersion": "summary-params-v3",
+      "rows": [
+        {
+          "caseId": "C6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 3552,
+          "rawSha256": "a09b9aff6b6846e82752df647eb6454242d181b76ff05e79d8158f8af0fe7989",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"从公开帖子来看，开源工具甲发布新版并增加了离线导出功能，另一则帖子讲解了开源工具乙的安装步骤与配置示例。\",\"en\":\"The available posts cover the new version of open-source tool A with added offline export functionality, and instructions for installing and configuring open-source tool B.\",\"refs\":[\"post:1\",\"post:2\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 959,
+              "completion_tokens": 89,
+              "total_tokens": 1048,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 11.145454406738281
+            }
+          }
+        },
+        {
+          "caseId": "G1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1826,
+          "rawSha256": "93de6461007f0a0da162e0234a882a8570c6ede055142e046c7622fea5b1a620",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"讨论 Python 编程与代码调试。\",\"en\":\"Discuss Python programming and code debugging.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 821,
+              "completion_tokens": 34,
+              "total_tokens": 855,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.390908241271973
+            }
+          }
+        },
+        {
+          "caseId": "G6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 807,
+          "rawSha256": "49a50c435564bd156c55433707bb80d3c45357830f25f017374a64f8752800f7",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"日语交流\",\"en\":\"Japanese language exchange.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 816,
+              "completion_tokens": 25,
+              "total_tokens": 841,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.09999942779541
+            }
+          }
+        },
+        {
+          "caseId": "B1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2065,
+          "rawSha256": "0fc487f4fcce2b002192b70bed826a499ffe86d63c9b10e51e6b6c90e2a14ff0",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将 PDF 文件转换成图片。\",\"en\":\"Converts PDF files into images.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 830,
+              "completion_tokens": 34,
+              "total_tokens": 864,
+              "prompt_tokens_details": {
+                "cached_tokens": 640
+              },
+              "neurons": 5.563633441925049
+            }
+          }
+        },
+        {
+          "caseId": "R-foursquare",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2328,
+          "rawSha256": "ec287fc05c6d7e78c0f5ad40cd7f1ccccd05be74744ec78856a70087443f77ad",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"用于查找附近的餐厅或其他地点，并将地址发送给好友。\",\"en\":\"Find nearby restaurants and other places, and send their addresses to friends.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 843,
+              "completion_tokens": 46,
+              "total_tokens": 889,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.918181419372559
+            }
+          }
+        },
+        {
+          "caseId": "B6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1038,
+          "rawSha256": "bbfabd97aa212dab3d6246f6daa24f58720158c81439ee727e309455a3bd86f4",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将语音转换为文字。\",\"en\":\"Converts voice to text.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 844,
+              "completion_tokens": 31,
+              "total_tokens": 875,
+              "prompt_tokens_details": {
+                "cached_tokens": 192
+              },
+              "neurons": 7.645453453063965
+            }
+          }
+        },
+        {
+          "caseId": "R-telegramtips",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 413,
+          "rawSha256": "4b27ed1993639791637a7377622944dc23f7fb24ec3aac13df743ad8ca62254c",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}",
+                  "refusal": null,
+                  "annotations": null,
+                  "audio": null,
+                  "function_call": null,
+                  "reasoning": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "stop_reason": null,
+                "token_ids": null,
+                "routed_experts": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 893,
+              "completion_tokens": 10,
+              "total_tokens": 903,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.390908241271973
+            }
+          }
+        },
+        {
+          "caseId": "H-B3",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 591,
+          "rawSha256": "e50cfadf18c9d14d1b5eeabc76c3d0a31bbe51eff929ae98b62e229ff85b1c86",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 836,
+              "completion_tokens": 10,
+              "total_tokens": 846,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.872727394104004
+            }
+          }
+        },
+        {
+          "caseId": "S-C1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2179,
+          "rawSha256": "a1d1353adf057f86193de37fa4075e6bdbe29a3e900a2718b02897eea026a890",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"分享开源图像编辑工具的操作教程，涵盖图层管理、批量调整图片尺寸及导出设置，并配有用于练习的示例文件。\",\"en\":\"Shares tutorials for open-source image editing tools, covering layer management, batch resizing, and export settings, with accompanying sample files for practice.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 909,
+              "completion_tokens": 77,
+              "total_tokens": 986,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 10.363636016845703
+            }
+          }
+        },
+        {
+          "caseId": "S-B1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2814,
+          "rawSha256": "3d8f31ae718b5e462e93cc9f302f59e0b5efaa944cc71c13fa5377435d13c782",
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将 PDF 文档转换为 JPG 或 PNG 图片，支持提取指定页码，并将多页图片打包成 ZIP 压缩包。单个文件上限为 20MB，不支持处理加密文档。\",\"en\":\"Converts PDF documents to JPG or PNG images, allowing for specific page extraction and bundling multiple pages into a ZIP archive. It supports files up to 20MB but cannot process encrypted documents.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 865,
+              "completion_tokens": 100,
+              "total_tokens": 965,
+              "prompt_tokens_details": {
+                "cached_tokens": 192
+              },
+              "neurons": 9.718180656433105
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "final": {
+    "promptVersion": "summary-prompt-v5",
+    "paramsVersion": "summary-params-v3",
+    "planHash": "b875b1704fcb431cc3db19c4e01922c96cd096e422a9c1a29b63a450155fa5c8",
+    "results": {
+      "planHash": "b875b1704fcb431cc3db19c4e01922c96cd096e422a9c1a29b63a450155fa5c8",
+      "provenance": "live",
+      "rows": [
+        {
+          "caseId": "C6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 3552,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"从公开帖子来看，开源工具甲发布新版并增加了离线导出功能，另一则帖子讲解了开源工具乙的安装步骤与配置示例。\",\"en\":\"The available posts cover the new version of open-source tool A with added offline export functionality, and instructions for installing and configuring open-source tool B.\",\"refs\":[\"post:1\",\"post:2\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 959,
+              "completion_tokens": 89,
+              "total_tokens": 1048,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 11.145454406738281
+            }
+          }
+        },
+        {
+          "caseId": "G1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1826,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"讨论 Python 编程与代码调试。\",\"en\":\"Discuss Python programming and code debugging.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 821,
+              "completion_tokens": 34,
+              "total_tokens": 855,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.390908241271973
+            }
+          }
+        },
+        {
+          "caseId": "G6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 807,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"日语交流\",\"en\":\"Japanese language exchange.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 816,
+              "completion_tokens": 25,
+              "total_tokens": 841,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.09999942779541
+            }
+          }
+        },
+        {
+          "caseId": "B1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2065,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将 PDF 文件转换成图片。\",\"en\":\"Converts PDF files into images.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 830,
+              "completion_tokens": 34,
+              "total_tokens": 864,
+              "prompt_tokens_details": {
+                "cached_tokens": 640
+              },
+              "neurons": 5.563633441925049
+            }
+          }
+        },
+        {
+          "caseId": "R-foursquare",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2328,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"用于查找附近的餐厅或其他地点，并将地址发送给好友。\",\"en\":\"Find nearby restaurants and other places, and send their addresses to friends.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 843,
+              "completion_tokens": 46,
+              "total_tokens": 889,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.918181419372559
+            }
+          }
+        },
+        {
+          "caseId": "B6",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 1038,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将语音转换为文字。\",\"en\":\"Converts voice to text.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 844,
+              "completion_tokens": 31,
+              "total_tokens": 875,
+              "prompt_tokens_details": {
+                "cached_tokens": 192
+              },
+              "neurons": 7.645453453063965
+            }
+          }
+        },
+        {
+          "caseId": "R-telegramtips",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 413,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}",
+                  "refusal": null,
+                  "annotations": null,
+                  "audio": null,
+                  "function_call": null,
+                  "reasoning": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop",
+                "stop_reason": null,
+                "token_ids": null,
+                "routed_experts": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 893,
+              "completion_tokens": 10,
+              "total_tokens": 903,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 8.390908241271973
+            }
+          }
+        },
+        {
+          "caseId": "H-B3",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 591,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"insufficient\",\"sentences\":[]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 836,
+              "completion_tokens": 10,
+              "total_tokens": 846,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 7.872727394104004
+            }
+          }
+        },
+        {
+          "caseId": "S-C1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2179,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"分享开源图像编辑工具的操作教程，涵盖图层管理、批量调整图片尺寸及导出设置，并配有用于练习的示例文件。\",\"en\":\"Shares tutorials for open-source image editing tools, covering layer management, batch resizing, and export settings, with accompanying sample files for practice.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 909,
+              "completion_tokens": 77,
+              "total_tokens": 986,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              },
+              "neurons": 10.363636016845703
+            }
+          }
+        },
+        {
+          "caseId": "S-B1",
+          "model": "@cf/google/gemma-4-26b-a4b-it",
+          "elapsedMs": 2814,
+          "response": {
+            "model": "@cf/google/gemma-4-26b-a4b-it-external",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "{\"status\":\"ok\",\"sentences\":[{\"zh\":\"可将 PDF 文档转换为 JPG 或 PNG 图片，支持提取指定页码，并将多页图片打包成 ZIP 压缩包。单个文件上限为 20MB，不支持处理加密文档。\",\"en\":\"Converts PDF documents to JPG or PNG images, allowing for specific page extraction and bundling multiple pages into a ZIP archive. It supports files up to 20MB but cannot process encrypted documents.\",\"refs\":[\"profile\"]}]}"
+                },
+                "finish_reason": "stop",
+                "logprobs": null
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 865,
+              "completion_tokens": 100,
+              "total_tokens": 965,
+              "prompt_tokens_details": {
+                "cached_tokens": 192
+              },
+              "neurons": 9.718180656433105
+            }
+          }
+        }
+      ]
+    },
+    "comparisons": [
+      {
+        "caseId": "C6",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "从公开帖子来看，开源工具甲发布新版并增加了离线导出功能，另一则帖子讲解了开源工具乙的安装步骤与配置示例。",
+              "en": "The available posts cover the new version of open-source tool A with added offline export functionality, and instructions for installing and configuring open-source tool B.",
+              "refs": ["post:1", "post:2"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 52,
+          "englishWords": 25
+        },
+        "zhHant": [
+          "從公開帖子來看，開源工具甲發佈新版並增加了離線導出功能，另一則帖子講解了開源工具乙的安裝步驟與配置示例。"
+        ]
+      },
+      {
+        "caseId": "G1",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "讨论 Python 编程与代码调试。",
+              "en": "Discuss Python programming and code debugging.",
+              "refs": ["profile"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 18,
+          "englishWords": 6
+        },
+        "zhHant": ["討論 Python 編程與代碼調試。"]
+      },
+      {
+        "caseId": "G6",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "日语交流",
+              "en": "Japanese language exchange.",
+              "refs": ["profile"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 4,
+          "englishWords": 3
+        },
+        "zhHant": ["日語交流"]
+      },
+      {
+        "caseId": "B1",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "可将 PDF 文件转换成图片。",
+              "en": "Converts PDF files into images.",
+              "refs": ["profile"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 15,
+          "englishWords": 5
+        },
+        "zhHant": ["可將 PDF 文件轉換成圖片。"]
+      },
+      {
+        "caseId": "R-foursquare",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "用于查找附近的餐厅或其他地点，并将地址发送给好友。",
+              "en": "Find nearby restaurants and other places, and send their addresses to friends.",
+              "refs": ["profile"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 25,
+          "englishWords": 12
+        },
+        "zhHant": ["用於查找附近的餐廳或其他地點，並將地址發送給好友。"]
+      },
+      {
+        "caseId": "B6",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "可将语音转换为文字。",
+              "en": "Converts voice to text.",
+              "refs": ["profile"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 10,
+          "englishWords": 4
+        },
+        "zhHant": ["可將語音轉換為文字。"]
+      },
+      {
+        "caseId": "R-telegramtips",
+        "expected": "insufficient",
+        "output": {
+          "status": "insufficient",
+          "sentences": []
+        },
+        "metrics": {
+          "zhCharacters": 0,
+          "englishWords": 0
+        },
+        "zhHant": []
+      },
+      {
+        "caseId": "H-B3",
+        "expected": "insufficient",
+        "output": {
+          "status": "insufficient",
+          "sentences": []
+        },
+        "metrics": {
+          "zhCharacters": 0,
+          "englishWords": 0
+        },
+        "zhHant": []
+      },
+      {
+        "caseId": "S-C1",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "分享开源图像编辑工具的操作教程，涵盖图层管理、批量调整图片尺寸及导出设置，并配有用于练习的示例文件。",
+              "en": "Shares tutorials for open-source image editing tools, covering layer management, batch resizing, and export settings, with accompanying sample files for practice.",
+              "refs": ["profile"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 50,
+          "englishWords": 21
+        },
+        "zhHant": [
+          "分享開源圖像編輯工具的操作教程，涵蓋圖層管理、批量調整圖片尺寸及導出設置，並配有用於練習的示例文件。"
+        ]
+      },
+      {
+        "caseId": "S-B1",
+        "expected": "ok",
+        "output": {
+          "status": "ok",
+          "sentences": [
+            {
+              "zh": "可将 PDF 文档转换为 JPG 或 PNG 图片，支持提取指定页码，并将多页图片打包成 ZIP 压缩包。单个文件上限为 20MB，不支持处理加密文档。",
+              "en": "Converts PDF documents to JPG or PNG images, allowing for specific page extraction and bundling multiple pages into a ZIP archive. It supports files up to 20MB but cannot process encrypted documents.",
+              "refs": ["profile"]
+            }
+          ]
+        },
+        "metrics": {
+          "zhCharacters": 76,
+          "englishWords": 32
+        },
+        "zhHant": [
+          "可將 PDF 文檔轉換為 JPG 或 PNG 圖片，支持提取指定頁碼，並將多頁圖片打包成 ZIP 壓縮包。單個文件上限為 20MB，不支持處理加密文檔。"
+        ]
+      }
+    ]
+  }
+}

@@ -1,6 +1,22 @@
 # 项目资料索引
 
-AI 资源摘要模块恢复先读 [STATE](ai-summary/STATE.md)，步骤三数据与异步任务见 [TASKS](ai-summary/TASKS.md)，步骤二契约见 [CONTRACTS](ai-summary/CONTRACTS.md)。按问题读取指定专题，禁止一次性读取全部文档与源码。
+当前恢复先读 [STATE](ai-summary/STATE.md)，最新为 [V7-REVIEW](ai-summary/V7-REVIEW.md)：Gemma v7在既有16条来源中完成三项定向修复，14次调用符合本批预期，步骤四按受审草稿范围完成。下一节点为后台人工控制，仍不自动发布、合并或部署。以下v6及更早说明为历史。
+
+最新提示词v6、实际输入—输出示例和边界回归见 [FEWSHOT](ai-summary/FEWSHOT.md)。按用户最新要求停止小模型评估，保持Gemma；以下v5及型号比较为历史。
+
+更大参数候选Llama70B、gpt-oss-120B的八次真实对照见 [LARGER-MODELS](ai-summary/LARGER-MODELS.md)：本批仍有套话，GPT还补写无依据群组活动，暂不更换默认模型。
+
+联网搜索已由用户取消。上一步研究草案与v5的四条真实输出对照见 [COMPARISON](ai-summary/COMPARISON.md)，新草案尚未达到介绍感目标，不替换v5。
+
+Workers AI联网补充资料的能力、计费前置条件及接入缺口见 [WEB-ENRICHMENT](ai-summary/WEB-ENRICHMENT.md)，目前仅可行性建议，未实施。
+
+最新“像人介绍资源”的案例研究与完整提示词草案见 [PROMPT-RESEARCH](ai-summary/PROMPT-RESEARCH.md)。草案未替换v5，未新增推理。
+
+AI 摘要最新提示词 v5、字数目标及真实前后对照见 [STYLE](ai-summary/STYLE.md)，旧 PILOT/QUALITY 保留各自版本边界。
+
+AI 摘要实际生成质量与页面增值评估见 [QUALITY](ai-summary/QUALITY.md)：结构与源文核对通过不等于内容增强目标通过。
+
+AI 资源摘要模块恢复先读 [STATE](ai-summary/STATE.md)，步骤四已选模型、真实小批结果及提示词版本见 [PILOT](ai-summary/PILOT.md)，接口与离线复算见 [MODELS](ai-summary/MODELS.md)，步骤三数据与异步任务见 [TASKS](ai-summary/TASKS.md)，步骤二契约见 [CONTRACTS](ai-summary/CONTRACTS.md)。按问题读取指定专题，禁止一次性读取全部文档与源码。
 
 头像 URL 协议相对地址导致的 Invalid URL 错误与修复见 [刷新状态](refresh-progress/STATE.md#2026-11-21-头像-url-兼容修复) 和 [补充计划](refresh-progress/PLAN.md#头像-url-兼容补充节点)。
 
