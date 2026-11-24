@@ -2,6 +2,8 @@
 
 ## 构建期间更新保护（2026-11-24）
 
+交付[PR #79](https://github.com/forfreek/tgbox/pull/79)，base=main；Worker/Admin类型检查、Worker dry-run、Admin生产构建通过，完整CI及生产修补证据待追加。
+
 上线复核补发现：旧AI发布/编辑/撤回沿用 `dirty_since ... ON CONFLICT DO NOTHING`，而构建完成会删除早于BUILD_STARTED_AT的标记。若构建开始前已有dirty、导出后AI又变化，旧时间戳会被清掉，下一次定时构建可能误判干净。新增的真实runtime回归在修复前得到null（标记丢失），复现成功。
 
 本节点 `codex/ai-summary-publication-dirty` 仅修改AI自动发布和人工发布/编辑/撤回的事务：内容实际变化时将时间戳单调推进到最新变更时刻；同内容重放不推进、旧时钟不倒退。既有构建清理、非AI业务的debounce及构建频率保持。新增四项构建竞态回归，Worker105项通过；Worker/Admin类型检查、构建及生产状态按本段后续证据核验。不触发模型、不改配额或人工记录。
