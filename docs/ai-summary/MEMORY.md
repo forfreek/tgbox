@@ -1,5 +1,9 @@
 # AI 资源摘要模块项目记忆
 
+AGENTS已同步2026-11-24机器稿校验后自动发布的新授权，避免未来恢复时套用旧人审门禁；配额、人工稿/锁定/撤回保护继续保留，自动投影不伪造人工审批。
+
+构建时序修补PR #79的代码01f032a全仓CI45409126181通过，生产Worker e550d4c3、Admin68e91ba4已更新；settings/人工记录/认证不变且无新推理。最新证据auto-publish-dirty-2026-11-24.json覆盖原上线版本快照，原auto-publish-activation证据保留首次全局展示验收边界。原工作树入口恢复指向本工作树STATE；后续观察仍不为验收补额度。
+
 构建时序修补独立PR #79，依赖已合并#77/#78；修复前自动发布回归实际失败，修复后105项通过，类型检查及两包构建通过。只有投影实际变化才推进dirty；全仓CI及生产版本以STATE/AUTO-PUBLISH核验，不以本地成功代替上线。
 
 2026-11-24 构建时序保护：AI变化写dirty时不能仅ON CONFLICT DO NOTHING，否则导出后变化仍持旧时间戳，被本次构建清除。只在实际投影变化时单调推进dirty时间，重复发布/抽检不推进；非AI markDirty的debounce不扩改。四项runtime回归覆盖自动发布及人工批准/编辑/撤回，修复前复现标记丢失，修复后Worker105项通过。当前分支codex/ai-summary-publication-dirty，生产修补结果查STATE及AUTO-PUBLISH。

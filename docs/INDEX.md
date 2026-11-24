@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-24 最新自动发布时序修补PR #79已部署Worker/Admin，105项及全仓CI45409126181通过；settings/131人工记录/认证保持，无新推理。恢复 `tgbox-ai-summary-auto-publish` 的STATE及AUTO-PUBLISH构建期间更新保护；记录证据仅按需读取。
+
 2026-11-24 自动发布上线复核发现构建期间AI变更的dirty时间戳问题，最新分支codex/ai-summary-publication-dirty，恢复先读STATE及[AUTO-PUBLISH](ai-summary/AUTO-PUBLISH.md#构建期间更新保护2026-11-24)。已复现并修补、105项Worker测试通过，生产修补待核验；此前自动发布已上线，配额和观察范围不变。
 
 2026-11-24 自动发布已上线，代码PR #77已合并，Worker/Admin/Web部署及配额、人工稿保护读回见[AUTO-PUBLISH](ai-summary/AUTO-PUBLISH.md#生产验收2026-11-24)。记录分支codex/ai-summary-auto-publish-records，工作树tgbox-ai-summary-auto-publish；当前触限等待，不增配额，新机器正向生产发布仍待恢复后观察。

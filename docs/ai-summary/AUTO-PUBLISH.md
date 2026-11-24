@@ -2,6 +2,8 @@
 
 ## 构建期间更新保护（2026-11-24）
 
+修补生产已部署：代码01f032a的[CI45409126181](https://github.com/forfreek/tgbox/actions/runs/45409126181)全仓检查/测试及脚本检查通过；Worker更新至e550d4c3-71b2-47a1-a513-650348a15c7a，Admin更新至68e91ba4-ab41-4982-93af-c9456b31a25f。自动发布=1、scope=all和空生成名单保持；settings全字段、131条人工记录版本/状态、Admin明文配置与secret名称均前后一致。今日60调用/6000固定预留未增加，未补模型调用。仅AI事务时间戳修补，网站仍消费此前已上线的全局投影协议；细节见[修补读回证据](evidence/auto-publish-dirty-2026-11-24.json)。记录文档随后随PR #79合入，不将修补上线等同新机器结果已生成。
+
 交付[PR #79](https://github.com/forfreek/tgbox/pull/79)，base=main；Worker/Admin类型检查、Worker dry-run、Admin生产构建通过，完整CI及生产修补证据待追加。
 
 上线复核补发现：旧AI发布/编辑/撤回沿用 `dirty_since ... ON CONFLICT DO NOTHING`，而构建完成会删除早于BUILD_STARTED_AT的标记。若构建开始前已有dirty、导出后AI又变化，旧时间戳会被清掉，下一次定时构建可能误判干净。新增的真实runtime回归在修复前得到null（标记丢失），复现成功。

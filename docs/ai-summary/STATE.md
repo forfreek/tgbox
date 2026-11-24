@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+2026-11-24 构建时序修补PR #79代码01f032a全仓CI45409126181通过，Worker e550d4c3 / Admin68e91ba4已生产更新，自动发布=1、all范围保持。配额100/6000/100/1、131人工记录及认证逐项保持；今日60次固定预留6000未增加。当前分支codex/ai-summary-publication-dirty，本次只补上线记录并合入PR，无需再部署模型服务。入口AUTO-PUBLISH与auto-publish-dirty证据；未发生新机器正向发布，继续等待原配额恢复与观察。
+
 构建期间AI更新保护[PR #79](https://github.com/forfreek/tgbox/pull/79)，base=main。四项新回归及Worker105项、Worker/Admin类型检查、Worker dry-run、Admin构建通过；完整CI与生产修补待核验。仅三处AI事务时间戳逻辑变化，不调配额、不重推模型，原自动发布保持开启。
 
 2026-11-24 上线复核补充：当前同一工作树分支 `codex/ai-summary-publication-dirty`，base包含已合并的记录PR #78。发现构建中AI变更可能被旧dirty时间戳清除，已用失败回归复现并修复，限AI发布/编辑/撤回事务，105项Worker测试通过。下一步独立PR、全仓CI、Worker/Admin修补部署及配额保护读回；详见AUTO-PUBLISH构建期间更新保护。当前生产自动发布仍开启，不重新推理或调额。
