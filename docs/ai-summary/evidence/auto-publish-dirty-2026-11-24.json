@@ -1,0 +1,54 @@
+{
+  "verifiedAt": "2026-11-24T14:03:46.588Z",
+  "pr": 79,
+  "codeCommit": "01f032a0c7a93f911d0910e8e21f08ef647686b9",
+  "ci": 45409126181,
+  "ciConclusion": "success",
+  "tests": 105,
+  "regressionBeforeFix": "dirty flag incorrectly removed; expected timestamp but got null",
+  "regressionAfterFix": "automatic publication and manual approve/edit/withdraw all preserve next build",
+  "workerVersion": "e550d4c3-71b2-47a1-a513-650348a15c7a",
+  "adminVersion": "68e91ba4-ab41-4982-93af-c9456b31a25f",
+  "workerVars": [
+    {
+      "name": "AI_SUMMARY_AUTO_PUBLISH",
+      "text": "1",
+      "type": "plain_text"
+    },
+    {
+      "name": "AI_SUMMARY_ENTRY_IDS",
+      "text": "",
+      "type": "plain_text"
+    },
+    {
+      "name": "AI_SUMMARY_SCOPE",
+      "text": "all",
+      "type": "plain_text"
+    }
+  ],
+  "settings": {
+    "id": 1,
+    "enabled": 1,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "prompt_version": "summary-prompt-v8",
+    "params_version": "summary-params-v3",
+    "daily_calls": 100,
+    "daily_neurons": 6000,
+    "reservation": 100,
+    "max_attempts": 1,
+    "auto_scan": 1
+  },
+  "settingsUnchanged": true,
+  "humanReviews": {
+    "count": 131,
+    "versionsAndStatusesUnchanged": true
+  },
+  "adminPlainTextUnchanged": true,
+  "adminSecretNamesUnchanged": true,
+  "ledger": {
+    "calls": 60,
+    "reserved": 6000
+  },
+  "reservationIsNotActualUsage": true,
+  "noAdditionalInference": true
+}

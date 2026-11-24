@@ -304,6 +304,37 @@ test("publication sweep reuses existing machine revisions even with scanning pau
   expect(await db.select().from(aiSummaryAttempts)).toHaveLength(1);
 });
 
+test("publication during a build survives clearing the older dirty flag", async () => {
+  const id = await entry();
+  const message = await queued(id);
+  await env.DB.prepare("INSERT OR REPLACE INTO site_state(key,value) VALUES('dirty_since',?)")
+    .bind(String(NOW - 1000))
+    .run();
+  await consumeSummaryMessage(
+    db,
+    env.MEDIA,
+    message,
+    () => NOW,
+    async () => output,
+    Math.random,
+    undefined,
+    true,
+  );
+  // The snapshot began before this publication; its cleanup must leave a subsequent build due.
+  await env.DB.prepare(
+    "DELETE FROM site_state WHERE key='dirty_since' AND CAST(value AS INTEGER)<?",
+  )
+    .bind(NOW - 1)
+    .run();
+  expect(
+    await env.DB.prepare("SELECT value FROM site_state WHERE key='dirty_since'").first(),
+  ).toEqual({ value: String(NOW) });
+  await publishSummaryEntry(db, env.MEDIA, id, NOW + 1000);
+  expect(
+    await env.DB.prepare("SELECT value FROM site_state WHERE key='dirty_since'").first(),
+  ).toEqual({ value: String(NOW) });
+});
+
 test.each(["locked", "d1", "r2", "invalid", "insufficient", "config"])(
   "automatic publication rejects %s without inference",
   async (mode) => {

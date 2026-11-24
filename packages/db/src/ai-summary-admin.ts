@@ -247,7 +247,8 @@ export async function changeSummaryReview(
         .prepare(`INSERT INTO site_state(key,value)
       SELECT 'dirty_since',? WHERE EXISTS(SELECT 1 FROM (${candidate}) n LEFT JOIN ai_summary_public p ON p.entry_id=n.entry_id
         WHERE p.entry_id IS NULL OR p.zh IS NOT n.zh OR p.hant IS NOT n.hant OR p.en IS NOT n.en
-        OR p.fingerprint IS NOT n.fingerprint OR p.contract_version!=1) ON CONFLICT(key) DO NOTHING`)
+        OR p.fingerprint IS NOT n.fingerprint OR p.contract_version!=1) ON CONFLICT(key) DO UPDATE SET value=excluded.value
+        WHERE CAST(site_state.value AS INTEGER)<CAST(excluded.value AS INTEGER)`)
         .bind(String(now), token),
     );
     statements.push(
@@ -266,7 +267,8 @@ export async function changeSummaryReview(
       db.$client
         .prepare(`INSERT INTO site_state(key,value) SELECT 'dirty_since',?
       WHERE EXISTS(SELECT 1 FROM ai_summary_public p JOIN ai_summary_sources s ON s.entry_id=p.entry_id
-      WHERE s.observation_token=?) ON CONFLICT(key) DO NOTHING`)
+      WHERE s.observation_token=?) ON CONFLICT(key) DO UPDATE SET value=excluded.value
+      WHERE CAST(site_state.value AS INTEGER)<CAST(excluded.value AS INTEGER)`)
         .bind(String(now), token),
     );
     statements.push(
