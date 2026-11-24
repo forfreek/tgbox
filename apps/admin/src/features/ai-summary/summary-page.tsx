@@ -24,9 +24,9 @@ import {
 
 const filters = [
   ["all", "全部"],
-  ["pending", "待审草稿"],
+  ["pending", "未发布稿"],
   ["failed", "失败或待处理"],
-  ["approved", "已批准"],
+  ["approved", "已发布到构建"],
   ["locked", "已锁定"],
   ["sample", "抽检：未检优先"],
 ] as const;
@@ -48,6 +48,7 @@ const states: Record<string, string> = {
   failed: "失败",
   draft: "待人工审核",
   approved: "已批准",
+  auto_published: "已自动发布到构建",
   withdrawn: "已撤回",
 };
 const reasons: Record<string, string> = {
@@ -60,7 +61,7 @@ const reasons: Record<string, string> = {
   source_parse_error: "来源格式有误",
   unsupported_config: "任务配置不在已验证范围",
   generation_paused: "生成已暂停",
-  quota_or_policy: "配额或执行策略限制",
+  quota_or_policy: "等待日配额恢复",
   source_conflict: "来源存在冲突",
   ambiguous_scope: "资源用途不明确",
   lease_expired: "上次执行中断",
@@ -77,7 +78,7 @@ export function SummaryPage() {
   const query = useQuery(summaryOverviewOptions(filter, before));
   const command = useMutation({
     mutationFn: (data: SummaryAction) => $summaryCommand({ data }),
-    onSuccess: () => setNotice("已保存。白名单内已批准的内容将在后续网站构建后生效。"),
+    onSuccess: () => setNotice("已保存。发布或撤回将在后续网站构建后生效。"),
     onError: (e) => {
       setNotice(e.message);
       noticeRef.current?.focus();
@@ -219,7 +220,8 @@ export function SummaryPage() {
                 >
                   查看与审核
                 </DialogTrigger>
-                {row.job_status === "failed" || row.job_status === "retry_wait" ? (
+                {row.job_status === "failed" ||
+                (row.job_status === "retry_wait" && row.reason !== "quota_or_policy") ? (
                   <Button
                     type="button"
                     variant="outline"
@@ -338,7 +340,7 @@ function ConfigForm({
           </select>
         </div>
         <p className="text-muted-foreground text-sm">
-          当前固定提示词 v7。今日已预留 {view.usage?.calls ?? 0} 次调用、{view.usage?.neurons ?? 0}{" "}
+          当前固定提示词 v8。今日已预留 {view.usage?.calls ?? 0} 次调用、{view.usage?.neurons ?? 0}{" "}
           Neurons；预留预算不是实际账单。
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -560,7 +562,7 @@ function Draft({
           ))}
         </div>
         <p className="text-muted-foreground text-sm">
-          核对事实、重要限制及整页重复内容。中文最多120字，英文最多90词。保存会撤销旧批准；白名单内已批准的内容将在后续网站构建后展示。
+          自动生成内容通过校验后进入网站构建。人工保存会锁定并撤回当前发布，需批准后重新展示。中文最多120字，英文最多90词。
         </p>
         <Button type="submit" disabled={busy || !evidence.success}>
           保存三语草稿并锁定
@@ -584,15 +586,15 @@ function Draft({
         <Button
           type="button"
           variant="outline"
-          disabled={busy || !saved}
+          disabled={busy || (!saved && detail.publicContract !== 2)}
           onClick={() => act({ action: "withdraw", ...base })}
         >
-          撤回批准
+          撤回发布
         </Button>
         <Button
           type="button"
           variant="outline"
-          disabled={busy || saved?.status !== "approved"}
+          disabled={busy || (saved?.status !== "approved" && detail.publicContract !== 2)}
           onClick={() => act({ action: "sample", ...base })}
         >
           标记已抽检

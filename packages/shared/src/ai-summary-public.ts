@@ -19,3 +19,6 @@ export const PublicSummary = PublicSummaryText.extend({
   fingerprint: z.string().regex(/^sha256:[a-f0-9]{64}$/),
   contractVersion: z.literal(AI_SUMMARY_PUBLIC_VERSION),
 });
+
+/** Machine projection: hant is a zh placeholder, converted only by the static build. */
+export const AutomaticPublicSummary = PublicSummary.extend({ contractVersion: z.literal(2) });

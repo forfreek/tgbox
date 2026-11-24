@@ -98,9 +98,31 @@ test("all 50 approved rollout projections are consumed, including IDs beyond the
     expect(summaries.size).toBe(50);
     expect(summaries.has(50)).toBe(true);
     expect(summaries.has(51)).toBe(false);
+    f.db.prepare("UPDATE ai_summary_public SET contract_version=2 WHERE entry_id=51").run();
+    const global = await readPublicSummaries(f.db, [], f.read, f.db, true);
+    expect(global.size).toBe(51);
+    expect(global.get(51)?.hant).toBe("分享軟件說明。");
   } finally {
     f.db.close();
   }
+});
+
+test("global machine projection derives hant, preserves human hant and rolls back when disabled", async () => {
+  const f = await fixture();
+  f.db.exec("UPDATE ai_summary_public SET contract_version=2,hant=zh WHERE entry_id=1");
+  f.db.exec("UPDATE ai_summary_public SET hant='人工繁中保留。' WHERE entry_id=2");
+  expect((await readPublicSummaries(f.db, [1, 2], f.read)).has(1)).toBe(false);
+  const all = await readPublicSummaries(f.db, [], f.read, f.db, true);
+  expect(all.get(1)?.hant).toBe("分享軟件說明。");
+  expect(all.get(2)?.hant).toBe("人工繁中保留。");
+  f.db.close();
+  const site = await buildSiteData({
+    dbPath: f.file,
+    readMedia: f.read,
+    now: fixtureNow,
+    summaryAll: true,
+  });
+  expect(site.entries.every((e) => e.aiSummary !== null)).toBe(true);
 });
 test("stats and views do not invalidate but changed visible posts do", async () => {
   const f = await fixture();

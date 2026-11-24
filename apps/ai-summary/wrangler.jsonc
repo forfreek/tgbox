@@ -6,7 +6,11 @@
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
   "preview_urls": false,
-  "vars": { "AI_SUMMARY_SCOPE": "selected", "AI_SUMMARY_ENTRY_IDS": "" },
+  "vars": {
+    "AI_SUMMARY_SCOPE": "selected",
+    "AI_SUMMARY_ENTRY_IDS": "",
+    "AI_SUMMARY_AUTO_PUBLISH": "0"
+  },
   "observability": { "enabled": true, "traces": { "enabled": true } },
   "triggers": { "crons": ["*/5 * * * *"] },
   "d1_databases": [

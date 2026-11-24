@@ -1,6 +1,7 @@
 import { createDb } from "@tgbox/db";
 import { SUMMARY_PARAMS_VERSION, SUMMARY_PROMPT_VERSION } from "@tgbox/shared";
 import { createSummaryModel } from "./models.ts";
+import { sweepSummaryPublication } from "./publish.ts";
 import { summaryGenerationScope } from "./scope.ts";
 import {
   consumeSummaryDlq,
@@ -23,6 +24,14 @@ export default {
       Date.now,
       summaryGenerationScope(env.AI_SUMMARY_SCOPE, env.AI_SUMMARY_ENTRY_IDS),
     );
+    if (env.AI_SUMMARY_AUTO_PUBLISH === "1") {
+      await sweepSummaryPublication(
+        createDb(env.DB),
+        env.MEDIA,
+        Date.now,
+        summaryGenerationScope(env.AI_SUMMARY_SCOPE, env.AI_SUMMARY_ENTRY_IDS),
+      );
+    }
   },
   async queue(batch, env) {
     const db = createDb(env.DB);
@@ -71,6 +80,7 @@ export default {
             }),
             Math.random,
             summaryGenerationScope(env.AI_SUMMARY_SCOPE, env.AI_SUMMARY_ENTRY_IDS),
+            env.AI_SUMMARY_AUTO_PUBLISH === "1",
           );
         }
         message.ack();

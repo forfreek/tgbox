@@ -165,7 +165,26 @@ export async function summaryCommand(core: CoreContext, media: Media, raw: unkno
   }
   const detail = await summaryAdminDetail(core.db, data.entryId);
   if (!detail.source) throw new Error("请先预检并生成该条目");
-  if (["approve", "withdraw", "sample"].includes(data.action) && !detail.review)
+  if (data.action === "sample" && !detail.review && detail.publicContract === 2) {
+    const { sampleAutomaticSummary } = await import("@tgbox/db");
+    if (
+      !(await sampleAutomaticSummary(
+        core.db,
+        data.entryId,
+        data.expectedVersion,
+        data.observationToken,
+        actor,
+        core.now(),
+      ))
+    )
+      throw new Error("摘要版本已变化，请刷新后重试");
+    return { ok: true };
+  }
+  if (
+    ["approve", "withdraw", "sample"].includes(data.action) &&
+    !detail.review &&
+    !(data.action === "withdraw" && detail.publicContract === 2)
+  )
     throw new Error("请先保存三语草稿");
   if (data.action === "sample" && detail.review?.status !== "approved")
     throw new Error("仅可对已批准内容标记抽检");

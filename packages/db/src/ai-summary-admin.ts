@@ -20,7 +20,7 @@ export type SummaryReview = {
   sampled_at: number | null;
 };
 export async function summaryAdminDetail(db: Db, entryId: number) {
-  const [entry, source, revisions, review] = await Promise.all([
+  const [entry, source, revisions, review, publication] = await Promise.all([
     readSummaryEntry(db, entryId),
     getSummarySource(db, entryId),
     listSummaryRevisions(db, entryId),
@@ -28,8 +28,18 @@ export async function summaryAdminDetail(db: Db, entryId: number) {
       .prepare("SELECT * FROM ai_summary_reviews WHERE entry_id=?")
       .bind(entryId)
       .first<SummaryReview>(),
+    db.$client
+      .prepare("SELECT contract_version FROM ai_summary_public WHERE entry_id=?")
+      .bind(entryId)
+      .first<{ contract_version: number }>(),
   ]);
-  return { entry, source: source ?? null, revisions, review };
+  return {
+    entry,
+    source: source ?? null,
+    revisions,
+    review,
+    publicContract: publication?.contract_version ?? null,
+  };
 }
 export type SummaryListRow = {
   id: number;
@@ -45,21 +55,24 @@ export type SummaryListRow = {
 export async function listSummaryAdmin(db: Db, filter: string, before: number) {
   const condition = {
     all: "1=1",
-    pending: "j.status='succeeded' AND coalesce(r.status,'draft')='draft'",
-    failed: "j.status IN ('failed','retry_wait','blocked')",
-    approved: "r.status='approved'",
+    pending: "j.status='succeeded' AND coalesce(r.status,'draft')='draft' AND p.entry_id IS NULL",
+    failed:
+      "(j.status IN ('failed','blocked') OR (j.status='retry_wait' AND coalesce(j.reason,'')!='quota_or_policy'))",
+    approved: "p.entry_id IS NOT NULL",
     locked: "s.locked=1",
-    sample: "r.status='approved'",
+    sample: "p.entry_id IS NOT NULL",
   }[filter];
   if (!condition) throw new Error("Invalid filter");
   const rows = await db.$client
     .prepare(`SELECT e.id,e.username,e.title,e.kind,coalesce(s.locked,0) AS locked,
-    j.status AS job_status,j.reason,r.status AS review_status,r.sampled_at
+    j.status AS job_status,j.reason,coalesce(r.status,CASE WHEN p.contract_version=2 THEN 'auto_published' END) AS review_status,
+    coalesce(r.sampled_at,(SELECT max(created_at) FROM audit_log WHERE action='ai_summary.auto_sample' AND target=cast(e.id AS TEXT))) AS sampled_at
     FROM entries e LEFT JOIN ai_summary_sources s ON s.entry_id=e.id
     LEFT JOIN ai_summary_jobs j ON j.id=(SELECT id FROM ai_summary_jobs WHERE entry_id=e.id ORDER BY created_at DESC,id DESC LIMIT 1)
     LEFT JOIN ai_summary_reviews r ON r.entry_id=e.id
+    LEFT JOIN ai_summary_public p ON p.entry_id=e.id
     WHERE e.status='approved' AND e.id<? AND ${condition}
-    ORDER BY ${filter === "sample" ? "coalesce(r.sampled_at,0) ASC," : ""} e.id DESC LIMIT 21`)
+    ORDER BY ${filter === "sample" ? "sampled_at ASC," : ""} e.id DESC LIMIT 21`)
     .bind(before)
     .all<SummaryListRow>();
   return {
@@ -187,6 +200,17 @@ export async function changeSummaryReview(
         ),
     );
   } else if (["approve", "withdraw", "sample"].includes(data.action)) {
+    if (data.action === "withdraw")
+      statements.push(
+        db.$client
+          .prepare(`INSERT OR IGNORE INTO ai_summary_reviews
+      (entry_id,revision_id,zh,hant,en,status,version,actor,updated_at)
+      SELECT p.entry_id,(SELECT r.id FROM ai_summary_revisions r JOIN ai_summary_jobs j ON j.id=r.job_id
+        WHERE r.entry_id=p.entry_id AND j.fingerprint=p.fingerprint AND j.status='succeeded' ORDER BY r.created_at DESC LIMIT 1),
+      p.zh,p.hant,p.en,'withdrawn',s.edit_version,?,? FROM ai_summary_public p
+      JOIN ai_summary_sources s ON s.entry_id=p.entry_id WHERE s.observation_token=? AND p.contract_version=2`)
+          .bind(actor, now, token),
+      );
     statements.push(
       db.$client
         .prepare(`UPDATE ai_summary_reviews SET status=CASE WHEN ?='approve' THEN 'approved' WHEN ?='withdraw' THEN 'withdrawn' ELSE status END,
@@ -254,6 +278,26 @@ export async function changeSummaryReview(
   }
   const result = await db.$client.batch(statements);
   return result[0]?.meta.changes === 1;
+}
+
+/** Sampling a machine publication must not freeze it or increment the inference generation. */
+export async function sampleAutomaticSummary(
+  db: Db,
+  entryId: number,
+  version: number,
+  observationToken: string,
+  actor: string,
+  now: number,
+) {
+  const result = await db.$client
+    .prepare(`INSERT INTO audit_log(actor,action,target,payload,created_at)
+    SELECT ?,'ai_summary.auto_sample',cast(s.entry_id AS TEXT),json_object('fingerprint',p.fingerprint),?
+    FROM ai_summary_sources s JOIN ai_summary_public p ON p.entry_id=s.entry_id
+    WHERE s.entry_id=? AND s.edit_version=? AND s.observation_token=? AND p.contract_version=2
+    AND NOT EXISTS(SELECT 1 FROM ai_summary_reviews r WHERE r.entry_id=s.entry_id)`)
+    .bind(actor, now, entryId, version, observationToken)
+    .run();
+  return result.meta.changes === 1;
 }
 export async function retrySummaryJob(db: Db, entryId: number, actor: string, now: number) {
   const token = crypto.randomUUID();

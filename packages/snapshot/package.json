@@ -21,6 +21,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "catalog:",
     "@tgbox/db": "workspace:*",
+    "@tgbox/hant": "workspace:*",
     "@tgbox/shared": "workspace:*"
   },
   "bin": {

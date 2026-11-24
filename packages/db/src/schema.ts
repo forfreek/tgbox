@@ -159,6 +159,7 @@ export const aiSummaryPublic = sqliteTable("ai_summary_public", {
   hant: text().notNull(),
   en: text().notNull(),
   fingerprint: text().notNull(),
+  // 1 = human three-language text; 2 = machine zh/en with hant derived during static build.
   contractVersion: integer("contract_version").notNull().default(1),
 });
 
