@@ -23,6 +23,7 @@ import {
 } from "@tgbox/db";
 import { beforeEach, expect, test, vi } from "vitest";
 import worker from "../src/index.ts";
+import { publishSummaryEntry, sweepSummaryPublication } from "../src/publish.ts";
 import { observeEntry } from "../src/sources.ts";
 import {
   consumeSummaryDlq,
@@ -240,6 +241,111 @@ test("migration defaults disable generation and enabled mock pipeline writes one
   expect((await getSummaryJob(db, message.jobId))?.status).toBe("succeeded");
   expect(await listSummaryRevisions(db, id)).toMatchObject([{ reviewStatus: "pending" }]);
 });
+
+test("opt-in auto publication is idempotent, dirties the site and preserves quotas without locking", async () => {
+  const id = await entry();
+  const message = await queued(id);
+  const config = await getSummaryConfig(db);
+  const model = vi.fn(async () => output);
+  await consumeSummaryMessage(
+    db,
+    env.MEDIA,
+    message,
+    () => NOW,
+    model,
+    Math.random,
+    undefined,
+    true,
+  );
+  expect((await getSummaryJob(db, message.jobId))?.status).toBe("succeeded");
+  expect(
+    await env.DB.prepare("SELECT zh,contract_version FROM ai_summary_public WHERE entry_id=?")
+      .bind(id)
+      .first(),
+  ).toEqual({ zh: "支持语音转为文字。", contract_version: 2 });
+  expect(await env.DB.prepare("SELECT * FROM ai_summary_reviews").first()).toBeNull();
+  expect((await getSummarySource(db, id))?.locked).toBe(false);
+  await env.DB.prepare("DELETE FROM site_state WHERE key='dirty_since'").run();
+  await Promise.all([
+    publishSummaryEntry(db, env.MEDIA, id, NOW),
+    publishSummaryEntry(db, env.MEDIA, id, NOW),
+  ]);
+  await consumeSummaryMessage(
+    db,
+    env.MEDIA,
+    message,
+    () => NOW,
+    model,
+    Math.random,
+    undefined,
+    true,
+  );
+  expect(
+    await env.DB.prepare("SELECT * FROM site_state WHERE key='dirty_since'").first(),
+  ).toBeNull();
+  expect(model).toHaveBeenCalledTimes(1);
+  expect(await getSummaryConfig(db)).toEqual(config);
+});
+
+test("publication sweep reuses existing machine revisions even with scanning paused and daily budget exhausted", async () => {
+  const id = await entry();
+  const message = await queued(id);
+  const model = vi.fn(async () => output);
+  await consumeSummaryMessage(db, env.MEDIA, message, () => NOW, model);
+  expect(await env.DB.prepare("SELECT * FROM ai_summary_public").first()).toBeNull();
+  await env.DB.prepare(
+    "UPDATE ai_summary_settings SET auto_scan=0,daily_neurons=0 WHERE id=1",
+  ).run();
+  await sweepSummaryPublication(db, env.MEDIA, () => NOW);
+  expect(
+    await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?").bind(id).first(),
+  ).not.toBeNull();
+  expect(model).toHaveBeenCalledTimes(1);
+  expect(await db.select().from(aiSummaryAttempts)).toHaveLength(1);
+});
+
+test.each(["locked", "d1", "r2", "invalid", "insufficient", "config"])(
+  "automatic publication rejects %s without inference",
+  async (mode) => {
+    const id = await entry("publish_channel", "支持语音转为文字", "channel");
+    await env.MEDIA.put(
+      "posts/publish_channel.json",
+      JSON.stringify([{ id: 1, date: "2026-11-22T00:00:00Z", text: "语音识别说明", views: 1 }]),
+    );
+    const message = await queued(id);
+    await consumeSummaryMessage(
+      db,
+      env.MEDIA,
+      message,
+      () => NOW,
+      async () => output,
+    );
+    if (mode === "locked")
+      await env.DB.prepare("UPDATE ai_summary_sources SET locked=1 WHERE entry_id=?")
+        .bind(id)
+        .run();
+    if (mode === "d1")
+      await env.DB.prepare("UPDATE entries SET description='新用途' WHERE id=?").bind(id).run();
+    if (mode === "r2") await env.MEDIA.put("posts/publish_channel.json", "[]");
+    if (mode === "invalid")
+      await env.DB.prepare("UPDATE ai_summary_revisions SET output='{}' WHERE entry_id=?")
+        .bind(id)
+        .run();
+    if (mode === "insufficient")
+      await env.DB.prepare(
+        `UPDATE ai_summary_revisions SET output='{"status":"insufficient","reason":"no_substantive_evidence"}' WHERE entry_id=?`,
+      )
+        .bind(id)
+        .run();
+    if (mode === "config")
+      await env.DB.prepare("UPDATE ai_summary_settings SET prompt_version='old' WHERE id=1").run();
+    await publishSummaryEntry(db, env.MEDIA, id, NOW);
+    expect(
+      await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?").bind(id).first(),
+    ).toBeNull();
+    expect(await db.select().from(aiSummaryAttempts)).toHaveLength(1);
+  },
+);
 
 test("duplicate delivery and overlapping consumers infer once", async () => {
   const message = await queued(await entry());

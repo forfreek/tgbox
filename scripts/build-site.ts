@@ -84,7 +84,10 @@ if (values.remote) {
     ...tables,
     "--skip-confirmation",
   ]);
-  if (summaryEntryIds(process.env.AI_SUMMARY_ENTRY_IDS).length) {
+  if (
+    process.env.AI_SUMMARY_AUTO_PUBLISH === "1" ||
+    summaryEntryIds(process.env.AI_SUMMARY_ENTRY_IDS).length
+  ) {
     const extra = await optionalSummaryExport(
       path.join(dataDir, "ai-summary-public.sql"),
       (file) => {

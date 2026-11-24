@@ -20,6 +20,7 @@ import {
   validateAiSummaryOutput,
 } from "@tgbox/shared";
 import { z } from "zod";
+import { publishSummaryEntry } from "./publish.ts";
 import { observeEntry } from "./sources.ts";
 
 export const SummaryMessage = z.strictObject({
@@ -94,6 +95,7 @@ export async function consumeSummaryMessage(
   model?: SummaryModel,
   random = Math.random,
   scope?: readonly number[],
+  autoPublish = false,
 ) {
   const message = SummaryMessage.parse(raw);
   if (scope && !scope.includes(message.entryId)) return;
@@ -178,6 +180,7 @@ export async function consumeSummaryMessage(
     const delay = Math.min(21_600_000, 30_000 * 2 ** job.attempts) + Math.floor(random() * 30_000);
     await failSummaryJob(db, job, now(), "inference_failed", delay);
   }
+  if (autoPublish) await publishSummaryEntry(db, media, job.entryId, now());
 }
 
 export async function consumeSummaryDlq(db: Db, raw: unknown, now: number) {

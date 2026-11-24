@@ -574,6 +574,9 @@ importers:
       '@tgbox/db':
         specifier: workspace:*
         version: link:../db
+      '@tgbox/hant':
+        specifier: workspace:*
+        version: link:../hant
       '@tgbox/shared':
         specifier: workspace:*
         version: link:../shared

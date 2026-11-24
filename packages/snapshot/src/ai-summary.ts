@@ -1,7 +1,9 @@
 import type { DatabaseSync } from "node:sqlite";
 import { summaryEntryQuery } from "@tgbox/db";
+import { toHant } from "@tgbox/hant";
 import {
   AiSummarySourceInput,
+  AutomaticPublicSummary,
   aiSummaryFingerprint,
   PostView,
   PublicSummary,
@@ -52,11 +54,14 @@ export async function readPublicSummaries(
   ids: readonly number[] | undefined,
   readMedia: (key: string) => Promise<unknown>,
   projectionDb: DatabaseSync | null = db,
+  all = false,
 ) {
   const summaries = new Map<number, ReturnType<typeof PublicSummaryText.parse>>();
-  if (!ids?.length || !projectionDb) return summaries;
+  if (!projectionDb) return summaries;
+  const selected = all ? publicSummaryIds(projectionDb) : ids?.slice(0, SUMMARY_ROLLOUT_LIMIT);
+  if (!selected?.length) return summaries;
   // Per-ID reads avoid loading unselected texts. Any optional AI failure leaves the old summary.
-  for (const id of new Set(ids.slice(0, SUMMARY_ROLLOUT_LIMIT))) {
+  for (const id of new Set(selected)) {
     if (!Number.isSafeInteger(id) || id <= 0) continue;
     try {
       const row = projectionDb
@@ -64,7 +69,9 @@ export async function readPublicSummaries(
           "SELECT zh,hant,en,fingerprint,contract_version AS contractVersion FROM ai_summary_public WHERE entry_id=?",
         )
         .get(id);
-      const parsed = PublicSummary.safeParse(row);
+      // v1 contains human-controlled hant. v2 derives hant at build time, never in Workers.
+      const machine = all && row?.contractVersion === 2;
+      const parsed = machine ? AutomaticPublicSummary.safeParse(row) : PublicSummary.safeParse(row);
       if (!parsed.success) continue;
       const source = await snapshotSummarySource(db, id, readMedia);
       if (!source) continue;
@@ -75,11 +82,28 @@ export async function readPublicSummaries(
       if (fingerprint !== parsed.data.fingerprint) continue;
       summaries.set(
         id,
-        PublicSummaryText.parse({ zh: parsed.data.zh, hant: parsed.data.hant, en: parsed.data.en }),
+        PublicSummaryText.parse({
+          zh: parsed.data.zh,
+          hant: machine ? toHant(parsed.data.zh) : parsed.data.hant,
+          en: parsed.data.en,
+        }),
       );
     } catch {
       /* Missing table, malformed row, stale/failed source: optional per-entry fallback. */
     }
   }
   return summaries;
+}
+
+export function publicSummaryIds(db: DatabaseSync | null): number[] {
+  try {
+    return db
+      ? db
+          .prepare("SELECT entry_id FROM ai_summary_public ORDER BY entry_id")
+          .all()
+          .map((r) => Number(r.entry_id))
+      : [];
+  } catch {
+    return [];
+  }
 }

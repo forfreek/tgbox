@@ -20,6 +20,7 @@ import {
 } from "../../admin/src/server/ai-summary.ts";
 import worker from "../src/index.ts";
 import { createSummaryModel } from "../src/models.ts";
+import { publishSummaryEntry } from "../src/publish.ts";
 import { observeEntry } from "../src/sources.ts";
 import {
   consumeSummaryMessage,
@@ -146,6 +147,73 @@ test("preflight is read-only, selected generation is idempotent and does not inf
       .success,
   ).toBe(false);
   expect(SummaryBatch.safeParse({ ids: [id, id], generate: true }).success).toBe(false);
+});
+
+test("machine publications appear in published and sampling lists; sampling keeps automatic updates enabled", async () => {
+  const { id } = await draft();
+  await publishSummaryEntry(db, env.MEDIA, id, NOW);
+  expect((await summaryAdminDetail(db, id)).publicContract).toBe(2);
+  expect(
+    (await listSummaryAdmin(db, "approved", Number.MAX_SAFE_INTEGER)).rows[0]?.review_status,
+  ).toBe("auto_published");
+  expect((await listSummaryAdmin(db, "pending", Number.MAX_SAFE_INTEGER)).rows).toHaveLength(0);
+  const source = await getSummarySource(db, id);
+  await summaryCommand(core, env.MEDIA, { action: "sample", ...(await base(id)) }, actor);
+  expect(await getSummarySource(db, id)).toEqual(source);
+  expect((await listSummaryAdmin(db, "sample", Number.MAX_SAFE_INTEGER)).rows[0]?.sampled_at).toBe(
+    NOW,
+  );
+  expect((await summaryAdminDetail(db, id)).review).toBeNull();
+});
+
+test("withdrawing machine publication prevents republishing and preserves a manual withdrawal", async () => {
+  const { id } = await draft();
+  await publishSummaryEntry(db, env.MEDIA, id, NOW);
+  await summaryCommand(core, env.MEDIA, { action: "withdraw", ...(await base(id)) }, actor);
+  expect((await summaryAdminDetail(db, id)).review?.status).toBe("withdrawn");
+  await publishSummaryEntry(db, env.MEDIA, id, NOW);
+  expect(
+    await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?").bind(id).first(),
+  ).toBeNull();
+});
+
+test("automatic publisher leaves manual draft, approval and lock untouched", async () => {
+  const { id, revision } = await draft();
+  if (!revision) throw new Error("Missing revision");
+  await edit(id, revision.id);
+  await publishSummaryEntry(db, env.MEDIA, id, NOW);
+  expect(
+    await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?").bind(id).first(),
+  ).toBeNull();
+  await summaryCommand(
+    core,
+    env.MEDIA,
+    { action: "approve", ...(await base(id)), revisionId: revision.id },
+    actor,
+  );
+  const before = await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?")
+    .bind(id)
+    .first();
+  await publishSummaryEntry(db, env.MEDIA, id, NOW);
+  expect(
+    await env.DB.prepare("SELECT * FROM ai_summary_public WHERE entry_id=?").bind(id).first(),
+  ).toEqual(before);
+  expect(before?.contract_version).toBe(1);
+});
+
+test("quota waits are not included in the failures list", async () => {
+  const id = await entry();
+  const msg = await queued(id);
+  await env.DB.prepare("UPDATE ai_summary_settings SET daily_neurons=0 WHERE id=1").run();
+  await consumeSummaryMessage(
+    db,
+    env.MEDIA,
+    msg,
+    () => NOW,
+    async () => output,
+  );
+  expect((await getSummaryJob(db, msg.jobId))?.reason).toBe("quota_or_policy");
+  expect((await listSummaryAdmin(db, "failed", Number.MAX_SAFE_INTEGER)).rows).toEqual([]);
 });
 test("configuration CAS prevents lost updates and unverified model or tiny reservation is rejected", async () => {
   const expected = await getSummaryConfig(db);

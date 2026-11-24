@@ -43,6 +43,7 @@ const data = await (async () => {
       readMedia: r2?.read,
       now: new Date(),
       summaryEntryIds: summaryEntryIds(process.env.AI_SUMMARY_ENTRY_IDS),
+      summaryAll: process.env.AI_SUMMARY_AUTO_PUBLISH === "1",
       summaryDbPath: values["summary-db"],
     });
   } finally {

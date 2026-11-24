@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "wrangler deploy --dry-run --outdir dist",
-    "types": "wrangler types",
+    "types": "wrangler types --strict-vars=false",
     "typecheck": "tsc",
     "test": "vitest run"
   },

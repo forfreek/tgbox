@@ -16,7 +16,7 @@ import {
   settingsDefaults,
   shouldHidePost,
 } from "@tgbox/shared";
-import { readPublicSummaries } from "./ai-summary.ts";
+import { publicSummaryIds, readPublicSummaries } from "./ai-summary.ts";
 
 export type BuildSiteDataOptions = {
   /** Exported D1 database: a SQLite file, or a `.sql` dump as produced by `wrangler d1 export`. */
@@ -30,6 +30,8 @@ export type BuildSiteDataOptions = {
   now: Date;
   /** Explicit whitelist, absent/empty disables summary consumption. */
   summaryEntryIds?: readonly number[];
+  /** Explicit opt-in to all public projections, including machine contract 2. */
+  summaryAll?: boolean;
   /** Optional independent public-only SQL export; parse failures disable just AI consumption. */
   summaryDbPath?: string;
 };
@@ -83,7 +85,7 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
   let projectionDb: DatabaseSync | null = options.summaryDbPath ? null : db;
   try {
     if (isSqlDump) db.exec(await readFile(dbPath, "utf8"));
-    if (options.summaryDbPath && options.summaryEntryIds?.length) {
+    if (options.summaryDbPath && (options.summaryAll || options.summaryEntryIds?.length)) {
       const optional = new DatabaseSync(":memory:");
       try {
         optional.exec("PRAGMA foreign_keys=OFF");
@@ -219,7 +221,11 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
       };
     });
 
-    const summaryIds = new Set(options.summaryEntryIds?.slice(0, SUMMARY_ROLLOUT_LIMIT));
+    const summaryIds = new Set(
+      options.summaryAll
+        ? publicSummaryIds(projectionDb)
+        : options.summaryEntryIds?.slice(0, SUMMARY_ROLLOUT_LIMIT),
+    );
     for (const entry of entries)
       if (summaryIds.has(entry.id)) cachedPostKeys.add(`posts/${entry.username}.json`);
     const media = await loadMedia(entries);
@@ -322,6 +328,7 @@ export async function buildSiteData(options: BuildSiteDataOptions): Promise<Site
       options.summaryEntryIds,
       readMedia,
       projectionDb,
+      options.summaryAll,
     );
     mediaCache.clear();
     return SiteData.parse({
