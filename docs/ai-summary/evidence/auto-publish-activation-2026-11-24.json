@@ -1,0 +1,76 @@
+{
+  "verifiedAt": "2026-11-24T13:50:11.190Z",
+  "codePR": 77,
+  "mergeCommit": "e650b0ac5990911ac5095062d18b26fafaa593fb",
+  "ci": {
+    "code": 45405487594,
+    "finalPR": 45406000340,
+    "main": 45406013274,
+    "mainFirstAttempt": "snapshot existing reader-failure test exceeded 5000ms (5682ms)",
+    "sameCodeRerun": "success"
+  },
+  "buildDeploy": {
+    "run": 45406013006,
+    "conclusion": "success",
+    "webVersion": "c5de3ce4-5ddc-4e53-a443-0337c8416c67"
+  },
+  "worker": {
+    "version": "98f55d88-3ad6-4a64-98e4-6e03832e1dd3",
+    "scope": "all",
+    "entryIds": "",
+    "autoPublish": "1",
+    "cronRunObserved": true
+  },
+  "admin": {
+    "version": "40463897-7675-4006-bdbf-cefee4cf7540",
+    "plainTextVariablesUnchanged": true,
+    "secretNamesUnchanged": true,
+    "secretCount": 6
+  },
+  "settingsBefore": {
+    "id": 1,
+    "enabled": 1,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "prompt_version": "summary-prompt-v8",
+    "params_version": "summary-params-v3",
+    "daily_calls": 100,
+    "daily_neurons": 6000,
+    "reservation": 100,
+    "max_attempts": 1,
+    "auto_scan": 1
+  },
+  "settingsAfter": {
+    "id": 1,
+    "enabled": 1,
+    "model": "@cf/google/gemma-4-26b-a4b-it",
+    "prompt_version": "summary-prompt-v8",
+    "params_version": "summary-params-v3",
+    "daily_calls": 100,
+    "daily_neurons": 6000,
+    "reservation": 100,
+    "max_attempts": 1,
+    "auto_scan": 1
+  },
+  "settingsUnchanged": true,
+  "humanReviews": {
+    "count": 131,
+    "versionsAndStatusesUnchanged": true
+  },
+  "githubAutoPublish": "1",
+  "day": "2026-11-24",
+  "attempts": 60,
+  "reservedNeurons": 6000,
+  "reservationIsNotActualUsage": true,
+  "automaticMachinePublications": 0,
+  "limitation": "No current-version unreviewed success available; sole remaining v7 draft excluded by current v8 version checks. No additional inference because daily reservation exhausted.",
+  "pages": {
+    "id": 1938,
+    "status": 200,
+    "completeBody": false,
+    "introMatches": true,
+    "pagefindIgnored": true,
+    "seoUnchanged": true,
+    "otherFive": true
+  },
+  "pageNote": "Two deterministic IDs outside former whitelist. Five complete post-deployment bodies; one partial HTTP200 body contained full summary and head. Baseline capture overlapped deployment; only that page has pre/post SEO comparison."
+}
