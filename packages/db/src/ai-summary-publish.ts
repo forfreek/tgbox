@@ -39,7 +39,8 @@ export async function publishSummaryRevision(
     db.$client
       .prepare(`INSERT INTO site_state(key,value) SELECT 'dirty_since',?
       WHERE EXISTS(SELECT 1 FROM (${candidate}) n LEFT JOIN ai_summary_public p ON p.entry_id=n.entry_id
-      WHERE ${changed}) ON CONFLICT(key) DO NOTHING`)
+      WHERE ${changed}) ON CONFLICT(key) DO UPDATE SET value=excluded.value
+      WHERE CAST(site_state.value AS INTEGER)<CAST(excluded.value AS INTEGER)`)
       .bind(String(now), ...args),
     db.$client
       .prepare(`INSERT INTO audit_log(actor,action,target,payload,created_at)

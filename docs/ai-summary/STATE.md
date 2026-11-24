@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+2026-11-24 上线复核补充：当前同一工作树分支 `codex/ai-summary-publication-dirty`，base包含已合并的记录PR #78。发现构建中AI变更可能被旧dirty时间戳清除，已用失败回归复现并修复，限AI发布/编辑/撤回事务，105项Worker测试通过。下一步独立PR、全仓CI、Worker/Admin修补部署及配额保护读回；详见AUTO-PUBLISH构建期间更新保护。当前生产自动发布仍开启，不重新推理或调额。
+
 上线记录[PR #78](https://github.com/forfreek/tgbox/pull/78)仅文档/最小证据，base=main，当前记录分支codex/ai-summary-auto-publish-records。证据不变量、165个本地文档链接及diff通过；最终记录CI以该PR为准。无需再次部署或推理，继续原观察窗口。
 
 2026-11-24 自动发布已生产启用，代码PR #77合并main e650b0a，Worker98f55d88/Admin40463897/Webc5de3ce4部署成功，构建45406013006通过；main CI45406013274同代码重跑通过（首次既有快照5秒超时）。当前tgbox-ai-summary-auto-publish / codex/ai-summary-auto-publish-records补上线记录，入口[AUTO-PUBLISH生产验收](AUTO-PUBLISH.md#生产验收2026-11-24)。全局静态展示不再限50，六页名单外三语投影核对及传输限制已记录。settings100/6000/100/1、131人工记录和后台认证前后保持。今日60次预留6000触限，无新增推理，无未审v8成功稿，因此新机器正向发布需次日08:00恢复后观察；不擅自补额度，不宣称两天观察完成。

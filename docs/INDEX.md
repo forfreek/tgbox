@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-24 自动发布上线复核发现构建期间AI变更的dirty时间戳问题，最新分支codex/ai-summary-publication-dirty，恢复先读STATE及[AUTO-PUBLISH](ai-summary/AUTO-PUBLISH.md#构建期间更新保护2026-11-24)。已复现并修补、105项Worker测试通过，生产修补待核验；此前自动发布已上线，配额和观察范围不变。
+
 2026-11-24 自动发布已上线，代码PR #77已合并，Worker/Admin/Web部署及配额、人工稿保护读回见[AUTO-PUBLISH](ai-summary/AUTO-PUBLISH.md#生产验收2026-11-24)。记录分支codex/ai-summary-auto-publish-records，工作树tgbox-ai-summary-auto-publish；当前触限等待，不增配额，新机器正向生产发布仍待恢复后观察。
 
 2026-11-24 自动发布节点见[自动发布](ai-summary/AUTO-PUBLISH.md)，恢复先读[STATE](ai-summary/STATE.md)。最新授权取消机器摘要逐条人工审核；全局公开投影构建接入、人工保护及自动撤回已实现，本地专项通过，PR/生产部署待核验。工作树tgbox-ai-summary-auto-publish；配额保持线上最新值，勿恢复旧快照。

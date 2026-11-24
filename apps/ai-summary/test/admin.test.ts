@@ -215,6 +215,45 @@ test("quota waits are not included in the failures list", async () => {
   expect((await getSummaryJob(db, msg.jobId))?.reason).toBe("quota_or_policy");
   expect((await listSummaryAdmin(db, "failed", Number.MAX_SAFE_INTEGER)).rows).toEqual([]);
 });
+
+test.each(["approve", "edit", "withdraw"] as const)(
+  "%s during a build preserves a subsequent build",
+  async (action) => {
+    const { id, revision } = await draft();
+    if (!revision) throw new Error("Missing revision");
+    await edit(id, revision.id);
+    if (action !== "approve")
+      await summaryCommand(
+        core,
+        env.MEDIA,
+        { action: "approve", ...(await base(id)), revisionId: revision.id },
+        actor,
+      );
+    await env.DB.prepare("INSERT OR REPLACE INTO site_state(key,value) VALUES('dirty_since',?)")
+      .bind(String(NOW - 1000))
+      .run();
+    if (action === "edit") await edit(id, revision.id);
+    else
+      await summaryCommand(
+        core,
+        env.MEDIA,
+        {
+          action,
+          ...(await base(id)),
+          ...(action === "approve" ? { revisionId: revision.id } : {}),
+        },
+        actor,
+      );
+    await env.DB.prepare(
+      "DELETE FROM site_state WHERE key='dirty_since' AND CAST(value AS INTEGER)<?",
+    )
+      .bind(NOW - 1)
+      .run();
+    expect(
+      await env.DB.prepare("SELECT value FROM site_state WHERE key='dirty_since'").first(),
+    ).toEqual({ value: String(NOW) });
+  },
+);
 test("configuration CAS prevents lost updates and unverified model or tiny reservation is rejected", async () => {
   const expected = await getSummaryConfig(db);
   const { id: _, ...config } = expected;
