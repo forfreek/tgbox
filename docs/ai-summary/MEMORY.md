@@ -1,5 +1,7 @@
 # AI 资源摘要模块项目记忆
 
+自动发布PR #77的代码cbaf510经Linux CI45405487594全仓检查/测试及脚本检查通过；Windows全仓格式检查受CRLF影响，不为此批量改文件。Admin发布保留线上全部plain_text及6个secret名称集合，Access空默认值不可覆盖线上值。实现与生产启用必须分别核验，见AUTO-PUBLISH。
+
 2026-11-24 自动发布取代机器稿逐条人工审批，但不绕过既有格式/来源/指纹校验。Worker成功持久化后独立发布，发布补偿只读revision不重新推理；公开投影v2由构建派生繁体，v1人工繁体不动，禁止Worker加载OpenCC。任何人工review和锁定挡住自动写入；机器稿直接撤回建立人工保护，抽检不推进generation。全局静态读取必须同时接通，不能只放开生成端或伪造人工审批。入口[AUTO-PUBLISH](AUTO-PUBLISH.md)，工作树tgbox-ai-summary-auto-publish。本地101+16专项及类型检查通过，生产/PR状态按STATE核验。settings最新只读100/6000/100/1，不写设置表、不恢复旧预算；六小时静态构建仍有延迟。
 
 全局生产22:31已部署09fdef59-abc8-4242-b108-f4c9a733da10，scope=all且旧生成ID名单清空，配置对照证据global-activation-2026-11-23.json证明settings全字段不变。后续部署必须明确保持生产all模式，源码selected空名单是安全默认，不得误称默认部署会保持全局。首次运行与全站处理完成分开报告；静态已审核内容展示规则本次未改。

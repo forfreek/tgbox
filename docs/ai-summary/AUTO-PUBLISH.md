@@ -30,6 +30,8 @@
 
 ## 验证与回退
 
+交付[PR #77](https://github.com/forfreek/tgbox/pull/77)，代码 `cbaf510` 的 [Linux CI 45405487594](https://github.com/forfreek/tgbox/actions/runs/45405487594) 全仓检查、测试和脚本检查通过。补充本地Web摘要10项及可选导出2项通过、Admin生产构建通过。该CI核验代码，不等同生产开关或页面已生效。
+
 本地 Worker 101项通过，快照专项16项通过，Worker/快照/Admin类型检查通过，Worker dry-run通过。覆盖重复投递/发布、历史补发布不推理、零日预算仍可发布已有稿、锁定/人工批准/撤回保护、来源D1/R2变化拒绝、全局超过50条、繁体转换与人工繁体保留、关闭时回退。全仓 Windows biome 受既有CRLF影响失败，不批量格式化无关文件；以Linux CI核验全仓门禁。PR、CI、部署及生产验收待追加。
 
 快速回退：Worker自动发布开关设0停止新增投影；GitHub自动发布开关设0并重新构建恢复旧名单/v1行为。要全部回到原摘要，另将展示开关 `AI_SUMMARY_DISPLAY=0` 后构建。保留全部原Telegram资料、AI revision和人工稿；无需删除数据或回滚迁移。已部署静态HTML必须重新构建才能改变。

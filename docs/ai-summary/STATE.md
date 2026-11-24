@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+自动发布[PR #77](https://github.com/forfreek/tgbox/pull/77)，代码cbaf510的Linux CI45405487594全仓检查/测试和脚本检查通过。Admin生产构建、Web摘要10项及可选导出2项通过。下一步执行已授权的Worker/Admin及全局展示上线，部署后核验settings和人工稿保持；尚不声称生产自动发布已启用。
+
 2026-11-24 最新节点：用户取消逐条人工审核，当前工作树 `C:/Users/123/tgbox-ai-summary-auto-publish`，分支 `codex/ai-summary-auto-publish`，base main d807168。实现及回退见[AUTO-PUBLISH](AUTO-PUBLISH.md)。机器结果校验后自动写公开投影，全局构建消费；人工review/锁定继续保留。Worker101项、快照专项16项、三包类型检查及dry-run通过；PR/CI/生产上线待完成。线上当前100调用/6000固定预留/100单次/1尝试为只读快照，不修改任何配额，旧数值不得恢复。
 
 22:32全局生成已部署，Worker09fdef59-abc8-4242-b108-f4c9a733da10，远端scope=all、selected IDs空。D1完整配置逐字段与部署前一致，200调用/800预留/100单次/1尝试保持，未写settings表；9500仅累计预留，非真实消耗。首次扫描按*/5分钟定时器启动，实际运行证据从PR #76追加验收读取，当前不冒称全站生成已完成。源码及执行记录见GLOBAL；观察窗口沿用11-25晚。
