@@ -1,5 +1,7 @@
 # AI 资源摘要模块状态
 
+2026-11-24 自动发布已生产启用，代码PR #77合并main e650b0a，Worker98f55d88/Admin40463897/Webc5de3ce4部署成功，构建45406013006通过；main CI45406013274同代码重跑通过（首次既有快照5秒超时）。当前tgbox-ai-summary-auto-publish / codex/ai-summary-auto-publish-records补上线记录，入口[AUTO-PUBLISH生产验收](AUTO-PUBLISH.md#生产验收2026-11-24)。全局静态展示不再限50，六页名单外三语投影核对及传输限制已记录。settings100/6000/100/1、131人工记录和后台认证前后保持。今日60次预留6000触限，无新增推理，无未审v8成功稿，因此新机器正向发布需次日08:00恢复后观察；不擅自补额度，不宣称两天观察完成。
+
 自动发布[PR #77](https://github.com/forfreek/tgbox/pull/77)，代码cbaf510的Linux CI45405487594全仓检查/测试和脚本检查通过。Admin生产构建、Web摘要10项及可选导出2项通过。下一步执行已授权的Worker/Admin及全局展示上线，部署后核验settings和人工稿保持；尚不声称生产自动发布已启用。
 
 2026-11-24 最新节点：用户取消逐条人工审核，当前工作树 `C:/Users/123/tgbox-ai-summary-auto-publish`，分支 `codex/ai-summary-auto-publish`，base main d807168。实现及回退见[AUTO-PUBLISH](AUTO-PUBLISH.md)。机器结果校验后自动写公开投影，全局构建消费；人工review/锁定继续保留。Worker101项、快照专项16项、三包类型检查及dry-run通过；PR/CI/生产上线待完成。线上当前100调用/6000固定预留/100单次/1尝试为只读快照，不修改任何配额，旧数值不得恢复。

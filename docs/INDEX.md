@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-24 自动发布已上线，代码PR #77已合并，Worker/Admin/Web部署及配额、人工稿保护读回见[AUTO-PUBLISH](ai-summary/AUTO-PUBLISH.md#生产验收2026-11-24)。记录分支codex/ai-summary-auto-publish-records，工作树tgbox-ai-summary-auto-publish；当前触限等待，不增配额，新机器正向生产发布仍待恢复后观察。
+
 2026-11-24 自动发布节点见[自动发布](ai-summary/AUTO-PUBLISH.md)，恢复先读[STATE](ai-summary/STATE.md)。最新授权取消机器摘要逐条人工审核；全局公开投影构建接入、人工保护及自动撤回已实现，本地专项通过，PR/生产部署待核验。工作树tgbox-ai-summary-auto-publish；配额保持线上最新值，勿恢复旧快照。
 
 22:32全局自动生成已部署，scope=all且生成ID名单空，配额逐字段保持；证据见[GLOBAL](ai-summary/GLOBAL.md)及按需JSON。代码PR #76，观察至11-25晚；不要再用此前50条限制描述当前生成范围，也不要将预留台账叫作实际消耗。
