@@ -176,6 +176,13 @@
       "when": 1795405945300,
       "tag": "0025_tough_black_crow",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "6",
+      "when": 1795591894403,
+      "tag": "0026_manual_summary",
+      "breakpoints": true
     }
   ]
 }

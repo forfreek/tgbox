@@ -11,6 +11,7 @@ import {
   summaryAdminDetail,
 } from "@tgbox/db";
 import {
+  PublicSummaryText,
   SUMMARY_MODEL,
   SUMMARY_PARAMS_VERSION,
   SUMMARY_PROMPT_VERSION,
@@ -72,6 +73,13 @@ export const SummaryCommand = z.discriminatedUnion("action", [
       .refine((s) => s.split(/\s+/u).length <= 90, "英文最多90词"),
   }),
   z.strictObject({ action: z.literal("approve"), ...base, revisionId: z.uuid() }),
+  z.strictObject({
+    action: z.literal("publish_manual"),
+    ...base,
+    observationToken: base.observationToken.nullable(),
+    sourceGuard: z.string().min(1),
+    ...PublicSummaryText.shape,
+  }),
   z.strictObject({ action: z.enum(["withdraw", "lock", "unlock", "sample"]), ...base }),
   z.strictObject({ action: z.literal("retry"), entryId: id }),
 ]);
@@ -161,6 +169,18 @@ export async function summaryCommand(core: CoreContext, media: Media, raw: unkno
     if (!(await retrySummaryJob(core.db, data.entryId, actor, core.now())))
       throw new Error("仅可重试未锁定条目的技术失败，资料不足不重跑");
     await observeEntry(core.db, media, data.entryId, config, core.now(), 2);
+    return { ok: true };
+  }
+  if (data.action === "publish_manual") {
+    const fresh = await readSummaryEvidence(core.db, media, data.entryId);
+    if (!fresh || fresh.guard !== data.sourceGuard)
+      throw new Error("资源资料已变化，请刷新后再发布");
+    if (fresh.decision.status !== "eligible" && fresh.decision.status !== "skipped")
+      throw new Error("当前来源不可用，请检查资料后再发布");
+    if (
+      !(await changeSummaryReview(core.db, { ...data, manualEvidence: fresh }, actor, core.now()))
+    )
+      throw new Error("资料或编辑版本已变化，请刷新后再发布");
     return { ok: true };
   }
   const detail = await summaryAdminDetail(core.db, data.entryId);

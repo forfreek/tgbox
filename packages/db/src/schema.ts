@@ -169,9 +169,9 @@ export const aiSummaryReviews = sqliteTable(
     entryId: integer("entry_id")
       .primaryKey()
       .references(() => entries.id, { onDelete: "cascade" }),
-    revisionId: text("revision_id")
-      .notNull()
-      .references(() => aiSummaryRevisions.id, { onDelete: "cascade" }),
+    revisionId: text("revision_id").references(() => aiSummaryRevisions.id, {
+      onDelete: "cascade",
+    }),
     zh: text().notNull(),
     hant: text().notNull(),
     en: text().notNull(),

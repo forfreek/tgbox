@@ -1,5 +1,9 @@
 # AI 资源摘要模块状态
 
+本节点本地点验通过。Wrangler 本地 D1 应用 0026 成功，Admin 构建通过。内置浏览器在本地测试条目打开空编辑器，填三语，点击一次发布，看到保存反馈、原样回填和锁定状态，控制台无错误或警告。
+
+2026-11-25 手写三语摘要节点在 `C:/Users/123/tgbox-ai-summary-manual-editor`、`codex/ai-summary-manual-editor`。无机器版本时直接显示编辑框，有版本时可切换到手写。一次保存并发布，进入下一次网站构建。Worker 107 项、快照摘要 17 项和 Admin 类型检查通过。生产上线需先应用 D1 0026，再部署 Admin，并让站点构建使用本节点的快照逻辑。当前未迁移或部署生产。
+
 2026-11-24 构建时序修补PR #79代码01f032a全仓CI45409126181通过，Worker e550d4c3 / Admin68e91ba4已生产更新，自动发布=1、all范围保持。配额100/6000/100/1、131人工记录及认证逐项保持；今日60次固定预留6000未增加。当前分支codex/ai-summary-publication-dirty，本次只补上线记录并合入PR，无需再部署模型服务。入口AUTO-PUBLISH与auto-publish-dirty证据；未发生新机器正向发布，继续等待原配额恢复与观察。
 
 构建期间AI更新保护[PR #79](https://github.com/forfreek/tgbox/pull/79)，base=main。四项新回归及Worker105项、Worker/Admin类型检查、Worker dry-run、Admin构建通过；完整CI与生产修补待核验。仅三处AI事务时间戳逻辑变化，不调配额、不重推模型，原自动发布保持开启。
