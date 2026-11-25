@@ -330,19 +330,28 @@ describe("site build from snapshot data", () => {
     }
   });
 
-  test("detail pages open with an H1 and a sentence naming the entry, kind and category", () => {
+  test("detail summaries and metadata lead with the entry identity and facts in all three locales", () => {
     const zh = html("detail/techdaily");
     expect(zh).toMatch(/<h1[\s\S]*?每日科技[\s\S]*?Telegram 开发编程频道[\s\S]*?<\/h1>/);
     expect(zh).toMatch(
-      /data-entry-summary[^>]*>\s*每日科技（@techdaily）是 Telegram 上的开发编程频道，主要语言为中文，公开资料记录 5,000 名订阅者/,
+      /data-entry-summary[^>]*>\s*每日科技（@techdaily），主要语言为中文，公开资料记录 5,000 名订阅者/,
+    );
+    expect(zh).toContain(
+      '<meta name="description" content="每日科技（@techdaily），主要语言为中文',
+    );
+    const hant = html("zh-hant/detail/techdaily");
+    expect(hant).toMatch(/data-entry-summary[^>]*>\s*每日科技（@techdaily），主要語言為中文/);
+    expect(hant).toContain(
+      '<meta name="description" content="每日科技（@techdaily），主要語言為中文',
     );
     const en = html("en/detail/techdaily");
     expect(en).toMatch(/<h1[\s\S]*?Telegram Development Channel[\s\S]*?<\/h1>/);
     expect(en).toMatch(
-      /data-entry-summary[^>]*>\s*每日科技 \(@techdaily\) is a Telegram channel in the Development category, primary language Chinese, public profile count of 5,000 subscribers/,
+      /data-entry-summary[^>]*>\s*每日科技 \(@techdaily\)\. Primary language: Chinese\. Public profile count: 5,000 subscribers/,
     );
-    // The same sentence leads the meta description.
-    expect(en).toMatch(/<meta name="description" content="每日科技 \(@techdaily\) is a Telegram/);
+    expect(en).toContain(
+      '<meta name="description" content="每日科技 (@techdaily). Primary language: Chinese.',
+    );
   });
 
   test("channel detail shows recent posts, stats and related entries", () => {

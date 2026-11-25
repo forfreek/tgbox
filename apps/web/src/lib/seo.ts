@@ -186,7 +186,7 @@ export type EntryFacts = {
 };
 
 /**
- * One sentence about an entry, built from whatever facts exist. Shown above the stats table and
+ * Entry identity and available facts. Shown above the stats table and
  * reused as the meta description, so the page leads with prose rather than a bare table.
  */
 export function entrySummary(locale: SiteLocale, facts: EntryFacts): string {
@@ -195,8 +195,6 @@ export function entrySummary(locale: SiteLocale, facts: EntryFacts): string {
     fill(summary.lead, {
       title: facts.title,
       username: facts.username,
-      category: facts.categoryName,
-      kind: facts.kindWord,
     }),
     facts.language && fill(summary.language, { language: facts.language }),
     facts.members && fill(summary.members, { n: facts.members.count, noun: facts.members.noun }),

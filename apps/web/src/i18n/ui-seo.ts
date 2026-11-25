@@ -65,9 +65,9 @@ const zh = {
   detail: {
     title: "{title}（@{username}）· Telegram {kind}",
   },
-  /** Clauses of the auto-written one-sentence entry summary; empty ones are dropped. */
+  /** Entry identity and optional facts for the detail summary. */
   summary: {
-    lead: "{title}（@{username}）是 Telegram 上的{category}{kind}",
+    lead: "{title}（@{username}）",
     members: "公开资料记录 {n} {noun}",
     created: "创建日期为 {date}",
     activity: "近期活跃程度为{tier}",
@@ -180,15 +180,15 @@ const en: typeof zh = {
     title: "{title} (@{username}) — Telegram {kind}",
   },
   summary: {
-    lead: "{title} (@{username}) is a Telegram {kind} in the {category} category",
-    members: "public profile count of {n} {noun}",
-    created: "creation date {date}",
-    activity: "recent activity rated {tier}",
-    language: "primary language {language}",
-    topics: "tagged {topics}",
+    lead: "{title} (@{username})",
+    members: "Public profile count: {n} {noun}",
+    created: "Created on {date}",
+    activity: "Recent activity: {tier}",
+    language: "Primary language: {language}",
+    topics: "Tags: {topics}",
     topicSeparator: " / ",
-    updated: "profile updated on {date}",
-    separator: ", ",
+    updated: "Profile updated on {date}",
+    separator: ". ",
     terminator: ".",
   },
   keywords: {
