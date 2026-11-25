@@ -75,7 +75,8 @@ export async function readPublicSummaries(
       if (!parsed.success) continue;
       const source = await snapshotSummarySource(db, id, readMedia);
       if (!source) continue;
-      if (prepareAiSummary(source).decision.status !== "eligible") continue;
+      const { status } = prepareAiSummary(source).decision;
+      if (status !== "eligible" && (machine || status !== "skipped")) continue;
       const fingerprint = await aiSummaryFingerprint(source, (b) =>
         crypto.subtle.digest("SHA-256", b),
       );

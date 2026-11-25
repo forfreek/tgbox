@@ -413,7 +413,7 @@ function Editor({
   act: (data: SummaryAction) => void;
 }) {
   const [revisionId, setRevisionId] = useState(
-    detail.review?.revision_id ?? detail.revisions[0]?.id ?? "",
+    detail.review ? (detail.review.revision_id ?? "") : (detail.revisions[0]?.id ?? ""),
   );
   const revision = detail.revisions.find((r) => r.id === revisionId);
   return (
@@ -422,9 +422,7 @@ function Editor({
         #{detail.entry?.id} {detail.entry?.title} · 来源与三语草稿
       </h2>
       {detail.source && detail.entry?.source_guard !== detail.source.sourceGuard ? (
-        <p role="alert">
-          简介或可见性已变化。请先解锁并重新生成，再核对和批准；旧批准不代表当前资料。
-        </p>
+        <p role="alert">简介或可见性已变化。请按当前资料更新手写稿，或解锁并重新生成机器稿。</p>
       ) : null}
       <Card className="p-4">
         <h3 className="font-medium">当前原简介</h3>
@@ -432,25 +430,34 @@ function Editor({
           {detail.entry?.description ?? "资源不存在"}
         </p>
       </Card>
-      <label htmlFor="summary-revision">生成版本</label>
-      <select
-        id="summary-revision"
-        name="revision"
-        className={selectStyle}
-        value={revisionId}
-        onChange={(e) => setRevisionId(e.target.value)}
-      >
-        {detail.revisions.map((r) => (
-          <option key={r.id} value={r.id}>
-            {new Date(r.createdAt).toLocaleString("zh-CN")} · {r.id.slice(0, 8)}
-          </option>
-        ))}
-      </select>
-      {revision ? (
-        <Draft key={revisionId} detail={detail} revision={revision} busy={busy} act={act} />
-      ) : (
-        <p>还没有可审核的生成结果。请先预检并生成草稿。</p>
-      )}
+      {detail.revisions.length > 0 ? (
+        <div className="flex flex-col gap-1">
+          <label htmlFor="summary-revision">摘要版本</label>
+          <select
+            id="summary-revision"
+            name="revision"
+            className={selectStyle}
+            value={revisionId}
+            onChange={(e) => setRevisionId(e.target.value)}
+          >
+            <option value="">手写三语摘要</option>
+            {detail.revisions.map((r) => (
+              <option key={r.id} value={r.id}>
+                {new Date(r.createdAt).toLocaleString("zh-CN")} · {r.id.slice(0, 8)}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+      {detail.entry?.source_guard ? (
+        <Draft
+          key={revision?.id ?? "manual"}
+          detail={detail}
+          revision={revision}
+          busy={busy}
+          act={act}
+        />
+      ) : null}
       {detail.source ? (
         <div className="flex gap-2">
           <Button
@@ -480,22 +487,22 @@ function Draft({
   act,
 }: {
   detail: SummaryDetail;
-  revision: SummaryDetail["revisions"][number];
+  revision: SummaryDetail["revisions"][number] | undefined;
   busy: boolean;
   act: (data: SummaryAction) => void;
 }) {
-  const parsed = AiSummaryOutput.safeParse(parseJson(revision.output));
+  const parsed = AiSummaryOutput.safeParse(revision && parseJson(revision.output));
   const output = parsed.success && parsed.data.status === "ok" ? parsed.data : null;
-  const saved = detail.review?.revision_id === revision.id ? detail.review : null;
+  const saved = detail.review?.revision_id === (revision?.id ?? null) ? detail.review : null;
   const initialZh = saved?.zh ?? output?.sentences.map((s) => s.zh).join("") ?? "";
   const [zh, setZh] = useState(initialZh);
   const [en, setEn] = useState(saved?.en ?? output?.sentences.map((s) => s.en).join(" ") ?? "");
   const [hant, setHant] = useState(saved?.hant ?? "");
   const [error, setError] = useState("");
-  const evidence = AiSummaryModelInput.safeParse(parseJson(revision.input));
+  const evidence = AiSummaryModelInput.safeParse(revision && parseJson(revision.input));
   useEffect(() => {
     let cancelled = false;
-    if (!saved)
+    if (revision && !saved)
       import("@tgbox/hant")
         .then(({ toHant }) => {
           if (!cancelled) setHant((current) => current || toHant(initialZh));
@@ -506,37 +513,51 @@ function Draft({
     return () => {
       cancelled = true;
     };
-  }, [saved, initialZh]);
-  if (!output) return <p>此版本未生成摘要（资料不足或结果不可用），继续使用原有展示。</p>;
+  }, [revision, saved, initialZh]);
+  if (revision && !output) return <p>此版本没有可用摘要。可切换到「手写三语摘要」直接发布。</p>;
   const base = {
-    entryId: revision.entryId,
+    entryId: detail.entry?.id ?? 0,
     expectedVersion: detail.source?.editVersion ?? 0,
     observationToken: detail.source?.observationToken ?? "",
   };
   return (
     <>
-      <Card className="p-4">
-        <h3 className="font-medium">本次生成引用的证据</h3>
-        {evidence.success ? (
-          evidence.data.evidence.map((e) => (
-            <p key={e.ref} className="whitespace-pre-wrap break-words text-sm">
-              <strong>{e.ref}</strong>：{e.text}
-            </p>
-          ))
-        ) : (
-          <p>证据格式不可用，不能批准。</p>
-        )}
-      </Card>
+      {revision ? (
+        <Card className="p-4">
+          <h3 className="font-medium">本次生成引用的证据</h3>
+          {evidence.success ? (
+            evidence.data.evidence.map((e) => (
+              <p key={e.ref} className="whitespace-pre-wrap break-words text-sm">
+                <strong>{e.ref}</strong>：{e.text}
+              </p>
+            ))
+          ) : (
+            <p>证据格式不可用，不能批准。</p>
+          )}
+        </Card>
+      ) : null}
       <form
         aria-labelledby="summary-draft-heading"
         className="flex flex-col gap-3"
         onSubmit={(e) => {
           e.preventDefault();
-          act({ action: "edit", ...base, revisionId: revision.id, zh, hant, en });
+          if (revision) {
+            act({ action: "edit", ...base, revisionId: revision.id, zh, hant, en });
+          } else {
+            act({
+              action: "publish_manual",
+              ...base,
+              observationToken: detail.source?.observationToken ?? null,
+              sourceGuard: detail.entry?.source_guard ?? "",
+              zh,
+              hant,
+              en,
+            });
+          }
         }}
       >
         <h3 id="summary-draft-heading" className="font-medium">
-          三语编辑（保存后自动锁定，需另行批准）
+          {revision ? "三语编辑（保存后自动锁定，需另行批准）" : "手写三语摘要"}
         </h3>
         <p role="status">{error}</p>
         <div className="grid gap-4 lg:grid-cols-3">
@@ -562,27 +583,32 @@ function Draft({
           ))}
         </div>
         <p className="text-muted-foreground text-sm">
-          自动生成内容通过校验后进入网站构建。人工保存会锁定并撤回当前发布，需批准后重新展示。中文最多120字，英文最多90词。
+          {revision
+            ? "保存草稿会锁定并撤回当前发布，需批准后重新展示。"
+            : "发布后锁定自动改写，网站将在下一次构建后更新。"}
+          中文最多120字，英文最多90词。
         </p>
-        <Button type="submit" disabled={busy || !evidence.success}>
-          保存三语草稿并锁定
+        <Button type="submit" disabled={busy || (revision !== undefined && !evidence.success)}>
+          {revision ? "保存三语草稿并锁定" : "保存并发布"}
         </Button>
       </form>
       <div className="flex flex-wrap gap-2">
-        <Button
-          type="button"
-          disabled={
-            busy ||
-            !saved ||
-            !evidence.success ||
-            zh !== saved.zh ||
-            hant !== saved.hant ||
-            en !== saved.en
-          }
-          onClick={() => act({ action: "approve", ...base, revisionId: revision.id })}
-        >
-          批准已保存版本
-        </Button>
+        {revision ? (
+          <Button
+            type="button"
+            disabled={
+              busy ||
+              !saved ||
+              !evidence.success ||
+              zh !== saved.zh ||
+              hant !== saved.hant ||
+              en !== saved.en
+            }
+            onClick={() => act({ action: "approve", ...base, revisionId: revision.id })}
+          >
+            批准已保存版本
+          </Button>
+        ) : null}
         <Button
           type="button"
           variant="outline"

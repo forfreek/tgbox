@@ -130,6 +130,60 @@ async function edit(id: number, revisionId: string) {
   );
 }
 
+test("one manual command publishes with no source or revision, locks, and rejects stale writes", async () => {
+  const id = await entry();
+  await env.DB.prepare("UPDATE entries SET description='' WHERE id=?").bind(id).run();
+  const before = await summaryAdminDetail(db, id);
+  const command = {
+    action: "publish_manual",
+    entryId: id,
+    expectedVersion: 0,
+    observationToken: null,
+    sourceGuard: before.entry?.source_guard,
+    zh: "将语音转为文字。",
+    hant: "將語音轉為文字。",
+    en: "Transcribes speech into text.",
+  };
+  expect(before.source).toBeNull();
+  await expect(summaryCommand(core, env.MEDIA, command, actor)).resolves.toEqual({ ok: true });
+  const after = await summaryAdminDetail(db, id);
+  expect(after.revisions).toEqual([]);
+  expect(after.source).toMatchObject({ locked: true, editVersion: 1 });
+  expect(after.review).toMatchObject({ status: "approved", revision_id: null, hant: command.hant });
+  expect(after.publicContract).toBe(1);
+  expect(await getSummaryUsage(db, NOW)).toMatchObject({ calls: 0, neurons: 0 });
+  await expect(summaryCommand(core, env.MEDIA, command, actor)).rejects.toThrow("编辑版本已变化");
+  await summaryCommand(core, env.MEDIA, { action: "withdraw", ...(await base(id)) }, actor);
+  expect((await summaryAdminDetail(db, id)).publicContract).toBeNull();
+});
+
+test("publishing by hand supersedes queued generation and supports subsequent manual edits", async () => {
+  const id = await entry();
+  const message = await queued(id);
+  const sourceGuard = (await summaryAdminDetail(db, id)).entry?.source_guard;
+  const text = { zh: "手写摘要。", hant: "手寫摘要。", en: "Handwritten summary." };
+  await summaryCommand(
+    core,
+    env.MEDIA,
+    { action: "publish_manual", ...(await base(id)), sourceGuard, ...text },
+    actor,
+  );
+  expect((await getSummaryJob(db, message.jobId))?.status).toBe("superseded");
+  await summaryCommand(
+    core,
+    env.MEDIA,
+    { action: "publish_manual", ...(await base(id)), sourceGuard, ...text, en: "Updated text." },
+    actor,
+  );
+  const detail = await summaryAdminDetail(db, id);
+  expect(detail.review).toMatchObject({
+    revision_id: null,
+    status: "approved",
+    en: "Updated text.",
+  });
+  expect(detail.source?.locked).toBe(true);
+});
+
 test("preflight is read-only, selected generation is idempotent and does not infer", async () => {
   const id = await entry();
   expect(

@@ -4,7 +4,7 @@ import { SummaryPage } from "@/features/ai-summary/summary-page.tsx";
 export const Route = createFileRoute("/ai-summary")({
   component: () => (
     <>
-      <PageHeader title="AI 摘要" description="生成三语草稿，核对来源后编辑、批准或撤回。" />
+      <PageHeader title="AI 摘要" description="手写并发布三语摘要，或查看机器生成版本。" />
       <SummaryPage />
     </>
   ),

@@ -107,6 +107,28 @@ test("all 50 approved rollout projections are consumed, including IDs beyond the
   }
 });
 
+test("manual summaries can publish without model evidence but still expire on source changes", async () => {
+  const f = await fixture();
+  try {
+    f.db.exec("UPDATE entries SET description='', hide_posts=1 WHERE id=1");
+    const source = await snapshotSummarySource(f.db, 1, f.read);
+    const fingerprint = await aiSummaryFingerprint(source, (b) =>
+      crypto.subtle.digest("SHA-256", b),
+    );
+    f.db.prepare("UPDATE ai_summary_public SET fingerprint=? WHERE entry_id=1").run(fingerprint);
+    expect((await readPublicSummaries(f.db, [], f.read, f.db, true)).get(1)?.hant).toBe(
+      "分享軟體說明。",
+    );
+    f.db.exec("UPDATE ai_summary_public SET contract_version=2 WHERE entry_id=1");
+    expect((await readPublicSummaries(f.db, [], f.read, f.db, true)).has(1)).toBe(false);
+    f.db.exec("UPDATE ai_summary_public SET contract_version=1 WHERE entry_id=1");
+    f.db.exec("UPDATE entries SET description='来源更新' WHERE id=1");
+    expect((await readPublicSummaries(f.db, [], f.read, f.db, true)).has(1)).toBe(false);
+  } finally {
+    f.db.close();
+  }
+});
+
 test("global machine projection derives hant, preserves human hant and rolls back when disabled", async () => {
   const f = await fixture();
   f.db.exec("UPDATE ai_summary_public SET contract_version=2,hant=zh WHERE entry_id=1");

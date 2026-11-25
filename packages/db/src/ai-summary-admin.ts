@@ -1,3 +1,4 @@
+import type { AiSummaryModelInput, AiSummaryPreflight } from "@tgbox/shared";
 import type { Db } from "./access.ts";
 import type { SummaryConfig } from "./ai-summary.ts";
 import {
@@ -9,7 +10,7 @@ import {
 
 export type SummaryReview = {
   entry_id: number;
-  revision_id: string;
+  revision_id: string | null;
   zh: string;
   hant: string;
   en: string;
@@ -141,23 +142,57 @@ export async function changeSummaryReview(
   data: {
     entryId: number;
     expectedVersion: number;
-    observationToken: string;
-    action: "edit" | "approve" | "withdraw" | "lock" | "unlock" | "sample";
+    observationToken: string | null;
+    action: "edit" | "approve" | "withdraw" | "lock" | "unlock" | "sample" | "publish_manual";
     revisionId?: string;
     zh?: string;
     hant?: string;
     en?: string;
     fingerprint?: string;
     guard?: string;
+    manualEvidence?: {
+      input: AiSummaryModelInput;
+      decision: AiSummaryPreflight;
+      fingerprint: string;
+      guard: string;
+    };
   },
   actor: string,
   now: number,
 ) {
   const token = crypto.randomUUID();
   const guarded = data.action === "edit" || data.action === "approve";
+  const manual = data.action === "publish_manual" ? data.manualEvidence : undefined;
+  if (data.action === "publish_manual" && !manual) return false;
   const statements = [
-    db.$client
-      .prepare(`UPDATE ai_summary_sources SET
+    manual
+      ? db.$client
+          .prepare(`INSERT INTO ai_summary_sources
+      (entry_id,generation,fingerprint,input,decision,source_guard,observation_token,updated_at,locked,edit_version)
+      SELECT ?,1,?,?,?,?,?,?,1,1 WHERE (${summarySourceGuardQuery})=?
+      AND (? IS NULL OR EXISTS(SELECT 1 FROM ai_summary_sources WHERE entry_id=?))
+      ON CONFLICT(entry_id) DO UPDATE SET generation=ai_summary_sources.generation+1,
+      edit_version=ai_summary_sources.edit_version+1,locked=1,
+      fingerprint=excluded.fingerprint,input=excluded.input,decision=excluded.decision,
+      source_guard=excluded.source_guard,observation_token=excluded.observation_token,updated_at=excluded.updated_at
+      WHERE ai_summary_sources.observation_token=? AND ai_summary_sources.edit_version=?`)
+          .bind(
+            data.entryId,
+            manual.fingerprint,
+            JSON.stringify(manual.input),
+            JSON.stringify(manual.decision),
+            manual.guard,
+            token,
+            now,
+            data.entryId,
+            manual.guard,
+            data.observationToken,
+            data.entryId,
+            data.observationToken,
+            data.expectedVersion,
+          )
+      : db.$client
+          .prepare(`UPDATE ai_summary_sources SET
     edit_version=edit_version+1,generation=generation+1,observation_token=?,updated_at=?,
     locked=CASE WHEN ? IN ('edit','lock') THEN 1 WHEN ?='unlock' THEN 0 ELSE locked END
     WHERE entry_id=? AND edit_version=? AND observation_token=?
@@ -169,31 +204,32 @@ export async function changeSummaryReview(
         AND j.source_guard=ai_summary_sources.source_guard AND json_extract(r.output,'$.status')='ok')`
         : ""
     }`)
-      .bind(
-        token,
-        now,
-        data.action,
-        data.action,
-        data.entryId,
-        data.expectedVersion,
-        data.observationToken,
-        ...(guarded
-          ? [data.fingerprint ?? "", data.guard ?? "", data.entryId, data.revisionId ?? ""]
-          : []),
-      ),
+          .bind(
+            token,
+            now,
+            data.action,
+            data.action,
+            data.entryId,
+            data.expectedVersion,
+            data.observationToken,
+            ...(guarded
+              ? [data.fingerprint ?? "", data.guard ?? "", data.entryId, data.revisionId ?? ""]
+              : []),
+          ),
   ];
-  if (data.action === "edit") {
+  if (data.action === "edit" || manual) {
     statements.push(
       db.$client
         .prepare(`INSERT INTO ai_summary_reviews(entry_id,revision_id,zh,hant,en,status,version,actor,updated_at)
-      SELECT entry_id,?,?,?,?,'draft',edit_version,?,? FROM ai_summary_sources WHERE observation_token=?
+      SELECT entry_id,?,?,?,?,?,edit_version,?,? FROM ai_summary_sources WHERE observation_token=?
       ON CONFLICT(entry_id) DO UPDATE SET revision_id=excluded.revision_id,zh=excluded.zh,hant=excluded.hant,en=excluded.en,
-        status='draft',version=excluded.version,actor=excluded.actor,updated_at=excluded.updated_at,sampled_at=NULL`)
+        status=excluded.status,version=excluded.version,actor=excluded.actor,updated_at=excluded.updated_at,sampled_at=NULL`)
         .bind(
-          data.revisionId ?? "",
+          manual ? null : (data.revisionId ?? ""),
           data.zh ?? "",
           data.hant ?? "",
           data.en ?? "",
+          manual ? "approved" : "draft",
           actor,
           now,
           token,
@@ -239,7 +275,7 @@ export async function changeSummaryReview(
       .bind(now, data.entryId, token),
   );
   statements.push(audit(db, actor, `ai_summary.${data.action}`, String(data.entryId), token, now));
-  if (data.action === "approve") {
+  if (data.action === "approve" || manual) {
     const candidate = `SELECT r.entry_id,r.zh,r.hant,r.en,s.fingerprint FROM ai_summary_reviews r
       JOIN ai_summary_sources s ON s.entry_id=r.entry_id WHERE s.observation_token=? AND r.status='approved'`;
     statements.push(
