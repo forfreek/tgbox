@@ -1,5 +1,11 @@
 # 内容工作状态
 
+## 2026-11-25 详情页三语开场
+
+独立工作树 `C:/Users/123/tgbox-entry-summary-copy`，分支 `codex/entry-summary-copy`，基于 main `68c3bb6`。共用开场保留名称和用户名，接续已有事实，去掉固定 Telegram 分类句。简中与繁中使用共同源模板，英文独立断句。详情正文和描述元数据一并生效。旧条目数据、摘要正文、生成设置与生产部署未修改。测试与 PR 状态按本节交付记录核对。
+
+本地 66 项 SEO 与繁中转换单测通过，93 项网站构建与 AI 摘要构建测试通过。最初有一项英文断言误要求标签与更新时间相邻，已按既有字段顺序修正并重跑通过。见[独立 PR](https://github.com/forfreek/tgbox/pulls?q=is%3Apr+head%3Acodex%2Fentry-summary-copy)及其全仓 CI。
+
 ## 2026-11-16 后台 Crypto Pay 回调地址
 
 - 用户要求定位并修改后台显示的旧 workers.dev 回调。settings.ts:113 从 tgbox-admin 的 BOT_PUBLIC_URL 拼接地址，仓库 wrangler.jsonc 已为 https://bot.tgsearch.app，线上变量仍为旧值。

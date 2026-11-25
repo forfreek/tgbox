@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-25 详情页三语开场精简见[内容工作状态](content-review/STATE.md#2026-11-25-详情页三语开场)和[文案项目记忆](content-review/MEMORY.md)。
+
 2026-11-25 手写三语摘要及单击发布见 [AI 摘要状态](ai-summary/STATE.md) 与 [后台手写流程](ai-summary/ADMIN.md#手写三语摘要)。
 
 2026-11-24 最新自动发布时序修补PR #79已部署Worker/Admin，105项及全仓CI45409126181通过；settings/131人工记录/认证保持，无新推理。恢复 `tgbox-ai-summary-auto-publish` 的STATE及AUTO-PUBLISH构建期间更新保护；记录证据仅按需读取。
