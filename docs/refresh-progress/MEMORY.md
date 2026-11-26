@@ -16,3 +16,6 @@
 - 本地bot刷新28项/core进度9项及db/core/bot类型检查通过。代码及回归入口：packages/core/src/{refresh,refresh-progress}.ts、packages/db/src/access.ts、apps/bot/test/refresh/refresh.test.ts。尚未部署生产；正常轮巡吞吐在优先队列繁忙时降低，不能承诺即时更新。
 
 - 本节点独立草稿PR #82：https://github.com/forfreek/tgbox/pull/82；生产未部署，CI结论按最新检查核验。
+
+- 2026-11-26用户授权后，PR #82已合并并以项目Wrangler部署既有bot，版本c079943c-7945-438e-97af-028f394483f9。保持生产变量/绑定及原请求预算，发布不等于全量补齐；必须以lane日志、双进度、D1版本和图片/网站验证区分各层完成情况。PR/main全仓CI通过，具体运行ID见STATE生产发布记录。
+- 发布后11:00优先通道6条、11子请求、0写入，独立游标推进756而常规保持1340，说明空结果不会阻塞优先队列。近期87条的真实头像补齐与展示尚未验证，零写入本身不能证明源站无头像。没有手动移动或重置生产进度。
