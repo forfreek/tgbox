@@ -6,6 +6,7 @@ const LEASE_MS = 20 * 60_000;
 
 type Progress = {
   nextId: number;
+  avatarNextId?: number;
   cycle: number;
   lastScheduledTime: number;
   lease: { token: string; until: number } | null;
@@ -16,6 +17,8 @@ function parse(raw: string): Progress {
   if (
     !Number.isSafeInteger(state.nextId) ||
     state.nextId < 1 ||
+    (state.avatarNextId !== undefined &&
+      (!Number.isSafeInteger(state.avatarNextId) || state.avatarNextId < 1)) ||
     !Number.isSafeInteger(state.cycle) ||
     state.cycle < 0 ||
     !Number.isSafeInteger(state.lastScheduledTime) ||
@@ -61,12 +64,13 @@ export async function claimRefreshProgress(
 export async function finishRefreshProgress(
   db: Db,
   claim: NonNullable<Awaited<ReturnType<typeof claimRefreshProgress>>>,
-  completed?: { nextId: number; scheduledTime: number },
+  completed?: { nextId: number; scheduledTime: number; avatarNextId?: number },
 ) {
   const state: Progress = { ...claim.state, lease: null };
   if (completed) {
     state.nextId = completed.nextId;
     state.lastScheduledTime = completed.scheduledTime;
+    if (completed.avatarNextId !== undefined) state.avatarNextId = completed.avatarNextId;
   }
   if (
     !(await compareAndSetSiteState(db, REFRESH_PROGRESS_KEY, claim.claimed, JSON.stringify(state)))

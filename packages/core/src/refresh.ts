@@ -5,6 +5,7 @@ import {
   type Entry,
   type EntryStats,
   getEntriesByIdRange,
+  getEntriesMissingAvatar,
   getMaxEntryId,
   markDirty,
   recordLivenessResult,
@@ -67,6 +68,7 @@ const REFRESH_DISPATCH_INTERVAL_MS = 30 * MINUTE_MS;
 const GUARD_MIN_FAILURES = 2;
 
 type RefreshResult = RefreshTally & {
+  lane: "regular" | "missing_avatar";
   from: number;
   to: number;
   processed: string[];
@@ -146,6 +148,7 @@ export async function runRefresh(
   const db = createDb(env.DB);
   const now = scheduledTime;
   const result: RefreshResult = {
+    lane: "regular",
     from: 0,
     to: -1,
     processed: [],
@@ -175,8 +178,32 @@ export async function runRefresh(
   result.to = Math.min(maxId, result.from + batchSize - 1);
 
   try {
-    const rows = await getEntriesByIdRange(db, result.from, result.to);
-    result.subrequests++;
+    // Alternate lanes under the SAME lease and request budget. The separate keyset checkpoint
+    // reaches recent additions without waiting for the full directory; avatar-less profiles
+    // advance too. Regular ticks keep existing avatars and other metadata fresh.
+    let avatarNextId = claim.state.avatarNextId ?? 1;
+    let rows: Awaited<ReturnType<typeof getEntriesByIdRange>>;
+    if (
+      claim.state.avatarNextId !== undefined &&
+      Math.floor(scheduledTime / REFRESH_INTERVAL_MS) % 2 === 0
+    ) {
+      rows = await getEntriesMissingAvatar(db, avatarNextId, batchSize);
+      result.subrequests++;
+      const first = rows[0];
+      const last = rows.at(-1);
+      if (first && last) {
+        result.lane = "missing_avatar";
+        result.from = first.entry.id;
+        result.to = last.entry.id;
+      } else {
+        avatarNextId = 1;
+        rows = await getEntriesByIdRange(db, result.from, result.to);
+        result.subrequests++;
+      }
+    } else {
+      rows = await getEntriesByIdRange(db, result.from, result.to);
+      result.subrequests++;
+    }
 
     const pending: Pending[] = [];
     let rateLimited = false;
@@ -272,7 +299,12 @@ export async function runRefresh(
     }
     const deferred = rows.find(({ entry }) => result.deferred.includes(entry.username));
     await finishRefreshProgress(db, claim, {
-      nextId: deferred?.entry.id ?? result.to + 1,
+      nextId:
+        result.lane === "missing_avatar"
+          ? claim.state.nextId
+          : (deferred?.entry.id ?? result.to + 1),
+      avatarNextId:
+        result.lane === "missing_avatar" ? (deferred?.entry.id ?? result.to + 1) : avatarNextId,
       scheduledTime,
     });
     result.subrequests++;

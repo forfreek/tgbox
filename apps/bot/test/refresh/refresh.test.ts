@@ -138,11 +138,11 @@ describe("scheduling", () => {
     const sliced = { ...env, REFRESH_BATCH_SIZE: "2" };
 
     const seen: string[] = [];
-    for (let tick = 0; tick < 5; tick++) {
+    for (let tick = 0; tick < 10; tick++) {
       const result = await runRefresh(sliced, T0 + tick * REFRESH_INTERVAL_MS, tg);
       seen.push(...result.processed);
     }
-    expect([...seen].sort()).toEqual([...names].sort());
+    expect([...new Set(seen)].sort()).toEqual([...names].sort());
   });
 
   test("skips removed and admin-hidden entries, and low-activity channels on odd cycles", async () => {
@@ -603,4 +603,88 @@ test("the cron's default fetch is called the way the Workers runtime requires", 
   } finally {
     vi.unstubAllGlobals();
   }
+});
+
+test("missing avatars bypass the directory cursor and retain independent progress", async () => {
+  const old = await addEntry("old", { kind: "group" });
+  const empty = await addEntry("empty", { kind: "group" });
+  const recent = await addEntry("recent", { kind: "group" });
+  await env.DB.prepare("UPDATE entries SET avatar_version = 'existing' WHERE id = ?")
+    .bind(old)
+    .run();
+  await setSiteState(
+    db,
+    "refresh_progress_v1",
+    JSON.stringify({ nextId: old, avatarNextId: 1, cycle: 0, lastScheduledTime: 0, lease: null }),
+  );
+  const tg = fakeTelegram({ old: "group", empty: "not_found", recent: "group" });
+  const sliced = { ...env, REFRESH_BATCH_SIZE: "1" };
+  const first = await runRefresh(sliced, T0, tg);
+  expect(first.lane).toBe("missing_avatar");
+  expect(first.processed).toEqual(["empty"]);
+  expect(JSON.parse((await getSiteState(db, "refresh_progress_v1")) ?? "null")).toMatchObject({
+    nextId: old,
+    avatarNextId: empty + 1,
+  });
+  const normal = await runRefresh(sliced, T0 + REFRESH_INTERVAL_MS, tg);
+  expect(normal.lane).toBe("regular");
+  expect(normal.processed).toEqual(["old"]);
+  const next = await runRefresh(sliced, T0 + 2 * REFRESH_INTERVAL_MS, tg);
+  expect(next.processed).toEqual(["recent"]);
+  expect((await entry("recent")).avatarVersion).not.toBeNull();
+  expect(await env.MEDIA.head("avatars/recent.jpg")).not.toBeNull();
+  expect(recent).toBe(next.to);
+});
+
+test("priority lane preserves its checkpoint on rate limit and shares the request budget", async () => {
+  const id = await addEntry("limited", { kind: "group" });
+  await setSiteState(
+    db,
+    "refresh_progress_v1",
+    JSON.stringify({ nextId: id, avatarNextId: id, cycle: 0, lastScheduledTime: 0, lease: null }),
+  );
+  const limited = await runRefresh(env, T0, fakeTelegram({ limited: "rate_limited" }));
+  expect(limited.deferred).toEqual(["limited"]);
+  expect(JSON.parse((await getSiteState(db, "refresh_progress_v1")) ?? "null")).toMatchObject({
+    nextId: id,
+    avatarNextId: id,
+    lease: null,
+  });
+  const budget = await runRefresh(
+    env,
+    T0 + 2 * REFRESH_INTERVAL_MS,
+    fakeTelegram({ limited: "group" }),
+    25,
+  );
+  expect(budget.processed).toEqual([]);
+  expect(budget.deferred).toEqual(["limited"]);
+  expect(budget.subrequests).toBeLessThanOrEqual(45);
+  const retry = await runRefresh(
+    env,
+    T0 + 4 * REFRESH_INTERVAL_MS,
+    fakeTelegram({ limited: "group" }),
+  );
+  expect(retry.processed).toEqual(["limited"]);
+  expect((await entry("limited")).avatarVersion).not.toBeNull();
+});
+
+test("exhausted avatar lane falls back to regular refresh and wraps without selecting hidden rows", async () => {
+  const id = await addEntry("visible", { kind: "group" });
+  const hidden = await addEntry("hidden", { kind: "group" });
+  await env.DB.prepare("UPDATE entries SET status='hidden_by_admin' WHERE id=?").bind(hidden).run();
+  await env.DB.prepare("UPDATE entries SET avatar_version='existing' WHERE id=?").bind(id).run();
+  await setSiteState(
+    db,
+    "refresh_progress_v1",
+    JSON.stringify({ nextId: id, avatarNextId: 1, cycle: 0, lastScheduledTime: 0, lease: null }),
+  );
+  const tg = fakeTelegram({ visible: "group", hidden: "group" });
+  const result = await runRefresh(env, T0, tg);
+  expect(result.lane).toBe("regular");
+  expect(result.processed).toEqual(["visible"]);
+  expect(tg.tme("hidden")).toHaveLength(0);
+  expect(JSON.parse((await getSiteState(db, "refresh_progress_v1")) ?? "null")).toMatchObject({
+    avatarNextId: 1,
+    lease: null,
+  });
 });
