@@ -83,3 +83,16 @@ test("compare and swap never recreates a removed checkpoint for an old owner", a
   await expect(finishRefreshProgress(db, first)).rejects.toThrow("ownership lost");
   expect(await getSiteState(db, REFRESH_PROGRESS_KEY)).toBeUndefined();
 });
+
+test("priority progress upgrades old state without moving the regular checkpoint", async () => {
+  const first = await claim();
+  await finishRefreshProgress(db, first, {
+    nextId: first.state.nextId,
+    avatarNextId: 100,
+    scheduledTime: NOW,
+  });
+  const next = await claim({ scheduledTime: NOW + 300_000 });
+  expect(next.state).toMatchObject({ nextId: first.state.nextId, avatarNextId: 100 });
+  await finishRefreshProgress(db, next);
+  expect((await claim({ scheduledTime: NOW + 300_000 })).state.avatarNextId).toBe(100);
+});

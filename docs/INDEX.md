@@ -114,3 +114,5 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 第一阶段上线结果与生产验证边界见 [发布验收记录](seo-phase1/STATE.md#排行榜发布验收)。
 
 已上线六页的 Google 收录与搜索表现复核见 [搜索复核](seo-phase1/SEARCH-REVIEW.md)，包含数据窗口、时区、私有报告和下一次复核入口。
+
+2026-11-26 头像补齐延迟根因与缺头像优先通道恢复入口：C:/Users/123/tgbox-avatar-priority，见 [刷新状态](refresh-progress/STATE.md#2026-11-26-缺头像优先刷新)。生产bot于11-25已更新旧修复，本次优先通道尚未部署；不要将网站构建成功视为头像抓取完成。

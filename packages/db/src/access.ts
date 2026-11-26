@@ -121,6 +121,23 @@ export async function getMaxEntryId(db: Db) {
   return row?.value ?? 0;
 }
 
+/** Keyset page so entries without a public avatar cannot starve later additions. */
+export function getEntriesMissingAvatar(db: Db, from: number, limit: number) {
+  return db
+    .select({ entry: entries, stats: entryStats })
+    .from(entries)
+    .leftJoin(entryStats, eq(entryStats.entryId, entries.id))
+    .where(
+      and(
+        gte(entries.id, from),
+        eq(entries.status, "approved"),
+        sql`${entries.avatarVersion} IS NULL`,
+      ),
+    )
+    .orderBy(entries.id)
+    .limit(Math.min(100, Math.max(1, limit)));
+}
+
 export async function getEntryTagIds(db: Db, entryId: number) {
   const rows = await db
     .select({ tagId: entryTags.tagId })
