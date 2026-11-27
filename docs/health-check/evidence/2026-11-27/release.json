@@ -1,0 +1,281 @@
+{
+  "verifiedAt": "2026-11-27 09:52:22 UTC",
+  "main": "acf9e3dda75cbe508c3af4cefff1541904413088",
+  "sourceTree": "92b80adfb98554ce55b6a41c7eb9fc2580974fe9",
+  "migration": "0027_entry_health.sql",
+  "workers": [
+    {
+      "name": "tgbox-bot",
+      "before": {
+        "id": "418e2d00-e89e-44f6-8f9b-a636a3ab332b",
+        "createdOn": "2026-11-26T02:54:15.236937Z",
+        "versions": [
+          {
+            "version_id": "c079943c-7945-438e-97af-028f394483f9",
+            "percentage": 100
+          }
+        ]
+      },
+      "after": {
+        "id": "4dcd8661-c981-475a-a741-ff1357f9465e",
+        "createdOn": "2026-11-27T09:46:57.209707Z",
+        "versions": [
+          {
+            "version_id": "ac61a4c4-1676-4b05-a2a1-9c443d075808",
+            "percentage": 100
+          }
+        ]
+      },
+      "bindingsUnchanged": true,
+      "bindingNames": [
+        {
+          "name": "ADMIN_CHAT_ID",
+          "type": "secret_text"
+        },
+        {
+          "name": "ADMIN_IDS",
+          "type": "secret_text"
+        },
+        {
+          "name": "ADMIN_URL",
+          "type": "plain_text"
+        },
+        {
+          "name": "AI",
+          "type": "ai"
+        },
+        {
+          "name": "BOT_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "BOT_USERNAME",
+          "type": "secret_text"
+        },
+        {
+          "name": "DB",
+          "type": "d1"
+        },
+        {
+          "name": "GITHUB_DISPATCH_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "GITHUB_REPO",
+          "type": "plain_text"
+        },
+        {
+          "name": "MEDIA",
+          "type": "r2_bucket"
+        },
+        {
+          "name": "R2_PUBLIC_URL",
+          "type": "plain_text"
+        },
+        {
+          "name": "REFRESH_BATCH_SIZE",
+          "type": "plain_text"
+        },
+        {
+          "name": "SETTINGS_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "SITE_URL",
+          "type": "plain_text"
+        },
+        {
+          "name": "WEBHOOK_SECRET",
+          "type": "secret_text"
+        }
+      ]
+    },
+    {
+      "name": "tgbox-admin",
+      "before": {
+        "id": "b55181e8-4c59-43a7-bad3-69ebfcefd1de",
+        "createdOn": "2026-11-25T07:57:40.853059Z",
+        "versions": [
+          {
+            "version_id": "8f0aeef5-242c-4bd1-b1b9-fac0b120860e",
+            "percentage": 100
+          }
+        ]
+      },
+      "after": {
+        "id": "1c1afa78-6636-4761-a739-f7a84104802a",
+        "createdOn": "2026-11-27T09:47:24.529058Z",
+        "versions": [
+          {
+            "version_id": "8923c4ef-3a91-40c6-b5a5-393b45544619",
+            "percentage": 100
+          }
+        ]
+      },
+      "bindingsUnchanged": true,
+      "bindingNames": [
+        {
+          "name": "ADMIN_DEV_BYPASS",
+          "type": "plain_text"
+        },
+        {
+          "name": "ADMIN_EMAILS",
+          "type": "secret_text"
+        },
+        {
+          "name": "ADMIN_IDS",
+          "type": "secret_text"
+        },
+        {
+          "name": "AI",
+          "type": "ai"
+        },
+        {
+          "name": "BOT_PUBLIC_URL",
+          "type": "plain_text"
+        },
+        {
+          "name": "BOT_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "CF_ACCESS_AUD",
+          "type": "plain_text"
+        },
+        {
+          "name": "CF_ACCESS_TEAM_DOMAIN",
+          "type": "plain_text"
+        },
+        {
+          "name": "DB",
+          "type": "d1"
+        },
+        {
+          "name": "GITHUB_DISPATCH_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "GITHUB_REPO",
+          "type": "plain_text"
+        },
+        {
+          "name": "MEDIA",
+          "type": "r2_bucket"
+        },
+        {
+          "name": "R2_PUBLIC_URL",
+          "type": "plain_text"
+        },
+        {
+          "name": "SETTINGS_KEY",
+          "type": "secret_text"
+        },
+        {
+          "name": "SITE_URL",
+          "type": "plain_text"
+        },
+        {
+          "name": "WEBHOOK_SECRET",
+          "type": "secret_text"
+        }
+      ]
+    },
+    {
+      "name": "tgbox-web",
+      "before": {
+        "id": "6fba6cd5-ee4f-45a4-80b1-0f5bdb12fca2",
+        "createdOn": "2026-11-27T09:18:18.103903Z",
+        "versions": [
+          {
+            "version_id": "8f8bfe9b-4aad-4d55-9f76-f052200f37a2",
+            "percentage": 100
+          }
+        ]
+      },
+      "after": {
+        "id": "29bb00df-2955-4967-8459-2495cc772848",
+        "createdOn": "2026-11-27T09:49:39.338465Z",
+        "versions": [
+          {
+            "version_id": "9b45a126-bad7-43bd-8501-73ea516743d5",
+            "percentage": 100
+          }
+        ]
+      },
+      "bindingsUnchanged": true,
+      "bindingNames": [
+        {
+          "name": "ADMIN_CHAT_ID",
+          "type": "secret_text"
+        },
+        {
+          "name": "ADMIN_IDS",
+          "type": "secret_text"
+        },
+        {
+          "name": "AI",
+          "type": "ai"
+        },
+        {
+          "name": "ASSETS",
+          "type": "assets"
+        },
+        {
+          "name": "BOT_TOKEN",
+          "type": "secret_text"
+        },
+        {
+          "name": "BOT_USERNAME",
+          "type": "secret_text"
+        },
+        {
+          "name": "DB",
+          "type": "d1"
+        },
+        {
+          "name": "MEDIA",
+          "type": "r2_bucket"
+        },
+        {
+          "name": "R2_PUBLIC_URL",
+          "type": "plain_text"
+        }
+      ]
+    }
+  ],
+  "aiSettings": [
+    {
+      "id": 1,
+      "enabled": 0,
+      "model": "@cf/google/gemma-4-26b-a4b-it",
+      "prompt_version": "summary-prompt-v8",
+      "params_version": "summary-params-v3",
+      "daily_calls": 100,
+      "daily_neurons": 6000,
+      "reservation": 100,
+      "max_attempts": 1,
+      "auto_scan": 0
+    }
+  ],
+  "protectionCheck": {
+    "aiSettingsUnchanged": true,
+    "businessSettingsUnchanged": true,
+    "historicalHiddenIdsAndLegacyHealthUnchanged": true
+  },
+  "workflow": {
+    "ci": 45976512365,
+    "web": 45976512454,
+    "conclusion": "success"
+  },
+  "http": {
+    "publicHome": 200,
+    "adminUnauthenticated": 302,
+    "adminLocationHost": "authacs.cloudflareaccess.com",
+    "miniAppMeUnauthenticated": 401,
+    "miniAppPreviewUnauthenticated": 401
+  },
+  "limitations": [
+    "No authenticated administrator production record was created",
+    "One full regular sweep and historical restoration remain unverified"
+  ]
+}

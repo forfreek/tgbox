@@ -133,3 +133,5 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 2026-11-27 健康检查阶段三最新恢复入口 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、[历史只读复核](health-check/HISTORY.md)。15条候选实时复核：5当前可识别、1类型异常、9无法确认；仅只读采集，无生产恢复/迁移/部署。依赖#87，正式修复与阶段四验收未完成。
 
 2026-11-27 阶段三只读复核草稿PR #88 https://github.com/forfreek/tgbox/pull/88 ，base=codex/health-check-integration（#87），代码aa574b7。最新恢复 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、HISTORY.md。15条候选中5当前公开身份可识别、1类型异常、9无法确认；未迁移/部署/恢复，旧工作树历史边界保留。
+
+2026-11-27 健康检查已按明确授权合并#84–#88并完成兼容迁移及Bot/Admin/Web发布，最新恢复 C:/Users/123/tgbox-health-release/docs/health-check/STATE.md、[发布记录](health-check/RELEASE.md)。原历史清单为带日期快照，12条隐藏未恢复；全目录观察、人工核验与旧字段清理仍待完成。

@@ -72,3 +72,9 @@
 2026-11-27 阶段三只读复核草稿PR #88 https://github.com/forfreek/tgbox/pull/88 ，base=codex/health-check-integration（#87），代码aa574b7。最新恢复 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、HISTORY.md。15条候选中5当前公开身份可识别、1类型异常、9无法确认；未迁移/部署/恢复，旧工作树历史边界保留。
 
 2026-11-27 PR #88首轮CI45953535909在未改动snapshot的build-site-data.test.ts第362行触发5000ms超时，格式/类型检查通过。该文件随后本地单worker完整复跑28项通过（53.63s）；没有改业务代码或放宽测试超时。Node新增专项8项+迁移1项、scripts类型与变更Biome通过；最终提交CI重新核验。
+
+## 2026-11-27 合并部署（最新）
+
+用户已明确授权“pr 合并部署”。#84–#88已按顺序合并main acf9e3d；0027生产兼容迁移、Bot/Admin及最终Web部署完成。记录工作树C:/Users/123/tgbox-health-release，分支codex/health-check-release，实际版本与验证见RELEASE.md；后续真实常规tick与最终保护读回待追加。历史12条未恢复，原主体/机器人功能验证、完整巡检和旧列最终清理仍未完成。
+
+2026-11-27 发布验收补充：17:50 missing_avatar真实tick成功（14子请求、健康0写入），17:55 regular真实tick成功（41<=45子请求，3条新健康/证据，3条预算延期，nextId=131、avatarNextId=1935、无隐藏/恢复、无异常）。D1新证据为health-v1/tme-profile-v2/HTTP200；最终AI/settings及12条历史状态保持。main CI45976512365和最终Web部署45976512454均成功。完整目录巡检和生产人工验证/历史修复/旧字段清理仍未完成，不能标专题关闭。

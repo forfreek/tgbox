@@ -1,0 +1,51 @@
+[
+  {
+    "version": "ac61a4c4-1676-4b05-a2a1-9c443d075808",
+    "outcome": "ok",
+    "exceptions": [],
+    "scheduledTime": 1795773040000,
+    "wallTime": 5775,
+    "cpuTime": 59,
+    "refresh": {
+      "lane": "missing_avatar",
+      "from": 1500,
+      "to": 1934,
+      "processed": [
+        "stockprice_bot",
+        "airpollution_bot",
+        "automemebot",
+        "magiskcnshare",
+        "lybot",
+        "getbridgesbot12_bot"
+      ],
+      "deferred": [],
+      "hidden": [],
+      "restored": [],
+      "rowsWritten": 0,
+      "r2Writes": 0,
+      "subrequests": 14,
+      "dirty": false
+    }
+  },
+  {
+    "version": "ac61a4c4-1676-4b05-a2a1-9c443d075808",
+    "outcome": "ok",
+    "exceptions": [],
+    "scheduledTime": 1795773340000,
+    "wallTime": 11211,
+    "cpuTime": 59,
+    "refresh": {
+      "lane": "regular",
+      "from": 128,
+      "to": 133,
+      "processed": ["theblockclub", "adguardcn", "materialgram"],
+      "deferred": ["notcoin", "binance_announcements", "cointelegraph"],
+      "hidden": [],
+      "restored": [],
+      "rowsWritten": 22,
+      "r2Writes": 6,
+      "subrequests": 41,
+      "dirty": true
+    }
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "capturedAt": "2026-11-27 09:56:29 UTC",
+  "aiUnchanged": true,
+  "settingsUnchanged": true,
+  "historicalStateUnchanged": true,
+  "health": [
+    {
+      "id": 128,
+      "username": "theblockclub",
+      "status": "approved",
+      "public_state": "accessible",
+      "observed_at": 1795773340000,
+      "confirmed_at": 1795773340000,
+      "function_state": "unverified",
+      "revision": 1
+    },
+    {
+      "id": 129,
+      "username": "adguardcn",
+      "status": "approved",
+      "public_state": "accessible",
+      "observed_at": 1795773340000,
+      "confirmed_at": 1795773340000,
+      "function_state": "unverified",
+      "revision": 1
+    },
+    {
+      "id": 130,
+      "username": "materialgram",
+      "status": "approved",
+      "public_state": "accessible",
+      "observed_at": 1795773340000,
+      "confirmed_at": 1795773340000,
+      "function_state": "unverified",
+      "revision": 1
+    }
+  ],
+  "evidence": [
+    {
+      "entry_id": 128,
+      "source": "tme_profile",
+      "policy": "health-v1",
+      "parser": "tme-profile-v2",
+      "reason": "profile_recognized",
+      "http_status": 200
+    },
+    {
+      "entry_id": 129,
+      "source": "tme_profile",
+      "policy": "health-v1",
+      "parser": "tme-profile-v2",
+      "reason": "profile_recognized",
+      "http_status": 200
+    },
+    {
+      "entry_id": 130,
+      "source": "tme_profile",
+      "policy": "health-v1",
+      "parser": "tme-profile-v2",
+      "reason": "profile_recognized",
+      "http_status": 200
+    }
+  ],
+  "progress": [
+    {
+      "key": "dirty_since",
+      "value": "1795773340000"
+    },
+    {
+      "key": "health_source_v1:tme_preview",
+      "value": "{\"failures\":0,\"lastObservedAt\":1795773340000,\"notBefore\":0}"
+    },
+    {
+      "key": "health_source_v1:tme_profile",
+      "value": "{\"failures\":0,\"lastObservedAt\":1795773340000,\"notBefore\":0}"
+    },
+    {
+      "key": "refresh_progress_v1",
+      "value": "{\"nextId\":131,\"cycle\":2,\"lastScheduledTime\":1795773340000,\"lease\":null,\"avatarNextId\":1935}"
+    }
+  ]
+}
