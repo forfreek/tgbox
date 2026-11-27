@@ -46,3 +46,13 @@
 2026-11-27 阶段三只读复核草稿PR #88 https://github.com/forfreek/tgbox/pull/88 ，base=codex/health-check-integration（#87），代码aa574b7。最新恢复 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、HISTORY.md。15条候选中5当前公开身份可识别、1类型异常、9无法确认；未迁移/部署/恢复，旧工作树历史边界保留。
 
 2026-11-27 PR #88首轮CI45953535909在未改动snapshot的build-site-data.test.ts第362行触发5000ms超时，格式/类型检查通过。该文件随后本地单worker完整复跑28项通过（53.63s）；没有改业务代码或放宽测试超时。Node新增专项8项+迁移1项、scripts类型与变更Biome通过；最终提交CI重新核验。
+
+## 生产发布保护（2026-11-27）
+
+- 依据本轮明确生产授权合并#84–#88，先0027再Bot/Admin/Web一致发布；不从旧liveness回填。来源main与交付tree核对相同，版本与CI见RELEASE.md。
+- keep-vars不会保护配置中同名变量的旧值，Admin上线前须将线上plain_text完整写入忽略的build配置再keep-vars；本次保留既有Access与不同R2 URL，三服务bindings读回一致。AI配额以发布前真实100 calls/6000 reservation预算/100单次/1 attempt为准，enabled/auto_scan均0，全部保持。
+- 后台匿名302是既有Cloudflare Access保护，随跳转的200是登录页，不能称后台界面或middleware验收；生产人工记录未执行。头像真实tick14子请求且不写health，常规证据验收后追加。
+
+2026-11-27 发布验收补充：17:50 missing_avatar真实tick成功（14子请求、健康0写入），17:55 regular真实tick成功（41<=45子请求，3条新健康/证据，3条预算延期，nextId=131、avatarNextId=1935、无隐藏/恢复、无异常）。D1新证据为health-v1/tme-profile-v2/HTTP200；最终AI/settings及12条历史状态保持。main CI45976512365和最终Web部署45976512454均成功。完整目录巡检和生产人工验证/历史修复/旧字段清理仍未完成，不能标专题关闭。
+
+2026-11-27 最新生产发布记录PR #89 https://github.com/forfreek/tgbox/pull/89 ，工作树C:/Users/123/tgbox-health-release，分支codex/health-check-release，base=main。#84–#88已合并，0027与Bot/Admin/Web已部署；真实头像/常规tick及配置保护读回见RELEASE.md。历史隐藏未恢复，完整巡检/人工功能验证/旧字段清理仍未完成。PR检查与合并状态按远端最新核验。
