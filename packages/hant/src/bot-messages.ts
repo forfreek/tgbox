@@ -6,7 +6,7 @@ import { toHant } from "./index.ts";
  * which can't afford OpenCC at request time, so the conversion is committed as source instead.
  */
 export function botHantSource(zhSource: string): string {
-  const converted = toHant(zhSource)
+  const converted = toHant(zhSource.replace(/\r\n?/g, "\n"))
     // One public export per dictionary file; the helper types stay module-private here.
     .replace(/^export (type|const) (?!zh = )/gm, "$1 ")
     .replace(/^export const zh = /m, "export const zhHant = ");
@@ -15,7 +15,8 @@ export function botHantSource(zhSource: string): string {
     [...categories, ...tags]
       .map((item) => [item.nameZh, toHant(item.nameZh)] as const)
       .filter(([zh, hant]) => zh !== hant)
-      .sort(([a], [b]) => a.localeCompare(b)),
+      // Stable source output across OS/ICU defaults; this is not a user-facing sort.
+      .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)),
   );
   return [
     "// Generated from zh.ts by `pnpm --filter @tgbox/hant gen:bot`. Edit zh.ts, then regenerate.",
