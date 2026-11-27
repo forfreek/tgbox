@@ -1,0 +1,458 @@
+{
+  "version": "health-history-review-v1",
+  "collectedAt": "2026-11-27T06:31:51.971Z",
+  "sources": {
+    "tme_profile": {
+      "failures": 1,
+      "lastObservedAt": 1795761103960,
+      "notBefore": 1795761403960
+    },
+    "tme_preview": {
+      "failures": 0,
+      "lastObservedAt": 0,
+      "notBefore": 0
+    }
+  },
+  "results": [
+    {
+      "entry": {
+        "id": 174,
+        "username": "gpegucxozphzl6gj",
+        "kind": "channel",
+        "title": "币圈集结圈",
+        "status": "approved",
+        "liveness": "not_found",
+        "fail_count": 2,
+        "first_fail_at": 1795298440983,
+        "last_fail_at": 1795596340983,
+        "updated_at": 1795596340983,
+        "listed_at": 1794248723617
+      },
+      "assessment": {
+        "finding": "unable_to_confirm",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "not_applicable",
+        "productionMutationAllowed": false,
+        "fingerprint": "b5824f3605e58cf1b4bd8ddae0ad13c31e51315bb4eaf0168b9e3a00bcc5c762"
+      },
+      "observation": {
+        "observationId": "2506b4fc-a4bb-4fc7-b8cc-cee34f0ff949",
+        "targetUsername": "gpegucxozphzl6gj",
+        "expectedKind": "channel",
+        "startedAt": 1795761103960,
+        "completedAt": 1795761111965,
+        "parserVersion": "tme-profile-v2",
+        "policyVersion": "health-v1",
+        "outcome": "uncertain",
+        "reason": "transport_error",
+        "httpStatus": null,
+        "pageShape": null,
+        "detectedKind": null,
+        "previewUnavailable": false
+      },
+      "currentProfile": null,
+      "sourceResults": {
+        "tme_profile": {
+          "at": 1795761103960,
+          "outcome": "transport_error"
+        }
+      },
+      "deferredUntil": null,
+      "subrequests": 1
+    },
+    {
+      "entry": {
+        "id": 209,
+        "username": "kgndni5hqox3hhf6",
+        "kind": "channel",
+        "title": "顽童技术站",
+        "status": "hidden_by_system",
+        "liveness": "not_found",
+        "fail_count": 3,
+        "first_fail_at": 1795300240983,
+        "last_fail_at": 1795598440983,
+        "updated_at": 1795598440983,
+        "listed_at": 1794248821111
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "c01d67a83d3ecf64b5a98b8646b7b0501068a74311fb9e4d0a898a7fc57e2989"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 316,
+        "username": "oyn4uj6viui8pni",
+        "kind": "channel",
+        "title": "热心小宅男",
+        "status": "approved",
+        "liveness": "not_found",
+        "fail_count": 4,
+        "first_fail_at": 1795405240983,
+        "last_fail_at": 1795604740983,
+        "updated_at": 1795604740983,
+        "listed_at": 1794249132422
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "not_applicable",
+        "productionMutationAllowed": false,
+        "fingerprint": "9805333db1327382e3cf75a612a5f6ad9dcbe100f7b000fe05db2eb594bb2aaa"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 317,
+        "username": "zng7qbrh9uaes6",
+        "kind": "channel",
+        "title": "饭后乐哈哈",
+        "status": "approved",
+        "liveness": "not_found",
+        "fail_count": 4,
+        "first_fail_at": 1795405240983,
+        "last_fail_at": 1795604740983,
+        "updated_at": 1795604740983,
+        "listed_at": 1794249135454
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "not_applicable",
+        "productionMutationAllowed": false,
+        "fingerprint": "4fb9b66e220a92ddd86c329fe439b36266dd7929bce600167f1a3041a302eac1"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 351,
+        "username": "magazinesclubnew",
+        "kind": "channel",
+        "title": "☁️云上报刊亭📰 [精选] 🅥 -- 新闻，报纸，杂志，电子书，资料 PDF",
+        "status": "hidden_by_system",
+        "liveness": "banned",
+        "fail_count": 12,
+        "first_fail_at": 1794545440983,
+        "last_fail_at": 1795606840983,
+        "updated_at": 1795606840983,
+        "listed_at": 1794249234779
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "d93b7ace84a81dbf937981ff42a01a4e39efdcea45f2ba5d1d2ece9be07b10f0"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 702,
+        "username": "barmapsbot",
+        "kind": "bot",
+        "title": "BarMatch",
+        "status": "hidden_by_system",
+        "liveness": "not_found",
+        "fail_count": 13,
+        "first_fail_at": 1794466840983,
+        "last_fail_at": 1795628440983,
+        "updated_at": 1795628440983,
+        "listed_at": 1794249941298
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": "unverified",
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "64635e2efa7ca915c6171604e9a8ca042518fab0cbdf18fb5f8cca35040d8bad"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1092,
+        "username": "rigvault_bot",
+        "kind": "bot",
+        "title": "Rigvault",
+        "status": "hidden_by_system",
+        "liveness": "not_found",
+        "fail_count": 11,
+        "first_fail_at": 1794486340983,
+        "last_fail_at": 1795648540983,
+        "updated_at": 1795648540983,
+        "listed_at": 1794250484649
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": "unverified",
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "90fdbaf925e3e17037077fd549340f515547d3f92254fdc362667c326d3352ea"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1259,
+        "username": "mybestfriend_ai_en_bot",
+        "kind": "bot",
+        "title": "ChatPal",
+        "status": "hidden_by_system",
+        "liveness": "type_changed",
+        "fail_count": 14,
+        "first_fail_at": 1794494740983,
+        "last_fail_at": 1795657540983,
+        "updated_at": 1795657540983,
+        "listed_at": 1794263618324
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": "unverified",
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "b9b57b0a0df858cd68137d1a71aeba18c005180bd6a406f49b6dc2fd5c058e98"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1276,
+        "username": "macos_ru",
+        "kind": "group",
+        "title": "macOS_ru",
+        "status": "hidden_by_system",
+        "liveness": "not_found",
+        "fail_count": 14,
+        "first_fail_at": 1794495640983,
+        "last_fail_at": 1795658440983,
+        "updated_at": 1795658440983,
+        "listed_at": 1794263618324
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "7b9fe7f439d4ee123a6c13ebc17837d5942f5917fcd6ebe1afedde5216058813"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1335,
+        "username": "dailyscorefootbot",
+        "kind": "bot",
+        "title": "Daily Score ⚽ Guess the Score",
+        "status": "hidden_by_system",
+        "liveness": "not_found",
+        "fail_count": 14,
+        "first_fail_at": 1794498640983,
+        "last_fail_at": 1795661740983,
+        "updated_at": 1795661740983,
+        "listed_at": 1794263618324
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": "unverified",
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "f9eea098bd01013436eb1c3281e339599e978626f52cbe20a1add4faa0e01775"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1350,
+        "username": "hacking_group_channel",
+        "kind": "channel",
+        "title": "Hack",
+        "status": "hidden_by_system",
+        "liveness": "banned",
+        "fail_count": 7,
+        "first_fail_at": 1794336340983,
+        "last_fail_at": 1795662940983,
+        "updated_at": 1795662940983,
+        "listed_at": 1794263618324
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "3a6ff92bc93a0d63416a3e6e99b0d9e61c978364f684176e7f2a5e4c8a1fdeab"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1356,
+        "username": "aisecnews",
+        "kind": "channel",
+        "title": "AISec",
+        "status": "hidden_by_system",
+        "liveness": "banned",
+        "fail_count": 3,
+        "first_fail_at": 1795664140983,
+        "last_fail_at": 1795690840983,
+        "updated_at": 1795690840983,
+        "listed_at": 1794263618324
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "a49122b57e0318ea86823bb07e627663e28376d9121437fa99ed9b94032b2485"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1918,
+        "username": "transfernews_live",
+        "kind": "channel",
+        "title": "Transfer News Live",
+        "status": "hidden_by_system",
+        "liveness": "banned",
+        "fail_count": 2,
+        "first_fail_at": 1795530640983,
+        "last_fail_at": 1795725940000,
+        "updated_at": 1795725940000,
+        "listed_at": 1794411366828
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "80d2be247cb5357e8a5a0c2a36dca0a104c60b7412b20dad81fecfcc4aaf82c5"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1946,
+        "username": "ferdesmozek",
+        "kind": "channel",
+        "title": "آهنگ های بلوچی موزیک های هوش مصنوعی",
+        "status": "hidden_by_system",
+        "liveness": "banned",
+        "fail_count": 5,
+        "first_fail_at": 1794934840983,
+        "last_fail_at": 1795729540000,
+        "updated_at": 1795729540000,
+        "listed_at": 1794895463799
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "8742bceed50138d16d4ea748971e5459dfe53520d7c870094c51b10958cd200a"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    },
+    {
+      "entry": {
+        "id": 1995,
+        "username": "ai_virtualcard1",
+        "kind": "group",
+        "title": "AIcrad虚拟卡官方群组",
+        "status": "hidden_by_system",
+        "liveness": "banned",
+        "fail_count": 3,
+        "first_fail_at": 1795666840983,
+        "last_fail_at": 1795734340000,
+        "updated_at": 1795734340000,
+        "listed_at": 1795406571796
+      },
+      "assessment": {
+        "finding": "deferred",
+        "identityContinuity": "not_verified",
+        "functionState": null,
+        "restoration": "requires_human_review",
+        "productionMutationAllowed": false,
+        "fingerprint": "ce4a56df582b8672a2c29a6fa55fea1ef98cc8e3205832271ffc65c04c15caeb"
+      },
+      "observation": null,
+      "currentProfile": null,
+      "sourceResults": {},
+      "deferredUntil": 1795761403960,
+      "subrequests": 0
+    }
+  ],
+  "inputSha256": "e11c44bf7ee458b0c66cd69834b8fbb207149a774dd28d83e095849d8f94b52c"
+}

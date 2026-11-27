@@ -60,3 +60,11 @@
 2026-11-27 PR #87 CI45949457611：lint/typecheck通过，测试发现繁体生成词典不同步（简体源格式化后未重生成，且localeCompare受宿主ICU默认排序影响）。已修正为固定码点顺序、规范生成换行，按最终简体源重新生成；同步测试只忽略checkout换行，新增禁止宿主localeCompare及CRLF/LF等价回归。Hant本地6项与类型检查通过；最新完整CI待核验。
 
 2026-11-27 PR #87 CI45949801379：Hant同步、lint/typecheck及其余9个包测试通过，Web Mini App测试4项因DB mock缺readHealthSources失败。已补齐mock并发现/修正Mini App preview直接采集漏接共享退避；新增真实采集函数下preview+submit冷却期零网络/零收录回归，API63项通过。Mini App未确认文案改为本次未确认，seed离线CLI仍仅作正向导入校验，不写新健康或发布决策。
+
+## 2026-11-27 阶段三只读复核（最新）
+
+- 当前工作树C:/Users/123/tgbox-health-history，分支codex/health-check-history，基线9f41632，堆叠base=codex/health-check-integration（#87）。#87 Linux CI45950431638于本次核验成功，仍OPEN/draft，未合并/部署。
+- 生产SELECT重新确认12条系统隐藏+3条上线旧异常；实时网页5条当前channel可识别、1条bot识别为channel、9条占位无法确认。见HISTORY.md与四份精简证据，不把可识别写成原主体或机器人功能确认。
+- 首次Node直连超时后停批，等待退避到期并沿现有代理重采；20次GET完成15条。二次只读导出的15条与之前一致，所有查询0写入；新迁移/健康表未上线。
+- 新增只读采集/评估与指纹工具，没有生产应用命令；Node专项8项和scripts类型检查通过，PR/最终CI在交付后登记。
+- 阶段三正式数据修复尚未完成：需要安全版本上线、独立人工原主体证据、明确恢复授权、新鲜快照及本地执行器演练。阶段四生产观察和旧列最终清理亦未完成。本节点无生产变更。
