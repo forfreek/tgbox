@@ -28,3 +28,19 @@
 - #84仍未合并；CI结果按当前远端核验，不将先前检查快照当最新结果。
 - 2026-11-27核验：阶段一#84全仓CI 45942342071通过（check 1m58s）。2A文档经源码入口核对与git diff --check验证，未改可执行代码，因此不重复运行实现测试；2A与后续2B不可混为已实现。
 - 2A已提交草稿PR #85：https://github.com/forfreek/tgbox/pull/85 ，base=codex/health-check-stage1，代码9727ce2。阶段一#84已标记ready且CI通过；两PR均未合并。本节点git diff --check通过，远端CI按PR最新检查核验。
+
+## 2026-11-27 阶段二2B1数据与判定基础
+
+- 工作树C:/Users/123/tgbox-health-data，分支codex/health-check-data，基线2A a2d88eb，堆叠base=codex/health-check-contract（#85）。独立PR待完成验证后登记。
+- 新增共享证据/功能/身份确认校验与判定、0027本地迁移、16槽证据、事务化条件写入、有界分页及来源退避/CAS。实现和限制见DATA.md。
+- 当前只交付2B1；2B2的Cron/手动/后台/三语/收录入口与预算接入未实施，旧运行路径仍存在，阶段二整体未完成。本节点未执行生产迁移、部署或历史数据修复。
+- 不将2B1 API导出当成已有生产观测。新API没有发布状态变更权限，未来入口亦不得退回旧自动隐藏。
+
+## 2B1验证结果（2026-11-27）
+
+- shared全套9文件205项、db全套17文件96项通过；最新数据/来源专项22项通过。Node SQLite旧库升级测试1项、scripts类型检查通过。
+- 全仓turbo typecheck 10个实际任务通过，Astro314文件0诊断；11个变更TS文件Biome及git diff --check通过。
+- 本地pnpm check因未改动文件大量CRLF格式诊断未通过，没有批量格式化全仓；Linux全仓CI按PR最新检查核验。
+- 源码审查核对条件UPSERT与证据同事务、16槽采样与功能明细保留、复核栅栏、actor/时间需可信服务端、来源CAS与不提前解除Retry-After，以及静态导出allowlist未扩入私有表。
+- 2B1是可独立审阅的基础实现；2B2运行/UI接入、整体tick预算与浏览器验证尚未执行。没有授权或执行生产迁移/部署/历史恢复。
+- 2B1已提交草稿PR #86：https://github.com/forfreek/tgbox/pull/86，base=codex/health-check-contract（#85），代码14635f0。#85 CI 45942928545核验通过；#86 Linux CI按最新检查核验。下一节点2B2接入运行/UI并停用旧隐藏路径，本节点不声称已完成该工作。

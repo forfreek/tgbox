@@ -8,11 +8,14 @@ import type {
   BroadcastStatus,
   EntryKind,
   EntryStatus,
+  FunctionHealth,
+  HealthReason,
   Liveness,
   OrderStatus,
   PaymentCurrency,
   PaymentProvider,
   ProductKind,
+  PublicHealth,
   SettingsKey,
   SiteLocale,
   SubmissionStatus,
@@ -585,5 +588,70 @@ export const friendLinkRequests = sqliteTable(
     uniqueIndex("friend_link_requests_pending_user_unique")
       .on(t.tgUserId)
       .where(sql`status = 'pending'`),
+  ],
+);
+
+/** Private diagnostic state, deliberately excluded from public snapshot exports. */
+export const entryHealth = sqliteTable(
+  "entry_health",
+  {
+    entryId: integer("entry_id")
+      .primaryKey()
+      .references(() => entries.id, { onDelete: "cascade" }),
+    bindingUsername: text("binding_username").notNull(),
+    bindingKind: text("binding_kind").notNull(),
+    publicState: text("public_state").$type<PublicHealth>().notNull().default("unverified"),
+    observedAt: integer("observed_at"),
+    confirmedAt: integer("confirmed_at"),
+    reason: text().$type<HealthReason>(),
+    observationId: text("observation_id"),
+    functionState: text("function_state").$type<FunctionHealth>().notNull().default("unverified"),
+    functionAt: integer("function_at"),
+    functionObservationId: text("function_observation_id"),
+    functionEvidence: text("function_evidence"),
+    evidenceToken: text("evidence_token"),
+    revision: integer().notNull().default(0),
+    evidenceSeq: integer("evidence_seq").notNull().default(0),
+    identityReviewedAt: integer("identity_reviewed_at"),
+    evidenceAt: integer("evidence_at"),
+    writeToken: text("write_token"),
+  },
+  (t) => [
+    index("entry_health_state").on(t.publicState, t.entryId),
+    check(
+      "entry_health_public_state",
+      sql`${t.publicState} IN ('unverified','accessible','uncertain','identity_review')`,
+    ),
+    check(
+      "entry_health_function_evidence",
+      sql`${t.functionEvidence} IS NULL OR json_valid(${t.functionEvidence})`,
+    ),
+    check(
+      "entry_health_function_state",
+      sql`${t.functionState} IN ('unverified','responded','no_response','reported_issue')`,
+    ),
+  ],
+);
+export const entryHealthEvidence = sqliteTable(
+  "entry_health_evidence",
+  {
+    entryId: integer("entry_id")
+      .notNull()
+      .references(() => entries.id, { onDelete: "cascade" }),
+    slot: integer().notNull(),
+    observationId: text("observation_id").notNull().unique(),
+    observedAt: integer("observed_at").notNull(),
+    source: text().notNull(),
+    evidence: text().notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.entryId, t.slot] }),
+    index("entry_health_evidence_time").on(t.entryId, t.observedAt),
+    check("entry_health_evidence_slot", sql`${t.slot} >= 0 AND ${t.slot} < 16`),
+    check(
+      "entry_health_evidence_source",
+      sql`${t.source} IN ('tme_profile','manual_function_check','manual_identity_review')`,
+    ),
+    check("entry_health_evidence_json", sql`json_valid(${t.evidence})`),
   ],
 );

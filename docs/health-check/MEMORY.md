@@ -15,3 +15,9 @@
 - 旧liveness消费方不仅Cron与后台列表，还包括review/dashboard/add、Bot三语、seed及DTO差异展示。必须整体切换及清理，不能只换recordLivenessResult留下旧误导标签。证据采用固定容量环且不进入静态导出，幂等/CAS/identity binding和预算是实现验收要求，不是本节点已实现能力。
 - #84全仓CI 45942342071于本节点核验通过。2A文档无运行时代码变更，以源码映射审阅、迁移/验收依赖核对及git diff --check验证；生产能力仍未改变。
 - 2A独立草稿PR #85 https://github.com/forfreek/tgbox/pull/85 ，依赖#84；2A只交付契约，2B代码/迁移/UI均未实施。恢复先读本工作树STATE及CONTRACT。
+
+- 2B1落地DATA.md：两张私有健康表及0027增量migration，不把旧active回填为验证成功；SQL条件UPSERT+D1 batch保证状态与环形证据事务一致，按2 SQL保守预算计账；来源控制复用site_state CAS，不加Cron。
+- 本地规模2093资源、100条页实际读300行，需报告测量而非把LIMIT当有界证据。身份变化保持人工复核、独立功能验证清除，确认带revision与时间栅栏，不伪造成功网页。无稳定Telegram ID仍不能证明同名主体未更换，不自动恢复历史隐藏。
+- 2B1没有修改任何运行入口/UI；下一2B2必须统一鉴权/审计/DTO/三语与tick预算并停用旧路径，阶段二未完成。生产迁移/部署/恢复未执行。
+- 2B1本地shared205/db96项、专项22项及Node旧库迁移1项通过，scripts类型与全仓10个typecheck任务通过（Astro314文件0诊断）。本地全仓check受既有CRLF格式诊断阻断，变更11个TS文件Biome通过，不将Linux CI或生产验收推定为通过。
+- 2B1独立草稿PR #86 https://github.com/forfreek/tgbox/pull/86 ，依赖#85/#84；代码14635f0。恢复至本工作树STATE/DATA，后续2B2使用已验证API接入可信服务端，不能仅部署此基础库就声称误隐藏修复生效。
