@@ -18,16 +18,16 @@ describe("classifyLiveness", () => {
     });
   });
 
-  test("view page without avatar/extra → banned", () => {
+  test("existing view placeholder → unknown", () => {
     expect(
       classifyLiveness({ profileResponse: ok("profile-banned.html"), previousKind: "channel" }),
-    ).toEqual({ liveness: "banned", kind: null });
+    ).toEqual({ liveness: "unknown", kind: null });
   });
 
-  test("contact page without avatar/extra → not_found", () => {
+  test("existing contact placeholder → unknown", () => {
     expect(
       classifyLiveness({ profileResponse: ok("profile-not-found.html"), previousKind: "bot" }),
-    ).toEqual({ liveness: "not_found", kind: null });
+    ).toEqual({ liveness: "unknown", kind: null });
   });
 
   test.each([
@@ -56,13 +56,30 @@ describe("classifyLiveness", () => {
     ).toEqual({ liveness: "active", kind: "user" });
   });
 
-  test("channel whose /s/ preview now redirects → banned", () => {
+  test("a recognized channel remains active", () => {
     expect(
       classifyLiveness({
         profileResponse: ok("profile-channel.html"),
         previousKind: "channel",
-        previewRedirected: true,
       }),
-    ).toEqual({ liveness: "banned", kind: "channel" });
+    ).toEqual({ liveness: "active", kind: "channel" });
   });
+});
+
+test("new placeholder submissions retain an unverified identity instead of becoming active", () => {
+  expect(
+    classifyLiveness({ profileResponse: ok("profile-not-found.html"), previousKind: null })
+      .liveness,
+  ).toBe("not_found");
+  expect(
+    classifyLiveness({ profileResponse: ok("profile-banned.html"), previousKind: null }).liveness,
+  ).toBe("banned");
+});
+
+test("a bot without avatar or monthly users remains identifiable by Start Bot", () => {
+  const html =
+    '<div class="tgme_page"><div class="tgme_page_title">Example</div><a class="tgme_action_button_new" href="tg://resolve?domain=example_bot">Start Bot</a></div>';
+  expect(classifyLiveness({ profileResponse: { status: 200, html }, previousKind: "bot" })).toEqual(
+    { liveness: "active", kind: "bot" },
+  );
 });

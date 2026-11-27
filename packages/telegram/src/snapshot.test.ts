@@ -99,7 +99,7 @@ describe("fetchEntrySnapshot", () => {
     expect(snap).toMatchObject({ liveness: "active", createdAt: null, subrequests: 1 });
   });
 
-  test("channel whose /s/ now redirects → banned", async () => {
+  test("normal channel with redirecting preview stays active", async () => {
     const { fetch } = fakeFetch({
       "https://t.me/telegram": html("profile-channel.html"),
       "https://t.me/s/telegram": redirect("https://t.me/telegram"),
@@ -111,7 +111,7 @@ describe("fetchEntrySnapshot", () => {
       needCreatedAt: true,
     });
     expect(snap).toMatchObject({
-      liveness: "banned",
+      liveness: "active",
       posts: null,
       createdAt: null,
       subrequests: 2,
@@ -194,6 +194,6 @@ describe("fetchEntrySnapshot", () => {
       knownKind: "bot",
       needCreatedAt: false,
     });
-    expect(snap).toMatchObject({ liveness: "not_found", kind: null, lang: null, subrequests: 1 });
+    expect(snap).toMatchObject({ liveness: "unknown", kind: null, lang: null, subrequests: 1 });
   });
 });

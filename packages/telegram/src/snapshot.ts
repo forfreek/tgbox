@@ -82,18 +82,11 @@ export async function fetchEntrySnapshot(
   if (profileResponse?.status === 200) {
     snapshot.profile = parseProfile(profileResponse.html, username);
   }
-  let verdict = classifyLiveness({ profileResponse, previousKind: options.knownKind });
+  const verdict = classifyLiveness({ profileResponse, previousKind: options.knownKind });
 
   if (verdict.liveness === "active" && verdict.kind === "channel") {
     const preview = await get(`/s/${username}`);
-    if (preview?.redirected) {
-      verdict = classifyLiveness({
-        profileResponse,
-        previousKind: options.knownKind,
-        // Only an entry we already know as a channel "used to" have a preview.
-        previewRedirected: options.knownKind === "channel",
-      });
-    } else if (preview?.status === 200) {
+    if (preview?.status === 200) {
       const page = parseChannelPage(preview.html);
       if (page.hasPreview) {
         snapshot.posts = page.posts;

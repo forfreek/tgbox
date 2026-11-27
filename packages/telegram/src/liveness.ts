@@ -8,8 +8,6 @@ export type LivenessInput = {
   profileResponse: ProfileResponse | null;
   /** kind stored in the database; null for a new submission */
   previousKind: EntryKind | null;
-  /** the channel's `/s/{u}` preview used to work and now redirects */
-  previewRedirected?: boolean;
 };
 
 /** Order follows spec §失效判定. `unknown` never counts as a failure. */
@@ -25,16 +23,13 @@ export function classifyLiveness(input: LivenessInput): {
     case "malformed":
       return { liveness: "unknown", kind: null };
     case "view":
-      return { liveness: "banned", kind: null };
+      return { liveness: input.previousKind ? "unknown" : "banned", kind: null };
     case "contact":
-      return { liveness: "not_found", kind: null };
+      return { liveness: input.previousKind ? "unknown" : "not_found", kind: null };
   }
   if (!profile.kind) return { liveness: "unknown", kind: null };
   if (input.previousKind && profile.kind !== input.previousKind) {
     return { liveness: "type_changed", kind: profile.kind };
-  }
-  if (input.previewRedirected && profile.kind === "channel") {
-    return { liveness: "banned", kind: profile.kind };
   }
   return { liveness: "active", kind: profile.kind };
 }

@@ -239,7 +239,18 @@ export async function runRefresh(
 
       if (snapshot.liveness === "active" && snapshot.profile) {
         const io = { db, fetch: deps.fetch, media: env.MEDIA };
-        await applyActiveSnapshot(io, { entry, stats, snapshot, now, manual: false }, result);
+        await applyActiveSnapshot(
+          io,
+          {
+            entry,
+            stats,
+            snapshot,
+            now,
+            manual: false,
+            avatarOnly: result.lane === "missing_avatar",
+          },
+          result,
+        );
       }
 
       const clean =
@@ -247,7 +258,7 @@ export async function runRefresh(
         entry.status !== "hidden_by_system" &&
         entry.failCount === 0 &&
         entry.liveness === "active";
-      if (snapshot.liveness !== "unknown" && !clean) {
+      if (result.lane === "regular" && snapshot.liveness !== "unknown" && !clean) {
         result.subrequests++;
         pending.push({ entry, username: entry.username, liveness: snapshot.liveness });
       }
@@ -331,6 +342,8 @@ export async function applyActiveSnapshot(
     now: number;
     /** admin "refresh now": skip the write throttles meant for the cron */
     manual: boolean;
+    /** Avatar initialization must not update profile, statistics, posts or health. */
+    avatarOnly?: boolean;
   },
   result: RefreshTally,
 ) {
@@ -342,15 +355,17 @@ export async function applyActiveSnapshot(
 
   // Cold fields: diffed here so an unchanged entry costs no D1 call.
   const fields: ColdFields = {};
-  const title = profile.title ?? entry.title;
-  if (title !== entry.title) fields.title = title;
-  const description = profile.description ?? "";
-  if (description !== entry.description) fields.description = description;
-  if (snapshot.lang !== null && snapshot.lang !== entry.lang) fields.lang = snapshot.lang;
-  if (profile.verified !== entry.verified) fields.verified = profile.verified;
-  if (entry.tgCreatedAt === null && snapshot.createdAt !== null) {
-    const createdAt = Date.parse(snapshot.createdAt);
-    if (Number.isFinite(createdAt)) fields.tgCreatedAt = createdAt;
+  if (!input.avatarOnly) {
+    const title = profile.title ?? entry.title;
+    if (title !== entry.title) fields.title = title;
+    const description = profile.description ?? "";
+    if (description !== entry.description) fields.description = description;
+    if (snapshot.lang !== null && snapshot.lang !== entry.lang) fields.lang = snapshot.lang;
+    if (profile.verified !== entry.verified) fields.verified = profile.verified;
+    if (entry.tgCreatedAt === null && snapshot.createdAt !== null) {
+      const createdAt = Date.parse(snapshot.createdAt);
+      if (Number.isFinite(createdAt)) fields.tgCreatedAt = createdAt;
+    }
   }
   if (profile.avatarUrl === null) {
     if (entry.avatarVersion !== null) fields.avatarVersion = null;
@@ -370,6 +385,7 @@ export async function applyActiveSnapshot(
     if (rowsWritten > 0) result.dirty = true;
   }
 
+  if (input.avatarOnly) return;
   const kind = snapshot.kind ?? entry.kind;
   const next = {
     members: kind === "bot" ? profile.monthlyUsers : profile.members,
