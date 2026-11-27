@@ -54,3 +54,5 @@
 - 后台匿名302是既有Cloudflare Access保护，随跳转的200是登录页，不能称后台界面或middleware验收；生产人工记录未执行。头像真实tick14子请求且不写health，常规证据验收后追加。
 
 2026-11-27 发布验收补充：17:50 missing_avatar真实tick成功（14子请求、健康0写入），17:55 regular真实tick成功（41<=45子请求，3条新健康/证据，3条预算延期，nextId=131、avatarNextId=1935、无隐藏/恢复、无异常）。D1新证据为health-v1/tme-profile-v2/HTTP200；最终AI/settings及12条历史状态保持。main CI45976512365和最终Web部署45976512454均成功。完整目录巡检和生产人工验证/历史修复/旧字段清理仍未完成，不能标专题关闭。
+
+2026-11-27 最新生产发布记录PR #89 https://github.com/forfreek/tgbox/pull/89 ，工作树C:/Users/123/tgbox-health-release，分支codex/health-check-release，base=main。#84–#88已合并，0027与Bot/Admin/Web已部署；真实头像/常规tick及配置保护读回见RELEASE.md。历史隐藏未恢复，完整巡检/人工功能验证/旧字段清理仍未完成。PR检查与合并状态按远端最新核验。
