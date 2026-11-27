@@ -470,37 +470,26 @@ describe("build dispatch", () => {
 });
 
 describe("liveness", () => {
-  test("not_found hides only after 3 checks spanning 48h, then restores when active", async () => {
+  test("existing placeholders never accumulate failures or hide after repeated checks", async () => {
     await addEntry("vanished", { kind: "group" });
-    const site: Record<string, Behaviour> = { vanished: "not_found" };
-    const tg = fakeTelegram(site);
-
-    for (const at of [T0, T0 + HOUR, T0 + 2 * HOUR]) await runRefresh(adminEnv, at, tg);
-    expect(await entry("vanished")).toMatchObject({ status: "approved", failCount: 3 });
-
-    const hidden = await runRefresh(adminEnv, T0 + 48 * HOUR, tg);
-    expect(hidden.hidden).toEqual(["vanished"]);
-    expect(await entry("vanished")).toMatchObject({ status: "hidden_by_system", failCount: 4 });
-    expect(await getSiteState(db, "dirty_since")).toBe(String(T0 + 48 * HOUR));
-
-    site.vanished = "group";
-    const restored = await runRefresh(adminEnv, T0 + 50 * HOUR, tg);
-    expect(restored.restored).toEqual(["vanished"]);
-    expect(await entry("vanished")).toMatchObject({
-      status: "approved",
-      liveness: "active",
-      failCount: 0,
-      firstFailAt: null,
-    });
+    for (const [index, shape] of (["not_found", "banned"] as const).entries()) {
+      const tg = fakeTelegram({ vanished: shape });
+      for (const at of [T0, T0 + 5 * MINUTE, T0 + 48 * HOUR].map((at) => at + index * 72 * HOUR)) {
+        const result = await runRefresh(adminEnv, at, tg);
+        expect(result.hidden).toEqual([]);
+      }
+      expect(await entry("vanished")).toMatchObject({ status: "approved", failCount: 0 });
+      expect(tg.calls.some((call) => call.url.includes("api.telegram.org"))).toBe(false);
+    }
   });
 
-  test("banned hides after 2 checks and admins get one summary message", async () => {
+  test("legacy type-change policy hides after 2 regular checks and admins get one summary message", async () => {
     await addEntry("blocked", { kind: "group" });
-    const tg = fakeTelegram({ blocked: "banned" });
+    const tg = fakeTelegram({ blocked: "channel" });
 
     await runRefresh(adminEnv, T0, tg);
     expect(await entry("blocked")).toMatchObject({ status: "approved", failCount: 1 });
-    await runRefresh(adminEnv, T0 + 2 * MINUTE, tg);
+    await runRefresh(adminEnv, T0 + 5 * MINUTE, tg);
     expect(await entry("blocked")).toMatchObject({ status: "hidden_by_system" });
 
     const sent = tg.calls.filter((call) => call.url.includes("api.telegram.org"));
@@ -518,9 +507,9 @@ describe("liveness", () => {
       T0,
     );
     await addEntry("blocked", { kind: "group" });
-    const tg = fakeTelegram({ blocked: "banned" });
+    const tg = fakeTelegram({ blocked: "channel" });
     await runRefresh(adminEnv, T0, tg);
-    await runRefresh(adminEnv, T0 + 2 * MINUTE, tg);
+    await runRefresh(adminEnv, T0 + 5 * MINUTE, tg);
 
     const sent = tg.calls.filter((call) => call.url.includes("api.telegram.org"));
     expect(sent.map((call) => JSON.parse(call.body ?? "{}").chat_id)).toEqual(["-100777"]);
@@ -534,10 +523,10 @@ describe("liveness", () => {
       T0,
     );
     await addEntry("blocked", { kind: "group" });
-    const tg = fakeTelegram({ blocked: "banned" });
+    const tg = fakeTelegram({ blocked: "channel" });
     const env2 = { ...adminEnv, ADMIN_IDS: "900,901" };
     await runRefresh(env2, T0, tg);
-    const run = await runRefresh(env2, T0 + 2 * MINUTE, tg);
+    const run = await runRefresh(env2, T0 + 5 * MINUTE, tg);
 
     const sent = tg.calls.filter((call) => call.url.includes("api.telegram.org"));
     expect(sent.map((call) => JSON.parse(call.body ?? "{}").chat_id)).toEqual([
@@ -551,10 +540,10 @@ describe("liveness", () => {
   test("guard: with 2+ definitive failures in one batch, failures are counted but nothing is hidden", async () => {
     await addEntry("b1", { kind: "group" });
     await addEntry("b2", { kind: "group" });
-    const tg = fakeTelegram({ b1: "banned", b2: "banned" });
+    const tg = fakeTelegram({ b1: "channel", b2: "channel" });
 
     await runRefresh(adminEnv, T0, tg);
-    const run = await runRefresh(adminEnv, T0 + 2 * MINUTE, tg);
+    const run = await runRefresh(adminEnv, T0 + 5 * MINUTE, tg);
     expect(run.hidden).toEqual([]);
     expect(await entry("b1")).toMatchObject({ status: "approved", failCount: 2 });
     expect(await entry("b2")).toMatchObject({ status: "approved", failCount: 2 });
@@ -687,4 +676,55 @@ test("exhausted avatar lane falls back to regular refresh and wraps without sele
     avatarNextId: 1,
     lease: null,
   });
+});
+
+test.each(["banned", "not_found", "channel"] as const)(
+  "avatar lane cannot mutate health for %s",
+  async (shape) => {
+    const id = await addEntry("suspect", { kind: "group" });
+    await env.DB.prepare(
+      "UPDATE entries SET fail_count=9, liveness='type_changed', first_fail_at=? WHERE id=?",
+    )
+      .bind(T0 - 1000, id)
+      .run();
+    await setSiteState(
+      db,
+      "refresh_progress_v1",
+      JSON.stringify({ nextId: 1, avatarNextId: 1, cycle: 0, lastScheduledTime: 0, lease: null }),
+    );
+    const tg = fakeTelegram({ suspect: shape });
+    const run = await runRefresh(adminEnv, T0, tg);
+    expect(run.lane).toBe("missing_avatar");
+    expect(run.hidden).toEqual([]);
+    expect(run.restored).toEqual([]);
+    expect(await entry("suspect")).toMatchObject({
+      status: "approved",
+      failCount: 9,
+      liveness: "type_changed",
+      firstFailAt: T0 - 1000,
+    });
+    expect(tg.calls.some((call) => call.url.includes("api.telegram.org"))).toBe(false);
+  },
+);
+
+test("avatar lane writes the image without changing profile, stats or post media", async () => {
+  const id = await addEntry("photo", { kind: "channel" });
+  const before = await entry("photo");
+  const stats = await statsOf(id);
+  await setSiteState(
+    db,
+    "refresh_progress_v1",
+    JSON.stringify({ nextId: 1, avatarNextId: 1, cycle: 0, lastScheduledTime: 0, lease: null }),
+  );
+  const result = await runRefresh(env, T0, fakeTelegram({ photo: "channel" }));
+  expect(result.lane).toBe("missing_avatar");
+  expect((await entry("photo")).avatarVersion).not.toBeNull();
+  expect(await entry("photo")).toMatchObject({
+    title: before.title,
+    description: before.description,
+    verified: before.verified,
+    lang: before.lang,
+  });
+  expect(await statsOf(id)).toEqual(stats);
+  expect((await env.MEDIA.list()).objects.map((o) => o.key)).toEqual(["avatars/photo.jpg"]);
 });

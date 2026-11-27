@@ -117,3 +117,8 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 
 2026-11-26 头像补齐延迟根因与缺头像优先通道恢复入口：C:/Users/123/tgbox-avatar-priority，见 [刷新状态](refresh-progress/STATE.md#2026-11-26-缺头像优先刷新)。生产bot于11-25已更新旧修复，本次优先通道尚未部署；不要将网站构建成功视为头像抓取完成。
 2026-11-26 PR #82已合并并发布bot优先头像刷新，版本c079943c；生产点验及剩余批次见docs/refresh-progress/STATE.md的生产发布记录。
+
+## 资源健康检查与机器人验证
+
+2026-11-27 新专题入口：C:/Users/123/tgbox-health-check。[状态](health-check/STATE.md)、[四阶段计划](health-check/PLAN.md)、[项目记忆](health-check/MEMORY.md)。覆盖轮询误隐藏、头像任务副作用隔离、机器人身份与功能验证；当前仅阶段一实施，生产未部署。恢复先读STATE，不把旧头像专题的发布等同本次健康规则已上线。
+阶段一已交付草稿PR #84：https://github.com/forfreek/tgbox/pull/84；恢复先读health-check/STATE.md。尚未合并或部署。
