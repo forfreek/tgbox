@@ -4,6 +4,8 @@ export * from "./ai-summary-public.ts";
 export * from "./ai-summary-rollout.ts";
 export * from "./categories.ts";
 export * from "./domain.ts";
+export * from "./health.ts";
+export * from "./health-source.ts";
 export { type Dictionary, type MessageKey, t } from "./i18n/index.ts";
 export * from "./miniapp.ts";
 export * from "./promo-link.ts";

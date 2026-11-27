@@ -11,6 +11,8 @@ export * from "./ai-summary-publish.ts";
 export * from "./app.ts";
 export * from "./clicks.ts";
 export * from "./friend-links.ts";
+export * from "./health.ts";
+export * from "./health-source.ts";
 export * from "./prefs.ts";
 export * from "./promotions.ts";
 export * from "./schema.ts";
