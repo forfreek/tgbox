@@ -1,4 +1,4 @@
-import type { Entry } from "@tgbox/db";
+import type { Entry, HealthView } from "@tgbox/db";
 import { type EntryKind, isEntryProduct, type ProductKind } from "@tgbox/shared";
 
 export type SubmissionSummary = {
@@ -72,7 +72,20 @@ export type SupportUser = {
   language: string | null;
 };
 
+const healthPublicNames = {
+  unverified: "未检查",
+  accessible: "公开身份可识别",
+  uncertain: "本次未能确认",
+  identity_review: "身份或类型待复核",
+};
+const healthFunctionNames = {
+  unverified: "功能未验证",
+  responded: "已记录响应",
+  no_response: "本次未响应",
+  reported_issue: "已记录功能问题",
+};
 export type EntryStatusSummary = {
+  health?: HealthView;
   entry: Entry;
   members: number | null;
   category: string;
@@ -170,8 +183,8 @@ export const zh = {
   alreadyListed: (username: string) => `@${username} 已经收录，无需重复提交。`,
   alreadyPending: (username: string) => `@${username} 已在审核中，请耐心等待。`,
   dailyLimit: (limit: number) => `今天的提交次数已达上限（${limit} 次），请明天再试。`,
-  notFound: (username: string) => `@${username} 不存在，请检查用户名。`,
-  banned: (username: string) => `@${username} 已被 Telegram 封禁或限制，无法收录。`,
+  notFound: (username: string) => `暂时无法确认 @${username} 的公开身份，请稍后重试。`,
+  banned: (username: string) => `暂时无法确认 @${username} 的公开身份，请稍后重试。`,
   checking: (username: string) => `正在检查 @${username}…`,
   unavailable: "暂时无法获取资料，请稍后再试。",
   userAccount: (username: string) => `@${username} 是个人账号，只能收录公开的频道、群组和机器人。`,
@@ -382,7 +395,19 @@ export const zh = {
       [
         `@${s.entry.username}（${s.entry.kind}）${s.entry.title}`,
         `状态：${s.entry.status}`,
-        `检测：${s.entry.liveness}，连续失败 ${s.entry.failCount} 次${s.entry.lastFailAt ? `，最近失败 ${new Date(s.entry.lastFailAt).toISOString()}` : ""}`,
+        `公开身份：${healthPublicNames[s.health?.publicState ?? "unverified"]}`,
+        `最近确认可识别：${s.health?.confirmedAt ? new Date(s.health.confirmedAt).toISOString() : "尚无记录"}`,
+        ...(s.entry.kind === "bot"
+          ? [
+              `功能：${healthFunctionNames[s.health?.functionState ?? "unverified"]}${s.health?.functionObservedAt ? `（${new Date(s.health.functionObservedAt).toISOString()}）` : ""}`,
+              ...(s.health?.functionEvidence
+                ? [
+                    `验证操作：${s.health.functionEvidence.action}`,
+                    `验证范围：${s.health.functionEvidence.scope}（仅代表记录时的结果）`,
+                  ]
+                : []),
+            ]
+          : []),
         `成员：${s.members ?? "未知"}`,
         `分类：${s.category}`,
         `标签：${s.tags.join(", ") || "无"}`,

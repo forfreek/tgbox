@@ -4,6 +4,7 @@ import {
   adminStats,
   createDb,
   createSubmission,
+  healthViewOf,
   insertApprovedEntry,
   insertAuditLog,
   listAuditLog,
@@ -111,6 +112,28 @@ describe("admin stats", () => {
 });
 
 describe("entries list", () => {
+  test("health filtering preserves stats and does not infer old banned flags", async () => {
+    const id = await listed("verified_bot", { kind: "bot", members: 45 });
+    await listed("legacy_bot", { kind: "bot" });
+    await env.DB.prepare("UPDATE entries SET liveness='banned',fail_count=12").run();
+    await env.DB.prepare(
+      "INSERT INTO entry_health(entry_id,binding_username,binding_kind,public_state) VALUES(?,'verified_bot','bot','accessible')",
+    )
+      .bind(id)
+      .run();
+    const found = await listEntriesAdmin(db, { page: 1, pageSize: 20, health: "accessible" });
+    expect(found.total).toBe(1);
+    expect(found.rows[0]?.stats?.members).toBe(45);
+    expect(healthViewOf(found.rows[0]?.health).publicState).toBe("accessible");
+    const unknown = await listEntriesAdmin(db, { page: 1, pageSize: 20, health: "unverified" });
+    expect(unknown.total).toBe(1);
+    expect(unknown.rows[0]?.entry.username).toBe("legacy_bot");
+    expect(healthViewOf(unknown.rows[0]?.health).publicState).toBe("unverified");
+    await env.DB.prepare("UPDATE entries SET username='rebound_bot' WHERE id=?").bind(id).run();
+    expect(
+      (await listEntriesAdmin(db, { page: 1, pageSize: 20, health: "accessible" })).total,
+    ).toBe(0);
+  });
   test("filters, searches, sorts and reports the total across pages", async () => {
     await listed("alpha_news", { members: 50, title: "Alpha News" });
     await listed("beta_news", { members: 500, title: "Beta News" });

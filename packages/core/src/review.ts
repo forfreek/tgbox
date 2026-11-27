@@ -1,6 +1,6 @@
 import type { EntryKind } from "@tgbox/shared";
-import { fetchEntrySnapshot } from "@tgbox/telegram";
 import type { Actor, CoreContext } from "./context.ts";
+import { fetchResourceSnapshot } from "./health.ts";
 import {
   approveSubmission,
   listApprovedSubmission,
@@ -41,14 +41,12 @@ export async function rejectSubmissions(
   return results;
 }
 
-/** Live t.me snapshot for the review drawer. Read-only: nothing is stored or audited. */
+/** Review preview does not write entry health or audit; acquisition updates source backoff. */
 export async function previewSubmission(
   ctx: CoreContext,
   input: { username: string; kind: EntryKind },
 ) {
-  const snap = await fetchEntrySnapshot(input.username, {
-    fetch: ctx.fetch,
-    now: new Date(ctx.now()),
+  const snap = await fetchResourceSnapshot(ctx, input.username, {
     knownKind: input.kind,
     needCreatedAt: false,
   });

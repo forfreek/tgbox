@@ -4,7 +4,6 @@ import {
   insertApprovedEntry,
   listCategories,
   listTags,
-  recordLivenessResult,
   setEntryCategory,
   setEntryPromoted,
   setEntryStartPayload as setEntryStartPayloadRow,
@@ -18,10 +17,10 @@ import {
   MAX_TAGS,
   parseTelegramRef,
 } from "@tgbox/shared";
-import { fetchEntrySnapshot } from "@tgbox/telegram";
 import { audit } from "./audit.ts";
 import { markDirtyAndDispatch } from "./build.ts";
 import type { Actor, CoreContext } from "./context.ts";
+import { currentEntryHealth, fetchResourceSnapshot, saveEntryObservation } from "./health.ts";
 import { applyActiveSnapshot, type MediaBucket } from "./refresh.ts";
 
 export type StartPayloadError = "not_found" | "not_bot" | "invalid";
@@ -137,9 +136,7 @@ export async function listEntryManually(
   if (tagIds.length !== slugs.length) return { ok: false, error: "unknown_tags" };
 
   const now = ctx.now();
-  const snap = await fetchEntrySnapshot(username, {
-    fetch: ctx.fetch,
-    now: new Date(now),
+  const snap = await fetchResourceSnapshot(ctx, username, {
     knownKind: null,
     needCreatedAt: true,
   });
@@ -177,6 +174,7 @@ export async function listEntryManually(
     tagIds,
     now,
   });
+  await saveEntryObservation(ctx, { id, username, kind }, snap);
   await audit(ctx, input.actor, "entry.list", `entry:${id}`, {
     username,
     category: category.slug,
@@ -187,7 +185,7 @@ export async function listEntryManually(
 }
 
 /**
- * Re-fetches one entry now, like one cron slot for a single entry: cold fields, stats, liveness and
+ * Re-fetches one entry now, like one cron slot for a single entry: cold fields, stats, health and
  * the R2 media (avatar, posts, member history). The admin passes its `MEDIA` binding.
  */
 export async function refreshEntryNow(
@@ -198,30 +196,25 @@ export async function refreshEntryNow(
   if (!row) return null;
   const { entry } = row;
   const now = ctx.now();
-  const snapshot = await fetchEntrySnapshot(entry.username, {
-    fetch: ctx.fetch,
-    now: new Date(now),
+  const snapshot = await fetchResourceSnapshot(ctx, entry.username, {
     knownKind: entry.kind,
     needCreatedAt: entry.tgCreatedAt === null,
   });
 
   const tally = { rowsWritten: 0, r2Writes: 0, subrequests: 0, dirty: false };
-  if (snapshot.liveness === "active" && snapshot.profile) {
+  const healthWrite = await saveEntryObservation(ctx, entry, snapshot);
+  tally.rowsWritten += healthWrite.rowsWritten;
+  if (
+    snapshot.liveness === "active" &&
+    snapshot.profile &&
+    healthWrite.publicState === "accessible"
+  ) {
     await applyActiveSnapshot(
       { db: ctx.db, fetch: ctx.fetch, media: input.media },
       { entry, stats: row.stats, snapshot, now, manual: true },
       tally,
     );
   }
-  // A manual refresh is a single observation: record it, but never let it hide an entry on its own.
-  const liveness = await recordLivenessResult(ctx.db, entry, {
-    liveness: snapshot.liveness,
-    now,
-    allowHide: false,
-  });
-  tally.rowsWritten += liveness.rowsWritten;
-  if (liveness.transition) tally.dirty = true;
-
   await audit(ctx, input.actor, "entry.refresh", `entry:${entry.id}`, {
     liveness: snapshot.liveness,
     rowsWritten: tally.rowsWritten,
@@ -232,7 +225,9 @@ export async function refreshEntryNow(
     liveness: snapshot.liveness,
     rowsWritten: tally.rowsWritten,
     r2Writes: tally.r2Writes,
-    transition: liveness.transition,
+    transition: null,
+    health: await currentEntryHealth(ctx, entry.id),
+    deferredUntil: snapshot.deferredUntil,
   };
 }
 

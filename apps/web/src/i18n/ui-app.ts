@@ -74,7 +74,7 @@ const zh = {
     errors: {
       closed: "收录暂时关闭了，过段时间再试。",
       invalid: "这个链接看起来不是公开的 Telegram 频道、群组或机器人。",
-      not_found: "打不开这个页面，确认它是公开的，并且用户名没写错。",
+      not_found: "本次未能确认公开资料，请核对用户名并稍后重试。",
       already_listed: "这个条目已经收录了。",
       already_pending: "这个条目已经提交过，正在审核中。",
       daily_limit: "今天的提交次数已经用完，明天再来。",
@@ -285,7 +285,8 @@ const en: typeof zh = {
     errors: {
       closed: "Submissions are closed for now. Please try again later.",
       invalid: "That doesn't look like a public Telegram channel, group or bot.",
-      not_found: "That page didn't open. Check the username and that it is public.",
+      not_found:
+        "Public details could not be confirmed this time. Check the username and try again later.",
       already_listed: "This entry is already listed.",
       already_pending: "This entry was already submitted and is waiting for review.",
       daily_limit: "You have used today's submissions. Try again tomorrow.",

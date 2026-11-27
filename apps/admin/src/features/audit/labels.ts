@@ -12,6 +12,8 @@ export const auditActionLabels: Record<AuditAction, string> = {
   "entry.posts": "消息显示",
   "post.hidden": "隐藏消息",
   "entry.refresh": "刷新条目",
+  "entry.function_check": "记录人工功能验证",
+  "entry.identity_review": "确认原账号身份",
   "build.trigger": "触发构建",
   "blacklist.add": "加入黑名单",
   "blacklist.remove": "移出黑名单",

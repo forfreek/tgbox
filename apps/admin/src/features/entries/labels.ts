@@ -1,4 +1,5 @@
-import type { EntryKind, EntryStatus, Liveness } from "@tgbox/shared";
+import type { EntryKind, EntryStatus, Liveness, PublicHealth } from "@tgbox/shared";
+import { publicHealthLabels } from "@tgbox/shared";
 import type { BadgeProps } from "@/components/coss/ui/badge.tsx";
 
 export const kindLabel: Record<EntryKind, string> = {
@@ -22,11 +23,11 @@ export const statusVariant: Record<EntryStatus, NonNullable<BadgeProps["variant"
 };
 
 export const livenessLabel: Record<Liveness, string> = {
-  active: "正常",
-  not_found: "不存在",
-  banned: "已封禁",
+  active: "公开身份可识别",
+  not_found: "本次未能确认",
+  banned: "本次未能确认",
   type_changed: "类型变更",
-  unknown: "未知",
+  unknown: "本次未能确认",
 };
 
 export const livenessVariant: Record<Liveness, NonNullable<BadgeProps["variant"]>> = {
@@ -62,3 +63,11 @@ export const formatDate = (ms: number) =>
 
 export const sitePageUrl = (siteUrl: string, username: string) =>
   `${siteUrl.replace(/\/$/, "")}/detail/${username}/`;
+
+export const healthLabel = publicHealthLabels;
+export const healthVariant: Record<PublicHealth, NonNullable<BadgeProps["variant"]>> = {
+  unverified: "outline",
+  accessible: "success",
+  uncertain: "warning",
+  identity_review: "warning",
+};

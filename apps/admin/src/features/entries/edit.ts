@@ -39,7 +39,6 @@ type Snapshot = {
   description: string;
   lang: string | null;
   verified: boolean;
-  liveness: string;
   status: string;
   members: number | null;
   online: number | null;
@@ -59,7 +58,6 @@ export function diffSnapshots(before: Snapshot, after: Snapshot): FieldChange[] 
     "description",
     "lang",
     "verified",
-    "liveness",
     "status",
     "members",
     "online",

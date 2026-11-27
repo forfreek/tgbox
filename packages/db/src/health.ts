@@ -4,7 +4,7 @@ import {
   type FunctionHealth,
   HealthObservation,
   IdentityReview,
-  type PublicHealth,
+  PublicHealth,
   publicHealthOf,
 } from "@tgbox/shared";
 import type { Db } from "./access.ts";
@@ -74,13 +74,13 @@ export async function recordHealthObservation(db: Db, entryId: number, input: He
     revision=entry_health.revision+1,write_token=excluded.write_token
    WHERE (${rebound} OR entry_health.observed_at IS NULL OR excluded.observed_at>entry_health.observed_at)
      AND excluded.observed_at>coalesce(entry_health.identity_reviewed_at,-1)
-     AND entry_health.observation_id IS NOT excluded.observation_id`)
+     AND entry_health.observation_id IS NOT excluded.observation_id RETURNING public_state`)
     .bind(
       state,
       o.startedAt,
       state,
       o.startedAt,
-      o.reason,
+      o.previewUnavailable && o.outcome === "recognized" ? "preview_unavailable" : o.reason,
       o.observationId,
       o.startedAt,
       o.observationId,
@@ -106,6 +106,9 @@ export async function recordHealthObservation(db: Db, entryId: number, input: He
   ]);
   return {
     accepted: (result[0]?.meta.changes ?? 0) > 0,
+    publicState: result[0]?.results?.[0]
+      ? PublicHealth.parse((result[0].results[0] as { public_state: unknown }).public_state)
+      : null,
     rowsRead: result.reduce((n: number, r: WriteResult) => n + r.meta.rows_read, 0),
     rowsWritten: result.reduce((n: number, r: WriteResult) => n + r.meta.rows_written, 0),
     subrequests: 2,
@@ -113,7 +116,17 @@ export async function recordHealthObservation(db: Db, entryId: number, input: He
 }
 
 /** Trusted server API only: actor and observedAt must be supplied by authenticated middleware. */
-export async function recordFunctionCheck(db: Db, entryId: number, input: FunctionCheck) {
+export async function recordFunctionCheck(
+  db: Db,
+  entryId: number,
+  input: FunctionCheck,
+  expectedRevision?: number,
+) {
+  if (
+    expectedRevision !== undefined &&
+    (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0)
+  )
+    throw new Error("Invalid health revision");
   const o = FunctionCheck.parse(input);
   const upsert = db.$client
     .prepare(`INSERT INTO entry_health
@@ -121,6 +134,7 @@ export async function recordFunctionCheck(db: Db, entryId: number, input: Functi
    SELECT id,username,kind,?,?,?,?,1,1,?,?,? FROM entries
    WHERE id=? AND username=? AND kind='bot'
    AND NOT EXISTS(SELECT 1 FROM entry_health_evidence WHERE observation_id=?)
+   AND (? IS NULL OR coalesce((SELECT revision FROM entry_health WHERE entry_id=entries.id),0)=?)
    ON CONFLICT(entry_id) DO UPDATE SET
     binding_username=excluded.binding_username,binding_kind=excluded.binding_kind,
     public_state=CASE WHEN ${rebound} THEN 'unverified' ELSE entry_health.public_state END,
@@ -147,6 +161,8 @@ export async function recordFunctionCheck(db: Db, entryId: number, input: Functi
       entryId,
       o.targetUsername,
       o.observationId,
+      expectedRevision ?? null,
+      expectedRevision ?? null,
     );
   const result = await db.$client.batch([
     upsert,
@@ -161,12 +177,13 @@ export async function recordFunctionCheck(db: Db, entryId: number, input: Functi
         o.observationId,
         o.observationId,
       ),
+    manualHealthAudit(db, entryId, o, "entry.function_check"),
   ]);
   return {
     accepted: (result[0]?.meta.changes ?? 0) > 0,
     rowsRead: result.reduce((n: number, r: WriteResult) => n + r.meta.rows_read, 0),
     rowsWritten: result.reduce((n: number, r: WriteResult) => n + r.meta.rows_written, 0),
-    subrequests: 2,
+    subrequests: 3,
   };
 }
 
@@ -254,7 +271,7 @@ export async function recordIdentityReview(
  function_state='unverified',function_at=NULL,function_observation_id=NULL,function_evidence=NULL,
  revision=revision+1,evidence_seq=evidence_seq+1,evidence_at=max(coalesce(evidence_at,0),?),
  identity_reviewed_at=?,write_token=?,evidence_token=?
- WHERE entry_id=? AND revision=? AND binding_username=? AND binding_kind=? AND ?>=coalesce(observed_at,0)
+ WHERE entry_id=? AND revision=? AND public_state='identity_review' AND binding_username=? AND binding_kind=? AND ?>=coalesce(observed_at,0)
  AND EXISTS(SELECT 1 FROM entries e WHERE e.id=entry_health.entry_id AND e.username=entry_health.binding_username AND e.kind=entry_health.binding_kind)
  AND NOT EXISTS(SELECT 1 FROM entry_health_evidence WHERE observation_id=?)`)
     .bind(
@@ -282,11 +299,64 @@ export async function recordIdentityReview(
         o.observationId,
         o.observationId,
       ),
+    manualHealthAudit(db, entryId, o, "entry.identity_review"),
   ]);
   return {
     accepted: (result[0]?.meta.changes ?? 0) > 0,
     rowsRead: result.reduce((n: number, r: WriteResult) => n + r.meta.rows_read, 0),
     rowsWritten: result.reduce((n: number, r: WriteResult) => n + r.meta.rows_written, 0),
-    subrequests: 2,
+    subrequests: 3,
   };
+}
+
+function manualHealthAudit(
+  db: Db,
+  entryId: number,
+  o: FunctionCheck | IdentityReview,
+  action: string,
+) {
+  return db.$client
+    .prepare(
+      `INSERT INTO audit_log(actor,action,target,payload,created_at) SELECT ?,?,?,?,? FROM entry_health WHERE entry_id=? AND write_token=? AND changes()>0`,
+    )
+    .bind(
+      o.actor,
+      action,
+      `entry:${entryId}`,
+      JSON.stringify(o),
+      o.observedAt,
+      entryId,
+      o.observationId,
+    );
+}
+
+export function healthViewOf(
+  row:
+    | {
+        publicState: PublicHealth;
+        observedAt: number | null;
+        confirmedAt: number | null;
+        reason: string | null;
+        revision: number;
+        functionState: FunctionHealth;
+        functionAt: number | null;
+        functionEvidence: string | null;
+      }
+    | null
+    | undefined,
+): HealthView {
+  return row?.publicState
+    ? {
+        publicState: row.publicState,
+        observedAt: row.observedAt,
+        confirmedAt: row.confirmedAt,
+        reason: row.reason,
+        revision: row.revision,
+        functionState: row.functionState,
+        functionObservedAt: row.functionAt,
+        functionEvidence: row.functionEvidence
+          ? FunctionCheck.parse(JSON.parse(row.functionEvidence))
+          : null,
+      }
+    : unverifiedHealth();
 }

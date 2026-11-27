@@ -13,6 +13,8 @@ export const auditActions = [
   "entry.posts",
   "post.hidden",
   "entry.refresh",
+  "entry.function_check",
+  "entry.identity_review",
   "build.trigger",
   "blacklist.add",
   "blacklist.remove",

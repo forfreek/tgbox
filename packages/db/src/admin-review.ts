@@ -1,6 +1,6 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import type { Db } from "./access.ts";
-import { auditLog, entries, submissions } from "./schema.ts";
+import { auditLog, entries, entryHealth, submissions } from "./schema.ts";
 
 /**
  * Recent activity for the admin dashboard. Scans `entries` for system hides (no index by design,
@@ -16,10 +16,18 @@ export async function dashboardActivity(db: Db, { limit }: { limit: number }) {
         username: entries.username,
         kind: entries.kind,
         title: entries.title,
-        liveness: entries.liveness,
+        health: entryHealth,
         updatedAt: entries.updatedAt,
       })
       .from(entries)
+      .leftJoin(
+        entryHealth,
+        and(
+          eq(entryHealth.entryId, entries.id),
+          eq(entryHealth.bindingUsername, entries.username),
+          eq(entryHealth.bindingKind, entries.kind),
+        ),
+      )
       .where(eq(entries.status, "hidden_by_system"))
       .orderBy(desc(entries.updatedAt), desc(entries.id))
       .limit(take),

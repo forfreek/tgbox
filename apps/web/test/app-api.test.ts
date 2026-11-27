@@ -36,6 +36,8 @@ const db = vi.hoisted(() => ({
   getUsdtPayment: vi.fn(),
   listPendingUsdtPayments: vi.fn(),
   createUsdtPayment: vi.fn(),
+  readHealthSources: vi.fn(),
+  recordHealthSource: vi.fn(),
 }));
 vi.mock("@tgbox/db", () => db);
 
@@ -156,6 +158,7 @@ const pendingOrder = {
 };
 
 const liveChannel = {
+  sourceResults: { tme_profile: { at: 1, outcome: "parsed" } },
   liveness: "active",
   kind: "channel",
   profile: {
@@ -173,6 +176,11 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.unstubAllGlobals();
   db.createDb.mockReturnValue({});
+  db.readHealthSources.mockResolvedValue({
+    tme_profile: { raw: undefined, state: { failures: 0, lastObservedAt: 0, notBefore: 0 } },
+    tme_preview: { raw: undefined, state: { failures: 0, lastObservedAt: 0, notBefore: 0 } },
+  });
+  db.recordHealthSource.mockResolvedValue({ accepted: true, subrequests: 1 });
   db.getBlacklistEntry.mockResolvedValue(undefined);
   db.loadAppOverview.mockResolvedValue(overview);
   db.listSettingsRows.mockResolvedValue([]);
@@ -340,10 +348,42 @@ describe("GET /api/app/me", () => {
 describe("POST /api/app/submit", () => {
   const body = { username: "@devnotes", categoryId: 3, tagIds: [7] };
 
+  test("Mini App preview and submission respect the shared cooldown without a fetch or approval", async () => {
+    const actual = await vi.importActual<typeof import("@tgbox/telegram")>("@tgbox/telegram");
+    telegram.fetchEntrySnapshot.mockImplementation(actual.fetchEntrySnapshot);
+    const source = {
+      raw: "stored",
+      state: { failures: 1, lastObservedAt: Date.now() - 1000, notBefore: Date.now() + 60_000 },
+    };
+    db.readHealthSources.mockResolvedValue({ tme_profile: source, tme_preview: source });
+    const fetch = vi.fn(() => {
+      throw new Error("cooldown must not fetch");
+    });
+    vi.stubGlobal("fetch", fetch);
+    expect(
+      await (
+        await call(preview, "/api/app/preview", { user: 6800, query: "?username=devnotes" })
+      ).json(),
+    ).toEqual({ ok: false, error: "not_found" });
+    expect(await (await call(submit, "/api/app/submit", { body })).json()).toEqual({
+      ok: false,
+      error: "invalid",
+    });
+    expect(fetch).not.toHaveBeenCalled();
+    expect(db.recordHealthSource).not.toHaveBeenCalled();
+    expect(db.createSubmission).not.toHaveBeenCalled();
+  });
+
   test("records the submission for the verified user", async () => {
     const response = await call(submit, "/api/app/submit", { body });
 
     expect(await response.json()).toEqual({ ok: true, submissionId: 51 });
+    expect(db.recordHealthSource).toHaveBeenCalledWith(
+      expect.anything(),
+      "tme_profile",
+      expect.anything(),
+      liveChannel.sourceResults.tme_profile,
+    );
     expect(db.createSubmission).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
@@ -439,6 +479,7 @@ describe("GET /api/app/preview", () => {
 
   test("a username that is not a channel, group or bot is not found", async () => {
     telegram.fetchEntrySnapshot.mockResolvedValue({
+      ...liveChannel,
       liveness: "active",
       kind: "user",
       profile: {},

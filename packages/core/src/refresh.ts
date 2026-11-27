@@ -8,16 +8,21 @@ import {
   getEntriesMissingAvatar,
   getMaxEntryId,
   markDirty,
-  recordLivenessResult,
+  readHealthSources,
   updateEntryCold,
   upsertEntryStats,
 } from "@tgbox/db";
-import { type Liveness, MemberPoint, type PostView, reviewRecipients } from "@tgbox/shared";
+import { MemberPoint, nextHealthSource, type PostView } from "@tgbox/shared";
 import { type EntrySnapshot, fetchEntrySnapshot } from "@tgbox/telegram";
 import { markDirtyAndDispatch } from "./build.ts";
 import type { CoreContext } from "./context.ts";
+import {
+  mergeSourceResults,
+  type SourceResults,
+  saveEntryObservation,
+  saveSourceResults,
+} from "./health.ts";
 import { claimRefreshProgress, finishRefreshProgress } from "./refresh-progress.ts";
-import { getSettings } from "./settings.ts";
 
 type Fetch = (input: string, init?: RequestInit) => Promise<Response>;
 type RefreshDeps = { fetch: Fetch };
@@ -49,23 +54,17 @@ export const REFRESH_INTERVAL_MS = 5 * MINUTE_MS;
 
 // Free plan: 50 subrequests per invocation (fetch + D1 + R2). Stay under 45.
 const SUBREQUEST_BUDGET = 45;
-const SUBREQUEST_LIMIT = 50;
-// Worst case for one entry: 3 t.me pages + avatar get/put + posts head/put
-// + history get/put + cold, stats and liveness writes.
-const ENTRY_WORST_CASE = 12;
+// Regular: up to 3 t.me + avatar get/put + posts head/put + history get/put
+// + cold/stat writes + 2 health SQL; reserve 14 conservatively. Avatar-only costs at most 4.
+const ENTRY_WORST_CASE = 14;
 // markDirty + last-dispatch read + the GitHub dispatch + the dispatched-at write.
 const DIRTY_DISPATCH_COST = 4;
-// The dirty handling above + settings read + admin summary at the end of the run.
+// Dirty dispatch (4), two indexed source control CAS writes (2), checkpoint (1).
 const FINAL_RESERVE = DIRTY_DISPATCH_COST + 3;
 // Content the cron noticed is less urgent than a person's edit: at most one build every 30 minutes.
 // The flag is cleared by every build, so these changes must not take the transition shortcut —
 // otherwise the first stat drift after a build dispatches again, and so on every few minutes.
 const REFRESH_DISPATCH_INTERVAL_MS = 30 * MINUTE_MS;
-
-// A single batch is 5–10 entries, so "more than 5% failed" is any failure at all;
-// instead treat ≥ 2 definitive failures in one batch as a likely Telegram-side/parser issue:
-// failures are still counted, but no entry is hidden this run.
-const GUARD_MIN_FAILURES = 2;
 
 type RefreshResult = RefreshTally & {
   lane: "regular" | "missing_avatar";
@@ -131,8 +130,6 @@ function statsDue(
   return Math.abs(next.members - previous.members) / previous.members >= 0.01;
 }
 
-type Pending = { entry: Entry; username: string; liveness: Liveness };
-
 export async function runRefresh(
   env: RefreshEnv,
   scheduledTime: number,
@@ -161,6 +158,8 @@ export async function runRefresh(
     dirty: false,
   };
 
+  // Do not spend even checkpoint overhead when sibling jobs exhausted the allowance.
+  if (spent + 7 > SUBREQUEST_BUDGET) return result;
   const maxId = await getMaxEntryId(db);
   result.subrequests++;
   if (maxId === 0) return result;
@@ -205,8 +204,13 @@ export async function runRefresh(
       result.subrequests++;
     }
 
-    const pending: Pending[] = [];
-    let rateLimited = false;
+    const controls = await readHealthSources(db);
+    result.subrequests++;
+    const observedSources: SourceResults = {};
+    const blockedUntil = {
+      tme_profile: controls.tme_profile.state.notBefore,
+      tme_preview: controls.tme_preview.state.notBefore,
+    };
     for (const { entry, stats } of rows) {
       if (entry.status === "removed" || entry.status === "hidden_by_admin") continue;
       if (
@@ -216,8 +220,11 @@ export async function runRefresh(
       )
         continue;
       if (
-        rateLimited ||
-        result.subrequests + ENTRY_WORST_CASE + FINAL_RESERVE > SUBREQUEST_BUDGET
+        blockedUntil.tme_profile > now ||
+        result.subrequests +
+          (result.lane === "missing_avatar" ? 4 : ENTRY_WORST_CASE) +
+          FINAL_RESERVE >
+          SUBREQUEST_BUDGET
       ) {
         result.deferred.push(entry.username);
         continue;
@@ -228,16 +235,39 @@ export async function runRefresh(
         now: new Date(now),
         knownKind: entry.kind,
         needCreatedAt: entry.tgCreatedAt === null,
+        purpose: result.lane === "missing_avatar" ? "avatar" : "full",
+        cooldowns: blockedUntil,
       });
       result.subrequests += snapshot.subrequests;
-      if (snapshot.rateLimited) {
-        rateLimited = true;
+      mergeSourceResults(observedSources, snapshot.sourceResults);
+      for (const source of ["tme_profile", "tme_preview"] as const) {
+        const result = snapshot.sourceResults[source];
+        if (result && result.outcome !== "parsed")
+          blockedUntil[source] = Math.max(
+            blockedUntil[source],
+            nextHealthSource(controls[source].state, result).notBefore,
+          );
+      }
+      const health =
+        result.lane === "regular" ? await saveEntryObservation({ db }, entry, snapshot) : null;
+      if (health) {
+        result.rowsWritten += health.rowsWritten;
+        result.subrequests += health.subrequests;
+      }
+      if (
+        snapshot.deferredUntil !== null ||
+        snapshot.sourceResults.tme_profile?.outcome === "rate_limited"
+      ) {
         result.deferred.push(entry.username);
         continue;
       }
       result.processed.push(entry.username);
 
-      if (snapshot.liveness === "active" && snapshot.profile) {
+      if (
+        snapshot.liveness === "active" &&
+        snapshot.profile &&
+        (result.lane === "missing_avatar" || health?.publicState === "accessible")
+      ) {
         const io = { db, fetch: deps.fetch, media: env.MEDIA };
         await applyActiveSnapshot(
           io,
@@ -252,31 +282,8 @@ export async function runRefresh(
           result,
         );
       }
-
-      const clean =
-        snapshot.liveness === "active" &&
-        entry.status !== "hidden_by_system" &&
-        entry.failCount === 0 &&
-        entry.liveness === "active";
-      if (result.lane === "regular" && snapshot.liveness !== "unknown" && !clean) {
-        result.subrequests++;
-        pending.push({ entry, username: entry.username, liveness: snapshot.liveness });
-      }
     }
-
-    const failures = pending.filter((item) => item.liveness !== "active").length;
-    const allowHide = failures < GUARD_MIN_FAILURES;
-    for (const item of pending) {
-      const outcome = await recordLivenessResult(db, item.entry, {
-        liveness: item.liveness,
-        now,
-        allowHide,
-      });
-      result.rowsWritten += outcome.rowsWritten;
-      if (outcome.transition === "hidden") result.hidden.push(item.username);
-      if (outcome.transition === "restored") result.restored.push(item.username);
-      if (outcome.transition) result.dirty = true;
-    }
+    result.subrequests += await saveSourceResults({ db }, controls, observedSources);
 
     if (result.dirty) {
       // The whole run already sits in `ctx.waitUntil`, so the dispatch is awaited here.
@@ -294,19 +301,6 @@ export async function runRefresh(
         onTransition: false,
       });
       result.subrequests += DIRTY_DISPATCH_COST;
-    }
-    if (result.hidden.length > 0) {
-      // Settings decide the review chat or private copies; only read when there is news.
-      const { chatIds } = reviewRecipients((await getSettings({ db })).bot, env);
-      result.subrequests++;
-      // Private copies beyond the reserved one use whatever is left of the hard limit.
-      for (const chatId of chatIds.slice(
-        0,
-        Math.max(0, SUBREQUEST_LIMIT - result.subrequests - 1),
-      )) {
-        await notifyAdmins(env.BOT_TOKEN, chatId, deps, pending, result.hidden);
-        result.subrequests++;
-      }
     }
     const deferred = rows.find(({ entry }) => result.deferred.includes(entry.username));
     await finishRefreshProgress(db, claim, {
@@ -500,25 +494,4 @@ async function appendHistory(
   });
   result.subrequests++;
   result.r2Writes++;
-}
-
-async function notifyAdmins(
-  botToken: string,
-  chatId: string,
-  deps: RefreshDeps,
-  pending: Pending[],
-  hidden: string[],
-) {
-  const reasons = new Map(pending.map((item) => [item.username, item.liveness]));
-  const lines = hidden.map((username) => `@${username} (${reasons.get(username)})`);
-  const text = `系统已隐藏 ${hidden.length} 个失效条目：\n${lines.join("\n")}`;
-  try {
-    await deps.fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text }),
-    });
-  } catch {
-    // Best effort: the hide itself is already recorded.
-  }
 }

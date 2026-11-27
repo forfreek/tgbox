@@ -21,3 +21,17 @@
 - 2B1没有修改任何运行入口/UI；下一2B2必须统一鉴权/审计/DTO/三语与tick预算并停用旧路径，阶段二未完成。生产迁移/部署/恢复未执行。
 - 2B1本地shared205/db96项、专项22项及Node旧库迁移1项通过，scripts类型与全仓10个typecheck任务通过（Astro314文件0诊断）。本地全仓check受既有CRLF格式诊断阻断，变更11个TS文件Biome通过，不将Linux CI或生产验收推定为通过。
 - 2B1独立草稿PR #86 https://github.com/forfreek/tgbox/pull/86 ，依赖#85/#84；代码14635f0。恢复至本工作树STATE/DATA，后续2B2使用已验证API接入可信服务端，不能仅部署此基础库就声称误隐藏修复生效。
+
+## 2B2接入决策与证据（2026-11-27）
+
+- 恢复入口tgbox-health-integration，INTEGRATION.md记录策略/预算/验证。来源退避跨Cron与交互共享；头像不写健康；所有生产recordLivenessResult调用清零，旧定义仅留至阶段四删列清理。
+- 手动功能记录使用服务端actor/时间/UUID和revision；健康、证据、审计同事务，重放或冲突无审计，审计失败回滚。身份确认只允许待复核，清为未检查，不恢复发布。
+- D1 batch结果使用列名映射：同时选择entry_stats和entry_health全表会重复entry_id，造成后续列错位。Admin健康选择采用唯一health_*别名，回归同时断言成员、健康、缺行、binding及筛选。
+- 正常网页不能解除identity_review；完整资料更新取数据库实际接受的publicState，阻止迟到/复核中元数据替换。Bot三语展示功能实际操作/范围/时间；不把可识别身份当成可用性。
+- 验证全量与专项数字见STATE，源码入口见INTEGRATION；本地模拟浏览器已验证保存/冲突/未认证401和隐藏状态不变。生产观察、历史误隐藏处理和旧字段最终清理仍未完成。
+
+2026-11-27 2B2运行/后台已交付草稿PR #87 https://github.com/forfreek/tgbox/pull/87 ，base=codex/health-check-data（#86），代码ece8088。恢复 C:/Users/123/tgbox-health-integration/docs/health-check/STATE.md、INTEGRATION.md。#86 CI45944985860通过；#87 CI按最新检查核验。生产未迁移/部署，未恢复历史条目；本工作树此前节点边界保留。
+
+2026-11-27 PR #87 CI45949457611：lint/typecheck通过，测试发现繁体生成词典不同步（简体源格式化后未重生成，且localeCompare受宿主ICU默认排序影响）。已修正为固定码点顺序、规范生成换行，按最终简体源重新生成；同步测试只忽略checkout换行，新增禁止宿主localeCompare及CRLF/LF等价回归。Hant本地6项与类型检查通过；最新完整CI待核验。
+
+2026-11-27 PR #87 CI45949801379：Hant同步、lint/typecheck及其余9个包测试通过，Web Mini App测试4项因DB mock缺readHealthSources失败。已补齐mock并发现/修正Mini App preview直接采集漏接共享退避；新增真实采集函数下preview+submit冷却期零网络/零收录回归，API63项通过。Mini App未确认文案改为本次未确认，seed离线CLI仍仅作正向导入校验，不写新健康或发布决策。

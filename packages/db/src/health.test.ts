@@ -16,7 +16,7 @@ const T = Date.UTC(2026, 10, 27);
 let id: number;
 beforeEach(async () => {
   await env.DB.batch(
-    ["entry_tags", "entry_stats", "entries_fts", "entries"].map((table) =>
+    ["audit_log", "entry_tags", "entry_stats", "entries_fts", "entries"].map((table) =>
       env.DB.prepare(`DELETE FROM ${table}`),
     ),
   );
@@ -56,6 +56,30 @@ const manual = (at = T) => ({
   scope: "Observed welcome reply only",
   note: "",
   actor: "admin@example.com",
+});
+
+test("manual revision conflicts and replays do not add audit records", async () => {
+  const check = manual();
+  expect((await recordFunctionCheck(db, id, check, 0)).accepted).toBe(true);
+  expect((await recordFunctionCheck(db, id, check, 0)).accepted).toBe(false);
+  expect((await recordFunctionCheck(db, id, manual(T + 1), 0)).accepted).toBe(false);
+  const rows = await env.DB.prepare("SELECT actor,action,payload FROM audit_log").all();
+  expect(rows.results).toHaveLength(1);
+  expect(rows.results[0]).toMatchObject({ actor: check.actor, action: "entry.function_check" });
+  expect(JSON.parse(String(rows.results[0]?.payload))).toMatchObject({ scope: check.scope });
+});
+
+test("manual audit failure rolls back health and evidence atomically", async () => {
+  await env.DB.prepare(
+    "CREATE TRIGGER reject_health_audit BEFORE INSERT ON audit_log BEGIN SELECT RAISE(ABORT,'audit unavailable'); END",
+  ).run();
+  try {
+    await expect(recordFunctionCheck(db, id, manual(), 0)).rejects.toThrow();
+    expect(await view()).toBeUndefined();
+    expect(await getEntryHealthEvidence(db, id)).toEqual([]);
+  } finally {
+    await env.DB.prepare("DROP TRIGGER reject_health_audit").run();
+  }
 });
 
 test("migration does not reinterpret legacy active/failures as verified health", async () => {

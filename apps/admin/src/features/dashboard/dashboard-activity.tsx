@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { publicHealthLabels } from "@tgbox/shared";
 import { ArrowRightIcon, HammerIcon } from "lucide-react";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
@@ -10,7 +11,7 @@ import { Skeleton } from "@/components/coss/ui/skeleton.tsx";
 import { toastManager } from "@/components/coss/ui/toast.tsx";
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@/components/coss/ui/tooltip.tsx";
 import { ActorChip } from "@/components/user-chip.tsx";
-import { dateTime, kindLabels, livenessLabels } from "@/features/review/labels.ts";
+import { dateTime, kindLabels } from "@/features/review/labels.ts";
 import { $triggerBuild, dashboardActivityQueryOptions } from "@/functions/dashboard.ts";
 import { invalidate } from "@/lib/query-keys.ts";
 
@@ -121,7 +122,7 @@ export function DashboardActivity() {
           ))
         )}
       </Panel>
-      <Panel title="系统隐藏" link={{ to: "/entries", label: "条目" }} index={1}>
+      <Panel title="历史系统隐藏（需复核）" link={{ to: "/entries", label: "条目" }} index={1}>
         {systemHides.length === 0 ? (
           <EmptyLine>最近没有被系统隐藏的条目</EmptyLine>
         ) : (
@@ -130,7 +131,7 @@ export function DashboardActivity() {
               key={row.id}
               primary={row.title}
               secondary={`@${row.username} · ${dateTime(row.updatedAt)}`}
-              aside={<Badge variant="warning">{livenessLabels[row.liveness]}</Badge>}
+              aside={<Badge variant="warning">{publicHealthLabels[row.health.publicState]}</Badge>}
             />
           ))
         )}

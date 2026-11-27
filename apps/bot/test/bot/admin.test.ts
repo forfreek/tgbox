@@ -6,6 +6,7 @@ import {
   insertApprovedEntry,
   listCategories,
   listTags,
+  recordFunctionCheck,
 } from "@tgbox/db";
 import { beforeEach, describe, expect, test } from "vitest";
 import { ADMIN, db, type Harness, startHarness } from "./harness.ts";
@@ -33,6 +34,33 @@ beforeEach(async () => {
 const reply = () => h.calls("sendMessage").at(-1)?.payload.text;
 
 describe("admin commands", () => {
+  test.each(["zh", "zh-hant", "en"])(
+    "/status keeps bot verification scope and time in %s",
+    async (language_code) => {
+      const at = Date.now() - 1000;
+      const { id } = await insertApprovedEntry(db, {
+        entry: { username: "checked_bot", kind: "bot", categoryId: 1, title: "Bot", listedAt: at },
+        stats: { statsWrittenAt: at },
+        tagIds: [],
+        now: at,
+      });
+      await recordFunctionCheck(db, id, {
+        observationId: crypto.randomUUID(),
+        targetUsername: "checked_bot",
+        observedAt: at,
+        result: "responded",
+        action: "/start",
+        scope: "Welcome response only",
+        note: "",
+        actor: `tg:${ADMIN.id}`,
+      });
+      await h.message({ ...ADMIN, language_code }, "/status @checked_bot");
+      expect(reply()).toContain("/start");
+      expect(reply()).toContain("Welcome response only");
+      expect(reply()).toContain(new Date(at).toISOString());
+      expect(reply()).not.toContain("active");
+    },
+  );
   test("/ban and /unban by user id and by username", async () => {
     await h.message(ADMIN, "/ban 777 spam bot");
     expect(await getBlacklistEntry(db, "user", "777")).toMatchObject({ reason: "spam bot" });
@@ -84,9 +112,10 @@ describe("admin commands", () => {
     expect(reply()).toContain("nonsense");
   });
 
-  test("/status reports status, liveness and stats", async () => {
+  test("/status reports publication, unverified health and stats without legacy active claims", async () => {
     await h.message(ADMIN, "/status @managed");
-    expect(reply()).toMatch(/approved[\s\S]*active[\s\S]*1234[\s\S]*news/);
+    expect(reply()).toMatch(/approved[\s\S]*未检查[\s\S]*1234[\s\S]*news/);
+    expect(reply()).not.toContain("active");
   });
 
   test("commands work in the admin group with the bot mention", async () => {

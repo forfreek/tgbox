@@ -19,7 +19,7 @@ import {
 } from "@/functions/posts.ts";
 import { invalidate, queryKeys } from "@/lib/query-keys.ts";
 import { entryEditErrorText } from "./edit.ts";
-import { formatCount, livenessLabel, statusLabel } from "./labels.ts";
+import { formatCount, healthLabel, statusLabel } from "./labels.ts";
 
 type Page = Awaited<ReturnType<typeof $listEntries>>;
 
@@ -55,7 +55,10 @@ function patchPosts(
 
 function useSettled() {
   const client = useQueryClient();
-  return () => invalidate(client, "entries", "adminStats", "dashboardActivity", "audit");
+  return () => {
+    void client.invalidateQueries({ queryKey: ["entry-health"] });
+    return invalidate(client, "entries", "adminStats", "dashboardActivity", "audit");
+  };
 }
 
 const failed = (error: Error) =>
@@ -168,7 +171,6 @@ const fieldLabel: Record<string, string> = {
   description: "简介",
   lang: "语言",
   verified: "认证",
-  liveness: "存活",
   status: "状态",
   members: "成员",
   online: "在线",
@@ -179,8 +181,6 @@ const show = (field: string, value: string | number | boolean | null) => {
   if (value === null) return "—";
   if (field === "members" || field === "online")
     return typeof value === "number" ? formatCount(value) : String(value);
-  const liveness = Object.entries(livenessLabel).find(([key]) => key === value);
-  if (field === "liveness" && liveness) return liveness[1];
   if (typeof value === "string" && value.length > 24) return `${value.slice(0, 24)}…`;
   return String(value);
 };
@@ -195,9 +195,17 @@ export function useRefreshEntry() {
         toastManager.add({ type: "error", title: "条目不存在" });
         return;
       }
+      if (result.deferredUntil !== null) {
+        toastManager.add({
+          type: "warning",
+          title: "来源退避中，尚未重新检查",
+          description: `最早重试时间：${new Date(result.deferredUntil).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" })}（北京时间）`,
+        });
+        return;
+      }
       toastManager.add({
-        type: result.liveness === "active" ? "success" : "warning",
-        title: `刷新完成 · ${livenessLabel[result.liveness]}`,
+        type: result.health.publicState === "accessible" ? "success" : "warning",
+        title: `刷新完成 · ${healthLabel[result.health.publicState]}`,
         description:
           result.changes.length === 0
             ? "没有字段变化"

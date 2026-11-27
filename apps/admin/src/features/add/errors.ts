@@ -11,7 +11,7 @@ export const addEntryErrorText: Record<AddEntryError, string> = {
   unknown_tags: "包含不存在的标签",
   too_many_tags: "标签数量超出上限",
   user_account: "这是个人账号，不能收录",
-  not_found: "t.me 上找不到该用户名",
-  banned: "该频道/群组已被 Telegram 封禁",
+  not_found: "本次未能确认公开身份，请稍后重试",
+  banned: "本次未能确认公开身份，请稍后重试",
   unavailable: "暂时无法获取资料（可能是网络问题或类型无法识别），请稍后重试",
 };

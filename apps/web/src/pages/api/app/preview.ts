@@ -1,8 +1,7 @@
 import { env } from "cloudflare:workers";
-import { aiCategoryClassifier } from "@tgbox/core";
+import { aiCategoryClassifier, fetchResourceSnapshot } from "@tgbox/core";
 import { listCategories, listTags } from "@tgbox/db";
 import { entryKinds, type PreviewResult, parseTelegramRef, suggestTaxonomy } from "@tgbox/shared";
-import { fetchEntrySnapshot } from "@tgbox/telegram";
 import type { APIRoute } from "astro";
 import { appJson, authenticateApp } from "@/lib/app-auth.ts";
 
@@ -35,7 +34,7 @@ function allow(userId: number, now: number) {
   return true;
 }
 
-/** What t.me says about a username, so the submit form can show it before anything is written. */
+/** Preview does not write a submission; acquisition shares the source cooldown with other entry points. */
 export const GET: APIRoute = async ({ request, url }) => {
   const auth = await authenticateApp(request);
   if (!auth.ok) return auth.response;
@@ -52,9 +51,7 @@ export const GET: APIRoute = async ({ request, url }) => {
     });
   }
 
-  const snap = await fetchEntrySnapshot(username, {
-    fetch: core.fetch,
-    now: new Date(core.now()),
+  const snap = await fetchResourceSnapshot(core, username, {
     knownKind: null,
     needCreatedAt: false,
   });

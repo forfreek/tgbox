@@ -1,5 +1,5 @@
 // Generated from zh.ts by `pnpm --filter @tgbox/hant gen:bot`. Edit zh.ts, then regenerate.
-import type { Entry } from "@tgbox/db";
+import type { Entry, HealthView } from "@tgbox/db";
 import { type EntryKind, isEntryProduct, type ProductKind } from "@tgbox/shared";
 
 type SubmissionSummary = {
@@ -73,7 +73,20 @@ type SupportUser = {
   language: string | null;
 };
 
+const healthPublicNames = {
+  unverified: "未檢查",
+  accessible: "公開身份可識別",
+  uncertain: "本次未能確認",
+  identity_review: "身份或類型待複核",
+};
+const healthFunctionNames = {
+  unverified: "功能未驗證",
+  responded: "已記錄響應",
+  no_response: "本次未響應",
+  reported_issue: "已記錄功能問題",
+};
 type EntryStatusSummary = {
+  health?: HealthView;
   entry: Entry;
   members: number | null;
   category: string;
@@ -171,8 +184,8 @@ export const zhHant = {
   alreadyListed: (username: string) => `@${username} 已經收錄，無需重複提交。`,
   alreadyPending: (username: string) => `@${username} 已在審核中，請耐心等待。`,
   dailyLimit: (limit: number) => `今天的提交次數已達上限（${limit} 次），請明天再試。`,
-  notFound: (username: string) => `@${username} 不存在，請檢查用戶名。`,
-  banned: (username: string) => `@${username} 已被 Telegram 封禁或限制，無法收錄。`,
+  notFound: (username: string) => `暫時無法確認 @${username} 的公開身份，請稍後重試。`,
+  banned: (username: string) => `暫時無法確認 @${username} 的公開身份，請稍後重試。`,
   checking: (username: string) => `正在檢查 @${username}…`,
   unavailable: "暫時無法獲取資料，請稍後再試。",
   userAccount: (username: string) => `@${username} 是個人賬號，只能收錄公開的頻道、群組和機器人。`,
@@ -383,7 +396,19 @@ export const zhHant = {
       [
         `@${s.entry.username}（${s.entry.kind}）${s.entry.title}`,
         `狀態：${s.entry.status}`,
-        `檢測：${s.entry.liveness}，連續失敗 ${s.entry.failCount} 次${s.entry.lastFailAt ? `，最近失敗 ${new Date(s.entry.lastFailAt).toISOString()}` : ""}`,
+        `公開身份：${healthPublicNames[s.health?.publicState ?? "unverified"]}`,
+        `最近確認可識別：${s.health?.confirmedAt ? new Date(s.health.confirmedAt).toISOString() : "尚無記錄"}`,
+        ...(s.entry.kind === "bot"
+          ? [
+              `功能：${healthFunctionNames[s.health?.functionState ?? "unverified"]}${s.health?.functionObservedAt ? `（${new Date(s.health.functionObservedAt).toISOString()}）` : ""}`,
+              ...(s.health?.functionEvidence
+                ? [
+                    `驗證操作：${s.health.functionEvidence.action}`,
+                    `驗證範圍：${s.health.functionEvidence.scope}（僅代表記錄時的結果）`,
+                  ]
+                : []),
+            ]
+          : []),
         `成員：${s.members ?? "未知"}`,
         `分類：${s.category}`,
         `標籤：${s.tags.join(", ") || "無"}`,
@@ -395,12 +420,12 @@ export const zhHant = {
 /** Traditional names of the seed categories and tags, keyed by their Simplified names. */
 export const hantNames: Record<string, string> = {
   "AI智能体": "AI智能體",
-  "AI视频": "AI視頻",
   "AI绘画": "AI繪畫",
   "AI编程": "AI編程",
+  "AI视频": "AI視頻",
   "API中转": "API中轉",
-  "iOS社区": "iOS社區",
   "TON生态": "TON生態",
+  "iOS社区": "iOS社區",
   "主机VPS": "主機VPS",
   "书报刊漫": "書報刊漫",
   "交易市场": "交易市場",
