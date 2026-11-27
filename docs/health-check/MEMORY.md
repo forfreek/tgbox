@@ -35,3 +35,14 @@
 2026-11-27 PR #87 CI45949457611：lint/typecheck通过，测试发现繁体生成词典不同步（简体源格式化后未重生成，且localeCompare受宿主ICU默认排序影响）。已修正为固定码点顺序、规范生成换行，按最终简体源重新生成；同步测试只忽略checkout换行，新增禁止宿主localeCompare及CRLF/LF等价回归。Hant本地6项与类型检查通过；最新完整CI待核验。
 
 2026-11-27 PR #87 CI45949801379：Hant同步、lint/typecheck及其余9个包测试通过，Web Mini App测试4项因DB mock缺readHealthSources失败。已补齐mock并发现/修正Mini App preview直接采集漏接共享退避；新增真实采集函数下preview+submit冷却期零网络/零收录回归，API63项通过。Mini App未确认文案改为本次未确认，seed离线CLI仍仅作正向导入校验，不写新健康或发布决策。
+
+## 阶段三只读复核决策（2026-11-27）
+
+- 恢复tgbox-health-history的STATE/HISTORY.md；依赖#87（9f41632，CI45950431638已核验通过）。生产新健康表/0027尚未上线，不把代码已交付当成线上已生效。
+- 当前15候选=12系统隐藏+3上线异常；5当前channel可识别、1原bot现channel、9占位。正向主页不能证明原主体连续性，四个bot功能未验证；不自动恢复。二次快照15条逐字段相同，生产查询meta均0写入。
+- 直连超时为本机未沿代理的采集故障；首轮立即退避，不将延后项称检查失败。等待到期沿系统既有代理继续，上一报告sources传入并保留Retry-After，不修改代理或D1控制。
+- scripts/health-history.ts只读工具和8项回归验证绑定/人工保护/限量/指纹/规范JSON摘要/退避/类型差异/逐条证据复算；报告与SQL入口见HISTORY。未创建未授权的恢复执行器，修复事务/审计/dirty/并发演练仍为后续门禁。
+
+2026-11-27 阶段三只读复核草稿PR #88 https://github.com/forfreek/tgbox/pull/88 ，base=codex/health-check-integration（#87），代码aa574b7。最新恢复 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、HISTORY.md。15条候选中5当前公开身份可识别、1类型异常、9无法确认；未迁移/部署/恢复，旧工作树历史边界保留。
+
+2026-11-27 PR #88首轮CI45953535909在未改动snapshot的build-site-data.test.ts第362行触发5000ms超时，格式/类型检查通过。该文件随后本地单worker完整复跑28项通过（53.63s）；没有改业务代码或放宽测试超时。Node新增专项8项+迁移1项、scripts类型与变更Biome通过；最终提交CI重新核验。
