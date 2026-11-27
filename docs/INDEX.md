@@ -127,3 +127,5 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 2B1实现草稿PR #86：https://github.com/forfreek/tgbox/pull/86，依赖#85；数据API已本地验证，运行/UI尚未接入。
 
 2026-11-27 健康检查2B2运行/后台最新恢复入口 C:/Users/123/tgbox-health-integration/docs/health-check/STATE.md、[接入验收](health-check/INTEGRATION.md)。统一来源退避、停用旧隐藏恢复、人工功能与身份记录及后台/三语接入已本地验证；依赖#86，生产尚未迁移/部署，历史修复与最终清理仍待后续阶段。
+
+2B2草稿PR #87：https://github.com/forfreek/tgbox/pull/87 ，依赖#86，最新恢复本工作树health-check/STATE.md与INTEGRATION.md；生产未变更。

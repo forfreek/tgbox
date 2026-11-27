@@ -54,3 +54,5 @@
 - 本地全量Telegram96/core161/db99/Admin113项通过；Bot全量175项通过，随后新增admin三语专项12项与刷新36项通过。全仓typecheck10任务、Admin生产构建、Node旧库迁移1项通过。变更文件Biome与最终Linux CI在交付检查登记。
 - 浏览器桌面/手机表单、真实本地POST及审计读回、并发冲突、GET未认证401通过。仅模拟资源，未发送真实机器人消息；不将QA视为生产验证。
 - 2B1 #86 Linux CI45944985860核验通过。阶段三历史评估、阶段四生产发布/观察/旧列清理尚未执行；禁止把本节点交付写成线上已修复或专题结束。生产迁移/部署/数据恢复均未执行。
+
+2026-11-27 2B2运行/后台已交付草稿PR #87 https://github.com/forfreek/tgbox/pull/87 ，base=codex/health-check-data（#86），代码ece8088。恢复 C:/Users/123/tgbox-health-integration/docs/health-check/STATE.md、INTEGRATION.md。#86 CI45944985860通过；#87 CI按最新检查核验。生产未迁移/部署，未恢复历史条目；本工作树此前节点边界保留。

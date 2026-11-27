@@ -29,3 +29,5 @@
 - D1 batch结果使用列名映射：同时选择entry_stats和entry_health全表会重复entry_id，造成后续列错位。Admin健康选择采用唯一health_*别名，回归同时断言成员、健康、缺行、binding及筛选。
 - 正常网页不能解除identity_review；完整资料更新取数据库实际接受的publicState，阻止迟到/复核中元数据替换。Bot三语展示功能实际操作/范围/时间；不把可识别身份当成可用性。
 - 验证全量与专项数字见STATE，源码入口见INTEGRATION；本地模拟浏览器已验证保存/冲突/未认证401和隐藏状态不变。生产观察、历史误隐藏处理和旧字段最终清理仍未完成。
+
+2026-11-27 2B2运行/后台已交付草稿PR #87 https://github.com/forfreek/tgbox/pull/87 ，base=codex/health-check-data（#86），代码ece8088。恢复 C:/Users/123/tgbox-health-integration/docs/health-check/STATE.md、INTEGRATION.md。#86 CI45944985860通过；#87 CI按最新检查核验。生产未迁移/部署，未恢复历史条目；本工作树此前节点边界保留。
