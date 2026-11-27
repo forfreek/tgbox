@@ -14,3 +14,4 @@
 - 阶段二先交付2A契约（CONTRACT.md），再2B实现。所有当前web结果均无修改发布status权限；旧系统隐藏不因一次正常网页自动恢复。Bot功能结果与公开身份分离，来源profile/preview不被称为独立验证。
 - 旧liveness消费方不仅Cron与后台列表，还包括review/dashboard/add、Bot三语、seed及DTO差异展示。必须整体切换及清理，不能只换recordLivenessResult留下旧误导标签。证据采用固定容量环且不进入静态导出，幂等/CAS/identity binding和预算是实现验收要求，不是本节点已实现能力。
 - #84全仓CI 45942342071于本节点核验通过。2A文档无运行时代码变更，以源码映射审阅、迁移/验收依赖核对及git diff --check验证；生产能力仍未改变。
+- 2A独立草稿PR #85 https://github.com/forfreek/tgbox/pull/85 ，依赖#84；2A只交付契约，2B代码/迁移/UI均未实施。恢复先读本工作树STATE及CONTRACT。
