@@ -137,13 +137,9 @@ function PreviewResult({ preview, onListed }: { preview: Preview; onListed: () =
   const problem =
     snap.kind === "user"
       ? addEntryErrorText.user_account
-      : snap.liveness === "not_found"
-        ? addEntryErrorText.not_found
-        : snap.liveness === "banned"
-          ? addEntryErrorText.banned
-          : snap.liveness !== "active" || !kind
-            ? addEntryErrorText.unavailable
-            : null;
+      : snap.liveness !== "active" || !kind
+        ? addEntryErrorText.unavailable
+        : null;
 
   return (
     <div className="flex flex-col gap-4">

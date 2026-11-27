@@ -36,11 +36,13 @@ export function RowActions({
   siteUrl,
   onEdit,
   onManagePosts,
+  onHealth,
 }: {
   entry: EntryRow;
   siteUrl: string;
   onEdit: (entry: EntryRow) => void;
   onManagePosts: (entry: EntryRow) => void;
+  onHealth: (entry: EntryRow) => void;
 }) {
   const refresh = useRefreshEntry();
   const status = useSetStatus();
@@ -57,6 +59,9 @@ export function RowActions({
       <MenuPopup align="end">
         <MenuItem onClick={() => onEdit(entry)}>
           <PencilIcon /> 编辑分类与标签
+        </MenuItem>
+        <MenuItem onClick={() => onHealth(entry)}>
+          <EyeIcon /> 检查证据与人工验证
         </MenuItem>
         <MenuItem disabled={refresh.isPending} onClick={() => refresh.mutate(entry.id)}>
           <RefreshCwIcon /> 立即刷新

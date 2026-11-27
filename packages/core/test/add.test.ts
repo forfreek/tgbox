@@ -60,7 +60,7 @@ describe("previewing a manual listing", () => {
 
   test.each([
     ["not a link!", { ok: false, error: "invalid_username" }],
-    ["gone_away", { ok: true, snapshot: { liveness: "not_found" } }],
+    ["gone_away", { ok: true, snapshot: { liveness: "unknown" } }],
     ["some_user", { ok: true, snapshot: { kind: "user" } }],
   ])("%s", async (username, expected) => {
     const { ctx } = await setup();

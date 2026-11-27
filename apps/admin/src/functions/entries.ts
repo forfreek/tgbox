@@ -13,6 +13,7 @@ import {
   type EntryStats,
   getEntryTagIds,
   getEntryWithStats,
+  healthViewOf,
   listActivePromotions,
   listCategories,
   listEntriesAdmin,
@@ -48,7 +49,7 @@ export const $listEntries = createServerFn({ method: "GET" })
       kind: data.kind,
       categoryId: data.category,
       status: data.status,
-      liveness: data.liveness,
+      health: data.health,
       lang: data.lang,
       promoted: data.promoted,
       q: data.q,
@@ -69,7 +70,7 @@ export const $listEntries = createServerFn({ method: "GET" })
     return {
       total,
       siteUrl: env.SITE_URL,
-      rows: rows.map(({ entry, stats }) => ({
+      rows: rows.map(({ entry, stats, health }) => ({
         id: entry.id,
         username: entry.username,
         startPayload: entry.startPayload,
@@ -81,7 +82,7 @@ export const $listEntries = createServerFn({ method: "GET" })
         tagIds: tags.get(entry.id) ?? [],
         members: stats?.members ?? null,
         activityTier: stats?.activityTier ?? null,
-        liveness: entry.liveness,
+        health: healthViewOf(health),
         status: entry.status,
         promoted: entry.isPromoted,
         /** Pinned by a paid promotion: the site shows the badge regardless of `promoted`. */
@@ -203,7 +204,6 @@ const snapshotOf = ({ entry, stats }: { entry: Entry; stats: EntryStats | null }
   description: entry.description,
   lang: entry.lang,
   verified: entry.verified,
-  liveness: entry.liveness,
   status: entry.status,
   members: stats?.members ?? null,
   online: stats?.online ?? null,

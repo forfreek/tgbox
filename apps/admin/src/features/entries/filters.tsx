@@ -1,9 +1,9 @@
-import { EntryKind, type EntrySort, EntryStatus, entrySorts, Liveness } from "@tgbox/shared";
+import { EntryKind, type EntrySort, EntryStatus, entrySorts, PublicHealth } from "@tgbox/shared";
 import { SearchIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/coss/ui/button.tsx";
 import { Input } from "@/components/coss/ui/input.tsx";
-import { kindLabel, langLabel, livenessLabel, statusLabel } from "./labels.ts";
+import { healthLabel, kindLabel, langLabel, statusLabel } from "./labels.ts";
 import { OptionSelect } from "./option-select.tsx";
 import type { EntriesSearch } from "./search.ts";
 
@@ -41,7 +41,7 @@ export function EntryFilters({
       search.kind,
       search.category,
       search.status,
-      search.liveness,
+      search.health,
       search.lang,
       search.promoted,
       search.q,
@@ -106,13 +106,13 @@ export function EntryFilters({
           }}
         />
         <OptionSelect
-          label="存活"
-          allLabel="全部存活状态"
-          value={search.liveness}
-          options={Liveness.options.map((value) => ({ value, label: livenessLabel[value] }))}
+          label="公开身份"
+          allLabel="全部检查状态"
+          value={search.health}
+          options={PublicHealth.options.map((value) => ({ value, label: healthLabel[value] }))}
           onChange={(value) => {
-            const liveness = Liveness.safeParse(value);
-            onChange({ liveness: liveness.success ? liveness.data : undefined });
+            const health = PublicHealth.safeParse(value);
+            onChange({ health: health.success ? health.data : undefined });
           }}
         />
         <OptionSelect
@@ -142,7 +142,7 @@ export function EntryFilters({
                 kind: undefined,
                 category: undefined,
                 status: undefined,
-                liveness: undefined,
+                health: undefined,
                 lang: undefined,
                 promoted: undefined,
                 q: undefined,

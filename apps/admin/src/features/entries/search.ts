@@ -1,4 +1,4 @@
-import { EntryKind, EntryStatus, entrySorts, Liveness } from "@tgbox/shared";
+import { EntryKind, EntryStatus, entrySorts, PublicHealth } from "@tgbox/shared";
 import { z } from "zod";
 
 export const ENTRIES_PAGE_SIZE = 50;
@@ -9,7 +9,7 @@ export const entriesSearchSchema = z.object({
   kind: EntryKind.optional().catch(undefined),
   category: z.coerce.number().int().positive().optional().catch(undefined),
   status: EntryStatus.optional().catch(undefined),
-  liveness: Liveness.optional().catch(undefined),
+  health: PublicHealth.optional().catch(undefined),
   lang: z
     .string()
     .regex(/^[a-z]{2,3}$/)

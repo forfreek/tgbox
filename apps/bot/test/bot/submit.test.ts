@@ -147,7 +147,7 @@ describe("submission flow", () => {
     const { response, done } = await h.startMessage(owner, "https://t.me/slow_channel");
     expect(response.status).toBe(200);
     expect(h.lastText()).toContain("正在检查 @slow_channel");
-    expect(h.tme).toEqual(["/slow_channel"]);
+    await expect.poll(() => h.tme).toEqual(["/slow_channel"]);
     expect(await getBotDraft(db, owner.id, Date.now())).toBeUndefined();
 
     release();
@@ -254,8 +254,8 @@ describe("submission flow", () => {
 
   test.each([
     ["invite link", "https://t.me/+AbCdEf123", "无法识别"],
-    ["not found", "@zzqq_not_exist_987654", "不存在"],
-    ["banned", "t.me/qassambrigades", "封禁"],
+    ["view placeholder", "@zzqq_not_exist_987654", "暂时无法获取资料"],
+    ["contact placeholder", "t.me/qassambrigades", "暂时无法获取资料"],
     ["personal account", "https://t.me/nikolai", "个人账号"],
   ])("%s is rejected with a clear message", async (_label, link, expected) => {
     await h.message(owner, link);

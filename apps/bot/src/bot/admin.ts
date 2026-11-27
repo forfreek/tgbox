@@ -1,5 +1,6 @@
 import {
   addBlacklist,
+  currentEntryHealth,
   removeBlacklist,
   setEntriesStatus,
   setEntryCategoryAndTags,
@@ -162,6 +163,7 @@ export function admin(app: App) {
     await ctx.reply(
       m.status({
         entry,
+        health: await currentEntryHealth(app.core, entry.id),
         members: row?.stats?.members ?? null,
         category: categories.find((category) => category.id === entry.categoryId)?.slug ?? "?",
         tags: allTags.filter((tag) => tagIds.includes(tag.id)).map((tag) => tag.slug),

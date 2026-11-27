@@ -33,6 +33,7 @@ export {
   rejectFriendLink,
   setFriendLinks,
 } from "./friend-links.ts";
+export * from "./health.ts";
 export {
   type ModerationError,
   setEntryPostsVisibility,

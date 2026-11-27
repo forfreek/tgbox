@@ -51,6 +51,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-outline: var(--sidebar-outline);
+  --color-destructive-foreground: var(--destructive-foreground);
 }
 
 /*
@@ -171,6 +172,7 @@
   --sidebar-accent-foreground: #006496;
   --sidebar-border: #e2e8ef;
   --sidebar-outline: #0088cc;
+  --destructive-foreground: var(--color-red-700);
 }
 
 .dark {
@@ -222,6 +224,7 @@
   --sidebar-accent-foreground: #7cc8f2;
   --sidebar-border: rgb(255 255 255 / 7.5%);
   --sidebar-outline: #5ab8ec;
+  --destructive-foreground: var(--color-red-400);
 }
 
 @theme {

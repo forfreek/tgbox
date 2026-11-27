@@ -126,3 +126,17 @@ export function healthRedirectTarget(target: string): string | undefined {
     return undefined;
   }
 }
+
+export const healthReasonLabels: Record<HealthReason, string> = {
+  profile_recognized: "公开主页身份可识别",
+  view_placeholder: "网页仅返回View占位信息",
+  contact_placeholder: "网页仅返回Contact占位信息",
+  profile_redirect: "主页发生重定向",
+  preview_unavailable: "主页可识别，消息预览不可用",
+  rate_limited: "来源限流，等待重试",
+  transport_error: "本次网络请求未完成",
+  http_error: "来源返回异常HTTP状态",
+  parse_error: "网页结构未能识别",
+  kind_mismatch: "识别类型与收录类型不同",
+  manual_observation: "人工记录",
+};

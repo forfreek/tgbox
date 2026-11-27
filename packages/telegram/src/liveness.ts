@@ -23,9 +23,9 @@ export function classifyLiveness(input: LivenessInput): {
     case "malformed":
       return { liveness: "unknown", kind: null };
     case "view":
-      return { liveness: input.previousKind ? "unknown" : "banned", kind: null };
+      return { liveness: "unknown", kind: null };
     case "contact":
-      return { liveness: input.previousKind ? "unknown" : "not_found", kind: null };
+      return { liveness: "unknown", kind: null };
   }
   if (!profile.kind) return { liveness: "unknown", kind: null };
   if (input.previousKind && profile.kind !== input.previousKind) {

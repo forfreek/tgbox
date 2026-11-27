@@ -26,11 +26,11 @@ export const rejectReasonOptions: { value: RejectReason; label: string }[] = [
 ];
 
 export const livenessLabels: Record<Liveness, string> = {
-  active: "正常",
-  not_found: "不存在",
-  banned: "已封禁",
+  active: "公开身份可识别",
+  not_found: "本次未能确认",
+  banned: "本次未能确认",
   type_changed: "类型变化",
-  unknown: "未知",
+  unknown: "本次未能确认",
 };
 
 export const dateTime = (ms: number) =>

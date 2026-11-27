@@ -13,10 +13,10 @@ import {
   type Submission,
 } from "@tgbox/db";
 import { entryKinds, MAX_TAGS, parseTelegramRef, type SubmitError } from "@tgbox/shared";
-import { fetchEntrySnapshot } from "@tgbox/telegram";
 import { audit } from "./audit.ts";
 import { markDirtyAndDispatch } from "./build.ts";
 import { type Actor, background, type CoreContext } from "./context.ts";
+import { fetchResourceSnapshot, saveEntryObservation } from "./health.ts";
 import { publishEntryToChannel } from "./publish.ts";
 import { notifyNewSubmission } from "./review-notify.ts";
 import { getSettings } from "./settings.ts";
@@ -64,9 +64,7 @@ export async function submitEntry(
   if (!allowed.ok) return allowed;
   const { username } = allowed;
 
-  const snap = await fetchEntrySnapshot(username, {
-    fetch: ctx.fetch,
-    now: new Date(ctx.now()),
+  const snap = await fetchResourceSnapshot(ctx, username, {
     knownKind: null,
     needCreatedAt: false,
   });
@@ -156,9 +154,7 @@ export async function approveSubmission(ctx: CoreContext, input: { id: number; a
  */
 export async function listApprovedSubmission(ctx: CoreContext, submission: Submission) {
   const now = ctx.now();
-  const snap = await fetchEntrySnapshot(submission.username, {
-    fetch: ctx.fetch,
-    now: new Date(now),
+  const snap = await fetchResourceSnapshot(ctx, submission.username, {
     knownKind: submission.kind,
     needCreatedAt: true,
   });
@@ -190,6 +186,12 @@ export async function listApprovedSubmission(ctx: CoreContext, submission: Submi
       now,
     }));
   }
+  if (entryId !== undefined)
+    await saveEntryObservation(
+      ctx,
+      { id: entryId, username: submission.username, kind: submission.kind },
+      snap,
+    );
   await markDirtyAndDispatch(ctx);
   if (!existing) {
     await background(ctx, () => publishEntryToChannel(ctx, { username: submission.username }));

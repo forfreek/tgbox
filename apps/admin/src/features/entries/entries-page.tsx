@@ -35,13 +35,12 @@ import { taxonomyQueryOptions } from "@/functions/taxonomy.ts";
 import { BulkBar } from "./bulk-bar.tsx";
 import { EditEntrySheet } from "./edit-sheet.tsx";
 import { EntryFilters } from "./filters.tsx";
+import { EntryHealthSheet, HealthBadge } from "./health-sheet.tsx";
 import {
   activityLabel,
   formatCount,
   formatDate,
   kindLabel,
-  livenessLabel,
-  livenessVariant,
   statusLabel,
   statusVariant,
 } from "./labels.ts";
@@ -66,6 +65,7 @@ export function EntriesPage({
   const list = useQuery(entriesQueryOptions(search));
   const taxonomy = useQuery(taxonomyQueryOptions());
   const [editing, setEditing] = useState<EntryRow | null>(null);
+  const [checkingHealth, setCheckingHealth] = useState<EntryRow | null>(null);
   const [managingPosts, setManagingPosts] = useState<EntryRow | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const siteUrl = list.data?.siteUrl ?? "";
@@ -128,11 +128,9 @@ export function EntriesPage({
           header: "活跃",
           cell: ({ getValue }) => activityLabel(getValue()),
         }),
-        helper.accessor("liveness", {
-          header: "存活",
-          cell: ({ getValue }) => (
-            <Badge variant={livenessVariant[getValue()]}>{livenessLabel[getValue()]}</Badge>
-          ),
+        helper.accessor("health.publicState", {
+          header: "公开身份",
+          cell: ({ row }) => <HealthBadge health={row.original.health} kind={row.original.kind} />,
         }),
         helper.accessor("status", {
           header: "状态",
@@ -177,6 +175,7 @@ export function EntriesPage({
               siteUrl={siteUrl}
               onEdit={setEditing}
               onManagePosts={setManagingPosts}
+              onHealth={setCheckingHealth}
             />
           ),
         }),
@@ -303,15 +302,14 @@ export function EntriesPage({
                           siteUrl={siteUrl}
                           onEdit={setEditing}
                           onManagePosts={setManagingPosts}
+                          onHealth={setCheckingHealth}
                         />
                       </div>
                       <div className="flex flex-wrap items-center gap-1.5 text-muted-foreground text-xs">
                         <Badge variant={statusVariant[row.original.status]}>
                           {statusLabel[row.original.status]}
                         </Badge>
-                        <Badge variant={livenessVariant[row.original.liveness]}>
-                          {livenessLabel[row.original.liveness]}
-                        </Badge>
+                        <HealthBadge health={row.original.health} kind={row.original.kind} />
                         {row.original.promoted && <Badge variant="warning">推广</Badge>}
                         {row.original.hidePosts && <Badge variant="outline">消息已隐藏</Badge>}
                         <span>{kindLabel[row.original.kind]}</span>·
@@ -365,6 +363,7 @@ export function EntriesPage({
         onClear={clearSelection}
       />
       <EditEntrySheet entry={editing} onClose={() => setEditing(null)} />
+      <EntryHealthSheet entry={checkingHealth} onClose={() => setCheckingHealth(null)} />
       <EntryPostsSheet entry={managingPosts} onClose={() => setManagingPosts(null)} />
     </>
   );

@@ -6,15 +6,15 @@ import {
   listTags,
 } from "@tgbox/db";
 import { entryKinds, parseTelegramRef, suggestTaxonomy } from "@tgbox/shared";
-import { fetchEntrySnapshot } from "@tgbox/telegram";
 import type { CoreContext } from "./context.ts";
+import { fetchResourceSnapshot } from "./health.ts";
 import { aiCategoryClassifier } from "./suggest.ts";
 
 const PREVIEW_POSTS = 3;
 
 /**
- * Admin "add entry" step 1: what would be listed for this username. Read-only (no rows written,
- * no audit). An already listed username is reported without fetching t.me.
+ * Admin "add entry" step 1: preview without entry writes or audit. Acquisition updates shared
+ * source backoff only. An already listed username is reported without fetching t.me.
  */
 export async function previewEntry(
   ctx: CoreContext,
@@ -37,9 +37,7 @@ export async function previewEntry(
   };
   if (entry) return { ...base, snapshot: null };
 
-  const snap = await fetchEntrySnapshot(username, {
-    fetch: ctx.fetch,
-    now: new Date(ctx.now()),
+  const snap = await fetchResourceSnapshot(ctx, username, {
     knownKind: null,
     needCreatedAt: false,
   });

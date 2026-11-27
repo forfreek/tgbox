@@ -3,8 +3,10 @@ import { REFRESH_INTERVAL_MS, runRefresh } from "@tgbox/core";
 import {
   createDb,
   getEntryByUsername,
+  getEntryHealthEvidence,
   getSiteState,
   insertApprovedEntry,
+  listEntryHealth,
   setSiteState,
   upsertSetting,
 } from "@tgbox/db";
@@ -287,7 +289,8 @@ describe("writes only on change", () => {
     const objects = await r2Snapshot();
     const second = await runRefresh(env, T0 + 2 * MINUTE, tg);
     expect(second.processed).toEqual(["telegram"]);
-    expect(second.rowsWritten).toBe(0);
+    expect(second.rowsWritten).toBeGreaterThan(0);
+    expect(await getEntryHealthEvidence(db, (await entry("telegram")).id)).toHaveLength(1);
     expect(second.r2Writes).toBe(0);
     expect(second.dirty).toBe(false);
     expect(await r2Snapshot()).toEqual(objects);
@@ -483,71 +486,64 @@ describe("liveness", () => {
     }
   });
 
-  test("legacy type-change policy hides after 2 regular checks and admins get one summary message", async () => {
-    await addEntry("blocked", { kind: "group" });
-    const tg = fakeTelegram({ blocked: "channel" });
-
-    await runRefresh(adminEnv, T0, tg);
-    expect(await entry("blocked")).toMatchObject({ status: "approved", failCount: 1 });
-    await runRefresh(adminEnv, T0 + 5 * MINUTE, tg);
-    expect(await entry("blocked")).toMatchObject({ status: "hidden_by_system" });
-
-    const sent = tg.calls.filter((call) => call.url.includes("api.telegram.org"));
-    expect(sent).toHaveLength(1);
-    expect(sent[0]?.url).toBe(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`);
-    expect(JSON.parse(sent[0]?.body ?? "{}")).toMatchObject({ chat_id: "-100123" });
-    expect(sent[0]?.body).toContain("@blocked");
-  });
-
-  test("the hidden-entry summary goes to the review chat from the settings when set", async () => {
-    await upsertSetting(
-      db,
-      "bot",
-      JSON.stringify({ ...settingsDefaults.bot, reviewChatId: "-100777" }),
-      T0,
-    );
-    await addEntry("blocked", { kind: "group" });
-    const tg = fakeTelegram({ blocked: "channel" });
+  test("type changes require review and cannot hide or notify", async () => {
+    await addEntry("changed", { kind: "group" });
+    const tg = fakeTelegram({ changed: "channel" });
     await runRefresh(adminEnv, T0, tg);
     await runRefresh(adminEnv, T0 + 5 * MINUTE, tg);
-
-    const sent = tg.calls.filter((call) => call.url.includes("api.telegram.org"));
-    expect(sent.map((call) => JSON.parse(call.body ?? "{}").chat_id)).toEqual(["-100777"]);
+    const row = await entry("changed");
+    expect(row).toMatchObject({ status: "approved", failCount: 0, kind: "group" });
+    expect((await listEntryHealth(db, [row.id])).get(row.id)?.publicState).toBe("identity_review");
+    expect(tg.calls.some((call) => call.url.includes("api.telegram.org"))).toBe(false);
   });
-
-  test("in admins review mode the hidden-entry summary is a private copy to each admin", async () => {
-    await upsertSetting(
-      db,
-      "bot",
-      JSON.stringify({ ...settingsDefaults.bot, reviewMode: "admins", extraAdminIds: ["902"] }),
-      T0,
-    );
-    await addEntry("blocked", { kind: "group" });
-    const tg = fakeTelegram({ blocked: "channel" });
-    const env2 = { ...adminEnv, ADMIN_IDS: "900,901" };
-    await runRefresh(env2, T0, tg);
-    const run = await runRefresh(env2, T0 + 5 * MINUTE, tg);
-
-    const sent = tg.calls.filter((call) => call.url.includes("api.telegram.org"));
-    expect(sent.map((call) => JSON.parse(call.body ?? "{}").chat_id)).toEqual([
-      "900",
-      "901",
-      "902",
-    ]);
-    expect(run.subrequests).toBeLessThanOrEqual(50);
+  test.each(["chat", "admins"] as const)(
+    "web checks cannot send failure notices in %s review mode",
+    async (mode) => {
+      await upsertSetting(
+        db,
+        "bot",
+        JSON.stringify({
+          ...settingsDefaults.bot,
+          reviewMode: mode,
+          reviewChatId: "-100777",
+          extraAdminIds: ["902"],
+        }),
+        T0,
+      );
+      await addEntry("changed", { kind: "group" });
+      const tg = fakeTelegram({ changed: "channel" });
+      await runRefresh(adminEnv, T0, tg);
+      const run = await runRefresh(adminEnv, T0 + 5 * MINUTE, tg);
+      expect(run.hidden).toEqual([]);
+      expect(run.restored).toEqual([]);
+      expect(tg.calls.some((call) => call.url.includes("api.telegram.org"))).toBe(false);
+    },
+  );
+  test("normal web evidence does not restore a historical system hide or reset legacy failures", async () => {
+    const id = await addEntry("old_hidden", { kind: "group" });
+    await env.DB.prepare(
+      "UPDATE entries SET status='hidden_by_system',liveness='banned',fail_count=9 WHERE id=?",
+    )
+      .bind(id)
+      .run();
+    const run = await runRefresh(adminEnv, T0, fakeTelegram({ old_hidden: "group" }));
+    expect(run.restored).toEqual([]);
+    expect(await entry("old_hidden")).toMatchObject({
+      status: "hidden_by_system",
+      liveness: "banned",
+      failCount: 9,
+    });
+    expect((await listEntryHealth(db, [id])).get(id)?.publicState).toBe("accessible");
   });
-
-  test("guard: with 2+ definitive failures in one batch, failures are counted but nothing is hidden", async () => {
+  test("several identity mismatches do not share failure counters", async () => {
     await addEntry("b1", { kind: "group" });
     await addEntry("b2", { kind: "group" });
     const tg = fakeTelegram({ b1: "channel", b2: "channel" });
-
     await runRefresh(adminEnv, T0, tg);
     const run = await runRefresh(adminEnv, T0 + 5 * MINUTE, tg);
     expect(run.hidden).toEqual([]);
-    expect(await entry("b1")).toMatchObject({ status: "approved", failCount: 2 });
-    expect(await entry("b2")).toMatchObject({ status: "approved", failCount: 2 });
-    expect(tg.calls.some((call) => call.url.includes("api.telegram.org"))).toBe(false);
+    for (const u of ["b1", "b2"])
+      expect(await entry(u)).toMatchObject({ status: "approved", failCount: 0 });
   });
 
   test("a 429 is unknown: no failure recorded and the rest of the batch is deferred", async () => {
@@ -556,7 +552,11 @@ describe("liveness", () => {
     const tg = fakeTelegram({ limited: "rate_limited", later: "group" });
 
     const run = await runRefresh(env, T0, tg);
-    expect(run.rowsWritten).toBe(0);
+    expect(run.rowsWritten).toBeGreaterThan(0);
+    const limited = await entry("limited");
+    expect((await listEntryHealth(db, [limited.id])).get(limited.id)?.publicState).toBe(
+      "uncertain",
+    );
     expect(run.deferred).toEqual(["limited", "later"]);
     expect(tg.tme("later")).toHaveLength(0);
     expect(await entry("limited")).toMatchObject({ failCount: 0, liveness: "active" });
@@ -643,7 +643,7 @@ test("priority lane preserves its checkpoint on rate limit and shares the reques
     env,
     T0 + 2 * REFRESH_INTERVAL_MS,
     fakeTelegram({ limited: "group" }),
-    25,
+    35,
   );
   expect(budget.processed).toEqual([]);
   expect(budget.deferred).toEqual(["limited"]);
@@ -727,4 +727,69 @@ test("avatar lane writes the image without changing profile, stats or post media
   });
   expect(await statsOf(id)).toEqual(stats);
   expect((await env.MEDIA.list()).objects.map((o) => o.key)).toEqual(["avatars/photo.jpg"]);
+});
+
+test("exhausted sibling budget performs no fetch or checkpoint write", async () => {
+  await addEntry("budget");
+  const tg = fakeTelegram({ budget: "channel" });
+  const before = await getSiteState(db, "refresh_progress_v1");
+  const run = await runRefresh(env, T0, tg, 39);
+  expect(run.subrequests).toBe(39);
+  expect(tg.calls).toEqual([]);
+  expect(await getSiteState(db, "refresh_progress_v1")).toEqual(before);
+});
+test("source cooldown survives cron ticks and clears only after a successful later probe", async () => {
+  const id = await addEntry("source", { kind: "group" });
+  const first = await runRefresh(env, T0, fakeTelegram({ source: "rate_limited" }));
+  expect(first.subrequests).toBeLessThanOrEqual(45);
+  const healthy = fakeTelegram({ source: "group" });
+  const skipped = await runRefresh(env, T0 + MINUTE, healthy);
+  expect(healthy.tme("source")).toEqual([]);
+  expect(skipped.deferred).toContain("source");
+  const recovered = await runRefresh(env, T0 + 6 * MINUTE, healthy);
+  expect(recovered.subrequests).toBeLessThanOrEqual(45);
+  expect((await listEntryHealth(db, [id])).get(id)?.publicState).toBe("accessible");
+  expect((await entry("source")).status).toBe("approved");
+});
+
+test("a full-write tick remains bounded with 2092 directory entries", async () => {
+  await setSiteState(
+    db,
+    "refresh_progress_v1",
+    JSON.stringify({ nextId: 1, cycle: 0, lastScheduledTime: 0, lease: null }),
+  );
+  for (let start = 1; start <= 2092; start += 100) {
+    await env.DB.batch(
+      Array.from({ length: Math.min(100, 2093 - start) }, (_, i) =>
+        env.DB.prepare(
+          "INSERT INTO entries(id,username,kind,category_id,title,listed_at,updated_at) VALUES(?,?,'channel',1,'scale',?,?)",
+        ).bind(start + i, `scale_${start + i}`, T0, T0),
+      ),
+    );
+  }
+  const tg = fakeTelegram(
+    Object.fromEntries(
+      Array.from({ length: 2092 }, (_, i) => [`scale_${i + 1}`, "channel" as const]),
+    ),
+  );
+  const run = await runRefresh(env, T0, tg);
+  expect(run.subrequests).toBeLessThanOrEqual(45);
+  expect(run.processed.length).toBeGreaterThan(0);
+  expect(run.deferred.length).toBeGreaterThan(0);
+  expect(run.processed.length + run.deferred.length).toBe(6);
+  for (const name of run.deferred) expect(tg.tme(name)).toHaveLength(0);
+  expect(await env.DB.prepare("SELECT count(*) FROM entry_health").first("count(*)")).toBe(
+    run.processed.length,
+  );
+  console.log(
+    "health-integration-scale",
+    JSON.stringify({
+      entries: 2092,
+      batch: 6,
+      subrequests: run.subrequests,
+      processed: run.processed.length,
+      deferred: run.deferred.length,
+      rowsWritten: run.rowsWritten,
+    }),
+  );
 });

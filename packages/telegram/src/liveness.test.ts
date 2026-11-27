@@ -70,10 +70,10 @@ test("new placeholder submissions retain an unverified identity instead of becom
   expect(
     classifyLiveness({ profileResponse: ok("profile-not-found.html"), previousKind: null })
       .liveness,
-  ).toBe("not_found");
+  ).toBe("unknown");
   expect(
     classifyLiveness({ profileResponse: ok("profile-banned.html"), previousKind: null }).liveness,
-  ).toBe("banned");
+  ).toBe("unknown");
 });
 
 test("a bot without avatar or monthly users remains identifiable by Start Bot", () => {

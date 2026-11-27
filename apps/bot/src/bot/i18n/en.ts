@@ -1,3 +1,16 @@
+const healthPublicNames = {
+  unverified: "Not checked",
+  accessible: "Public identity recognized",
+  uncertain: "Unable to confirm this time",
+  identity_review: "Identity or type needs review",
+};
+const healthFunctionNames = {
+  unverified: "Function not verified",
+  responded: "Response recorded",
+  no_response: "No response this time",
+  reported_issue: "Function issue recorded",
+};
+
 import { isEntryProduct, type ProductKind } from "@tgbox/shared";
 import {
   type AdOrderSummary,
@@ -110,8 +123,10 @@ export const en: typeof zh = {
   alreadyPending: (username: string) => `@${username} is already awaiting review.`,
   dailyLimit: (limit: number) =>
     `You've reached today's submission limit (${limit}). Please try again tomorrow.`,
-  notFound: (username: string) => `@${username} doesn't exist. Check the username.`,
-  banned: (username: string) => `@${username} is banned or restricted by Telegram.`,
+  notFound: (username: string) =>
+    `Unable to confirm the public identity of @${username}. Please retry later.`,
+  banned: (username: string) =>
+    `Unable to confirm the public identity of @${username}. Please retry later.`,
   checking: (username: string) => `Checking @${username}…`,
   unavailable: "Couldn't fetch the profile right now. Please try again later.",
   userAccount: (username: string) =>
@@ -327,7 +342,19 @@ export const en: typeof zh = {
       [
         `@${s.entry.username} (${s.entry.kind}) ${s.entry.title}`,
         `Status: ${s.entry.status}`,
-        `Liveness: ${s.entry.liveness}, ${s.entry.failCount} consecutive failures${s.entry.lastFailAt ? `, last at ${new Date(s.entry.lastFailAt).toISOString()}` : ""}`,
+        `Public identity: ${healthPublicNames[s.health?.publicState ?? "unverified"]}`,
+        `Last confirmed identity: ${s.health?.confirmedAt ? new Date(s.health.confirmedAt).toISOString() : "No record"}`,
+        ...(s.entry.kind === "bot"
+          ? [
+              `Function: ${healthFunctionNames[s.health?.functionState ?? "unverified"]}${s.health?.functionObservedAt ? ` (${new Date(s.health.functionObservedAt).toISOString()})` : ""}`,
+              ...(s.health?.functionEvidence
+                ? [
+                    `Checked action: ${s.health.functionEvidence.action}`,
+                    `Scope: ${s.health.functionEvidence.scope} (result at the recorded time only)`,
+                  ]
+                : []),
+            ]
+          : []),
         `Members: ${s.members ?? "unknown"}`,
         `Category: ${s.category}`,
         `Tags: ${s.tags.join(", ") || "none"}`,

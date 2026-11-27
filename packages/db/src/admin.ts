@@ -1,7 +1,13 @@
-import type { EntryKind, EntrySort, EntryStatus, Liveness, SubmissionStatus } from "@tgbox/shared";
+import type {
+  EntryKind,
+  EntrySort,
+  EntryStatus,
+  PublicHealth,
+  SubmissionStatus,
+} from "@tgbox/shared";
 import { and, asc, count, desc, eq, gte, inArray, lt, or, type SQL, sql } from "drizzle-orm";
 import { type Db, pageOf } from "./access.ts";
-import { auditLog, entries, entryStats, siteState, submissions } from "./schema.ts";
+import { auditLog, entries, entryHealth, entryStats, siteState, submissions } from "./schema.ts";
 
 // Admin reads run on live D1 and are billed by rows scanned. Traffic is a handful of admins, so
 // list/filter queries may scan `entries` (no secondary indexes by design, see .agents/database.md);
@@ -95,7 +101,7 @@ export type EntriesAdminQuery = {
   kind?: EntryKind;
   categoryId?: number;
   status?: EntryStatus;
-  liveness?: Liveness;
+  health?: PublicHealth;
   lang?: string;
   promoted?: boolean;
   /** substring of username or title */
@@ -110,7 +116,9 @@ export async function listEntriesAdmin(db: Db, query: EntriesAdminQuery) {
     query.kind === undefined ? undefined : eq(entries.kind, query.kind),
     query.categoryId === undefined ? undefined : eq(entries.categoryId, query.categoryId),
     query.status === undefined ? undefined : eq(entries.status, query.status),
-    query.liveness === undefined ? undefined : eq(entries.liveness, query.liveness),
+    query.health === undefined
+      ? undefined
+      : eq(sql`coalesce(${entryHealth.publicState}, 'unverified')`, query.health),
     query.lang === undefined ? undefined : eq(entries.lang, query.lang),
     query.promoted === undefined ? undefined : eq(entries.isPromoted, query.promoted),
   ];
@@ -135,14 +143,50 @@ export async function listEntriesAdmin(db: Db, query: EntriesAdminQuery) {
 
   const [rows, totals] = await db.batch([
     db
-      .select({ entry: entries, stats: entryStats })
+      .select({
+        entry: entries,
+        stats: entryStats,
+        health: {
+          publicState: sql<PublicHealth>`${entryHealth.publicState}`.as("health_public_state"),
+          observedAt: sql<number | null>`${entryHealth.observedAt}`.as("health_observed_at"),
+          confirmedAt: sql<number | null>`${entryHealth.confirmedAt}`.as("health_confirmed_at"),
+          reason: sql<string | null>`${entryHealth.reason}`.as("health_reason"),
+          revision: sql<number>`${entryHealth.revision}`.as("health_revision"),
+          functionState: sql<
+            typeof entryHealth.$inferSelect.functionState
+          >`${entryHealth.functionState}`.as("health_function_state"),
+          functionAt: sql<number | null>`${entryHealth.functionAt}`.as("health_function_at"),
+          functionEvidence: sql<string | null>`${entryHealth.functionEvidence}`.as(
+            "health_function_evidence",
+          ),
+        },
+      })
       .from(entries)
       .leftJoin(entryStats, eq(entryStats.entryId, entries.id))
+      .leftJoin(
+        entryHealth,
+        and(
+          eq(entryHealth.entryId, entries.id),
+          eq(entryHealth.bindingUsername, entries.username),
+          eq(entryHealth.bindingKind, entries.kind),
+        ),
+      )
       .where(where)
       .orderBy(...order)
       .limit(limit)
       .offset(offset),
-    db.select({ count: count() }).from(entries).where(where),
+    db
+      .select({ count: count() })
+      .from(entries)
+      .leftJoin(
+        entryHealth,
+        and(
+          eq(entryHealth.entryId, entries.id),
+          eq(entryHealth.bindingUsername, entries.username),
+          eq(entryHealth.bindingKind, entries.kind),
+        ),
+      )
+      .where(where),
   ]);
   return { rows, total: totals[0]?.count ?? 0 };
 }

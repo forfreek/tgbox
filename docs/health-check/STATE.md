@@ -44,3 +44,13 @@
 - 源码审查核对条件UPSERT与证据同事务、16槽采样与功能明细保留、复核栅栏、actor/时间需可信服务端、来源CAS与不提前解除Retry-After，以及静态导出allowlist未扩入私有表。
 - 2B1是可独立审阅的基础实现；2B2运行/UI接入、整体tick预算与浏览器验证尚未执行。没有授权或执行生产迁移/部署/历史恢复。
 - 2B1已提交草稿PR #86：https://github.com/forfreek/tgbox/pull/86，base=codex/health-check-contract（#85），代码14635f0。#85 CI 45942928545核验通过；#86 Linux CI按最新检查核验。下一节点2B2接入运行/UI并停用旧隐藏路径，本节点不声称已完成该工作。
+
+## 2026-11-27 阶段二2B2运行与后台集成
+
+当前工作树C:/Users/123/tgbox-health-integration，分支codex/health-check-integration，基线2B1 90ba34e，堆叠base=codex/health-check-data（#86）。阶段二运行/后台本地集成完成，详见INTEGRATION.md；独立PR创建后登记。
+
+- Cron/手动/收录/审核/Bot采集接入统一证据与来源退避；旧自动隐藏/恢复调用和失效通知已停用，头像通道不写健康。
+- Admin列表/仪表板/证据与人工验证、服务端白名单/actor/审计事务、三语Bot口径接入；未知不自动收录或恢复。已解决D1 batch联合查询重复entry_id导致列映射错位，并加入成员与健康过滤回归。
+- 本地全量Telegram96/core161/db99/Admin113项通过；Bot全量175项通过，随后新增admin三语专项12项与刷新36项通过。全仓typecheck10任务、Admin生产构建、Node旧库迁移1项通过。变更文件Biome与最终Linux CI在交付检查登记。
+- 浏览器桌面/手机表单、真实本地POST及审计读回、并发冲突、GET未认证401通过。仅模拟资源，未发送真实机器人消息；不将QA视为生产验证。
+- 2B1 #86 Linux CI45944985860核验通过。阶段三历史评估、阶段四生产发布/观察/旧列清理尚未执行；禁止把本节点交付写成线上已修复或专题结束。生产迁移/部署/数据恢复均未执行。

@@ -4,6 +4,94 @@ import { fetchEntrySnapshot } from "./snapshot.ts";
 
 const now = new Date("2026-05-20T00:00:00Z");
 
+test("profile cooldown emits no synthetic observation or fetch", async () => {
+  const { fetch, calls } = fakeFetch({});
+  const until = now.getTime() + 60_000;
+  const snapshot = await fetchEntrySnapshot("telegram", {
+    fetch,
+    now,
+    knownKind: "channel",
+    needCreatedAt: true,
+    cooldowns: { tme_profile: until },
+  });
+  expect(calls).toEqual([]);
+  expect(snapshot).toMatchObject({
+    health: null,
+    subrequests: 0,
+    deferredUntil: until,
+    sourceResults: {},
+  });
+});
+test("avatar acquisition reads only profile without health or posts", async () => {
+  const { fetch, calls } = fakeFetch({ "https://t.me/telegram": html("profile-channel.html") });
+  const snapshot = await fetchEntrySnapshot("telegram", {
+    fetch,
+    now,
+    knownKind: "channel",
+    needCreatedAt: true,
+    purpose: "avatar",
+  });
+  expect(calls).toHaveLength(1);
+  expect(snapshot).toMatchObject({ health: null, posts: null, createdAt: null, subrequests: 1 });
+});
+test("first-post throttling backs off preview without changing public identity", async () => {
+  const { fetch } = fakeFetch({
+    "https://t.me/telegram": html("profile-channel.html"),
+    "https://t.me/s/telegram": html("channel-posts.html"),
+    "https://t.me/s/telegram/1": () =>
+      new Response(null, { status: 429, headers: { "retry-after": "600" } }),
+  });
+  const snapshot = await fetchEntrySnapshot("telegram", {
+    fetch,
+    now,
+    knownKind: "channel",
+    needCreatedAt: true,
+  });
+  expect(snapshot.health?.outcome).toBe("recognized");
+  expect(snapshot.sourceResults.tme_preview).toMatchObject({
+    outcome: "rate_limited",
+    retryAfterMs: 600_000,
+  });
+});
+test("preview 429 retains recognized identity and independent Retry-After", async () => {
+  const { fetch } = fakeFetch({
+    "https://t.me/telegram": html("profile-channel.html"),
+    "https://t.me/s/telegram": () =>
+      new Response(null, { status: 429, headers: { "retry-after": "7200" } }),
+  });
+  const snapshot = await fetchEntrySnapshot("telegram", {
+    fetch,
+    now,
+    knownKind: "channel",
+    needCreatedAt: true,
+  });
+  expect(snapshot.health).toMatchObject({
+    outcome: "recognized",
+    reason: "profile_recognized",
+    previewUnavailable: true,
+  });
+  expect(snapshot.sourceResults).toMatchObject({
+    tme_profile: { outcome: "parsed" },
+    tme_preview: { outcome: "rate_limited", retryAfterMs: 7_200_000 },
+  });
+});
+test("redirect evidence strips secrets and absent Location stays absent", async () => {
+  for (const location of ["https://t.me/another?token=secret#fragment", null]) {
+    const { fetch } = fakeFetch({
+      "https://t.me/telegram": () =>
+        new Response(null, { status: 302, headers: location ? { location } : {} }),
+    });
+    const snapshot = await fetchEntrySnapshot("telegram", {
+      fetch,
+      now,
+      knownKind: "channel",
+      needCreatedAt: false,
+    });
+    expect(snapshot.health?.redirectTarget).toBe(location ? "t.me/another" : undefined);
+    expect(JSON.stringify(snapshot.health)).not.toContain("secret");
+  }
+});
+
 type Route = Response | "throw";
 
 function fakeFetch(routes: Record<string, () => Route>) {

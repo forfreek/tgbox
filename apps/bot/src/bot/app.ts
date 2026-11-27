@@ -1,7 +1,7 @@
-import { background, type CoreContext, getSettings } from "@tgbox/core";
+import { background, type CoreContext, fetchResourceSnapshot, getSettings } from "@tgbox/core";
 import { createDb, type Db, getUserLocale } from "@tgbox/db";
 import { type ReviewMode, reviewRecipients, type Settings, type SiteLocale } from "@tgbox/shared";
-import { type EntrySnapshot, fetchEntrySnapshot, type SnapshotOptions } from "@tgbox/telegram";
+import type { EntrySnapshot, SnapshotOptions } from "@tgbox/telegram";
 import { Api, type Context } from "grammy";
 import type { Message } from "grammy/types";
 import { localeOf, type Messages, messages } from "./i18n/index.ts";
@@ -127,7 +127,6 @@ export function createApp(env: BotEnv, deps: BotDeps): App {
       // Super admins skip the settings read.
       return superAdminIds.has(id) || (await settings()).bot.extraAdminIds.includes(id);
     },
-    snapshot: (username, options) =>
-      fetchEntrySnapshot(username, { ...options, fetch: deps.fetch, now: new Date(now()) }),
+    snapshot: (username, options) => fetchResourceSnapshot(core, username, options),
   };
 }

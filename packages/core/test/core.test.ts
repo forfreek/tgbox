@@ -126,8 +126,8 @@ describe("manual listing", () => {
 
   test.each([
     ["some_user", "software", "user_account"],
-    ["gone_away", "software", "not_found"],
-    ["banned_one", "software", "banned"],
+    ["gone_away", "software", "unavailable"],
+    ["banned_one", "software", "unavailable"],
     ["some_channel", "no_such_category", "unknown_category"],
     ["not a link!", "software", "invalid_username"],
   ])("%s in %s is refused with %s", async (username, categorySlug, error) => {
