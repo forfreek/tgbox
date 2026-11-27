@@ -124,3 +124,4 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 阶段一已交付草稿PR #84：https://github.com/forfreek/tgbox/pull/84；恢复先读health-check/STATE.md。尚未合并或部署。
 阶段二最新入口 C:/Users/123/tgbox-health-contract/docs/health-check/STATE.md、CONTRACT.md。2026-11-27交付2A契约，依赖阶段一#84；2B实现尚未开始，生产未变更。
 2026-11-27 健康检查2B1数据层最新入口 C:/Users/123/tgbox-health-data/docs/health-check/STATE.md、DATA.md。已实现共享证据、D1增量迁移/事务及来源退避基础；运行/UI接入为下一2B2，阶段二未完成，生产未变更。
+2B1实现草稿PR #86：https://github.com/forfreek/tgbox/pull/86，依赖#85；数据API已本地验证，运行/UI尚未接入。

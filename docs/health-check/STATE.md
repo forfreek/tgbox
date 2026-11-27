@@ -43,3 +43,4 @@
 - 本地pnpm check因未改动文件大量CRLF格式诊断未通过，没有批量格式化全仓；Linux全仓CI按PR最新检查核验。
 - 源码审查核对条件UPSERT与证据同事务、16槽采样与功能明细保留、复核栅栏、actor/时间需可信服务端、来源CAS与不提前解除Retry-After，以及静态导出allowlist未扩入私有表。
 - 2B1是可独立审阅的基础实现；2B2运行/UI接入、整体tick预算与浏览器验证尚未执行。没有授权或执行生产迁移/部署/历史恢复。
+- 2B1已提交草稿PR #86：https://github.com/forfreek/tgbox/pull/86，base=codex/health-check-contract（#85），代码14635f0。#85 CI 45942928545核验通过；#86 Linux CI按最新检查核验。下一节点2B2接入运行/UI并停用旧隐藏路径，本节点不声称已完成该工作。
