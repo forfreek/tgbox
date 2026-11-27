@@ -58,3 +58,5 @@
 2026-11-27 2B2运行/后台已交付草稿PR #87 https://github.com/forfreek/tgbox/pull/87 ，base=codex/health-check-data（#86），代码ece8088。恢复 C:/Users/123/tgbox-health-integration/docs/health-check/STATE.md、INTEGRATION.md。#86 CI45944985860通过；#87 CI按最新检查核验。生产未迁移/部署，未恢复历史条目；本工作树此前节点边界保留。
 
 2026-11-27 PR #87 CI45949457611：lint/typecheck通过，测试发现繁体生成词典不同步（简体源格式化后未重生成，且localeCompare受宿主ICU默认排序影响）。已修正为固定码点顺序、规范生成换行，按最终简体源重新生成；同步测试只忽略checkout换行，新增禁止宿主localeCompare及CRLF/LF等价回归。Hant本地6项与类型检查通过；最新完整CI待核验。
+
+2026-11-27 PR #87 CI45949801379：Hant同步、lint/typecheck及其余9个包测试通过，Web Mini App测试4项因DB mock缺readHealthSources失败。已补齐mock并发现/修正Mini App preview直接采集漏接共享退避；新增真实采集函数下preview+submit冷却期零网络/零收录回归，API63项通过。Mini App未确认文案改为本次未确认，seed离线CLI仍仅作正向导入校验，不写新健康或发布决策。
