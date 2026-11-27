@@ -17,3 +17,14 @@
 - 所有测试为本地D1/R2和模拟网络，不以测试通过当作真实Telegram恢复或生产验收。
 
 - 阶段一草稿PR #84：https://github.com/forfreek/tgbox/pull/84 。代码d51150f；Linux全仓CI按PR最新检查核验。阶段一代码交付完成，尚未合并/部署；下一节点为阶段二契约、数据模型及策略统一。
+
+## 阶段二2A契约节点
+
+2026-11-27：用户要求PR下一步，进入阶段二，先交付2A契约和迁移设计。当前工作树C:/Users/123/tgbox-health-contract，分支codex/health-check-contract，堆叠base=codex/health-check-stage1（#84，e1b2576）。阶段一工作树历史边界保持。
+
+- CONTRACT.md定义正向识别/不确定/身份复核与发布状态分离、机器人功能结果独立、当前web自动隐藏/恢复充分证据清单为空。
+- 已按源码梳理Cron、手动、新增/审核、后台列表/仪表板/标签、Bot三语、seed与snapshot消费者，列清旧字段迁移、16槽有界证据存储、幂等/乱序/binding保护及请求预算验收。
+- 本节点只文档，未创建表/修改运行时/UI/生产，也没有真实采集证据或恢复历史条目。阶段二实现与验收仍为2B，不声称已完成。
+- #84仍未合并；CI结果按当前远端核验，不将先前检查快照当最新结果。
+- 2026-11-27核验：阶段一#84全仓CI 45942342071通过（check 1m58s）。2A文档经源码入口核对与git diff --check验证，未改可执行代码，因此不重复运行实现测试；2A与后续2B不可混为已实现。
+- 2A已提交草稿PR #85：https://github.com/forfreek/tgbox/pull/85 ，base=codex/health-check-stage1，代码9727ce2。阶段一#84已标记ready且CI通过；两PR均未合并。本节点git diff --check通过，远端CI按PR最新检查核验。
