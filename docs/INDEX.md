@@ -131,3 +131,5 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 2B2草稿PR #87：https://github.com/forfreek/tgbox/pull/87 ，依赖#86，最新恢复本工作树health-check/STATE.md与INTEGRATION.md；生产未变更。
 
 2026-11-27 健康检查阶段三最新恢复入口 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、[历史只读复核](health-check/HISTORY.md)。15条候选实时复核：5当前可识别、1类型异常、9无法确认；仅只读采集，无生产恢复/迁移/部署。依赖#87，正式修复与阶段四验收未完成。
+
+2026-11-27 阶段三只读复核草稿PR #88 https://github.com/forfreek/tgbox/pull/88 ，base=codex/health-check-integration（#87），代码aa574b7。最新恢复 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、HISTORY.md。15条候选中5当前公开身份可识别、1类型异常、9无法确认；未迁移/部署/恢复，旧工作树历史边界保留。

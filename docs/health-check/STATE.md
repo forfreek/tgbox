@@ -68,3 +68,7 @@
 - 首次Node直连超时后停批，等待退避到期并沿现有代理重采；20次GET完成15条。二次只读导出的15条与之前一致，所有查询0写入；新迁移/健康表未上线。
 - 新增只读采集/评估与指纹工具，没有生产应用命令；Node专项8项和scripts类型检查通过，PR/最终CI在交付后登记。
 - 阶段三正式数据修复尚未完成：需要安全版本上线、独立人工原主体证据、明确恢复授权、新鲜快照及本地执行器演练。阶段四生产观察和旧列最终清理亦未完成。本节点无生产变更。
+
+2026-11-27 阶段三只读复核草稿PR #88 https://github.com/forfreek/tgbox/pull/88 ，base=codex/health-check-integration（#87），代码aa574b7。最新恢复 C:/Users/123/tgbox-health-history/docs/health-check/STATE.md、HISTORY.md。15条候选中5当前公开身份可识别、1类型异常、9无法确认；未迁移/部署/恢复，旧工作树历史边界保留。
+
+2026-11-27 PR #88首轮CI45953535909在未改动snapshot的build-site-data.test.ts第362行触发5000ms超时，格式/类型检查通过。该文件随后本地单worker完整复跑28项通过（53.63s）；没有改业务代码或放宽测试超时。Node新增专项8项+迁移1项、scripts类型与变更Biome通过；最终提交CI重新核验。
