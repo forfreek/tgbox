@@ -1,0 +1,15 @@
+// Local tests only. Never deploy this config or apply it to the core tgbox database.
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "tgbox-search-analytics-test",
+  "compatibility_date": "2026-09-15",
+  "d1_databases": [
+    {
+      "binding": "ANALYTICS_DB",
+      "database_name": "tgbox-analytics",
+      "database_id": "local",
+      "migrations_dir": "./migrations",
+      "remote": false
+    }
+  ]
+}

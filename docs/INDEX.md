@@ -137,3 +137,7 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 2026-11-27 健康检查已按明确授权合并#84–#88并完成兼容迁移及Bot/Admin/Web发布，最新恢复 C:/Users/123/tgbox-health-release/docs/health-check/STATE.md、[发布记录](health-check/RELEASE.md)。原历史清单为带日期快照，12条隐藏未恢复；全目录观察、人工核验与旧字段清理仍待完成。
 
 2026-11-27 最新生产发布记录PR #89 https://github.com/forfreek/tgbox/pull/89 ，工作树C:/Users/123/tgbox-health-release，分支codex/health-check-release，base=main。#84–#88已合并，0027与Bot/Admin/Web已部署；真实头像/常规tick及配置保护读回见RELEASE.md。历史隐藏未恢复，完整巡检/人工功能验证/旧字段清理仍未完成。PR检查与合并状态按远端最新核验。
+
+## 真实热门搜索与搜索分析
+
+恢复先读 [阶段状态](search-analytics/STATE.md)，再读 [约束和节点索引](search-analytics/AGENTS.md)；按当前节点进入 [计划](search-analytics/PLAN.md)、[架构决策](search-analytics/ADR.md)、[项目记忆](search-analytics/MEMORY.md)。2026-11-28 开始阶段一，独立工作树 C:/Users/123/tgbox-search-analytics，运行时尚未接入，生产未修改。
