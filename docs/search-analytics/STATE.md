@@ -34,3 +34,5 @@
 - pnpm check 被基线Windows CRLF格式阻断；没有提交全仓格式变化。
 - 全仓串行包测试在snapshot既有5000ms测试超时停止；snapshot文件串行复跑及其余包继续检查中。结果未完成前不宣称全仓测试通过。
 - 本节点只有事件契约与Schema，无现有Worker运行时绑定/路由/搜索变更。
+
+阶段一草稿PR：https://github.com/forfreek/tgbox/pull/90，代码5b42156。snapshot的超时用例独立运行（临时testTimeout=30000）1/1通过，原测试文件未改；全仓其他包与Linux CI仍在检查。阶段一不包含实际采集、聚合或后台页面，不将契约当功能上线。
