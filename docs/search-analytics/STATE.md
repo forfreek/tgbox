@@ -3,7 +3,7 @@
 核验日期：2026-11-28（Asia/Shanghai）。
 工作树：C:/Users/123/tgbox-search-analytics-service。
 分支：codex/search-analytics-service，base=codex/search-analytics-stage1（520fbc9）；阶段一PR #90。
-当前节点：阶段二本地实现与专项验收完成，准备独立堆叠PR；阶段三尚未开始。未接入现有Worker入口。
+当前节点：阶段二草稿PR #91（https://github.com/forfreek/tgbox/pull/91），依赖#90；代码62edf40，本地验收完成，Linux CI待核验。阶段三尚未开始，未接入现有Worker入口。
 
 ## 当前实现
 
