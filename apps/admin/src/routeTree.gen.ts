@@ -18,6 +18,7 @@ import { Route as EntriesRouteImport } from './routes/entries'
 import { Route as FriendLinksRouteImport } from './routes/friend-links'
 import { Route as PromotionsRouteImport } from './routes/promotions'
 import { Route as ReviewRouteImport } from './routes/review'
+import { Route as SearchAnalyticsRouteImport } from './routes/search-analytics'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TaxonomyRouteImport } from './routes/taxonomy'
 import { Route as UsersRouteImport } from './routes/users'
@@ -67,6 +68,11 @@ const ReviewRoute = ReviewRouteImport.update({
   path: '/review',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SearchAnalyticsRoute = SearchAnalyticsRouteImport.update({
+  id: '/search-analytics',
+  path: '/search-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/friend-links': typeof FriendLinksRoute
   '/promotions': typeof PromotionsRoute
   '/review': typeof ReviewRoute
+  '/search-analytics': typeof SearchAnalyticsRoute
   '/settings': typeof SettingsRoute
   '/taxonomy': typeof TaxonomyRoute
   '/users': typeof UsersRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/friend-links': typeof FriendLinksRoute
   '/promotions': typeof PromotionsRoute
   '/review': typeof ReviewRoute
+  '/search-analytics': typeof SearchAnalyticsRoute
   '/settings': typeof SettingsRoute
   '/taxonomy': typeof TaxonomyRoute
   '/users': typeof UsersRoute
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/friend-links': typeof FriendLinksRoute
   '/promotions': typeof PromotionsRoute
   '/review': typeof ReviewRoute
+  '/search-analytics': typeof SearchAnalyticsRoute
   '/settings': typeof SettingsRoute
   '/taxonomy': typeof TaxonomyRoute
   '/users': typeof UsersRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/friend-links'
     | '/promotions'
     | '/review'
+    | '/search-analytics'
     | '/settings'
     | '/taxonomy'
     | '/users'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/friend-links'
     | '/promotions'
     | '/review'
+    | '/search-analytics'
     | '/settings'
     | '/taxonomy'
     | '/users'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/friend-links'
     | '/promotions'
     | '/review'
+    | '/search-analytics'
     | '/settings'
     | '/taxonomy'
     | '/users'
@@ -181,6 +193,7 @@ export interface RootRouteChildren {
   FriendLinksRoute: typeof FriendLinksRoute
   PromotionsRoute: typeof PromotionsRoute
   ReviewRoute: typeof ReviewRoute
+  SearchAnalyticsRoute: typeof SearchAnalyticsRoute
   SettingsRoute: typeof SettingsRoute
   TaxonomyRoute: typeof TaxonomyRoute
   UsersRoute: typeof UsersRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/search-analytics': {
+      id: '/search-analytics'
+      path: '/search-analytics'
+      fullPath: '/search-analytics'
+      preLoaderRoute: typeof SearchAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -285,6 +305,7 @@ const rootRouteChildren: RootRouteChildren = {
   FriendLinksRoute: FriendLinksRoute,
   PromotionsRoute: PromotionsRoute,
   ReviewRoute: ReviewRoute,
+  SearchAnalyticsRoute: SearchAnalyticsRoute,
   SettingsRoute: SettingsRoute,
   TaxonomyRoute: TaxonomyRoute,
   UsersRoute: UsersRoute,

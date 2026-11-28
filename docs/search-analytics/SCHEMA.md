@@ -39,3 +39,7 @@ control包含rules_revision、publication_generation/key/rules_revision/config_v
 阶段二新增0001_rule_revision.sql，为规则INSERT/UPDATE/DELETE自动递增search_control.rules_revision。接受事务按当前配置和审核版本领取receipt，所有效果按本次attempt门禁；session/Turnstile/抽样预留也校验当前配置版本。
 
 阶段二0002_daily_contribution_guard.sql新增partial UNIQUE(day,keyword,identity) WHERE eligible=1，在数据库层保证跨source/locale的全球日贡献唯一。维度事实PK仍保留非贡献分析行，两者约束目标不同，不是重复索引。迁移在关闭态、本地先执行；不触碰核心迁移。
+
+## 阶段五兼容性
+
+新增访问层不新增迁移，继续使用0000–0003。Admin只修改独立统计库settings/rules/audit和既有发布任务数据，核心库只读推荐标题。业务变更+审计batch原子，审核revision由0001触发器维护。无新索引；当前date主键、keyword/day和job started索引用于范围和分页查询。instr筛词与分组/偏移可能扫描整个已选择的有界区间，不能宣传常量成本。

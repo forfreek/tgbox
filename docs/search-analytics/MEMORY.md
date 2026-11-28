@@ -60,3 +60,11 @@
 阶段二最终源码398462b的Linux CI 46102332989通过。交付保持独立共享包、独立统计迁移、单向依赖、默认关闭；不把后续入口/榜单/Admin验收套用到此阶段。
 
 2026-11-28阶段四收尾：自动标记词即使人工approved也不能取得eligible贡献（writer p.review=0）；发布先过滤再Top6，候选上限rules+rankingSize，超限无法确定完整安全榜则失败。聚合留存需windowDays+1覆盖完整日窗口和今天，默认90天不变。共享69、Web集成8、榜单浏览器3及既有14通过；最终CI查STATE。
+
+## 阶段五管理模块（2026-11-28）
+
+基线0130d88 / #93，工作树tgbox-search-analytics-admin。访问层admin.ts、纯v1 admin-contracts、单一ranking.ts；CAS+审计同统计D1事务，HMAC审计复用SETTINGS_KEY用途隔离。后台精确Origin+既有adminMiddleware，错误只固定诊断，私有身份不返回浏览器。规则先撤回后后台重建，显式刷新await完成而不是误用HTTP waitUntil承诺90秒。
+
+100词页分成80词组以守D1每SQL100参数；独立身份只在留存区间计，长期用身份日；当前资格分与已发布分分列，不将过滤列表语言冒称不同全球榜。批准不追补未具资格历史事实。83共享/136Admin/11Edge交互通过，最终构建/CI看STATE/ADMIN。生产未操作；恢复先总索引与STATE，阶段六按06约束。
+
+收尾发现P1：SearchDialog.tsx visibleWords在publicationEnabled=false使用hotKeywords，启用审核后的编译关闭/旧前端回滚可能重新展示被隐藏词。阶段六必须去除未审核回退并验证关闭/回滚矩阵；本节点未改Web，生产未动，禁止忽略该门槛上线。最终Admin dry-run gzip1443.53KiB。
