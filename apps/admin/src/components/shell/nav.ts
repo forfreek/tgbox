@@ -8,6 +8,7 @@ import {
   PlusCircleIcon,
   RocketIcon,
   ScrollTextIcon,
+  SearchIcon,
   SettingsIcon,
   SparklesIcon,
   TagsIcon,
@@ -27,7 +28,8 @@ export type NavItem = {
     | "/friend-links"
     | "/audit"
     | "/settings"
-    | "/ai-summary";
+    | "/ai-summary"
+    | "/search-analytics";
   label: string;
   icon: LucideIcon;
   /** shown in the mobile bottom bar (the rest live under "更多") */
@@ -47,4 +49,5 @@ export const navItems: NavItem[] = [
   { to: "/audit", label: "操作日志", icon: ScrollTextIcon, primary: false },
   { to: "/settings", label: "设置", icon: SettingsIcon, primary: false },
   { to: "/ai-summary", label: "AI 摘要", icon: SparklesIcon, primary: false },
+  { to: "/search-analytics", label: "搜索分析", icon: SearchIcon, primary: false },
 ];

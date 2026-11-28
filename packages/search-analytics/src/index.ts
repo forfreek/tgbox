@@ -1,3 +1,4 @@
+export { changeSearchAdmin, readSearchAdmin, SearchAdminError } from "./admin.ts";
 export { AuthenticatedSearch } from "./auth.ts";
 export { type AnalyticsBindings, collectionEnabled } from "./bindings.ts";
 export { collectBotSearch } from "./bot.ts";

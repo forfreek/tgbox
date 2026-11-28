@@ -51,3 +51,11 @@ Secret 清单：SEARCH_IDENTITY_SECRET（Web/Bot一致，独立用途域）、SE
 先对独立统计D1应用到0003，再给Web绑定ANALYTICS_DB/PUBLIC_CACHE/既有SEARCH_RATE_LIMITER及身份Secret，给Admin绑定ANALYTICS_DB/PUBLIC_CACHE。不替换任何核心DB条目。Admin main改为src/worker.ts委派原TanStack fetch，增加5 16 * * *触发器；SEARCH_JOBS_ENABLED=0保持。Web SEARCH_PUBLICATION_ENABLED=0及构建PUBLIC_SEARCH_PUBLICATION_ENABLED未开启。先关闭态部署和认证/fetch回归，再人工生成并检查版本撤回，最后按授权开启jobs/展示。当前仅本地配置，未修改生产Cron或资源。
 
 回滚先关闭部署展示/任务开关，不清空或降级数据库、不回滚到旧审核KV；0003为有默认值的新列，旧应用命名列写入兼容。若KV故障阻碍发布，可关闭D1 publication保留jobs以继续清理。生产开启前需核验真实bindings、Paid D1/API限额、原生限流、主库gate、任务/大数据容量及实际Admin权限。
+
+## 阶段五部署准备（未执行）
+
+Admin继续绑定统计D1/KV，保留已有核心DB；先迁移独立库至0003。复用现有SETTINGS_KEY至少32字符，Admin不需要Web/Bot匿名身份Secret。新增/search-analytics入口不绕过现有Access/TG白名单；以生产身份验证GET和全部POST拒绝场景。部署开关继续默认0；后台数据库设置不越权开启部署开关，不创建云资源。
+
+手动刷新保持HTTP连接等待任务结果，不依赖HTTP waitUntil处理90秒任务；操作员断开仍可能中断，租约超时后可重试。规则/设置事务立即安全撤回并附加best-effort后台刷新，失败时人工刷新或等待Cron。关闭新增功能无需删除库/KV或回退核心迁移；旧代码忽略新增路由/绑定，生产回滚不恢复旧审核缓存。0000–0003兼容，不降级迁移。
+
+上线阻断项：在阶段六关闭/回滚矩阵修复前，不允许通过PUBLIC_SEARCH_PUBLICATION_ENABLED=0或回滚旧前端来恢复静态推荐。该分支直接采用hotKeywords会绕过隐藏规则；运行时Web展示关闭应保留受审核前端安全空榜路径。新方案必须在启用生产前验证。

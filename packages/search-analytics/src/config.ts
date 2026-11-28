@@ -14,6 +14,8 @@ export const HARD_LIMITS = Object.freeze({
   turnstileHeader: 2048,
   sessionCookie: 1024,
   queryPage: 100,
+  // Ranking uses 9 fixed parameters; reserve space below D1's 100-parameter SQL limit.
+  rankingPage: 80,
   rules: 500,
   siteverifyTimeoutMs: 5000,
   resultVerificationTimeoutMs: 3000,

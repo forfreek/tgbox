@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`90 day indexed admin reads remain write-free and record resource baselines 1`] = `
+{
+  "keywords": {
+    "rowsRead": 3663,
+    "rowsWritten": 0,
+  },
+  "overview": {
+    "rowsRead": 1814,
+    "rowsWritten": 0,
+  },
+}
+`;
+
+exports[`90 day indexed admin reads remain write-free and record resource baselines 2`] = `
+{
+  "rowsRead": 3,
+  "rowsWritten": 3,
+}
+`;

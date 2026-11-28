@@ -37,3 +37,11 @@ Telegram 域 HMAC 对 Mini App/Bot 一致，匿名会话随机 ID 使用另一�
 ## ADR-009：发布快照与清理独立性（阶段四）
 
 指针和私有排名快照同D1事务，不把分数/身份数放进公开KV。public读的两次检查各新建first-primary会话，不用bookmark会话的后续副本查询代替主库检查。公开接口no-store，版本未知时空榜。部署展示开关、D1 publication与jobs分离，关闭展示仍可清理。清理一轮为原子续租及9个固定表的guarded DELETE，按付费D1绑定API上限留收尾余量；时间/容量耗尽明确失败并可重复排空。
+
+## ADR-Admin：复用认证、事务审计与任务边界（2026-11-28）
+
+采用既有adminMiddleware与精确Origin POST保护，访问层集中在共享包，UI只调用版本化server fn。使用已部署SETTINGS_KEY的独立HMAC域作为审计主体，避免为Admin索取采集身份Secret，避免在统计库持久化原始管理员TG/邮箱。审计必须与业务CAS同一事务；核心审计和独立统计库无法跨库事务，故审计写在独立统计库，不双写伪造原子性。
+
+列表资格得分与发布共用ranking.ts，不复制权重算法；私有已发布分数来自0003快照。关键词100条分页按80词分段复核以遵守D1每SQL100绑定参数限制。审核先失效，再best-effort后台刷新；手动刷新await整个任务给出最终状态，避免把HTTP waitUntil当90秒可靠执行器。不追溯恢复未具资格贡献，未来若需要审核后追补必须先保存可验证的独立资格事实，不能从聚合推算。
+
+平台证据：[D1事务与会话](https://developers.cloudflare.com/d1/worker-api/d1-database/)、[D1限制](https://developers.cloudflare.com/d1/platform/limits/)。

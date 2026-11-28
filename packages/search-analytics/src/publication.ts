@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { HARD_LIMITS, SearchSettings } from "./config.ts";
 import { normalizeKeyword } from "./normalize.ts";
+import { readSearchRanks } from "./ranking.ts";
 import { type AnalyticsDb, readSettings } from "./runtime.ts";
 import { DAY_MS, previousCompleteWindow } from "./time.ts";
 
@@ -183,23 +184,7 @@ export async function refreshSearchPublication(deps: JobDependencies, kind: "cro
             r.status !== "approved" &&
             (r.match_mode === "exact" ? word === r.pattern : word.includes(r.pattern)),
         );
-      const ranked = record(
-        await db
-          .prepare(`WITH latest AS (SELECT keyword,identity,MAX(day) day FROM search_daily_identities WHERE eligible=1 AND day>=? AND day<=? GROUP BY keyword,identity)
-      SELECT keyword,COUNT(*) identities,ROUND(SUM(CASE WHEN day=? THEN ? WHEN day>=date(?,'-2 days') THEN ? ELSE ? END),6) score FROM latest WHERE NOT EXISTS(SELECT 1 FROM search_keyword_rules r WHERE r.enabled=1 AND r.status<>'approved' AND (r.match_mode='exact' AND r.pattern=latest.keyword OR r.match_mode='contains' AND instr(latest.keyword,r.pattern)>0)) GROUP BY keyword HAVING COUNT(*)>=? ORDER BY score DESC,identities DESC,keyword COLLATE BINARY ASC LIMIT ?`)
-          .bind(
-            window.from,
-            window.to,
-            window.to,
-            settings.value.weights[0],
-            window.to,
-            settings.value.weights[1],
-            settings.value.weights[2],
-            settings.value.minimumIdentities,
-            HARD_LIMITS.rules + settings.value.rankingSize,
-          )
-          .all<{ keyword: string; identities: number; score: number }>(),
-      ).results;
+      const ranked = record(await readSearchRanks(db, settings.value, started)).results;
       processed = ranked.length;
       // Canonical safe display is deterministic across locale/source dimensions.
       let words = ranked

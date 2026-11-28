@@ -33,3 +33,9 @@
 新增集中参数：challengeAfterSearches=15（1–30），challengeAfterSessionIssues=2（1–5），anomalyIdentitiesPerMinute=20（10–1000），verificationsPerIdentityMinute=3（1–5），verificationsPerIpMinute=5（1–10），securitySamplesPerDay=100（0–100）。安全采样比率固定1%，明确标注截断样本。完整运行时范围以config.ts为准。
 
 按包含今天的自然日留存口径，aggregateRetentionDays必须>=windowDays+1，与身份留存一致；默认90天不变。7完整日窗口的最小聚合留存是8天，防后台配置丢掉窗口最早一天。
+
+## Admin编辑与优先级（阶段五）
+
+功能设置表单覆盖SearchSettings全部字段。只保存操作员本次提交值，服务端重验安全上下限及留存/权重关系，配置CAS递增version；不自动提高生产额度。读取新请求立即加载D1配置，部署开关和能力缺失优先关闭。增加配置版本会使旧公开榜单失配，需要重建。框架缓存no-store、React Query不自动轮询，窗口切换不自动刷新。新查询使用当前保留期裁切；保留期降低后不可恢复。
+
+Admin的HMAC审计复用现有SETTINGS_KEY（至少32字符），用途域与其他密钥用途隔离；无需分享Web/Bot身份密钥给Admin。轮换此key会使后续审计身份不可与旧哈希直接比较，不更改搜索身份。新HARD_LIMITS.rankingPage=80仅是SQL参数安全边界，后台业务分页仍允许100。

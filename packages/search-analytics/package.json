@@ -5,6 +5,8 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
+    "./admin-contracts": "./src/admin-contracts.ts",
+    "./config": "./src/config.ts",
     "./contracts": "./src/contracts.ts",
     ".": "./src/index.ts",
     "./client": "./src/client.ts"
