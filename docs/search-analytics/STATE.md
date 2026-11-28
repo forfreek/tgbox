@@ -1,5 +1,10 @@
 # 当前状态
 
+## 生产发布进行中：2026-11-28
+
+用户已授权合并、必要资源/Secrets/迁移配置及验收启用。当前分支codex/search-analytics-release，仍在verification工作树；见[生产发布记录](PRODUCTION-RELEASE.md)。D1/KV/widget和新Secrets已配置，迁移与部署待完成。历史默认关闭状态见下方，不再作为当前资源不存在的判断。
+
+
 ## 最新：阶段六最终验收，2026-11-28
 
 工作树C:/Users/123/tgbox-search-analytics-verification，分支codex/search-analytics-verification，base=4f6ffe4 / 草稿PR #94（其最新文档CI46125270288也通过）。main再次只读核验d150e0d。完整报告[VERIFICATION.md](VERIFICATION.md)，操作单[RELEASE.md](RELEASE.md)，资源/绑定片段bindings.example.jsonc，生产快照PRODUCTION-SNAPSHOT，当前技术债DEBT头部。阶段六草稿[PR #95](https://github.com/forfreek/tgbox/pull/95)，实现提交4bfcabaec75940efc028d6bbfd6aebb4d640b8c0；[Linux全仓CI 46145228889](https://github.com/forfreek/tgbox/actions/runs/46145228889)全部通过（格式/类型、全仓测试、脚本类型/测试）。后续提交仅补文档记录。

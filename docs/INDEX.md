@@ -151,3 +151,5 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 恢复先读 [阶段状态](search-analytics/STATE.md)，再读 [约束和节点索引](search-analytics/AGENTS.md)；按当前节点进入 [计划](search-analytics/PLAN.md)、[架构决策](search-analytics/ADR.md)、[项目记忆](search-analytics/MEMORY.md)。2026-11-28 开始阶段一，独立工作树 C:/Users/123/tgbox-search-analytics，运行时尚未接入，生产未修改。
 
 2026-11-28 搜索分析阶段二共享服务在C:/Users/123/tgbox-search-analytics-service，按[STATE](search-analytics/STATE.md)恢复；实现和成本见[SERVICE](search-analytics/SERVICE.md)、[RESOURCE-USAGE](search-analytics/RESOURCE-USAGE.md)。阶段三入口接入尚未开始，生产未变更。
+
+2026-11-28 搜索分析进入已授权生产发布，当前codex/search-analytics-release仍位于verification工作树，恢复STATE及PRODUCTION-RELEASE.md；已创建资源，按实时记录判断，不引用历史“未创建”快照。

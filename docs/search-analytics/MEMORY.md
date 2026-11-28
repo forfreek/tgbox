@@ -82,3 +82,5 @@ minimumCleanupBatch=floor(max(4B,2(B+I+V+S),6B+2I+4V+16)/900)+1，保留探空�
 独立审查/测试见VERIFICATION、当前P0–P3见DEBT头部、资源与关闭/回滚见RELEASE、生产只读见PRODUCTION-SNAPSHOT。工具化安全扫描WindowsACL拒绝启动，没scanId/canonical/SARIF，不能说工具扫描成功。共享87+4容量/Web450+8+1容量/Bot181/Admin136、浏览器两构建28不同Web用例/Admin11、类型/Lint/脚本通过；本机并行内存失败已按串行重测，LinuxCI结论以STATE为准。生产未修改，等待操作单确认。
 
 2026-11-28阶段六交付：草稿PR #95，base=codex/search-analytics-admin，implementation=4bfcaba；49文件、+1102/-37。Linux CI46145228889全部通过（全仓格式/类型、测试和脚本）；后续仅文档收尾。仍不执行生产操作。
+
+2026-11-28生产发布授权：用户明确同意创建独立D1/KV/widget、新Secrets/绑定、0000–0003迁移并验收后启用。真实ID与进度见PRODUCTION-RELEASE；本机Wrangler过期，采用连接器资源管理+仓库CI凭证发布，不读取/导出生产Secrets。

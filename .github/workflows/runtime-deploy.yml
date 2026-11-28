@@ -1,0 +1,60 @@
+name: Deploy runtime Workers
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Approved production operation
+        required: true
+        type: choice
+        options: [analytics-migrations, admin, bot]
+permissions:
+  contents: read
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+env:
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Verify deployment identity
+        run: pnpm --dir apps/bot exec wrangler whoami
+      - name: Guard isolated analytics migration target
+        if: inputs.target == 'analytics-migrations'
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          const text = readFileSync('apps/admin/wrangler.jsonc', 'utf8');
+          const marker = text.indexOf('"binding": "ANALYTICS_DB"');
+          const block = text.slice(text.lastIndexOf('{', marker), text.indexOf('}', marker) + 1);
+          const target = JSON.parse(block);
+          if (target.database_name !== 'tgbox-analytics' || target.database_id !== '0678cbaa-102b-4440-adba-ab5e10628744' || target.migrations_dir !== '../../packages/search-analytics/migrations') throw new Error('Invalid analytics migration target');
+          NODE
+      - name: Apply only analytics migrations
+        if: inputs.target == 'analytics-migrations'
+        working-directory: apps/admin
+        run: |
+          pnpm exec wrangler d1 migrations list ANALYTICS_DB --remote --config wrangler.jsonc
+          pnpm exec wrangler d1 migrations apply ANALYTICS_DB --remote --config wrangler.jsonc
+      - name: Build Admin
+        if: inputs.target == 'admin'
+        run: pnpm --dir apps/admin build
+      - name: Deploy Admin
+        if: inputs.target == 'admin'
+        working-directory: apps/admin
+        run: pnpm exec wrangler deploy --config dist/server/wrangler.json --keep-vars
+      - name: Deploy Bot
+        if: inputs.target == 'bot'
+        working-directory: apps/bot
+        run: pnpm exec wrangler deploy --config wrangler.jsonc --keep-vars

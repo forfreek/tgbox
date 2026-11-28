@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "wrangler dev --local",
     "build": "wrangler deploy --dry-run --outdir dist",
-    "types": "wrangler types --env-file .dev.vars.example",
+    "types": "wrangler types --strict-vars=false --env-file .dev.vars.example",
     "typecheck": "tsc",
     "test": "vitest run"
   },
