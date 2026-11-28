@@ -33,7 +33,6 @@ type KeywordRow = {
   eligible_identities: number;
   identities: number | null;
   review_status: string;
-  published_score: number | null;
 };
 type Totals = { day: string; searches: number; zero_results: number; identity_days: number };
 const privateRanking = z
@@ -44,7 +43,7 @@ const privateRanking = z
       score: z.number().nonnegative(),
     }),
   )
-  .max(6);
+  .max(HARD_LIMITS.rankingMaximum);
 function queryRange(raw: unknown, now: number) {
   const q = AdminSearchQuery.parse(raw);
   const today = beijingDay(now),
@@ -52,6 +51,7 @@ function queryRange(raw: unknown, now: number) {
   if (q.from < oldest || q.from > q.to || q.to > today)
     throw new SearchAdminError("日期须位于最近90天，且起止顺序有效");
   const search = q.search.trim();
+  q.search = search;
   if (search) {
     const n = normalizeKeyword(search);
     if (!n.ok) throw new SearchAdminError("筛选词不符合安全规则（2至64字符）");
@@ -175,8 +175,7 @@ export async function readSearchAdmin(
       session
         .prepare(`WITH words AS (SELECT keyword,SUM(searches) searches,SUM(zero_results) zero_results,SUM(trending_clicks) trending_clicks,SUM(recommended_clicks) recommended_clicks,SUM(prefill_searches) prefill_searches,SUM(verified_searches) verified_searches,SUM(eligible_identities) eligible_identities FROM search_daily_stats WHERE ${filter} GROUP BY keyword ${having} ORDER BY ${order} LIMIT ? OFFSET ?)
         SELECT w.*,CASE WHEN ?=1 THEN (SELECT COUNT(DISTINCT identity) FROM search_daily_identities i WHERE i.keyword=w.keyword AND i.day>=? AND i.day<=? AND (?='all' OR i.source=?) AND (?='all' OR i.locale=?)) ELSE NULL END identities,
-        COALESCE((SELECT status FROM search_keyword_rules r WHERE r.enabled=1 AND (r.match_mode='exact' AND r.pattern=w.keyword OR r.match_mode='contains' AND instr(w.keyword,r.pattern)>0) ORDER BY CASE r.status WHEN 'blacklist' THEN 0 WHEN 'hidden' THEN 1 WHEN 'pending' THEN 2 ELSE 3 END,r.id LIMIT 1),'unreviewed') review_status,
-        (SELECT json_extract(j.value,'$.score') FROM search_job_runs runs JOIN search_control c ON c.fence>=runs.fence,json_each(runs.ranking_json) j WHERE runs.published=1 AND c.publication_rules_revision=c.rules_revision AND c.publication_config_version=(SELECT version FROM search_settings WHERE id=1) AND runs.fence=c.publication_generation AND json_extract(j.value,'$.keyword')=w.keyword LIMIT 1) published_score
+        COALESCE((SELECT status FROM search_keyword_rules r WHERE r.enabled=1 AND (r.match_mode='exact' AND r.pattern=w.keyword OR r.match_mode='contains' AND instr(w.keyword,r.pattern)>0) ORDER BY CASE r.status WHEN 'blacklist' THEN 0 WHEN 'hidden' THEN 1 WHEN 'pending' THEN 2 ELSE 3 END,r.id LIMIT 1),'unreviewed') review_status
         FROM words w ORDER BY ${order}`)
         .bind(
           ...params,
@@ -191,6 +190,14 @@ export async function readSearchAdmin(
           q.locale,
         ),
     ]);
+    const snapshot = await session
+      .prepare(
+        "SELECT runs.ranking_json FROM search_job_runs runs JOIN search_control c ON runs.fence=c.publication_generation JOIN search_settings s ON s.id=c.id WHERE c.id=1 AND runs.published=1 AND c.rules_revision=c.publication_rules_revision AND s.version=c.publication_config_version LIMIT 1",
+      )
+      .all<{ ranking_json: string }>();
+    const published = snapshot.results[0]
+      ? privateRanking.parse(JSON.parse(snapshot.results[0].ranking_json))
+      : [];
     const rows = rowsAt<KeywordRow>(results, 1);
     const ranks = await Promise.all(
       Array.from({ length: Math.ceil(rows.length / HARD_LIMITS.rankingPage) }, (_, i) =>
@@ -215,11 +222,16 @@ export async function readSearchAdmin(
           normalized.ok && !normalized.value.review
             ? ranked.find((x) => x.keyword === r.keyword)
             : undefined;
-        return { ...r, ranking_score: rank?.score ?? 0, ranking_identities: rank?.identities ?? 0 };
+        return {
+          ...r,
+          published_score: published.find((p) => p.keyword === r.keyword)?.score ?? null,
+          ranking_score: rank?.score ?? 0,
+          ranking_identities: rank?.identities ?? 0,
+        };
       }),
       identityStart,
       retainedFrom: start,
-      usage: usage([...results, ...ranks]),
+      usage: usage([...results, snapshot, ...ranks]),
     };
   }
   if (q.view === "rules") {

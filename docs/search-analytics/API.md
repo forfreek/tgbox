@@ -50,3 +50,5 @@ POST action=settings含expectedVersion/value；action=rule含id/expectedRevision
 规则/设置成功返回saved/refresh=scheduled|disabled；后台重建不保证送达，严格D1版本失配先确保旧榜不能公开。手动刷新等待同一聚合函数，返回completed|busy|failed，不把已入后台等同于完成。GET日志用于确认published/status/reason。部署SEARCH_JOBS_ENABLED=0或缺KV拒绝显式刷新，数据库jobs=false只关闭每日任务，手动刷新仍可用。无需新增统计迁移。
 
 任务视图附操作审计分页：只返回id/action/target/created_at，不输出actor哈希或完整payload。两个列表共用页号，各计总数，分页以较长列表决定上限。
+
+阶段六v1事件/API字段不变；关键词在NFKC之后再次做禁止文本检查。公开关闭态不回退静态词；Admin空格筛选为空，资格与已发布分数保持不同口径。配置保存增加清理容量约束，最大批2000，验证失败不写入、不自动扩预算。

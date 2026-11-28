@@ -1,0 +1,64 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`core proof costs at current-scale and 10x resources, including unmatched two-character LIKE 1`] = `
+[
+  {
+    "entries": 2500,
+    "queries": [
+      {
+        "matches": 0,
+        "read": 2500,
+        "wordClass": "two-char-miss",
+        "written": 0,
+      },
+      {
+        "matches": 1,
+        "read": 2,
+        "wordClass": "two-char-hit",
+        "written": 0,
+      },
+      {
+        "matches": 0,
+        "read": 0,
+        "wordClass": "fts-miss",
+        "written": 0,
+      },
+      {
+        "matches": 1,
+        "read": 2,
+        "wordClass": "fts-hit",
+        "written": 0,
+      },
+    ],
+  },
+  {
+    "entries": 25000,
+    "queries": [
+      {
+        "matches": 0,
+        "read": 25000,
+        "wordClass": "two-char-miss",
+        "written": 0,
+      },
+      {
+        "matches": 1,
+        "read": 2,
+        "wordClass": "two-char-hit",
+        "written": 0,
+      },
+      {
+        "matches": 0,
+        "read": 0,
+        "wordClass": "fts-miss",
+        "written": 0,
+      },
+      {
+        "matches": 1,
+        "read": 2,
+        "wordClass": "fts-hit",
+        "written": 0,
+      },
+    ],
+  },
+]
+`;

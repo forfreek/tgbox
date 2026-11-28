@@ -1,5 +1,17 @@
 # 当前状态
 
+## 最新：阶段六最终验收，2026-11-28
+
+工作树C:/Users/123/tgbox-search-analytics-verification，分支codex/search-analytics-verification，base=4f6ffe4 / 草稿PR #94（其最新文档CI46125270288也通过）。main再次只读核验d150e0d。完整报告[VERIFICATION.md](VERIFICATION.md)，操作单[RELEASE.md](RELEASE.md)，资源/绑定片段bindings.example.jsonc，生产快照PRODUCTION-SNAPSHOT，当前技术债DEBT头部。阶段六PR/CI待提交后记录。
+
+关闭/回滚静态推荐P1已修复，NFKC/规则查询/后台快照/空格筛选/清理能力已修正；默认业务预算10000不变，不自动加预算，cleanupBatch默认100/上限2000并跨字段校验。独立两路源码复核完成；Codex Security工具因Windows父目录ACL拒绝启动，未形成工具化报告，不能宣称扫描通过。
+
+本地验收：共享87常规+4显式容量、Web450+8双D1+1核心容量、Bot181、Admin136，Web开启25/关闭17（28不同用例）及最终榜单6/关闭3再通过，Admin11交互、全仓类型11/11/Lint/脚本20通过。最终构建和固定Wrangler dry-run通过；打包数值/实现CI见后续交付记录。没有生产迁移/资源/Secrets/WAF/部署/合并；新开关默认0。下一步仅在用户确认操作单后开展资源配置、关闭态部署及真实站点启用验收，不另开未记录开发阶段。
+
+以下为各阶段历史快照，不能当生产状态。
+
+# 当前状态
+
 ## 最新：阶段五，2026-11-28
 
 工作树C:/Users/123/tgbox-search-analytics-admin，分支codex/search-analytics-admin，基于0130d88 / PR #93（未合并）。八视图、共享管理访问层、认证/同源/CAS/匿名审计、手动刷新和操作日志已本地实现。实施报告见[ADMIN.md](ADMIN.md)，计划见[ADMIN-PLAN.md](ADMIN-PLAN.md)。草稿[PR #94](https://github.com/forfreek/tgbox/pull/94)，实现821908850fff8068cbd2bab95485ee026556fb02；实现提交的Linux全仓CI 46124984114全部通过；后续仅文档收尾，不能当作生产功能。

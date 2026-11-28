@@ -14,7 +14,7 @@ import { ui } from "@/i18n/ui.ts";
 import { announcementKey, paidAnnouncement } from "@/lib/announcement.ts";
 import { langChoice } from "@/lib/lang-pref.ts";
 import { siteUrl } from "@/lib/site.ts";
-import { byMembers, getSiteData } from "@/lib/site-data.ts";
+import { getSiteData } from "@/lib/site-data.ts";
 
 interface Props {
   locale: SiteLocale;
@@ -54,10 +54,6 @@ const rotatePaidBars = `(() => {
   const pick = Math.floor(Math.random() * bars.length);
   bars.forEach((bar, index) => { bar.hidden = index !== pick; });
 })();`;
-// Titles of the largest entries always hit the (zh-built) index, unlike localized tag names.
-const hotKeywords = byMembers(data.entries)
-  .slice(0, 6)
-  .map((entry) => entry.title);
 // Only the admin's own notice stays dismissed across pages; a paid bar comes back on the next load.
 const dismissKey = announcement && !sponsored ? announcementKey(announcement) : "";
 // This page in the other locales; a 404 has none, so it neither redirects nor suggests.
@@ -169,7 +165,6 @@ const pagefindUrl = locale === "zh-hant" ? `${pagefindBase}/zh-hant` : pagefindB
       locale={locale}
       pagefindUrl={pagefindUrl}
       siteUrl={siteUrl}
-      hotKeywords={hotKeywords}
       analyticsEnabled={import.meta.env.PUBLIC_SEARCH_ANALYTICS_ENABLED === "1"}
       publicationEnabled={import.meta.env.PUBLIC_SEARCH_PUBLICATION_ENABLED === "1"}
       kindLabels={strings.entry.kind}

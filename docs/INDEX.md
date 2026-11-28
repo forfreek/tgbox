@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-28搜索分析最终验收工作树C:/Users/123/tgbox-search-analytics-verification；恢复[STATE](search-analytics/STATE.md)，报告[VERIFICATION](search-analytics/VERIFICATION.md)、待确认[发布操作单](search-analytics/RELEASE.md)、当前[技术债](search-analytics/DEBT.md)。生产未修改；工具扫描ACL限制和真实站点验收门槛明确保留。
+
 2026-11-28搜索分析阶段五工作树C:/Users/123/tgbox-search-analytics-admin，先读[STATE](search-analytics/STATE.md)、[Admin报告](search-analytics/ADMIN.md)及05约束。八视图本地完成，PR/CI以状态记录为准；生产未修改。
 
 2026-11-28 搜索分析阶段四位于 `C:/Users/123/tgbox-search-analytics-publication`，恢复先读[STATE](search-analytics/STATE.md)、[阶段报告](search-analytics/PUBLICATION.md)和当前阶段约束。已本地接入聚合/KV/gate/清理，生产未修改；PR/CI按状态核验。

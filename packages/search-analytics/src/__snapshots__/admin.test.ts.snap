@@ -3,7 +3,7 @@
 exports[`90 day indexed admin reads remain write-free and record resource baselines 1`] = `
 {
   "keywords": {
-    "rowsRead": 3663,
+    "rowsRead": 3655,
     "rowsWritten": 0,
   },
   "overview": {

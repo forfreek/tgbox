@@ -223,7 +223,17 @@ test("expired lease is recovered and an old runner cannot overwrite its supersed
 test("cleanup drains more than one batch and keeps the retention boundary", async () => {
   await db
     .prepare("UPDATE search_settings SET value=? WHERE id=1")
-    .bind(JSON.stringify({ ...defaultSettings, jobs: true, publication: true, cleanupBatch: 10 }))
+    .bind(
+      JSON.stringify({
+        ...defaultSettings,
+        jobs: true,
+        publication: true,
+        cleanupBatch: 10,
+        dailyBudget: 100,
+        sessionIssuesPerDay: 100,
+        verificationsPerDay: 10,
+      }),
+    )
     .run();
   for (let i = 1; i <= 25; i++) await contribution("expired", "2026-11-20", i);
   await contribution("retained", "2026-11-21", 1);

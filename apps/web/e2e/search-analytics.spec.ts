@@ -24,7 +24,6 @@ test("IME composition is silent; quick result navigation reports one final event
     await route.fulfill({ json: { status: "accepted", debounceMs: 1500 } });
   });
   const input = await openSearch(page);
-  await expect(page.getByText("推荐搜索", { exact: true })).toBeVisible();
   await input.dispatchEvent("compositionstart");
   await input.fill("科技");
   await input.dispatchEvent("keydown", { key: "Enter", isComposing: true, keyCode: 229 });
@@ -79,6 +78,15 @@ test("mobile zero results and service outage preserve Pagefind and search URLs",
 test("URL prefill/refresh creates no event; recommendation clicks carry their own trigger", async ({
   page,
 }) => {
+  test.skip(
+    process.env.TGBOX_E2E_PUBLICATION !== "1",
+    "Recommendations require reviewed API publication",
+  );
+  await page.route("**/api/trending", (route) =>
+    route.fulfill({
+      json: { version: 1, type: "recommended", items: [{ keyword: "Telegram News", rank: 1 }] },
+    }),
+  );
   const events: unknown[] = [];
   await page.route("**/api/search-event", async (route) => {
     events.push(route.request().postDataJSON());

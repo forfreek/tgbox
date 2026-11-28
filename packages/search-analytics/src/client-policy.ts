@@ -6,4 +6,5 @@ export const CLIENT_POLICY = Object.freeze({
   keywordMin: 2,
   keywordMax: 64,
   bodyBytes: 1024,
+  rankingMaximum: 6,
 });

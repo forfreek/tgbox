@@ -11,6 +11,7 @@ export default defineConfig(async () => ({
         compatibilityFlags: ["nodejs_compat"],
         d1Databases: ["DB", "ANALYTICS_DB"],
         bindings: {
+          CAPACITY_RUN: process.env.TGBOX_CAPACITY === "1",
           CORE_MIGRATIONS: await readD1Migrations(
             path.join(import.meta.dirname, "../../packages/db/migrations"),
           ),
@@ -21,5 +22,7 @@ export default defineConfig(async () => ({
       },
     }),
   ],
-  test: { include: ["test/search-analytics.integration.ts"] },
+  test: {
+    include: ["test/search-analytics.integration.ts", "test/search-capacity.integration.ts"],
+  },
 }));

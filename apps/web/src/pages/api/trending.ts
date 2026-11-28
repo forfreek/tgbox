@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
 import type { PublicationCache, PublicationDatabase } from "@tgbox/search-analytics";
-import { hmac, readPublishedSearches } from "@tgbox/search-analytics";
+import { HARD_LIMITS, hmac, readPublishedSearches } from "@tgbox/search-analytics";
 import type { APIRoute } from "astro";
 
 export const prerender = false;
@@ -16,7 +16,7 @@ export async function trendingResponse(bindings: Bindings, request: Request) {
   if (
     bindings.SEARCH_PUBLICATION_ENABLED === "1" &&
     bindings.SEARCH_RATE_LIMITER &&
-    (bindings.SEARCH_IDENTITY_SECRET?.length ?? 0) >= 32
+    (bindings.SEARCH_IDENTITY_SECRET?.length ?? 0) >= HARD_LIMITS.secretMinCharacters
   ) {
     try {
       const ip = request.headers.get("CF-Connecting-IP");

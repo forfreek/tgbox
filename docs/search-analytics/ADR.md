@@ -45,3 +45,9 @@ Telegram 域 HMAC 对 Mini App/Bot 一致，匿名会话随机 ID 使用另一�
 列表资格得分与发布共用ranking.ts，不复制权重算法；私有已发布分数来自0003快照。关键词100条分页按80词分段复核以遵守D1每SQL100绑定参数限制。审核先失效，再best-effort后台刷新；手动刷新await整个任务给出最终状态，避免把HTTP waitUntil当90秒可靠执行器。不追溯恢复未具资格贡献，未来若需要审核后追补必须先保存可验证的独立资格事实，不能从聚合推算。
 
 平台证据：[D1事务与会话](https://developers.cloudflare.com/d1/worker-api/d1-database/)、[D1限制](https://developers.cloudflare.com/d1/platform/limits/)。
+
+## ADR-验收：删除未审核回退，按词审核与清理容量（2026-11-28）
+
+删除静态推荐prop/构建计算，关闭和异常空榜；保留已有UI及搜索引擎。禁止回滚到不具撤回保护的旧前端，已有屏幕不可擦除。新SQL先保留latest身份权重，再MATERIALIZED分组审核，谓词只依赖keyword故等价，LIMIT仍在审核后；无新索引。NFKC后复查相同安全规则。
+
+最大预算不能配结构不足的清理批。采用可解释的跨字段模型+2000上限，不限为免费额度，不自动改管理员预算；旧实验配置不静默迁移。实际多地区吞吐、SQL30秒/总90秒与历史积压仍受Runbook控制，不假称精确TTL或可靠队列。
