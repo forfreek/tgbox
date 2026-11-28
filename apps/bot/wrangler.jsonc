@@ -31,8 +31,8 @@
   // Workers AI (free allocation): description translations in the hourly cron.
   "ai": { "binding": "AI" },
   "vars": {
-    "SEARCH_ANALYTICS_ENABLED": "0",
-    "SEARCH_BOT_ENABLED": "0",
+    "SEARCH_ANALYTICS_ENABLED": "1",
+    "SEARCH_BOT_ENABLED": "1",
     "SITE_URL": "https://tgsearch.app",
     // Admins get the chat menu button pointed here; everyone else gets SITE_URL/app/.
     "ADMIN_URL": "https://admin.tgsearch.app",

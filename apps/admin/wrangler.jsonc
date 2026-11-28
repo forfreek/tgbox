@@ -30,7 +30,7 @@
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "tgbox-media" }],
   "kv_namespaces": [{ "binding": "PUBLIC_CACHE", "id": "6fa85752b8364d6fbbede7f024b1f162" }],
   "vars": {
-    "SEARCH_JOBS_ENABLED": "0",
+    "SEARCH_JOBS_ENABLED": "1",
     // e.g. "myteam.cloudflareaccess.com"
     "CF_ACCESS_TEAM_DOMAIN": "authacs.cloudflareaccess.com",
     // Application Audience (AUD) tag of the Access application.

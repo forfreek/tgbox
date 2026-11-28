@@ -84,3 +84,5 @@ minimumCleanupBatch=floor(max(4B,2(B+I+V+S),6B+2I+4V+16)/900)+1，保留探空�
 2026-11-28阶段六交付：草稿PR #95，base=codex/search-analytics-admin，implementation=4bfcaba；49文件、+1102/-37。Linux CI46145228889全部通过（全仓格式/类型、测试和脚本）；后续仅文档收尾。仍不执行生产操作。
 
 2026-11-28生产发布授权：用户明确同意创建独立D1/KV/widget、新Secrets/绑定、0000–0003迁移并验收后启用。真实ID与进度见PRODUCTION-RELEASE；本机Wrangler过期，采用连接器资源管理+仓库CI凭证发布，不读取/导出生产Secrets。
+
+生产发布复用现有仓库CI凭证成功：迁移只针对ANALYTICS_DB固定ID，实际0000–0003读回；Admin/Bot关闭态已发布，真实Access身份可读取统计。自动Web工作流已恢复。启用用独立PR+DB开关分步控制，不靠修改默认库预算。
