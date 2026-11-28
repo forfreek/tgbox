@@ -45,3 +45,9 @@ Secret 清单：SEARCH_IDENTITY_SECRET（Web/Bot一致，独立用途域）、SE
 先用部署级 kill switch 关闭采集、公开榜单、Cron；旧版 Worker 可忽略统计 binding。独立统计数据库保留，不自动删库/删KV/降级迁移。KV版本可重建，禁止绕过审核指针“回滚”已隐藏词。Worker 回滚不回滚数据库；迁移向前兼容，新增结构不影响核心业务。
 
 实际生产执行记录和命令需在部署授权后追加，当前没有执行。
+
+## 阶段四部署准备（没有执行）
+
+先对独立统计D1应用到0003，再给Web绑定ANALYTICS_DB/PUBLIC_CACHE/既有SEARCH_RATE_LIMITER及身份Secret，给Admin绑定ANALYTICS_DB/PUBLIC_CACHE。不替换任何核心DB条目。Admin main改为src/worker.ts委派原TanStack fetch，增加5 16 * * *触发器；SEARCH_JOBS_ENABLED=0保持。Web SEARCH_PUBLICATION_ENABLED=0及构建PUBLIC_SEARCH_PUBLICATION_ENABLED未开启。先关闭态部署和认证/fetch回归，再人工生成并检查版本撤回，最后按授权开启jobs/展示。当前仅本地配置，未修改生产Cron或资源。
+
+回滚先关闭部署展示/任务开关，不清空或降级数据库、不回滚到旧审核KV；0003为有默认值的新列，旧应用命名列写入兼容。若KV故障阻碍发布，可关闭D1 publication保留jobs以继续清理。生产开启前需核验真实bindings、Paid D1/API限额、原生限流、主库gate、任务/大数据容量及实际Admin权限。

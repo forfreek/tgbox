@@ -1,5 +1,7 @@
 # 统一配置
 
+阶段四：SEARCH_JOBS_ENABLED（Admin）、SEARCH_PUBLICATION_ENABLED（Web）、PUBLIC_SEARCH_PUBLICATION_ENABLED（Web构建）默认0；D1 jobs/publication进一步限制。publication=false仍允许启用的jobs清理；jobs=false仍可人工刷新。公开GET复用SEARCH_RATE_LIMITER和SEARCH_IDENTITY_SECRET，以独立trending-ip HMAC键保护读量。分数统一6位小数。固定安全上限集中HARD_LIMITS：publicationBytes8192、publicationRuntimeMs90000、cleanupBatches900、recommendationCandidates30；不能通过后台绕开。每批清理仍用统一cleanupBatch。
+
 部署级开关优先关闭，后台设置只能在部署允许范围内调整。配置 version 单调递增；运行时同一接受事务读取版本，避免跨 await 复用旧设置。
 
 | 参数 | 默认 | 安全范围/约束 |
@@ -15,7 +17,7 @@
 | 最低排名身份 | 5 | 5–1000，人工批准不绕过 |
 | 榜单数量 | 6 | 1–6 |
 | 窗口 | 7完整日 | 1–7，身份留存>=窗口+1 |
-| 日聚合保留 | 90天 | 7–90且>=窗口 |
+| 日聚合保留 | 90天 | 7–90且>=窗口+1 |
 | 身份/receipt保留 | 8天 | 窗口+1–8 |
 | 权重 | 1.0/0.6/0.3 | 0–1，单调不增，最近日>0 |
 | 规则模式 | exact/contains | 禁止管理员上传任意正则 |
@@ -29,3 +31,5 @@
 2026-11-28用户确认付费版，不以免费额度刻意降低合理阈值。默认值保留原业务参数；全局事件和会话签发日预算可配置至100000，验证日预算默认500、可配置至100000。个人/IP限流为防刷，Turnstile不提升这些硬限额。
 
 新增集中参数：challengeAfterSearches=15（1–30），challengeAfterSessionIssues=2（1–5），anomalyIdentitiesPerMinute=20（10–1000），verificationsPerIdentityMinute=3（1–5），verificationsPerIpMinute=5（1–10），securitySamplesPerDay=100（0–100）。安全采样比率固定1%，明确标注截断样本。完整运行时范围以config.ts为准。
+
+按包含今天的自然日留存口径，aggregateRetentionDays必须>=windowDays+1，与身份留存一致；默认90天不变。7完整日窗口的最小聚合留存是8天，防后台配置丢掉窗口最早一天。

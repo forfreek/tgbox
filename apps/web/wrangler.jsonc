@@ -26,6 +26,7 @@
   // keyword rules are unsure — a handful of calls a day (see packages/core/src/suggest.ts).
   "ai": { "binding": "AI" },
   "vars": {
+    "SEARCH_PUBLICATION_ENABLED": "0",
     "SEARCH_ANALYTICS_ENABLED": "0",
     "SEARCH_WEBSITE_ENABLED": "0",
     "SEARCH_MINIAPP_ENABLED": "0",

@@ -359,3 +359,21 @@ describe("HTTP parsing limits", () => {
       await expect(readAnalyticsJson(r, origins)).rejects.toThrow();
   });
 });
+
+it("manual approval cannot grant ranking eligibility to automatically flagged content", async () => {
+  await resetAnalytics();
+  await settings();
+  await db
+    .prepare(
+      "INSERT INTO search_keyword_rules(pattern,match_mode,status,enabled,updated_at) VALUES('广告合作','exact','approved',1,?)",
+    )
+    .bind(now)
+    .run();
+  const auth = await AuthenticatedSearch.bot(secret, 42, now);
+  expect(
+    (await writeSearch(deps(), { ...event(), keyword: "广告合作" }, auth)).outcome.status,
+  ).toBe("accepted");
+  expect(
+    await db.prepare("SELECT searches,eligible_identities FROM search_daily_stats").first(),
+  ).toEqual({ searches: 1, eligible_identities: 0 });
+});

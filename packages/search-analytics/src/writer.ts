@@ -47,7 +47,7 @@ const context = `WITH p AS (SELECT
  json_extract(?1,'$.dimensions') dimensions)`;
 const matchesRule = `(r.match_mode='exact' AND r.pattern=p.keyword OR r.match_mode='contains' AND instr(p.keyword,r.pattern)>0)`;
 const cannotPublish = `EXISTS(SELECT 1 FROM search_keyword_rules r WHERE r.enabled=1 AND r.status IN ('blacklist','hidden','pending') AND ${matchesRule})`;
-const eligible = `p.verified=1 AND NOT ${cannotPublish}`;
+const eligible = `p.verified=1 AND p.review=0 AND NOT ${cannotPublish}`;
 const contribution = `(${eligible}) AND NOT EXISTS(SELECT 1 FROM search_daily_identities i WHERE i.day=p.day AND i.keyword=p.keyword AND i.identity=p.identity AND i.eligible=1)`;
 const shouldReview = `p.review=1 OR (p.verified=1
  AND NOT EXISTS(SELECT 1 FROM search_daily_identities i WHERE i.day=p.day AND i.keyword=p.keyword AND i.identity=p.identity AND i.eligible=1)

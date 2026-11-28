@@ -7,6 +7,13 @@ export { SearchEvent, type SearchEventWriter, type WriteOutcome } from "./contra
 export { hmac, type SearchSession, signSession, verifySession } from "./identity.ts";
 export { normalizeKeyword } from "./normalize.ts";
 export {
+  type PublicationCache,
+  type PublicationDatabase,
+  PublishedSearches,
+  readPublishedSearches,
+  refreshSearchPublication,
+} from "./publication.ts";
+export {
   type AnalyticsDb,
   type DiagnosticCode,
   type Observer,

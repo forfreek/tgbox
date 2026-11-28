@@ -34,3 +34,7 @@ createD1SearchWriter实现D1 writer；writeSearch返回统计库成功meta和usa
 事件成功200 `{status: accepted|duplicate, debounceMs}`；格式400、身份401、Origin/挑战/过滤403、方法405、幂等冲突409、限流429、关闭或依赖异常503。挑战403含安全siteKey/action/context；不对外发布身份或用量明细。所有响应no-store。首次事件无Cookie时可以合并签发；客户端不自动重试普通失败，只在成功Siteverify后重试同一事件一次。
 
 公开 `/api/trending`、Admin接口仍为阶段四/五契约，本阶段未实现。
+
+## 阶段四已实现公开榜单
+
+GET /api/trending不接受排名参数、不触发聚合。正常响应version=1、type=trending|recommended、generatedAt、window、items；无可用权威榜时返回200且type=unavailable、items=[]。所有响应no-store，不返回身份/分数/审核和配置版本，不设置Cookie。入口原生限流和IP-HMAC保护读取；缺能力或受限时安全空榜。存在健康榜单时两次新的first-primary校验与一次不可变KV读取，规则/配置/指针变化均拒绝旧结果。旧previous或静态推荐不能恢复已撤回词。后台人工刷新尚待阶段五认证接口接入，共享refreshSearchPublication已支持manual。

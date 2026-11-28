@@ -171,6 +171,7 @@ const pagefindUrl = locale === "zh-hant" ? `${pagefindBase}/zh-hant` : pagefindB
       siteUrl={siteUrl}
       hotKeywords={hotKeywords}
       analyticsEnabled={import.meta.env.PUBLIC_SEARCH_ANALYTICS_ENABLED === "1"}
+      publicationEnabled={import.meta.env.PUBLIC_SEARCH_PUBLICATION_ENABLED === "1"}
       kindLabels={strings.entry.kind}
       strings={strings.search}
     />

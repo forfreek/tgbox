@@ -203,6 +203,9 @@ importers:
       '@tgbox/hant':
         specifier: workspace:*
         version: link:../../packages/hant
+      '@tgbox/search-analytics':
+        specifier: workspace:*
+        version: link:../../packages/search-analytics
       '@tgbox/shared':
         specifier: workspace:*
         version: link:../../packages/shared

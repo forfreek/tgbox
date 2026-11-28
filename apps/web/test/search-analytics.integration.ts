@@ -1,9 +1,14 @@
 import { applyD1Migrations, type D1Migration } from "cloudflare:test";
 import { env } from "cloudflare:workers";
 import { createDb, insertApprovedEntry } from "@tgbox/db";
-import { collectBotSearch, defaultSettings } from "@tgbox/search-analytics";
+import {
+  collectBotSearch,
+  defaultSettings,
+  refreshSearchPublication,
+} from "@tgbox/search-analytics";
 import { beforeAll, beforeEach, expect, test, vi } from "vitest";
 import { searchAnalyticsApi } from "../src/lib/search-analytics-api.ts";
+import { trendingResponse } from "../src/pages/api/trending.ts";
 import { BOT_TOKEN, initData } from "./init-data.ts";
 
 declare global {
@@ -268,4 +273,90 @@ test("FTS failure accepts analysis without ranking credit; analytics failure ret
       )
     ).status,
   ).toBe(503);
+});
+
+test("public API exposes only reviewed cached data, never identity/version internals or shared HTTP caching", async () => {
+  await env.ANALYTICS_DB.prepare("UPDATE search_settings SET version=version+1,value=? WHERE id=1")
+    .bind(JSON.stringify({ ...defaultSettings, jobs: true, publication: true }))
+    .run();
+  const values = new Map<string, string>();
+  const cache = {
+    get: async (key: string) => values.get(key) ?? null,
+    put: async (key: string, value: string) => {
+      values.set(key, value);
+    },
+  };
+  await refreshSearchPublication(
+    {
+      db: env.ANALYTICS_DB,
+      cache,
+      enabled: true,
+      now: Date.now,
+      recommended: async () => ["科技"],
+    },
+    "manual",
+  );
+  const bindings = {
+    ANALYTICS_DB: env.ANALYTICS_DB,
+    PUBLIC_CACHE: cache,
+    SEARCH_PUBLICATION_ENABLED: "1",
+    SEARCH_IDENTITY_SECRET: runtime.SEARCH_IDENTITY_SECRET,
+    SEARCH_RATE_LIMITER: limiter,
+  };
+  const response = await trendingResponse(
+    bindings,
+    new Request("https://tgbox.test/api/trending", {
+      headers: { "CF-Connecting-IP": "192.0.2.1" },
+    }),
+  );
+  expect(response.headers.get("Cache-Control")).toBe("no-store");
+  const result = await response.json();
+  if (typeof result !== "object" || result === null) throw new Error("Expected JSON object");
+  expect(result).toMatchObject({ type: "recommended", items: [{ keyword: "科技", rank: 1 }] });
+  expect(Object.keys(result).sort()).toEqual(["generatedAt", "items", "type", "version", "window"]);
+  await env.ANALYTICS_DB.prepare("UPDATE search_settings SET version=version+1").run();
+  expect(
+    await (
+      await trendingResponse(
+        bindings,
+        new Request("https://tgbox.test/api/trending", {
+          headers: { "CF-Connecting-IP": "192.0.2.1" },
+        }),
+      )
+    ).json(),
+  ).toEqual({
+    version: 1,
+    type: "unavailable",
+    items: [],
+  });
+});
+
+test("public edge rejection does not read D1 or KV", async () => {
+  const db = new Proxy(env.ANALYTICS_DB, {
+    get() {
+      throw new Error("must not access D1");
+    },
+  });
+  const cache = {
+    get: async () => {
+      throw new Error("must not access KV");
+    },
+    put: async () => {
+      throw new Error("must not write KV");
+    },
+  };
+  limiter.limit.mockResolvedValue({ success: false });
+  const response = await trendingResponse(
+    {
+      ANALYTICS_DB: db,
+      PUBLIC_CACHE: cache,
+      SEARCH_PUBLICATION_ENABLED: "1",
+      SEARCH_IDENTITY_SECRET: runtime.SEARCH_IDENTITY_SECRET,
+      SEARCH_RATE_LIMITER: limiter,
+    },
+    new Request("https://tgbox.test/api/trending", {
+      headers: { "CF-Connecting-IP": "192.0.2.1" },
+    }),
+  );
+  expect(await response.json()).toEqual({ version: 1, type: "unavailable", items: [] });
 });
