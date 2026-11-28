@@ -2,11 +2,13 @@
 
 ## 最新：阶段三，2026-11-28
 
-工作树 `C:/Users/123/tgbox-search-analytics-collection`，分支 `codex/search-analytics-collection`，base=阶段二 `9d4a5d2` / PR #91。实现及验收见 [COLLECTION.md](COLLECTION.md)。本地代码已接三入口，PR/CI待本节点收尾核验。
+工作树 `C:/Users/123/tgbox-search-analytics-collection`，分支 `codex/search-analytics-collection`，base=阶段二 `9d4a5d2` / PR #91。实现及验收见 [COLLECTION.md](COLLECTION.md)。阶段三草稿 [PR #92](https://github.com/forfreek/tgbox/pull/92)，实现377f65e；Linux CI 46118001213全部通过，后续为文档收尾。
 
-共享55、Web双D1集成6、Bot181、采集浏览器5及原浏览器回归14项通过；全仓类型11/11和Lint通过。Web原450项有1项Windows5秒超时，单独15秒重跑通过。CI待提交后核验。无生产资源/迁移/部署/合并。下一步阶段四榜单发布，核心LIKE负载压测为生产启用前P1门槛。
+共享55、Web双D1集成6、Bot181、采集浏览器5及原浏览器回归14项通过；全仓类型11/11和Lint通过。Web原450项有1项Windows5秒超时，单独15秒重跑通过；Linux全仓CI通过。无生产资源/迁移/部署/合并。下一步阶段四榜单发布，核心LIKE负载压测为生产启用前P1门槛。
 
 最终Web类型复核0错误，Web/Bot固定Wrangler4.132.0显式配置dry-run通过；总gzip分别331.00KiB/363.57KiB。截图在C:/Users/123/.codex/visualizations/2026/11/28/search-analytics-stage3，已查看桌面和移动终态。
+
+阶段四实施入口见PUBLICATION-PLAN.md，尚未实现；不得将计划当作生产或本分支已具备的功能。
 
 远端main本阶段再次确认为d150e0d20041eb3a1c5d1315672bf0cb54c17e8f；生产部署版本未重新核验，以下为阶段二历史交付记录。
 

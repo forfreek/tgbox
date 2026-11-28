@@ -2,6 +2,9 @@
 
 ## 2026-11-28：阶段三采集
 
+- 草稿PR #92依赖#91，实现提交377f65e；CI状态查STATE。下一节点方案为PUBLICATION-PLAN.md，文档不是已实现功能。
+- 实现377f65e的Linux CI 46118001213全量通过，关闭态可独立验收；未合并或部署。后续仅交付文档，不把文档提交CI等同于重新运行浏览器测试。
+
 - 恢复工作树tgbox-search-analytics-collection，先读STATE和COLLECTION。固定网站/Mini路由鉴权，Bot只由可信webhook进入。无资源时关闭态兼容，不能补虚构资源ID自动provision。
 - collector为浏览器纯模块，contracts仅类型导入；共享client-policy统一防抖/长度。compositionend即便输入值不变也用revision触发成功查询；Autocomplete item-press不当手输处理，避免选中标题覆盖待报查询。
 - 网站event内限额签发Cookie，避免快速导航依赖先完成会话往返。Cookie Max-Age取签名exp；保持坏Cookie拒绝而非换身份。统计请求不进入公共缓存。

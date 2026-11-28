@@ -43,3 +43,5 @@
 阶段二已交付草稿PR #91（依赖#90），实现398462b的Linux CI 46102332989通过；阶段二验收完成，下一阶段三入口采集。未合并/迁移/部署。
 
 2026-11-28阶段三代码及本地专项验收见COLLECTION.md，工作树tgbox-search-analytics-collection、分支codex/search-analytics-collection；PR/CI以STATE最新记录为准。生产开启前追加两字符LIKE最坏扫描容量检查，不改变已确认2–64字符范围。阶段四继续KV/Cron/清理/版本gate；阶段五Admin；阶段六最终专项与部署准备。
+
+阶段三草稿PR #92已建立，依赖#91；阶段四开工方案和独立验收标准见PUBLICATION-PLAN.md。
