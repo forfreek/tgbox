@@ -3,7 +3,7 @@
 核验日期：2026-11-28（Asia/Shanghai）。
 工作树：C:/Users/123/tgbox-search-analytics-service。
 分支：codex/search-analytics-service，base=codex/search-analytics-stage1（520fbc9）；阶段一PR #90。
-当前节点：阶段二草稿PR #91（https://github.com/forfreek/tgbox/pull/91），依赖#90；代码62edf40，本地验收完成，Linux CI待核验。阶段三尚未开始，未接入现有Worker入口。
+当前节点：阶段二草稿PR #91（https://github.com/forfreek/tgbox/pull/91），依赖#90；实现代码以PR head核验，本地验收完成，Linux CI记录见末尾。阶段三尚未开始，未接入现有Worker入口。
 
 ## 当前实现
 
@@ -43,3 +43,5 @@
 未生产迁移、创建/修改资源、写Secrets/WAF、部署或合并main。
 
 2026-11-28 收尾：新增0002数据库级全球日贡献唯一约束，本地51/51通过；成本基线每接受事件增加1行索引写。前一head d5f5ee5的Linux CI 46101482836通过，当前追加修改的CI待核验。
+
+阶段二交付核验：实现提交398462b的Linux CI 46102332989全部通过。51项统计测试、96项Telegram回归、类型/Lint与本地显式配置dry-run通过；最终打包探针944.50KiB/gzip169.75KiB。PR #91依赖#90，均未合并，后续仅文档记录。下一阶段接三入口。
