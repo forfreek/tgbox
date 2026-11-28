@@ -1,40 +1,47 @@
 # 当前状态
 
 核验日期：2026-11-28（Asia/Shanghai）。
-工作树：C:/Users/123/tgbox-search-analytics。
-分支：codex/search-analytics-stage1；基线 origin/main d150e0d20041eb3a1c5d1315672bf0cb54c17e8f。
-当前节点：阶段一已交付草稿 PR #90；运行时功能尚未接入。下一阶段在独立 service 工作树开发。
+工作树：C:/Users/123/tgbox-search-analytics-service。
+分支：codex/search-analytics-service，base=codex/search-analytics-stage1（520fbc9）；阶段一PR #90。
+当前节点：阶段二草稿PR #91（https://github.com/forfreek/tgbox/pull/91），依赖#90；实现代码以PR head核验，本地验收完成，Linux CI记录见末尾。阶段三尚未开始，未接入现有Worker入口。
 
-## 已核验事实
+## 当前实现
 
-- 原入口 C:/Users/123/tgbox 在 cursor/about-drop-awesome-list，8 个已跟踪文件及若干未跟踪资料存在用户改动；未覆盖。
-- 远端 main 仍为 d150e0d；Web 当前 100% 版本 7f7c763f-7999-4730-b24f-0c3001420443，对应构建 46093910802；Bot ac61a4c4、Admin 8923c4ef。版本为核验快照。
-- 核心 D1 tgbox 存在；未发现 tgbox-analytics、tgbox-cache 或 TGSearch 专用 Turnstile widget。三 Worker 无统计 D1、KV、原生限流绑定。
-- tgsearch.app 是 Free Website；可见 WAF 只有一条停用的 media skip 自定义规则，没有活动 http_ratelimit ruleset。账户订阅 API 403，Workers 订阅/额度未确认，不能从域名 Free 推断 Workers Free。
-- Admin 使用 adminMiddleware + Access JWT/Telegram allowlist；已有 AI 摘要 POST Origin 校验可复用模式；其他模块的校验不自动证明新接口安全。
-- Mini App verifyInitData 验签并校验 24h 有效期和 60s 时钟偏差；统计适配不得经 authenticateApp 强依赖核心 DB 用户查询。
-- Bot webhook 已校验 Telegram secret header；inline 缓存 300s 保持。
-- @tgbox/hant 明确仅用于构建，不能直接复用其入口做 Worker 简繁归并。
-- 动态化未合并 PR 不属于生产能力。
+- 共享配置、轻量OpenCC字符归并、写前隐私过滤、HMAC身份域和签名会话。
+- Mini App纯验签与Bot可信capability分离，Telegram跨入口身份一致；网站匿名身份不等于真人。
+- receipt/严格预算/日聚合/身份贡献同一D1事务，跨入口/语言同身份同词每日一次贡献；已知触限不调用FTS。
+- 签发和挑战独立限额；Siteverify校验hostname/action/cdata，D1原子token receipt防并发重放，配置竞态不授可信状态。
+- 内容/增长异常进入pending，规则变更触发审核revision；固定原因码抽样有日封顶。
+- 新0001统计迁移仅添加规则版本触发器，核心数据库迁移不变。
 
-## 用户确认的架构调整
+## 实际验证
 
-1. KV 榜单读取前允许统计 D1 审核版本校验；不一致/故障返回空榜。
-2. 网站/Mini App 手动上榜候选接受额外服务端核心 FTS 验证；两引擎不一致单独计量。
+- 统计包51/51测试通过，涵盖真实Workers D1并发、幂等、回滚、跨入口、限额、Turnstile重放/配置竞态、敏感输入及流式正文上限。
+- Telegram包96/96回归通过；统计包类型/Biome与生成映射一致性通过。
+- 全仓类型11/11通过；全仓Lint通过，3条既有警告。
+- 成功meta基线：Bot新身份58读/19写；网站68读/22写；重试/触限4读/0写；会话签发11读/6写；500规则2054读/19写。见RESOURCE-USAGE.md。
+- 失败查询可能缺少计费meta，usageComplete=false时不能当作完整账单。
 
-## 边界
+## 最新用户确认
 
-未执行生产迁移、资源修改、WAF 修改、Secrets 写入、部署或 main 合并。
-本地迁移和测试结果须在实际执行后追加，不能以计划代替结果。
+1. 公开榜单可查询统计D1主库审核版本，不符/故障安全空榜。
+2. 客户端手动上榜候选可追加核心FTS复核，搜索不等待统计。
+3. 用户确认付费版，不为免费额度刻意限流；默认业务参数保持，全局事件/签发/验证日预算后台范围1–100000，不自动改线上值。
 
-## 阶段一验证记录
+## 基线与历史证据（阶段一快照）
 
-- 新包 Biome check、TypeScript、Workers D1迁移/契约测试 8/8 通过。
-- 全仓 Lint通过，3条既有警告；全仓类型检查11/11通过，Astro零诊断。
-- pnpm check 被基线Windows CRLF格式阻断；没有提交全仓格式变化。
-- 全仓串行包测试在snapshot既有5000ms测试超时停止；snapshot文件串行复跑及其余包继续检查中。结果未完成前不宣称全仓测试通过。
-- 本节点只有事件契约与Schema，无现有Worker运行时绑定/路由/搜索变更。
+- main重新读取仍为d150e0d20041eb3a1c5d1315672bf0cb54c17e8f；阶段一#90代码5b42156的Linux CI 46097134175通过，后续为文档记录。
+- 阶段一核验Web 7f7c763f、Bot ac61a4c4、Admin 8923c4ef；版本易变，不宣称本阶段重做生产部署验证。
+- 原入口C:/Users/123/tgbox有用户改动，保留，仅追加恢复指针。
+- 域名Free Website与Workers付费不是同一概念；旧Billing API权限不足记录不否定用户付费确认。
+- 统计资源与本站Turnstile/限流binding尚未创建，待单独授权。
 
-阶段一草稿PR：https://github.com/forfreek/tgbox/pull/90，代码5b42156。snapshot的超时用例独立运行（临时testTimeout=30000）1/1通过，原测试文件未改；全仓其他包与Linux CI仍在检查。阶段一不包含实际采集、聚合或后台页面，不将契约当功能上线。
+## 下一步与边界
 
-2026-11-28 Linux CI 46097134175 全部通过（2m5s）；PR #90仍为草稿未合并。下一阶段工作树C:/Users/123/tgbox-search-analytics-service，分支codex/search-analytics-service；阶段二尚未交付。
+阶段三接三入口、1500ms/IME/点击合并、Cookie及原生边缘限流；阶段四KV/Cron/清理；阶段五Admin；阶段六完整验收与生产准备。
+本阶段未测试浏览器、真实Siteverify、生产CPU/网络，不把库测试当入口或发布验收。
+未生产迁移、创建/修改资源、写Secrets/WAF、部署或合并main。
+
+2026-11-28 收尾：新增0002数据库级全球日贡献唯一约束，本地51/51通过；成本基线每接受事件增加1行索引写。前一head d5f5ee5的Linux CI 46101482836通过，当前追加修改的CI待核验。
+
+阶段二交付核验：实现提交398462b的Linux CI 46102332989全部通过。51项统计测试、96项Telegram回归、类型/Lint与本地显式配置dry-run通过；最终打包探针944.50KiB/gzip169.75KiB。PR #91依赖#90，均未合并，后续仅文档记录。下一阶段接三入口。

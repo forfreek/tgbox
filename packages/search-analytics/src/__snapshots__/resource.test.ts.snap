@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`measures the maximum supported rule set and refuses an over-limit set without writes > 500 moderation rules 1`] = `
+{
+  "rowsRead": 2054,
+  "rowsWritten": 19,
+}
+`;
+
+exports[`records local D1 cost baselines and bounds accepted versus rejected write amplification 1`] = `
+{
+  "botFirst": {
+    "rowsRead": 58,
+    "rowsWritten": 19,
+  },
+  "botRepeat": {
+    "rowsRead": 68,
+    "rowsWritten": 11,
+  },
+  "budgetRejected": {
+    "rowsRead": 4,
+    "rowsWritten": 0,
+  },
+  "retry": {
+    "rowsRead": 4,
+    "rowsWritten": 0,
+  },
+  "sessionIssue": {
+    "rowsRead": 11,
+    "rowsWritten": 6,
+  },
+  "webFirst": {
+    "rowsRead": 68,
+    "rowsWritten": 22,
+  },
+}
+`;

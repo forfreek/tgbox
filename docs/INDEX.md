@@ -141,3 +141,5 @@ Google 标签接入见 [交付记录](google-tag/DELIVERY.md)。
 ## 真实热门搜索与搜索分析
 
 恢复先读 [阶段状态](search-analytics/STATE.md)，再读 [约束和节点索引](search-analytics/AGENTS.md)；按当前节点进入 [计划](search-analytics/PLAN.md)、[架构决策](search-analytics/ADR.md)、[项目记忆](search-analytics/MEMORY.md)。2026-11-28 开始阶段一，独立工作树 C:/Users/123/tgbox-search-analytics，运行时尚未接入，生产未修改。
+
+2026-11-28 搜索分析阶段二共享服务在C:/Users/123/tgbox-search-analytics-service，按[STATE](search-analytics/STATE.md)恢复；实现和成本见[SERVICE](search-analytics/SERVICE.md)、[RESOURCE-USAGE](search-analytics/RESOURCE-USAGE.md)。阶段三入口接入尚未开始，生产未变更。
