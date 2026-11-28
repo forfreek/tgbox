@@ -1,7 +1,7 @@
 import type { SiteLocale } from "@tgbox/shared";
 import { CornerDownLeftIcon, SearchXIcon, TriangleAlertIcon } from "lucide-react";
 import { AnimatePresence, MotionConfig, motion, type Transition } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Command,
   CommandDialog,
@@ -19,6 +19,8 @@ import { localizePath } from "@/i18n/locale.ts";
 import { springs } from "@/lib/motion-presets.ts";
 import { loadPagefind, resetPagefind } from "@/lib/pagefind.ts";
 import { externalSearchUrls, safeExcerpt } from "@/lib/search.ts";
+import { useSearchAnalytics } from "@/lib/use-search-analytics.ts";
+import { SearchChallenge } from "./SearchChallenge.tsx";
 
 interface Props {
   locale: SiteLocale;
@@ -26,11 +28,13 @@ interface Props {
   pagefindUrl: string;
   siteUrl: string;
   hotKeywords: string[];
+  analyticsEnabled?: boolean;
   kindLabels: Record<string, string>;
   strings: {
     placeholder: string;
     dialogLabel: string;
     hot: string;
+    recommended: string;
     loading: string;
     empty: string;
     error: string;
@@ -82,6 +86,7 @@ export default function SearchDialog({
   pagefindUrl,
   siteUrl,
   hotKeywords,
+  analyticsEnabled = false,
   kindLabels,
   strings,
 }: Props) {
@@ -89,11 +94,23 @@ export default function SearchDialog({
   const [query, setQuery] = useState("");
   const [state, setState] = useState<SearchState>({ status: "idle", results: [] });
   const [highlighted, setHighlighted] = useState<string | undefined>();
+  const { collector, challenge, clearChallenge } = useSearchAnalytics(analyticsEnabled, "website");
+  const generation = useRef(0);
+  const composing = useRef(false);
+  const [revision, setRevision] = useState(0);
+  const changeQuery = (value: string, trigger: "manual" | "recommended" = "manual") => {
+    clearChallenge();
+    generation.current = collector.begin(value, trigger, locale);
+    setRevision((current) => current + 1);
+    setQuery(value);
+  };
 
   useEffect(() => {
     // `/?q=term` opens the dialog prefilled — the URL the WebSite SearchAction points at.
     const initial = new URLSearchParams(window.location.search).get("q")?.trim();
     if (initial) {
+      // SearchAction navigation/refresh opens search but creates no analytics event.
+      generation.current = collector.begin(initial, "prefill", locale, true);
       setQuery(initial);
       setOpen(true);
     }
@@ -120,11 +137,15 @@ export default function SearchDialog({
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("click", onClick);
     };
-  }, []);
+  }, [collector, locale]);
 
   useEffect(() => {
     const term = query.trim();
-    if (!open) return;
+    if (!open) {
+      collector.invalidate();
+      return;
+    }
+    const searchGeneration = generation.current;
     if (!term) {
       // Warm the index while the visitor is still typing.
       loadPagefind(pagefindUrl).catch(() => {});
@@ -141,6 +162,7 @@ export default function SearchDialog({
           search.results.slice(0, MAX_RESULTS).map((result) => result.data()),
         );
         if (cancelled) return;
+        collector.settled(searchGeneration, search.results.length > 0);
         setState({
           status: "done",
           results: data.map((item) => ({
@@ -161,7 +183,7 @@ export default function SearchDialog({
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [query, open, pagefindUrl, locale]);
+  }, [query, open, pagefindUrl, locale, collector, revision]);
 
   const external = externalSearchUrls(query, siteUrl);
   const showHot = !query.trim() && hotKeywords.length > 0;
@@ -208,11 +230,40 @@ export default function SearchDialog({
                     items={state.results}
                     filter={null}
                     value={query}
-                    onValueChange={setQuery}
+                    onValueChange={(value, details) => {
+                      if (details.reason === "item-press") {
+                        if (state.status === "done") collector.select();
+                        setQuery(value);
+                      } else changeQuery(value);
+                    }}
                     onItemHighlighted={(item) => setHighlighted(resultUrl(item))}
                     itemToStringValue={resultTitle}
                   >
-                    <div className="relative border-b border-border/70">
+                    <div
+                      className="relative border-b border-border/70"
+                      onCompositionStart={() => {
+                        composing.current = true;
+                        collector.composition(true);
+                        clearChallenge();
+                      }}
+                      onCompositionEnd={(event) => {
+                        composing.current = false;
+                        collector.composition(false);
+                        if (event.target instanceof HTMLInputElement)
+                          changeQuery(event.target.value);
+                      }}
+                      onKeyDownCapture={(event) => {
+                        if (
+                          event.key === "Enter" &&
+                          (composing.current ||
+                            event.nativeEvent.isComposing ||
+                            event.keyCode === 229)
+                        ) {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }
+                      }}
+                    >
                       <CommandInput
                         placeholder={strings.placeholder}
                         aria-label={strings.dialogLabel}
@@ -230,11 +281,12 @@ export default function SearchDialog({
                         )}
                       </AnimatePresence>
                     </div>
+                    <SearchChallenge challenge={challenge} />
                     <CommandPanel className="mx-0 flex min-h-0 flex-1 flex-col overflow-hidden rounded-none border-0 bg-transparent shadow-none [clip-path:none]!">
                       {showHot && (
                         <div className="shrink-0 px-4 pt-4 pb-5">
                           <p className="text-xs font-medium tracking-wide text-muted-foreground">
-                            {strings.hot}
+                            {strings.recommended}
                           </p>
                           <div className="mt-3 flex flex-wrap gap-2">
                             {hotKeywords.map((keyword, index) => (
@@ -246,7 +298,7 @@ export default function SearchDialog({
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ ...listSpring, delay: 0.06 + index * 0.03 }}
                                 whileTap={{ scale: 0.94 }}
-                                onClick={() => setQuery(keyword)}
+                                onClick={() => changeQuery(keyword, "recommended")}
                               >
                                 {keyword}
                               </motion.button>
@@ -303,6 +355,9 @@ export default function SearchDialog({
                             render={
                               <motion.a
                                 href={item.url}
+                                onClick={() => {
+                                  if (state.status === "done") collector.select();
+                                }}
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ ...listSpring, delay: Math.min(index, 8) * 0.035 }}

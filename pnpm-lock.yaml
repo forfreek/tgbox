@@ -319,6 +319,9 @@ importers:
       '@tgbox/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@tgbox/search-analytics':
+        specifier: workspace:*
+        version: link:../../packages/search-analytics
       '@tgbox/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -383,6 +386,9 @@ importers:
       '@tgbox/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@tgbox/search-analytics':
+        specifier: workspace:*
+        version: link:../../packages/search-analytics
       '@tgbox/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -429,6 +435,9 @@ importers:
       '@astrojs/check':
         specifier: 'catalog:'
         version: 0.9.10(prettier@3.9.6)(typescript@6.0.3)
+      '@cloudflare/vitest-pool-workers':
+        specifier: 'catalog:'
+        version: 0.22.0(@vitest/runner@4.1.11)(@vitest/snapshot@4.1.11)(vitest@4.1.11(@types/node@24.13.4)(vite@8.3.0(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.1)))
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.63.0

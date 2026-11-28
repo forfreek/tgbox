@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { CLIENT_POLICY } from "./client-policy.ts";
 
 export const HARD_LIMITS = Object.freeze({
-  bodyBytes: 1024,
-  keywordMin: 2,
-  keywordMax: 64,
+  bodyBytes: CLIENT_POLICY.bodyBytes,
+  keywordMin: CLIENT_POLICY.keywordMin,
+  keywordMax: CLIENT_POLICY.keywordMax,
   initDataHeader: 8192,
   turnstileHeader: 2048,
   sessionCookie: 1024,
@@ -32,7 +33,11 @@ export const SearchSettings = z
     publication: z.boolean().default(false),
     turnstile: z.boolean().default(false),
     jobs: z.boolean().default(false),
-    debounceMs: integer(1500, 500, 5000),
+    debounceMs: integer(
+      CLIENT_POLICY.debounceMs,
+      CLIENT_POLICY.minimumDelay,
+      CLIENT_POLICY.maximumDelay,
+    ),
     ipPerMinute: integer(60, 10, 300),
     sessionPerHour: integer(30, 1, 100),
     sessionPerDay: integer(100, 1, 300),

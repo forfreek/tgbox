@@ -29,5 +29,6 @@ const pagefindUrl = (import.meta.env.PUBLIC_PAGEFIND_URL ?? "/pagefind").replace
     pagefindUrl={pagefindUrl}
     siteUrl={siteUrl}
     botUrl={botUrl}
+    analyticsEnabled={import.meta.env.PUBLIC_SEARCH_ANALYTICS_ENABLED === "1"}
   />
 </AppLayout>

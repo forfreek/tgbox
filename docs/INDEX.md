@@ -1,5 +1,7 @@
 # 项目资料索引
 
+2026-11-28 搜索分析阶段三接入工作树 `C:/Users/123/tgbox-search-analytics-collection`，恢复先读 [STATE](search-analytics/STATE.md) 和 [采集实施报告](search-analytics/COLLECTION.md)。本地三入口及19项浏览器测试已验证；PR/CI见状态，生产未变更。
+
 2026-11-25 详情页三语开场精简见[内容工作状态](content-review/STATE.md#2026-11-25-详情页三语开场)和[文案项目记忆](content-review/MEMORY.md)。
 
 2026-11-25 手写三语摘要及单击发布见 [AI 摘要状态](ai-summary/STATE.md) 与 [后台手写流程](ai-summary/ADMIN.md#手写三语摘要)。

@@ -20,13 +20,21 @@ export type AppRootProps = {
   pagefindUrl: string;
   siteUrl: string;
   botUrl: string;
+  analyticsEnabled?: boolean;
 };
 
 /**
  * The island each of the four prerendered pages mounts. Screens never render on the server, so
  * everything below this point may read `window` freely.
  */
-export default function AppRoot({ locale, screen, pagefindUrl, siteUrl, botUrl }: AppRootProps) {
+export default function AppRoot({
+  locale,
+  screen,
+  pagefindUrl,
+  siteUrl,
+  botUrl,
+  analyticsEnabled = false,
+}: AppRootProps) {
   const telegram = useTelegramBridge();
   const webApp = telegram.status === "inside" ? telegram.webApp : null;
   const strings = appUi(locale);
@@ -38,7 +46,14 @@ export default function AppRoot({ locale, screen, pagefindUrl, siteUrl, botUrl }
     // Browsing works without a launch payload; everything signed does not.
     content = <OutsideTelegram locale={locale} botUrl={botUrl} />;
   } else if (screen === "browse") {
-    content = <BrowseScreen locale={locale} pagefindUrl={pagefindUrl} siteUrl={siteUrl} />;
+    content = (
+      <BrowseScreen
+        analyticsEnabled={analyticsEnabled}
+        locale={locale}
+        pagefindUrl={pagefindUrl}
+        siteUrl={siteUrl}
+      />
+    );
   } else if (screen === "submit") {
     content = <SubmitScreen locale={locale} />;
   } else if (screen === "me") {

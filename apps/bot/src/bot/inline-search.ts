@@ -1,4 +1,5 @@
 import { searchEntries } from "@tgbox/db";
+import { collectBotSearch, collectionEnabled } from "@tgbox/search-analytics";
 import { telegramLinks } from "@tgbox/shared";
 import { Composer, type Context, InlineKeyboard, InlineQueryResultBuilder } from "grammy";
 import type { App } from "./app.ts";
@@ -35,6 +36,18 @@ export function inlineSearch(app: App) {
       });
     });
     await ctx.answerInlineQuery(results, { cache_time: CACHE_SECONDS });
+    if (collectionEnabled(app.env, "bot")) {
+      await app.background(async () => {
+        await collectBotSearch(app.env, {
+          telegramUserId: ctx.from.id,
+          inlineQueryId: ctx.inlineQuery.id,
+          keyword: query,
+          locale: await app.locale(ctx),
+          hasResults: rows.length > 0,
+          now: app.now(),
+        });
+      });
+    }
   });
 
   return composer;

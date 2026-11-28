@@ -1,17 +1,19 @@
 import { background, type CoreContext, fetchResourceSnapshot, getSettings } from "@tgbox/core";
 import { createDb, type Db, getUserLocale } from "@tgbox/db";
+import type { AnalyticsBindings } from "@tgbox/search-analytics";
 import { type ReviewMode, reviewRecipients, type Settings, type SiteLocale } from "@tgbox/shared";
 import type { EntrySnapshot, SnapshotOptions } from "@tgbox/telegram";
 import { Api, type Context } from "grammy";
 import type { Message } from "grammy/types";
 import { localeOf, type Messages, messages } from "./i18n/index.ts";
 
-export type BotEnv = Env & {
-  /** Public bot username (without @); used to match `/command@bot` in groups. */
-  BOT_USERNAME?: string;
-  /** Admin panel origin; admins get the chat menu button pointed here instead of the Mini App. */
-  ADMIN_URL?: string;
-};
+export type BotEnv = Env &
+  AnalyticsBindings & {
+    /** Public bot username (without @); used to match `/command@bot` in groups. */
+    BOT_USERNAME?: string;
+    /** Admin panel origin; admins get the chat menu button pointed here instead of the Mini App. */
+    ADMIN_URL?: string;
+  };
 
 export type BotDeps = {
   fetch: typeof fetch;

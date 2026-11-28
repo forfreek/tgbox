@@ -1,4 +1,6 @@
 export { AuthenticatedSearch } from "./auth.ts";
+export { type AnalyticsBindings, collectionEnabled } from "./bindings.ts";
+export { collectBotSearch } from "./bot.ts";
 export { BoundaryError, readAnalyticsJson } from "./boundary.ts";
 export { defaultSettings, HARD_LIMITS, SearchSettings } from "./config.ts";
 export { SearchEvent, type SearchEventWriter, type WriteOutcome } from "./contracts.ts";

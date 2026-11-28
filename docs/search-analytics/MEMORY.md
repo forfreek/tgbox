@@ -1,5 +1,20 @@
 # 可复用决策与证据
 
+## 2026-11-28：阶段三采集
+
+- 草稿PR #92依赖#91，实现提交377f65e；CI状态查STATE。下一节点方案为PUBLICATION-PLAN.md，文档不是已实现功能。
+- 实现377f65e的Linux CI 46118001213全量通过，关闭态可独立验收；未合并或部署。后续仅交付文档，不把文档提交CI等同于重新运行浏览器测试。
+
+- 恢复工作树tgbox-search-analytics-collection，先读STATE和COLLECTION。固定网站/Mini路由鉴权，Bot只由可信webhook进入。无资源时关闭态兼容，不能补虚构资源ID自动provision。
+- collector为浏览器纯模块，contracts仅类型导入；共享client-policy统一防抖/长度。compositionend即便输入值不变也用revision触发成功查询；Autocomplete item-press不当手输处理，避免选中标题覆盖待报查询。
+- 网站event内限额签发Cookie，避免快速导航依赖先完成会话往返。Cookie Max-Age取签名exp；保持坏Cookie拒绝而非换身份。统计请求不进入公共缓存。
+- 首事件1500ms，后续从统计响应接收debounceMs；无配置预读。keepalive只能尽力发送，不能宣传完整日志；静态构建开关及部署/D1开关三重限制。
+- Mini App/Bot使用相同Telegram HMAC域；inlineQuery.id经独立HMAC域转换确定UUID防webhook重放。Bot复用已查结果、waitUntil，cache_time300保持。
+- 类型11/11、共享55、Bot181、Web双D1 6、Edge专项5和既有浏览器14通过。Web449/450通过，一项Windows5秒遍历超时单独15秒重跑通过。证据和未验证范围见COLLECTION/STATE。
+- 不把FTS结果验证3秒应用超时描述为查询取消；两字符LIKE无命中可能扫全表，生产启用前容量压测P1。用户付费口径不自动提高或降低实际配置。
+
+## 阶段一/二历史记录
+
 2026-11-28：新专题以最新确认生产 main d150e0d 建立独立 worktree，原工作区用户改动保留。生产版本证据见 STATE.md，易变信息行动前重核。
 
 - 新统计D1迁移完全独立；KV只存派生榜，不是计数/锁。无DO/Queues/新Worker。

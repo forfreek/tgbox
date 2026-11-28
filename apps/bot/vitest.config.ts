@@ -17,12 +17,16 @@ export default defineConfig(async () => {
           // The pool bundles an older workerd (miniflare 5.20260815) that rejects newer dates.
           compatibilityDate: "2026-08-15",
           bindings: {
+            ANALYTICS_MIGRATIONS: await readD1Migrations(
+              path.join(import.meta.dirname, "../../packages/search-analytics/migrations"),
+            ),
             TEST_MIGRATIONS: migrations,
             BOT_TOKEN: "123456:TEST",
             WEBHOOK_SECRET: "test-secret",
             GITHUB_DISPATCH_TOKEN: "test-token",
             SETTINGS_KEY: "test-settings-key",
           },
+          d1Databases: ["ANALYTICS_DB"],
         },
       }),
     ],

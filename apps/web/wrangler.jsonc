@@ -26,6 +26,11 @@
   // keyword rules are unsure — a handful of calls a day (see packages/core/src/suggest.ts).
   "ai": { "binding": "AI" },
   "vars": {
+    "SEARCH_ANALYTICS_ENABLED": "0",
+    "SEARCH_WEBSITE_ENABLED": "0",
+    "SEARCH_MINIAPP_ENABLED": "0",
+    "SEARCH_TURNSTILE_ENABLED": "0",
+    "SEARCH_ALLOWED_ORIGINS": "https://tgsearch.app,https://www.tgsearch.app",
     "R2_PUBLIC_URL": "https://media.tgsearch.app"
   },
   "assets": {

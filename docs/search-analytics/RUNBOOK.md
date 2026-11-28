@@ -1,5 +1,7 @@
 # 故障处理
 
+阶段三采集故障：先关闭对应部署SEARCH_WEBSITE_ENABLED/SEARCH_MINIAPP_ENABLED/SEARCH_BOT_ENABLED或全局SEARCH_ANALYTICS_ENABLED；无需停止Pagefind/索引或撤回核心DB。检查独立ANALYTICS_DB、身份Secret长度与一致性、网站sessionSecret、SEARCH_RATE_LIMITER和Origin allowlist。缺能力返回503并停采；限流429不要求用户停止搜索。日志只查固定原因码，不能打印关键词、Cookie、initData或token。真实绑定/限流/Turnstile尚未生产配置，不能用“开关为1”证明接入成功。详见COLLECTION和DEPLOYMENT。
+
 1. 采集异常：先关闭全局或单入口开关；Pagefind/inline 正常运行，不回滚搜索。
 2. DB 故障：拒绝统计；公开榜单空榜，不信任旧审核；不转写核心 D1。
 3. KV 故障：保留权威发布指针与已生成版本，失败不清空上次正常数据；无法通过审核验证则不展示。

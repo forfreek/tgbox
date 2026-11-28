@@ -16,6 +16,7 @@ import channelHtml from "../../../../packages/telegram/fixtures/profile-channel.
 import groupHtml from "../../../../packages/telegram/fixtures/profile-group.html?raw";
 import notFoundHtml from "../../../../packages/telegram/fixtures/profile-not-found.html?raw";
 import userHtml from "../../../../packages/telegram/fixtures/profile-user.html?raw";
+import type { BotEnv } from "../../src/bot/app.ts";
 import worker from "../../src/index.ts";
 
 export const ADMIN = { id: 900, is_bot: false, first_name: "Alice", username: "alice_admin" };
@@ -111,7 +112,8 @@ const profiles: Record<string, string> = {
 export type Harness = Awaited<ReturnType<typeof startHarness>>;
 
 /** Fakes api.telegram.org, t.me and api.github.com, and syncs the taxonomy into D1. */
-export async function startHarness() {
+export async function startHarness(overrides: Partial<BotEnv> = {}) {
+  const runtime = { ...testEnv, ...overrides };
   // Storage persists between tests in a file, so each test starts from empty mutable tables.
   await env.DB.batch(
     [
@@ -243,7 +245,7 @@ export async function startHarness() {
       body: JSON.stringify({ update_id: updateId++, ...update }),
     });
     const ctx = createExecutionContext();
-    const response = await worker.fetch(request, testEnv, ctx);
+    const response = await worker.fetch(request, runtime, ctx);
     return { response, done: waitOnExecutionContext(ctx) };
   }
 

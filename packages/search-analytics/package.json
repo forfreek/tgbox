@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     "./contracts": "./src/contracts.ts",
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts"
   },
   "scripts": {
     "types": "wrangler types --strict-vars=false",

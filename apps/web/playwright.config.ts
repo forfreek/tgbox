@@ -7,6 +7,7 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   reporter: process.env.CI ? "github" : "list",
   use: {
+    channel: process.env.TGBOX_E2E_BROWSER_CHANNEL,
     baseURL: "http://127.0.0.1:4329",
     trace: "retain-on-failure",
   },
