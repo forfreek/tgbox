@@ -77,3 +77,7 @@
 Admin正式构建及Wrangler4.132.0显式dist/server配置dry-run：5049.75KiB / gzip1443.07KiB；Web以固定本地资源夹具构建，267静态文件/47繁中页面，1225.44KiB / gzip332.35KiB；Bot1776.28KiB / gzip363.83KiB。都是整个Worker包，不是功能增量/CPU；生成配置保持核心DB和SEARCH_*开关0，没有本地fixture假ID。无上传或部署。实现提交/LinuxCI与最终Git diff摘要在交付记录补齐。
 
 补充：Windows全仓Biome check受既有CRLF检出格式差异（815项），未批量改写无关文件；本节点26个代码/配置文件按LF核验通过，仅既有gtag警告。全仓Linux格式与测试以PR CI为准。
+
+## Git交付记录
+
+草稿[PR #95](https://github.com/forfreek/tgbox/pull/95)，基于阶段五codex/search-analytics-admin。实现4bfcabaec75940efc028d6bbfd6aebb4d640b8c0，49文件、1102新增/37删除；主要为安全回退修补、排名/管理查询、配置校验、容量/浏览器测试和验收发布文档。[Linux CI46145228889](https://github.com/forfreek/tgbox/actions/runs/46145228889)全部通过：全仓格式/类型、测试、脚本类型与20项测试。WindowsCRLF格式差异不影响Git LF内容；后续收尾提交仅文档。main只读核验仍为d150e0d，生产版本与Git提交不可凭版本ID推断对应。

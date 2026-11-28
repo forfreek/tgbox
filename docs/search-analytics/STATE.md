@@ -2,7 +2,7 @@
 
 ## 最新：阶段六最终验收，2026-11-28
 
-工作树C:/Users/123/tgbox-search-analytics-verification，分支codex/search-analytics-verification，base=4f6ffe4 / 草稿PR #94（其最新文档CI46125270288也通过）。main再次只读核验d150e0d。完整报告[VERIFICATION.md](VERIFICATION.md)，操作单[RELEASE.md](RELEASE.md)，资源/绑定片段bindings.example.jsonc，生产快照PRODUCTION-SNAPSHOT，当前技术债DEBT头部。阶段六PR/CI待提交后记录。
+工作树C:/Users/123/tgbox-search-analytics-verification，分支codex/search-analytics-verification，base=4f6ffe4 / 草稿PR #94（其最新文档CI46125270288也通过）。main再次只读核验d150e0d。完整报告[VERIFICATION.md](VERIFICATION.md)，操作单[RELEASE.md](RELEASE.md)，资源/绑定片段bindings.example.jsonc，生产快照PRODUCTION-SNAPSHOT，当前技术债DEBT头部。阶段六草稿[PR #95](https://github.com/forfreek/tgbox/pull/95)，实现提交4bfcabaec75940efc028d6bbfd6aebb4d640b8c0；[Linux全仓CI 46145228889](https://github.com/forfreek/tgbox/actions/runs/46145228889)全部通过（格式/类型、全仓测试、脚本类型/测试）。后续提交仅补文档记录。
 
 关闭/回滚静态推荐P1已修复，NFKC/规则查询/后台快照/空格筛选/清理能力已修正；默认业务预算10000不变，不自动加预算，cleanupBatch默认100/上限2000并跨字段校验。独立两路源码复核完成；Codex Security工具因Windows父目录ACL拒绝启动，未形成工具化报告，不能宣称扫描通过。
 
