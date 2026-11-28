@@ -1,4 +1,4 @@
-import { SearchSettings } from "@tgbox/search-analytics/config";
+import { minimumCleanupBatch, SearchSettings } from "@tgbox/search-analytics/config";
 import { useId } from "react";
 import { Button } from "@/components/coss/ui/button.tsx";
 import { Card } from "@/components/coss/ui/card.tsx";
@@ -55,6 +55,10 @@ export function SettingsForm({
   return (
     <Card className="gap-4 p-5">
       <h2 className="font-semibold">统一配置 · 版本 {settings.version}</h2>
+      <p className="text-sm text-muted-foreground">
+        按当前预算，清理每批至少需{minimumCleanupBatch(settings.value)}
+        行才能覆盖日常到期行数上界；这不保证90秒内完成，也不覆盖历史积压。提高预算时请同时校验清理容量。
+      </p>
       <p className="text-sm text-muted-foreground">
         数据库配置不能越过部署开关或缺失绑定。保存增加配置版本，旧榜单立即安全失效；新请求读取新配置。降低保留期将在后续清理永久删除旧数据，提高保留期不能恢复已清理记录。限额变更仅保存管理员本次输入，不自动扩额。
       </p>

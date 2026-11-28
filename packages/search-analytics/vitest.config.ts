@@ -10,6 +10,7 @@ export default defineConfig(async () => ({
       miniflare: {
         compatibilityDate: "2026-08-15",
         bindings: {
+          CAPACITY_RUN: process.env.TGBOX_CAPACITY === "1",
           TEST_MIGRATIONS: await readD1Migrations(path.join(import.meta.dirname, "migrations")),
         },
       },

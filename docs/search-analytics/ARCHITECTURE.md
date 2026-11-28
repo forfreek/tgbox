@@ -31,3 +31,9 @@ Bot：已验证 webhook → 成功 inline 查询 → 共享 writer 后台调用�
 Admin浏览器→纯v1契约→认证/精确Origin server fn→共享admin.ts→独立D1。业务CAS和HMAC审计同事务；仅使用相邻语句changes()判断当前变更，绝不作为跨语句长期事务标记。ranking.ts是发布与后台资格分数的单一SQL，公开已发布分数仍来自私有快照。每日任务/人工等待刷新/审核best-effort后台刷新共用同一服务及推荐适配器；人工请求断连与HTTP waitUntil均有生命周期限制。
 
 上文“推荐不直接恢复静态旧列表”为架构目标：目前编译关闭的旧hotKeywords兼容分支尚未完全满足，已在DEBT列为P1，阶段六必须修复并验收关闭/回滚矩阵，未解决不得上线。统计从未开启的旧生产行为不代表未来审核后可以回滚到未审核推荐。
+
+## 阶段六最终边界
+
+编译关闭的hotKeywords旁路已移除，所有推荐/真实榜只从已审核API进入，关闭或失败空榜。冷启动推荐仍由批准资源成员规模回调供聚合，不能直接从构建词回退。排名先跨日身份去重，再MATERIALIZED逐词计分并审核，既有排序/门槛/审核CAS保持；[SQLite优化屏障说明](https://sqlite.org/lang_with.html#materialization_hints)及真实D1测试验证该SQL能力。
+
+独立源码复核及资源/生命周期限制见VERIFICATION/DEBT；Cloudflare资源尚未配置，RELEASE及bindings.example为待审批操作单，不能把模板当可直接deploy的配置。

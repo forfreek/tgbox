@@ -9,12 +9,13 @@ describe("configuration and time", () => {
     expect(entryEnabled(defaultSettings, "website", true)).toBe(false);
     for (const config of [
       { dailyBudget: 100001 },
+      { dailyBudget: 50000 },
       { minimumIdentities: 1 },
       { identityRetentionDays: 7 },
       { weights: [0.3, 0.6, 1] },
     ])
       expect(SearchSettings.safeParse(config).success).toBe(false);
-    expect(SearchSettings.safeParse({ dailyBudget: 50000 }).success).toBe(true);
+    expect(SearchSettings.safeParse({ dailyBudget: 50000, cleanupBatch: 500 }).success).toBe(true);
   });
   it("uses complete Beijing days across the UTC date and year boundary", () => {
     expect(beijingDay(Date.parse("2026-11-27T16:00:00Z"))).toBe("2026-11-28");

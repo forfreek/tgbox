@@ -43,3 +43,5 @@ control包含rules_revision、publication_generation/key/rules_revision/config_v
 ## 阶段五兼容性
 
 新增访问层不新增迁移，继续使用0000–0003。Admin只修改独立统计库settings/rules/audit和既有发布任务数据，核心库只读推荐标题。业务变更+审计batch原子，审核revision由0001触发器维护。无新索引；当前date主键、keyword/day和job started索引用于范围和分页查询。instr筛词与分组/偏移可能扫描整个已选择的有界区间，不能宣传常量成本。
+
+阶段六未新增迁移。新增配置约束和查询优化不变更表；仍只用0000–0003，核心库不迁移。回滚必须兼容cleanupBatch2000及当前审核指针，不能降级数据或恢复旧榜。

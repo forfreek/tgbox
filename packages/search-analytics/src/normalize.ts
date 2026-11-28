@@ -23,6 +23,7 @@ export function normalizeKeyword(raw: string): NormalizeResult {
     .replace(/\s+/gu, " ")
     .trim();
   const length = [...display].length;
+  if (unsafe.test(display)) return { ok: false, reason: "invalid" };
   if (length < HARD_LIMITS.keywordMin || length > HARD_LIMITS.keywordMax)
     return { ok: false, reason: "invalid" };
   if (privateContent.test(display) || highEntropy.test(display))

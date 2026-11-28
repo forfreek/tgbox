@@ -6,8 +6,11 @@ import { type AnalyticsDb, readSettings } from "./runtime.ts";
 import { DAY_MS, previousCompleteWindow } from "./time.ts";
 
 const item = z.strictObject({
-  keyword: z.string().min(2).max(128),
-  rank: z.number().int().min(1).max(6),
+  keyword: z
+    .string()
+    .min(HARD_LIMITS.keywordMin)
+    .max(HARD_LIMITS.keywordMax * 2),
+  rank: z.number().int().min(1).max(HARD_LIMITS.rankingMaximum),
 });
 export const PublishedSearches = z
   .strictObject({
@@ -21,7 +24,7 @@ export const PublishedSearches = z
     generation: z.number().int().positive(),
     configVersion: z.number().int().positive(),
     rulesRevision: z.number().int().positive(),
-    items: z.array(item).max(6),
+    items: z.array(item).max(HARD_LIMITS.rankingMaximum),
   })
   .superRefine((value, ctx) => {
     const seen = new Set<string>();

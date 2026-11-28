@@ -72,3 +72,13 @@
 阶段五草稿PR #94已创建，base=codex/search-analytics-publication，代码8219088；Linux CI46124984114进行中，最终结论待记录。未合并或部署。
 
 阶段五最终CI：8219088的Linux全仓CI46124984114全部通过；完整报告ADMIN.md，草稿PR #94。后续仅文档收尾，不合并main/不生产操作；下一阶段六先处理静态推荐回退P1并完成独立最终审查。
+
+## 阶段六最终维护决策（2026-11-28）
+
+工作树tgbox-search-analytics-verification，base4f6ffe4/#94。关闭和故障安全空榜，hotKeywords静态prop/构建计算已删，冷启动推荐必须走审核API，不能回滚到旧前端。NFKC后复查安全；ranking以MATERIALIZED逐词评分后审核，LIMIT仍在审核后。两路独立复核等价性，70万低词基数夹具读量51505645降1555745，高词基数仍大，不能万能外推。
+
+minimumCleanupBatch=floor(max(4B,2(B+I+V+S),6B+2I+4V+16)/900)+1，保留探空余量。默认100合法，max2000，最高前三100k需1334；不自动改预算。旧实验高预算小批将fail-closed，先预检经授权CAS只改批；回滚须兼容新范围和静态撤回。
+
+独立审查/测试见VERIFICATION、当前P0–P3见DEBT头部、资源与关闭/回滚见RELEASE、生产只读见PRODUCTION-SNAPSHOT。工具化安全扫描WindowsACL拒绝启动，没scanId/canonical/SARIF，不能说工具扫描成功。共享87+4容量/Web450+8+1容量/Bot181/Admin136、浏览器两构建28不同Web用例/Admin11、类型/Lint/脚本通过；本机并行内存失败已按串行重测，LinuxCI结论以STATE为准。生产未修改，等待操作单确认。
+
+2026-11-28阶段六交付：草稿PR #95，base=codex/search-analytics-admin，implementation=4bfcaba；49文件、+1102/-37。Linux CI46145228889全部通过（全仓格式/类型、测试和脚本）；后续仅文档收尾。仍不执行生产操作。

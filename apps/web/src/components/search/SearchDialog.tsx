@@ -1,3 +1,4 @@
+import { CLIENT_POLICY } from "@tgbox/search-analytics/client";
 import type { SiteLocale } from "@tgbox/shared";
 import { CornerDownLeftIcon, SearchXIcon, TriangleAlertIcon } from "lucide-react";
 import { AnimatePresence, MotionConfig, motion, type Transition } from "motion/react";
@@ -27,7 +28,6 @@ interface Props {
   /** Directory that holds `pagefind.js` (R2 public URL in production, `/pagefind` locally). */
   pagefindUrl: string;
   siteUrl: string;
-  hotKeywords: string[];
   analyticsEnabled?: boolean;
   publicationEnabled?: boolean;
   kindLabels: Record<string, string>;
@@ -86,7 +86,6 @@ export default function SearchDialog({
   locale,
   pagefindUrl,
   siteUrl,
-  hotKeywords,
   analyticsEnabled = false,
   publicationEnabled = false,
   kindLabels,
@@ -121,7 +120,7 @@ export default function SearchDialog({
           (data.type !== "trending" && data.type !== "recommended") ||
           !("items" in data) ||
           !Array.isArray(data.items) ||
-          data.items.length > 6
+          data.items.length > CLIENT_POLICY.rankingMaximum
         )
           return;
         const words: string[] = [];
@@ -131,7 +130,7 @@ export default function SearchDialog({
             !item ||
             !("keyword" in item) ||
             typeof item.keyword !== "string" ||
-            item.keyword.length > 128
+            item.keyword.length > CLIENT_POLICY.keywordMax * 2
           )
             return;
           words.push(item.keyword);
@@ -143,7 +142,8 @@ export default function SearchDialog({
       });
     return () => controller.abort();
   }, [open, publicationEnabled]);
-  const visibleWords = publicationEnabled ? published.words : hotKeywords;
+  // Disabled and failed states must never restore unreviewed build-time recommendations.
+  const visibleWords = publicationEnabled ? published.words : [];
   const keywordTrigger =
     publicationEnabled && published.type === "trending" ? "trending" : "recommended";
   const changeQuery = (

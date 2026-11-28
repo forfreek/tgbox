@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`drains maximum configured rolling rate expiry in bounded batches 1`] = `
+{
+  "rows_read": 4816297,
+  "rows_written": 1200621,
+  "status": "succeeded",
+}
+`;
+
+exports[`high keyword cardinality with maximum contains rules 1`] = `
+{
+  "processed": 506,
+  "rows_read": 72380545,
+  "rows_written": 9,
+}
+`;
+
+exports[`ranking 7x10000 contributions/500 rules and 90-day 45000 aggregates/5000 jobs 1`] = `
+{
+  "adminUsage": {
+    "rowsRead": 252825,
+    "rowsWritten": 0,
+  },
+  "job": {
+    "processed": 100,
+    "rows_read": 200745,
+    "rows_written": 9,
+  },
+}
+`;
+
+exports[`ranking 7x10000 contributions/500 rules and 90-day 45000 aggregates/5000 jobs 2`] = `
+{
+  "processed": 100,
+  "rows_read": 1555745,
+  "rows_written": 9,
+}
+`;
+
+exports[`ranking 7x10000 contributions/500 rules and 90-day 45000 aggregates/5000 jobs 3`] = `
+{
+  "processed": 100,
+  "rows_read": 1555746,
+  "rows_written": 9,
+}
+`;

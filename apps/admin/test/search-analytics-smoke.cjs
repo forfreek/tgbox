@@ -75,6 +75,7 @@ fs.mkdirSync(evidence, { recursive: true });
     await config.getByRole("button", { name: "保存配置", exact: true }).click();
     await expect(page.getByRole("status").filter({ hasText: "dailyBudget" })).toBeVisible();
     await config.getByLabel("全站每日有效事件预算", { exact: true }).fill("12000");
+    await config.getByLabel("每批每表清理行数", { exact: true }).fill("200");
     await config.getByRole("button", { name: "保存配置", exact: true }).click();
     await expect(page.getByRole("status").filter({ hasText: "已保存" })).toBeVisible();
     await expect(page.getByRole("heading", { name: /统一配置 · 版本 3/ })).toBeVisible();

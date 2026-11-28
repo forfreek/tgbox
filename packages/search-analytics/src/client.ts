@@ -1,4 +1,7 @@
 import { CLIENT_POLICY } from "./client-policy.ts";
+
+export { CLIENT_POLICY } from "./client-policy.ts";
+
 import type { SearchEvent } from "./contracts.ts";
 
 export type ClientSearchEvent = SearchEvent;

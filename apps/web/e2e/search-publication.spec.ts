@@ -89,6 +89,22 @@ test("cold start labels a reviewed recommendation without mixing it into a real 
   await expect(dialog.getByText("推荐搜索", { exact: true })).toBeVisible();
   await expect(dialog.getByText("热门搜索", { exact: true })).toHaveCount(0);
   await expect(dialog).toHaveCSS("opacity", "1");
+  await expect(dialog.getByRole("button", { name: "科技", exact: true })).toHaveCSS("opacity", "1");
   if (process.env.TGBOX_E2E_ARTIFACT_DIR)
     await page.screenshot({ path: `${process.env.TGBOX_E2E_ARTIFACT_DIR}/recommended-mobile.png` });
 });
+
+for (const path of ["/", "/zh-hant/", "/en/"]) {
+  test(`failed publication stays empty while local search works: ${path}`, async ({ page }) => {
+    await page.route("**/api/trending", (route) =>
+      route.fulfill({ status: 503, json: { items: [] } }),
+    );
+    await page.goto(`${path}?q=科技`);
+    const dialog = page.locator("[data-search-dialog]");
+    await expect(page.locator("[data-search-result]").first()).toBeVisible();
+    await dialog.getByRole("combobox").fill("");
+    await expect(dialog.getByRole("button")).toHaveCount(0);
+    await dialog.getByRole("combobox").fill("科技");
+    await expect(page.locator("[data-search-result]").first()).toBeVisible();
+  });
+}

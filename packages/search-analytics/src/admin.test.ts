@@ -135,6 +135,9 @@ test("keywords support stable pagination, source/language, zero result and safe 
   if (injected.kind !== "keywords") throw new Error("view");
   expect(injected.rows).toEqual([]);
   expect(first.usage.rowsWritten).toBe(0);
+  const spaces = await readSearchAdmin(db, cache, query("keywords", { search: "   " }), now);
+  if (spaces.kind !== "keywords") throw Error("view");
+  expect(spaces.total).toBe(2);
 });
 
 test("90 day keyword view cannot claim complete unique identities or read expired facts", async () => {
@@ -156,8 +159,8 @@ test("90 day keyword view cannot claim complete unique identities or read expire
 
 test("settings concurrent CAS accepts exactly one write and one audit; maxima are paid-tier compatible", async () => {
   const results = await Promise.allSettled([
-    changeSearchAdmin(db, settings({ dailyBudget: 100000 }), actor, now),
-    changeSearchAdmin(db, settings({ dailyBudget: 20000 }), actor, now),
+    changeSearchAdmin(db, settings({ dailyBudget: 100000, cleanupBatch: 1000 }), actor, now),
+    changeSearchAdmin(db, settings({ dailyBudget: 20000, cleanupBatch: 200 }), actor, now),
   ]);
   expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
   expect(await db.prepare("SELECT version FROM search_settings").first("version")).toBe(2);

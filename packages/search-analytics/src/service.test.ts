@@ -92,6 +92,12 @@ beforeEach(async () => {
 });
 
 describe("normalization and private data", () => {
+  it.each(["＜script＞", "ｊａｖａｓｃｒｉｐｔ：foo", "｛private｝"])(
+    "rejects normalized unsafe compatibility encoding %s",
+    (value) => {
+      expect(normalizeKeyword(value)).toEqual({ ok: false, reason: "invalid" });
+    },
+  );
   it("folds Unicode, case, whitespace and traditional characters without translating English", () => {
     expect(normalizeKeyword(" ＴＧ  頻道\t資源 ")).toEqual({
       ok: true,

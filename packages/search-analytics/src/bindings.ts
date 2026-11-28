@@ -1,3 +1,4 @@
+import { HARD_LIMITS } from "./config.ts";
 import type { AnalyticsDb } from "./runtime.ts";
 
 /** Optional until resources are explicitly provisioned. Missing capability means stop collecting. */
@@ -25,6 +26,6 @@ export function collectionEnabled(env: AnalyticsBindings, source: "website" | "m
     env.SEARCH_ANALYTICS_ENABLED === "1" &&
     flag === "1" &&
     !!env.ANALYTICS_DB &&
-    (env.SEARCH_IDENTITY_SECRET?.length ?? 0) >= 32
+    (env.SEARCH_IDENTITY_SECRET?.length ?? 0) >= HARD_LIMITS.secretMinCharacters
   );
 }

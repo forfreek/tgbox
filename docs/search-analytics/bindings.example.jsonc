@@ -1,0 +1,44 @@
+// Fragments only; NOT a Wrangler deploy configuration. Merge after explicit approval.
+// Keep each app's existing DB/MEDIA/AI/routes/vars. Replace placeholders with actual creation outputs.
+{
+  "web": {
+    "d1_databases_append": [
+      {
+        "binding": "ANALYTICS_DB",
+        "database_name": "tgbox-analytics",
+        "database_id": "<NEW_ANALYTICS_D1_ID>",
+        "migrations_dir": "../../packages/search-analytics/migrations"
+      }
+    ],
+    "kv_namespaces_append": [{ "binding": "PUBLIC_CACHE", "id": "<NEW_TGBOX_CACHE_ID>" }],
+    "ratelimits_append": [
+      {
+        "name": "SEARCH_RATE_LIMITER",
+        "namespace_id": "<VERIFIED_UNUSED_POSITIVE_INTEGER>",
+        "simple": { "limit": 60, "period": 60 }
+      }
+    ]
+  },
+  "bot": {
+    "d1_databases_append": [
+      {
+        "binding": "ANALYTICS_DB",
+        "database_name": "tgbox-analytics",
+        "database_id": "<SAME_ANALYTICS_D1_ID>",
+        "migrations_dir": "../../packages/search-analytics/migrations"
+      }
+    ]
+  },
+  "admin_and_cron": {
+    "d1_databases_append": [
+      {
+        "binding": "ANALYTICS_DB",
+        "database_name": "tgbox-analytics",
+        "database_id": "<SAME_ANALYTICS_D1_ID>",
+        "migrations_dir": "../../packages/search-analytics/migrations"
+      }
+    ],
+    "kv_namespaces_append": [{ "binding": "PUBLIC_CACHE", "id": "<SAME_TGBOX_CACHE_ID>" }],
+    "triggers": { "crons": ["5 16 * * *"] }
+  }
+}
