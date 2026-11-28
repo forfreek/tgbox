@@ -5,15 +5,19 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    "./contracts": "./src/contracts.ts"
+    "./contracts": "./src/contracts.ts",
+    ".": "./src/index.ts"
   },
   "scripts": {
     "types": "wrangler types --strict-vars=false",
     "typecheck": "tsc",
-    "test": "vitest run"
+    "test": "node scripts/generate-normalization.ts --check && vitest run",
+    "generate:normalization": "node scripts/generate-normalization.ts && biome format --write src/character-fold.gen.ts",
+    "check:normalization": "node scripts/generate-normalization.ts --check"
   },
   "dependencies": {
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@tgbox/telegram": "workspace:*"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "catalog:",
@@ -21,6 +25,7 @@
     "@types/node": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
-    "wrangler": "catalog:"
+    "wrangler": "catalog:",
+    "opencc-js": "catalog:"
   }
 }

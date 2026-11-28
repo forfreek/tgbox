@@ -27,7 +27,7 @@ export type WriteOutcome =
   | { status: "accepted" | "duplicate" }
   | {
       status: "rejected";
-      reason: "disabled" | "invalid" | "private" | "blocked" | "limited" | "conflict";
+      reason: "disabled" | "invalid" | "private" | "blocked" | "limited" | "conflict" | "challenge";
     }
   | { status: "unavailable" };
 

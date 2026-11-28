@@ -22,3 +22,7 @@ GET /api/trending；不接受聚合参数，不触发 D1 排名查询。仅查�
 ## Admin
 
 复用 createServerFn、adminMiddleware 和现有 POST Origin 校验模式。GET 分页筛选最多 100 条，日期最多 90 天，查询排序白名单；POST 配置/rule/refresh 必须认证+CSRF+统计 DB 审计。不由浏览器直接持有 Cloudflare token。每条写操作有 revision CAS，隐藏/黑名单使公开版本立即失配并触发后台刷新。
+
+## 阶段二库边界
+
+createD1SearchWriter实现D1 writer；writeSearch返回统计库成功meta和usageComplete。认证必须由AuthenticatedSearch工厂创建，body不能恢复可信对象。HTTP路由未接入。会话结果仅由服务器适配为安全Cookie；cdata用challengeContext计算，禁止原样输出会话对象/Secrets。挑战不提升硬额，配置变更时拒绝升级。
