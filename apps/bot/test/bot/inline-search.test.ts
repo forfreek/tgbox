@@ -1,4 +1,6 @@
+import { env } from "cloudflare:workers";
 import { insertApprovedEntry, setEntryStatus } from "@tgbox/db";
+import { defaultSettings } from "@tgbox/search-analytics";
 import { beforeEach, expect, test } from "vitest";
 import { buttons, db, type Harness, startHarness } from "./harness.ts";
 
@@ -34,6 +36,59 @@ const results = () => {
   const list = call?.payload.results;
   return { call, list: Array.isArray(list) ? list : [] };
 };
+
+test("verified webhook collects in isolated analytics DB without changing inline cache", async () => {
+  await env.ANALYTICS_DB.batch([
+    ...[
+      "search_daily_stats",
+      "search_daily_identities",
+      "search_identity_days",
+      "search_daily_totals",
+      "search_event_receipts",
+      "search_rate_limits",
+    ].map((t) => env.ANALYTICS_DB.prepare(`DELETE FROM ${t}`)),
+    env.ANALYTICS_DB.prepare("UPDATE search_settings SET value=? WHERE id=1").bind(
+      JSON.stringify({ ...defaultSettings, enabled: true, bot: true }),
+    ),
+  ]);
+  h = await startHarness({
+    SEARCH_ANALYTICS_ENABLED: "1",
+    SEARCH_BOT_ENABLED: "1",
+    SEARCH_IDENTITY_SECRET: "test-secret".repeat(4),
+  });
+  // startHarness resets core entries; this test only needs the successful zero-result path.
+  const update = {
+    inline_query: { id: "trusted-query-id", from: user, query: "无结果", offset: "" },
+  };
+  await h.update(update);
+  await h.update(update);
+  expect(h.calls("answerInlineQuery")[0]?.payload.cache_time).toBe(300);
+  expect(
+    await env.ANALYTICS_DB.prepare(
+      "SELECT source,searches,zero_results,eligible_identities FROM search_daily_stats",
+    ).first(),
+  ).toEqual({ source: "bot", searches: 1, zero_results: 1, eligible_identities: 0 });
+  expect(h.dispatches).toHaveLength(0);
+});
+
+test("analytics outage cannot prevent inline answers", async () => {
+  h = await startHarness({
+    SEARCH_ANALYTICS_ENABLED: "1",
+    SEARCH_BOT_ENABLED: "1",
+    SEARCH_IDENTITY_SECRET: "test-secret".repeat(4),
+    ANALYTICS_DB: new Proxy(env.ANALYTICS_DB, {
+      get(target, key) {
+        if (key === "prepare")
+          return () => {
+            throw new Error("offline");
+          };
+        return Reflect.get(target, key, target);
+      },
+    }),
+  });
+  await h.inline(user, "新闻");
+  expect(h.calls("answerInlineQuery")[0]?.payload.cache_time).toBe(300);
+});
 
 test("long query matches by phrase and links to the site and Telegram", async () => {
   await h.inline(user, "Digest");

@@ -10,8 +10,9 @@
     "preview": "wrangler dev --local",
     "types": "wrangler types --strict-vars=false --env-file .dev.vars.example",
     "typecheck": "astro check",
-    "test": "vitest run --passWithNoTests",
-    "test:e2e": "playwright test"
+    "test": "vitest run --passWithNoTests && vitest run --config vitest.analytics.config.ts",
+    "test:e2e": "playwright test",
+    "test:analytics": "vitest run --config vitest.analytics.config.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "catalog:",
@@ -36,7 +37,8 @@
     "tailwind-merge": "catalog:",
     "tailwind-variants": "catalog:",
     "tailwindcss": "catalog:",
-    "tw-animate-css": "catalog:"
+    "tw-animate-css": "catalog:",
+    "@tgbox/search-analytics": "workspace:*"
   },
   "devDependencies": {
     "@astrojs/check": "catalog:",
@@ -49,6 +51,7 @@
     "pagefind": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
-    "wrangler": "catalog:"
+    "wrangler": "catalog:",
+    "@cloudflare/vitest-pool-workers": "catalog:"
   }
 }

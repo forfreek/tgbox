@@ -17,7 +17,8 @@
     "@tgbox/shared": "workspace:*",
     "@tgbox/telegram": "workspace:*",
     "drizzle-orm": "catalog:",
-    "grammy": "catalog:"
+    "grammy": "catalog:",
+    "@tgbox/search-analytics": "workspace:*"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "catalog:",

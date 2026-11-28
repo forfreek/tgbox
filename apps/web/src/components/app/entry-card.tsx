@@ -35,11 +35,13 @@ export function EntryCard({
   locale,
   webApp,
   siteUrl,
+  onOpen,
 }: {
   entry: BrowseItem;
   locale: Locale;
   webApp: TelegramWebApp | null;
   siteUrl: string;
+  onOpen?: () => void;
 }) {
   const strings = appUi(locale);
   const detailUrl = `${siteUrl}${locale === "en" ? "/en" : ""}/detail/${entry.username}/`;
@@ -95,7 +97,13 @@ export function EntryCard({
         >
           <Share2Icon aria-hidden />
         </Button>
-        <Button size="sm" onClick={() => openInTelegram(webApp, entry)}>
+        <Button
+          size="sm"
+          onClick={() => {
+            onOpen?.();
+            openInTelegram(webApp, entry);
+          }}
+        >
           <ExternalLinkIcon aria-hidden />
           {strings.browse.open}
         </Button>

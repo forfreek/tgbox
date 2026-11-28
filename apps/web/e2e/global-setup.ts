@@ -22,12 +22,17 @@ export default async function globalSetup() {
     ...process.env,
     SITE_DATA_PATH: dataPath,
     SITE_URL: `http://127.0.0.1:${port}`,
+    PUBLIC_SEARCH_ANALYTICS_ENABLED: process.env.TGBOX_E2E_ANALYTICS === "1" ? "1" : "0",
   };
-  execFileSync(path.join(webRoot, "node_modules/.bin/astro"), ["build", "--outDir", outDir], {
-    cwd: webRoot,
-    env,
-    stdio: "pipe",
-  });
+  execFileSync(
+    process.execPath,
+    [path.join(webRoot, "node_modules/astro/bin/astro.mjs"), "build", "--outDir", outDir],
+    {
+      cwd: webRoot,
+      env,
+      stdio: "pipe",
+    },
+  );
   execFileSync(process.execPath, ["scripts/pagefind.ts", outDir], {
     cwd: webRoot,
     env,

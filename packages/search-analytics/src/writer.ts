@@ -14,7 +14,12 @@ import {
 } from "./runtime.ts";
 import { beijingDay, DAY_MS, HOUR_MS, MINUTE_MS } from "./time.ts";
 
-export type WriteReport = { outcome: WriteOutcome; usage: Usage; usageComplete: boolean };
+export type WriteReport = {
+  outcome: WriteOutcome;
+  usage: Usage;
+  usageComplete: boolean;
+  debounceMs?: number;
+};
 type Dependencies = {
   db: AnalyticsDb;
   secret: string;
@@ -57,7 +62,13 @@ export async function writeSearch(
 ): Promise<WriteReport> {
   const total: Usage = { rowsRead: 0, rowsWritten: 0 };
   let usageComplete = true;
-  const result = (outcome: WriteOutcome): WriteReport => ({ outcome, usage: total, usageComplete });
+  let debounceMs: number | undefined;
+  const result = (outcome: WriteOutcome): WriteReport => ({
+    outcome,
+    usage: total,
+    usageComplete,
+    debounceMs,
+  });
   const observe = deps.observe ?? observeFailure;
   try {
     const now = deps.now();
@@ -71,6 +82,7 @@ export async function writeSearch(
     if (!normalized.ok) return result({ status: "rejected", reason: normalized.reason });
     const { keyword, display, review } = normalized.value;
     const loaded = await readSettings(deps.db);
+    debounceMs = loaded.value.debounceMs;
     total.rowsRead += loaded.usage.rowsRead;
     if (!entryEnabled(loaded.value, auth.source, deps.enabled))
       return result({ status: "rejected", reason: "disabled" });

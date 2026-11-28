@@ -3,6 +3,7 @@
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
+    "types": ["@cloudflare/vitest-pool-workers/types"],
     "noUncheckedIndexedAccess": true,
     "verbatimModuleSyntax": true,
     "paths": {

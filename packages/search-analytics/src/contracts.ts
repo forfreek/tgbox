@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CLIENT_POLICY } from "./client-policy.ts";
 
 export const SEARCH_EVENT_VERSION = 1;
 export const SearchSource = z.enum(["website", "miniapp", "bot"]);
@@ -12,7 +13,7 @@ export const SearchEvent = z.strictObject({
   eventId: z.uuid(),
   keyword: z.string().refine((text) => {
     const length = [...text].length;
-    return length >= 2 && length <= 64;
+    return length >= CLIENT_POLICY.keywordMin && length <= CLIENT_POLICY.keywordMax;
   }, "Keyword must contain 2 to 64 Unicode codepoints"),
   trigger: SearchTrigger,
   reportedResult: ReportedResult,

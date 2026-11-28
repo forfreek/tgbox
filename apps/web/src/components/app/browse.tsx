@@ -1,11 +1,12 @@
 import { type EntryKind, entryKinds, type Locale, promoClickUrl } from "@tgbox/shared";
 import { SearchIcon, XIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Spinner } from "@/components/coss/ui/spinner";
 import { appUi } from "@/i18n/ui-app.ts";
 import { APP_BROWSE_LIMIT, type AppBrowse } from "@/lib/app-data.ts";
 import { cn } from "@/lib/cn.ts";
 import { loadPagefind, resetPagefind } from "@/lib/pagefind.ts";
+import { useSearchAnalytics } from "@/lib/use-search-analytics.ts";
 import { BannerCard } from "./banner-card.tsx";
 import { type BrowseItem, EntryCard } from "./entry-card.tsx";
 import { useWebApp } from "./shell.tsx";
@@ -56,10 +57,12 @@ export function BrowseScreen({
   locale,
   pagefindUrl,
   siteUrl,
+  analyticsEnabled = false,
 }: {
   locale: Locale;
   pagefindUrl: string;
   siteUrl: string;
+  analyticsEnabled?: boolean;
 }) {
   const strings = appUi(locale);
   const webApp = useWebApp();
@@ -76,8 +79,17 @@ export function BrowseScreen({
   const tabs: Tab[] = ["all", ...entryKinds];
   const [query, setQuery] = useState("");
   const [search, setSearch] = useState<SearchState>({ status: "idle" });
+  const { collector } = useSearchAnalytics(analyticsEnabled, "miniapp");
+  const generation = useRef(0);
+  const [revision, setRevision] = useState(0);
+  const changeQuery = (value: string) => {
+    generation.current = collector.begin(value, "manual", locale);
+    setRevision((current) => current + 1);
+    setQuery(value);
+  };
 
   useEffect(() => {
+    const id = generation.current;
     const term = query.trim();
     if (term === "") {
       setSearch({ status: "idle" });
@@ -92,7 +104,10 @@ export function BrowseScreen({
         const data = await Promise.all(
           found.results.slice(0, MAX_RESULTS).map((result) => result.data()),
         );
-        if (!cancelled) setSearch({ status: "done", results: data.flatMap(toItem) });
+        if (!cancelled) {
+          collector.settled(id, found.results.length > 0);
+          setSearch({ status: "done", results: data.flatMap(toItem) });
+        }
       } catch {
         resetPagefind();
         if (!cancelled) setSearch({ status: "error" });
@@ -102,7 +117,7 @@ export function BrowseScreen({
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [query, pagefindUrl]);
+  }, [query, pagefindUrl, collector, revision]);
 
   const searching = query.trim() !== "";
   const listed = entries.status === "ready" ? entries.data : [];
@@ -126,7 +141,12 @@ export function BrowseScreen({
           id="app-browse-search"
           name="q"
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => changeQuery(event.target.value)}
+          onCompositionStart={() => collector.composition(true)}
+          onCompositionEnd={(event) => {
+            collector.composition(false);
+            changeQuery(event.currentTarget.value);
+          }}
           placeholder={strings.browse.search}
           aria-label={strings.browse.search}
           className="h-11 w-full rounded-full border border-input bg-card pr-10 pl-9 text-base outline-none focus-visible:border-primary"
@@ -135,7 +155,7 @@ export function BrowseScreen({
           <button
             type="button"
             aria-label={strings.browse.clear}
-            onClick={() => setQuery("")}
+            onClick={() => changeQuery("")}
             className="-translate-y-1/2 absolute top-1/2 right-3 text-muted-foreground"
           >
             <XIcon className="size-4" aria-hidden />
@@ -190,6 +210,7 @@ export function BrowseScreen({
       <ul className="flex flex-col gap-2">
         {items.map((entry) => (
           <EntryCard
+            onOpen={searching && search.status === "done" ? () => collector.select() : undefined}
             key={entry.username}
             entry={entry}
             locale={locale}
