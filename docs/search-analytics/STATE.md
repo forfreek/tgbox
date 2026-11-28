@@ -36,3 +36,5 @@
 - 本节点只有事件契约与Schema，无现有Worker运行时绑定/路由/搜索变更。
 
 阶段一草稿PR：https://github.com/forfreek/tgbox/pull/90，代码5b42156。snapshot的超时用例独立运行（临时testTimeout=30000）1/1通过，原测试文件未改；全仓其他包与Linux CI仍在检查。阶段一不包含实际采集、聚合或后台页面，不将契约当功能上线。
+
+2026-11-28 Linux CI 46097134175 全部通过（2m5s）；PR #90仍为草稿未合并。下一阶段工作树C:/Users/123/tgbox-search-analytics-service，分支codex/search-analytics-service；阶段二尚未交付。

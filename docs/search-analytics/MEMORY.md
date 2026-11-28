@@ -14,3 +14,5 @@
 阶段一真实迁移测试发现SQLite CHECK遇到NULL可放行，已增加显式IS NOT NULL并通过回归。计费写入不能沿用简单UPSERT估算，后续必须测receipt/限额/维度累计的总meta。
 
 阶段一PR #90：未发布提交推送受GitHub邮箱隐私保护拒绝，已仅对此新提交使用账号noreply重建作者信息后成功推送。基线snapshot用例5秒超时，独立放宽时限后通过；不通过修改无关业务修测试。
+
+阶段一Linux CI 46097134175通过，Windows本地基线snapshot/Web测试存在5秒超时，不能将平台耗时差异当成功能失败；保留失败记录，以Linux及专项复核共同判断。
