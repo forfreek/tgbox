@@ -15,6 +15,12 @@
   "triggers": { "crons": ["*/5 * * * *", "0 * * * *"] },
   "d1_databases": [
     {
+      "binding": "ANALYTICS_DB",
+      "database_name": "tgbox-analytics",
+      "database_id": "0678cbaa-102b-4440-adba-ab5e10628744",
+      "migrations_dir": "../../packages/search-analytics/migrations"
+    },
+    {
       "binding": "DB",
       "database_name": "tgbox",
       "database_id": "426a1d23-bde7-42fc-a5ab-e76b3b408df5",

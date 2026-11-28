@@ -13,6 +13,12 @@
   // Only /r/* reads it: the promo click redirect counts the click before sending the visitor on.
   "d1_databases": [
     {
+      "binding": "ANALYTICS_DB",
+      "database_name": "tgbox-analytics",
+      "database_id": "0678cbaa-102b-4440-adba-ab5e10628744",
+      "migrations_dir": "../../packages/search-analytics/migrations"
+    },
+    {
       "binding": "DB",
       "database_name": "tgbox",
       "database_id": "426a1d23-bde7-42fc-a5ab-e76b3b408df5",
@@ -25,7 +31,16 @@
   // Workers AI (free allocation): the category suggestion on the submit form, and only when the
   // keyword rules are unsure — a handful of calls a day (see packages/core/src/suggest.ts).
   "ai": { "binding": "AI" },
+  "kv_namespaces": [{ "binding": "PUBLIC_CACHE", "id": "6fa85752b8364d6fbbede7f024b1f162" }],
+  "ratelimits": [
+    {
+      "name": "SEARCH_RATE_LIMITER",
+      "namespace_id": "2026112801",
+      "simple": { "limit": 60, "period": 60 }
+    }
+  ],
   "vars": {
+    "SEARCH_TURNSTILE_SITE_KEY": "0x4AAAAAAGXCWRlrEMzWFhQ5",
     "SEARCH_PUBLICATION_ENABLED": "0",
     "SEARCH_ANALYTICS_ENABLED": "0",
     "SEARCH_WEBSITE_ENABLED": "0",
