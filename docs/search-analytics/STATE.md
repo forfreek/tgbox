@@ -3,7 +3,7 @@
 核验日期：2026-11-28（Asia/Shanghai）。
 工作树：C:/Users/123/tgbox-search-analytics。
 分支：codex/search-analytics-stage1；基线 origin/main d150e0d20041eb3a1c5d1315672bf0cb54c17e8f。
-当前节点：阶段一开发中；运行时功能尚未接入；PR 尚未创建。
+当前节点：阶段一已交付草稿 PR #90；运行时功能尚未接入。下一阶段在独立 service 工作树开发。
 
 ## 已核验事实
 
