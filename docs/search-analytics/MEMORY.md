@@ -68,3 +68,7 @@
 100词页分成80词组以守D1每SQL100参数；独立身份只在留存区间计，长期用身份日；当前资格分与已发布分分列，不将过滤列表语言冒称不同全球榜。批准不追补未具资格历史事实。83共享/136Admin/11Edge交互通过，最终构建/CI看STATE/ADMIN。生产未操作；恢复先总索引与STATE，阶段六按06约束。
 
 收尾发现P1：SearchDialog.tsx visibleWords在publicationEnabled=false使用hotKeywords，启用审核后的编译关闭/旧前端回滚可能重新展示被隐藏词。阶段六必须去除未审核回退并验证关闭/回滚矩阵；本节点未改Web，生产未动，禁止忽略该门槛上线。最终Admin dry-run gzip1443.53KiB。
+
+阶段五草稿PR #94已创建，base=codex/search-analytics-publication，代码8219088；Linux CI46124984114进行中，最终结论待记录。未合并或部署。
+
+阶段五最终CI：8219088的Linux全仓CI46124984114全部通过；完整报告ADMIN.md，草稿PR #94。后续仅文档收尾，不合并main/不生产操作；下一阶段六先处理静态推荐回退P1并完成独立最终审查。

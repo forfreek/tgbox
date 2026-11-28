@@ -2,7 +2,7 @@
 
 ## 最新：阶段五，2026-11-28
 
-工作树C:/Users/123/tgbox-search-analytics-admin，分支codex/search-analytics-admin，基于0130d88 / PR #93（未合并）。八视图、共享管理访问层、认证/同源/CAS/匿名审计、手动刷新和操作日志已本地实现。实施报告见[ADMIN.md](ADMIN.md)，计划见[ADMIN-PLAN.md](ADMIN-PLAN.md)。草稿PR和实现CI待提交后记录，不把本分支当生产功能。
+工作树C:/Users/123/tgbox-search-analytics-admin，分支codex/search-analytics-admin，基于0130d88 / PR #93（未合并）。八视图、共享管理访问层、认证/同源/CAS/匿名审计、手动刷新和操作日志已本地实现。实施报告见[ADMIN.md](ADMIN.md)，计划见[ADMIN-PLAN.md](ADMIN-PLAN.md)。草稿[PR #94](https://github.com/forfreek/tgbox/pull/94)，实现821908850fff8068cbd2bab95485ee026556fb02；实现提交的Linux全仓CI 46124984114全部通过；后续仅文档收尾，不能当作生产功能。
 
 共享83、Admin136、真实Edge浏览器11条检查通过；全仓类型11/11和Lint通过（3条既有警告）。最终构建/固定Wrangler dry-run与Linux CI追加于下方交付记录。无新迁移/云资源/Secrets，无生产迁移、资源、WAF、部署或合并。下一阶段六最终验收/安全容量与技术债专项。
 
@@ -87,3 +87,5 @@
 全仓类型11/11、Lint通过（3既有警告，无新增）；Admin136和共享83项通过，14项真实D1管理测试包含100词分页，浏览器可复现脚本11条交互通过。Admin最终构建及Wrangler4.132.0显式配置dry-run总gzip1443.53KiB。
 
 新增上线前P1：旧前端编译关闭/回滚静态推荐可能绕过已建立的隐藏规则，证据SearchDialog.tsx visibleWords。阶段六必须修复并测试，见DEBT；当前生产没有改动，不允许未解决即上线。
+
+阶段五交付：草稿PR #94依赖#93；8219088的CI46124984114（https://github.com/forfreek/tgbox/actions/runs/46124984114）全部步骤成功。最终文档记录不改运行时代码。下一阶段六先修复静态推荐关闭/回滚P1，再做独立安全/容量/技术债/SEO回归与部署准备。
