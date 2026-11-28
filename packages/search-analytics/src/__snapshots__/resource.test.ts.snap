@@ -3,7 +3,7 @@
 exports[`measures the maximum supported rule set and refuses an over-limit set without writes > 500 moderation rules 1`] = `
 {
   "rowsRead": 2054,
-  "rowsWritten": 18,
+  "rowsWritten": 19,
 }
 `;
 
@@ -11,11 +11,11 @@ exports[`records local D1 cost baselines and bounds accepted versus rejected wri
 {
   "botFirst": {
     "rowsRead": 58,
-    "rowsWritten": 18,
+    "rowsWritten": 19,
   },
   "botRepeat": {
     "rowsRead": 68,
-    "rowsWritten": 10,
+    "rowsWritten": 11,
   },
   "budgetRejected": {
     "rowsRead": 4,
@@ -31,7 +31,7 @@ exports[`records local D1 cost baselines and bounds accepted versus rejected wri
   },
   "webFirst": {
     "rowsRead": 68,
-    "rowsWritten": 21,
+    "rowsWritten": 22,
   },
 }
 `;

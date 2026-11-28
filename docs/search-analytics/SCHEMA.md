@@ -35,3 +35,5 @@ day为首键支持窗口/清理范围，keyword/day仅用于分页关键词详�
 control包含rules_revision、publication_generation/key/rules_revision/config_version以及lease_token/until/fence。不可变KV先写，D1最后发布CAS。读主库版本gate，无效时空榜，不从旧缓存恢复已禁词。singleton控制结构与运营配置分离，便于频繁租约操作不修改JSON。
 
 阶段二新增0001_rule_revision.sql，为规则INSERT/UPDATE/DELETE自动递增search_control.rules_revision。接受事务按当前配置和审核版本领取receipt，所有效果按本次attempt门禁；session/Turnstile/抽样预留也校验当前配置版本。
+
+阶段二0002_daily_contribution_guard.sql新增partial UNIQUE(day,keyword,identity) WHERE eligible=1，在数据库层保证跨source/locale的全球日贡献唯一。维度事实PK仍保留非贡献分析行，两者约束目标不同，不是重复索引。迁移在关闭态、本地先执行；不触碰核心迁移。

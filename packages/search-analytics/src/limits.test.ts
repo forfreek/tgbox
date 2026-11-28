@@ -66,6 +66,21 @@ beforeEach(async () => {
   await enable();
   vi.restoreAllMocks();
 });
+it("enforces one global daily contribution in the schema even across source/locale rows", async () => {
+  const auth = await AuthenticatedSearch.bot(secret, 1, now);
+  await writeSearch(deps(), input(), auth);
+  await expect(
+    db
+      .prepare(
+        "INSERT INTO search_daily_identities(day,keyword,identity,source,locale,eligible,last_seen_at) VALUES('2026-11-28','telegram',?,'miniapp','en',1,1)",
+      )
+      .bind(auth.identity)
+      .run(),
+  ).rejects.toThrow();
+  expect(await db.prepare("SELECT sum(eligible) n FROM search_daily_identities").first("n")).toBe(
+    1,
+  );
+});
 it("bounds a stalled result verifier without granting a ranking contribution", async () => {
   const observer = vi.fn(),
     auth = await AuthenticatedSearch.bot(secret, 1, now);

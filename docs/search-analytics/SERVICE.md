@@ -51,7 +51,7 @@ Siteverify检查success/hostname/action/cdata，token用独立请求头（<=2048
 
 ## 本地验证
 
-- 统计包50项（含真实Workers D1并发/事务回滚、重试、跨入口身份、限额、Turnstile重放、配置竞态、请求流限制）。
+- 统计包51项（含真实Workers D1并发/事务回滚、重试、跨入口身份、限额、Turnstile重放、配置竞态、请求流限制）。
 - telegram包96项回归通过。
 - 统计包Biome/类型/生成映射一致性通过；全仓Lint通过（3条既有警告），全仓类型11/11通过。
 - 具体资源meta见RESOURCE-USAGE.md和资源snapshot。
@@ -61,3 +61,5 @@ Siteverify检查success/hostname/action/cdata，token用独立请求头（<=2048
 官方依据：[D1 batch事务](https://developers.cloudflare.com/d1/worker-api/d1-database/)、[Siteverify和token重复传播限制](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/)、[OpenCC](https://github.com/nk2028/opencc-js)。
 
 打包探针以本地test配置显式dry-run成功，整库导出探针944.10KiB/gzip169.60KiB；未包含OpenCC/Franc运行时字典，不等于现有Worker的实际增量大小。服务器结果复核有3秒截止，超时保留报告统计但不给贡献；不能取消已经提交的底层D1操作。
+
+0002_daily_contribution_guard.sql用部分唯一索引保证数据库层跨入口/语言的全球日贡献唯一，非贡献维度行仍可并存。最终统计库测试51项通过，成本报告已按索引实测更新。
