@@ -41,11 +41,11 @@
   ],
   "vars": {
     "SEARCH_TURNSTILE_SITE_KEY": "0x4AAAAAAGXCWRlrEMzWFhQ5",
-    "SEARCH_PUBLICATION_ENABLED": "0",
-    "SEARCH_ANALYTICS_ENABLED": "0",
-    "SEARCH_WEBSITE_ENABLED": "0",
-    "SEARCH_MINIAPP_ENABLED": "0",
-    "SEARCH_TURNSTILE_ENABLED": "0",
+    "SEARCH_PUBLICATION_ENABLED": "1",
+    "SEARCH_ANALYTICS_ENABLED": "1",
+    "SEARCH_WEBSITE_ENABLED": "1",
+    "SEARCH_MINIAPP_ENABLED": "1",
+    "SEARCH_TURNSTILE_ENABLED": "1",
     "SEARCH_ALLOWED_ORIGINS": "https://tgsearch.app,https://www.tgsearch.app",
     "R2_PUBLIC_URL": "https://media.tgsearch.app"
   },

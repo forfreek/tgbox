@@ -106,3 +106,5 @@
 新增上线前P1：旧前端编译关闭/回滚静态推荐可能绕过已建立的隐藏规则，证据SearchDialog.tsx visibleWords。阶段六必须修复并测试，见DEBT；当前生产没有改动，不允许未解决即上线。
 
 阶段五交付：草稿PR #94依赖#93；8219088的CI46124984114（https://github.com/forfreek/tgbox/actions/runs/46124984114）全部步骤成功。最终文档记录不改运行时代码。下一阶段六先修复静态推荐关闭/回滚P1，再做独立安全/容量/技术债/SEO回归与部署准备。
+
+2026-11-28生产推进：配置#96已合并，迁移及Admin/Bot关闭态发布成功；Web关闭态CI46147226739进行中。真实Admin登录/读取/关闭默认值通过。启用配置在codex/search-analytics-activate，未改预算；详见PRODUCTION-RELEASE。
