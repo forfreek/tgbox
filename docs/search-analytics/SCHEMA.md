@@ -1,5 +1,7 @@
 # 独立统计 Schema 与迁移
 
+阶段四新增0003_publication_snapshot.sql：search_job_runs追加published（0/1，默认0）及ranking_json（JSON数组，默认[]）。发布时与权威指针同D1 batch保存内部keyword/identities/score快照，不进入公开KV；失败任务可区分是否已成功发布后清理失败。表数量仍为12；核心DB不迁移。旧命名列写入兼容新增默认列，回滚应用不执行降级SQL。
+
 迁移目录 packages/search-analytics/migrations，从 0000 开始，不能使用核心 DB 的迁移目录或 drizzle journal。测试配置仅绑定本地 ANALYTICS_DB；生产 resource ID 需创建审批后填写。
 
 ## 表与索引

@@ -1,5 +1,9 @@
 # 实施计划
 
+阶段四本地实现已建立草稿PR #93，依赖#92；以当前STATE为恢复入口，完整数据流/测试/风险查PUBLICATION.md。下一节点阶段五Admin，不提前实施生产部署。
+
+2026-11-28第四阶段实现3e41929的Linux全仓CI 46121763628通过；该节点关闭态可独立验收，未合并/部署。下一阶段在此验收基线建立独立工作树，复用既有Admin权限/CSRF/审计，不把本阶段共享manual函数误当已经暴露的后台接口。
+
 日期：2026-11-28。用户授权独立开发、本地测试及交付；生产操作全部另行确认。
 
 | 阶段 | 可独立验收的交付 | 影响范围 | 兼容性 |
@@ -45,3 +49,5 @@
 2026-11-28阶段三代码及本地专项验收见COLLECTION.md，工作树tgbox-search-analytics-collection、分支codex/search-analytics-collection；PR/CI以STATE最新记录为准。生产开启前追加两字符LIKE最坏扫描容量检查，不改变已确认2–64字符范围。阶段四继续KV/Cron/清理/版本gate；阶段五Admin；阶段六最终专项与部署准备。
 
 阶段三草稿PR #92已建立，依赖#91；阶段四开工方案和独立验收标准见PUBLICATION-PLAN.md。
+
+2026-11-28阶段四已在tgbox-search-analytics-publication完成本地实现，基于阶段三PR #92；验收/PR/CI查STATE，细节查PUBLICATION.md。新增0003仅统计库，下一节点阶段五Admin的统计/规则/配置/审计界面，阶段六最终容量、安全及技术债专项；不提前启用生产。

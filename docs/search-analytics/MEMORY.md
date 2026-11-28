@@ -1,5 +1,20 @@
 # 可复用决策与证据
 
+## 2026-11-28：阶段四
+
+- 草稿PR #93依赖#92，实现3e41929；CI 46121763628状态查STATE，未合并/迁移/部署。
+- 实现提交3e41929的Linux全仓CI 46121763628通过；共享69、Web450+8、Admin115、浏览器17项本地验收见PUBLICATION。后续仅文档收尾，下一节点阶段五Admin。
+
+- 恢复tgbox-search-analytics-publication；先读STATE/PUBLICATION。基于阶段三76ca142，不将阶段四当生产。
+- immutable KV key+fresh first-primary前后校验；不能复用bookmark会话冒充第二次主库读取。no-store和打开时清空客户端旧词是严格撤回边界，不回退静态词。
+- D1指针与job ranking_json/published同batch；0003仅统计库列，后台可读原发布分数而非按新数据伪称历史榜单分数。
+- jobs与publication独立；关闭公开榜仍可定时清理，关闭cron仍可人工调用同服务。新版Admin worker委派原TanStack fetch，独立daily scheduled，不动Bot任务。
+- 清理每轮为续租+9表guarded DELETE的D1 batch；Paid D1每次调用1000 API限制，最多900轮为收尾留余量，另有90秒保护。批大小默认100可调10–500；积压失败须监控/人工排空，不宣称严格TTL。
+- 本地26行身份夹具124读/9写为任务内成功SQL，不包括最终日志/释放锁、公开读取、核心推荐或失败SQL。public正常2主库singleton+1KV；边缘拒绝0D1/0KV。
+- 回归及生产前P1门槛见PUBLICATION和DEBT；最终CI以STATE为准。
+
+## 前期历史记录
+
 ## 2026-11-28：阶段三采集
 
 - 草稿PR #92依赖#91，实现提交377f65e；CI状态查STATE。下一节点方案为PUBLICATION-PLAN.md，文档不是已实现功能。
@@ -43,3 +58,5 @@
 阶段二最终约束加固：0002 partial UNIQUE保证跨维度全球日贡献，51项测试通过。实际成功写入基线由索引增加1行：Bot19、网站22、同身份重复11；回归snapshot按实测更新，重试与触限仍0写。上一代码d5f5ee5的Linux CI 46101482836通过，新增约束后的head需重新核验。
 
 阶段二最终源码398462b的Linux CI 46102332989通过。交付保持独立共享包、独立统计迁移、单向依赖、默认关闭；不把后续入口/榜单/Admin验收套用到此阶段。
+
+2026-11-28阶段四收尾：自动标记词即使人工approved也不能取得eligible贡献（writer p.review=0）；发布先过滤再Top6，候选上限rules+rankingSize，超限无法确定完整安全榜则失败。聚合留存需windowDays+1覆盖完整日窗口和今天，默认90天不变。共享69、Web集成8、榜单浏览器3及既有14通过；最终CI查STATE。

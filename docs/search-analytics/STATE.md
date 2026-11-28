@@ -1,5 +1,15 @@
 # 当前状态
 
+## 最新：阶段四，2026-11-28
+
+工作树 `C:/Users/123/tgbox-search-analytics-publication`，分支 `codex/search-analytics-publication`，base=阶段三76ca142 / PR #92。聚合/发布/撤回/清理及Web/Admin接入已实现；完整报告见[PUBLICATION.md](PUBLICATION.md)。草稿[PR #93](https://github.com/forfreek/tgbox/pull/93)，实现3e41929的Linux CI 46121763628全部通过；后续为文档收尾，不是生产功能。
+
+共享统计69项、Web双D1 8项、Admin115项、新榜单浏览器3项及原浏览器14项通过；全仓类型11/11与Lint通过。最终提交检查见后续记录。Admin构建/固定Wrangler dry-run通过，总gzip1427.85KiB，生成cron为5 16 * * *。
+
+本阶段新增统计迁移0003，只扩展search_job_runs私有发布快照；未执行生产迁移。当前无生产资源/Secret/WAF/部署/合并操作。下一节点阶段五Admin，阶段六容量和技术债最终验收。
+
+以下为阶段三及更早历史快照，不能套用为当前工作树。
+
 ## 最新：阶段三，2026-11-28
 
 工作树 `C:/Users/123/tgbox-search-analytics-collection`，分支 `codex/search-analytics-collection`，base=阶段二 `9d4a5d2` / PR #91。实现及验收见 [COLLECTION.md](COLLECTION.md)。阶段三草稿 [PR #92](https://github.com/forfreek/tgbox/pull/92)，实现377f65e；Linux CI 46118001213全部通过，后续为文档收尾。
@@ -59,3 +69,5 @@
 2026-11-28 收尾：新增0002数据库级全球日贡献唯一约束，本地51/51通过；成本基线每接受事件增加1行索引写。前一head d5f5ee5的Linux CI 46101482836通过，当前追加修改的CI待核验。
 
 阶段二交付核验：实现提交398462b的Linux CI 46102332989全部通过。51项统计测试、96项Telegram回归、类型/Lint与本地显式配置dry-run通过；最终打包探针944.50KiB/gzip169.75KiB。PR #91依赖#90，均未合并，后续仅文档记录。下一阶段接三入口。
+
+阶段四最终本地收尾：Web450/450（Windows CLI 15秒且不改项目配置）及双D1 8/8通过；Admin115项含启用Cron适配验证。桌面/移动截图在C:/Users/123/.codex/visualizations/2026/11/28/search-analytics-stage4，已查看。Web/Admin最终dry-run总gzip331.74/1427.85KiB。

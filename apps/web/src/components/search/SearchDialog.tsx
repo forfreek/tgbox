@@ -29,6 +29,7 @@ interface Props {
   siteUrl: string;
   hotKeywords: string[];
   analyticsEnabled?: boolean;
+  publicationEnabled?: boolean;
   kindLabels: Record<string, string>;
   strings: {
     placeholder: string;
@@ -87,6 +88,7 @@ export default function SearchDialog({
   siteUrl,
   hotKeywords,
   analyticsEnabled = false,
+  publicationEnabled = false,
   kindLabels,
   strings,
 }: Props) {
@@ -98,7 +100,56 @@ export default function SearchDialog({
   const generation = useRef(0);
   const composing = useRef(false);
   const [revision, setRevision] = useState(0);
-  const changeQuery = (value: string, trigger: "manual" | "recommended" = "manual") => {
+  const [published, setPublished] = useState<{ type: "trending" | "recommended"; words: string[] }>(
+    { type: "recommended", words: [] },
+  );
+  useEffect(() => {
+    setPublished({ type: "recommended", words: [] });
+    if (!publicationEnabled || !open) return;
+    const controller = new AbortController();
+    void fetch("/api/trending", { signal: controller.signal, cache: "no-store", priority: "low" })
+      .then(async (response) => {
+        if (!response.ok) return;
+        const data: unknown = await response.json();
+        if (
+          controller.signal.aborted ||
+          typeof data !== "object" ||
+          !data ||
+          !("version" in data) ||
+          data.version !== 1 ||
+          !("type" in data) ||
+          (data.type !== "trending" && data.type !== "recommended") ||
+          !("items" in data) ||
+          !Array.isArray(data.items) ||
+          data.items.length > 6
+        )
+          return;
+        const words: string[] = [];
+        for (const item of data.items) {
+          if (
+            typeof item !== "object" ||
+            !item ||
+            !("keyword" in item) ||
+            typeof item.keyword !== "string" ||
+            item.keyword.length > 128
+          )
+            return;
+          words.push(item.keyword);
+        }
+        setPublished({ type: data.type, words });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) console.warn("search-analytics", "trending-fetch");
+      });
+    return () => controller.abort();
+  }, [open, publicationEnabled]);
+  const visibleWords = publicationEnabled ? published.words : hotKeywords;
+  const keywordTrigger =
+    publicationEnabled && published.type === "trending" ? "trending" : "recommended";
+  const changeQuery = (
+    value: string,
+    trigger: "manual" | "recommended" | "trending" = "manual",
+  ) => {
     clearChallenge();
     generation.current = collector.begin(value, trigger, locale);
     setRevision((current) => current + 1);
@@ -186,7 +237,7 @@ export default function SearchDialog({
   }, [query, open, pagefindUrl, locale, collector, revision]);
 
   const external = externalSearchUrls(query, siteUrl);
-  const showHot = !query.trim() && hotKeywords.length > 0;
+  const showHot = !query.trim() && visibleWords.length > 0;
   const firstLoad = state.status === "loading" && state.results.length === 0;
 
   return (
@@ -286,10 +337,10 @@ export default function SearchDialog({
                       {showHot && (
                         <div className="shrink-0 px-4 pt-4 pb-5">
                           <p className="text-xs font-medium tracking-wide text-muted-foreground">
-                            {strings.recommended}
+                            {keywordTrigger === "trending" ? strings.hot : strings.recommended}
                           </p>
                           <div className="mt-3 flex flex-wrap gap-2">
-                            {hotKeywords.map((keyword, index) => (
+                            {visibleWords.map((keyword, index) => (
                               <motion.button
                                 key={keyword}
                                 type="button"
@@ -298,7 +349,7 @@ export default function SearchDialog({
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ ...listSpring, delay: 0.06 + index * 0.03 }}
                                 whileTap={{ scale: 0.94 }}
-                                onClick={() => changeQuery(keyword, "recommended")}
+                                onClick={() => changeQuery(keyword, keywordTrigger)}
                               >
                                 {keyword}
                               </motion.button>

@@ -1,7 +1,7 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "tgbox-admin",
-  "main": "@tanstack/react-start/server-entry",
+  "main": "src/worker.ts",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": ["nodejs_compat"],
   // Mini App hostname. workers.dev stays off, and Cloudflare Access is not placed in
@@ -10,6 +10,7 @@
   "workers_dev": false,
   "routes": [{ "pattern": "admin.tgsearch.app", "custom_domain": true }],
   "observability": { "enabled": true },
+  "triggers": { "crons": ["5 16 * * *"] },
   "d1_databases": [
     {
       "binding": "DB",
@@ -22,6 +23,7 @@
   "ai": { "binding": "AI" },
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "tgbox-media" }],
   "vars": {
+    "SEARCH_JOBS_ENABLED": "0",
     // e.g. "myteam.cloudflareaccess.com"
     "CF_ACCESS_TEAM_DOMAIN": "",
     // Application Audience (AUD) tag of the Access application.

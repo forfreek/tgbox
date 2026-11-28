@@ -2,6 +2,11 @@ import { z } from "zod";
 import { CLIENT_POLICY } from "./client-policy.ts";
 
 export const HARD_LIMITS = Object.freeze({
+  publicationBytes: 8192,
+  publicationRuntimeMs: 90000,
+  // Paid D1 permits 1000 binding API calls/invocation; reserve headroom for publication/logs.
+  cleanupBatches: 900,
+  recommendationCandidates: 30,
   bodyBytes: CLIENT_POLICY.bodyBytes,
   keywordMin: CLIENT_POLICY.keywordMin,
   keywordMax: CLIENT_POLICY.keywordMax,
@@ -73,7 +78,7 @@ export const SearchSettings = z
     (s) =>
       s.sessionPerDay >= s.sessionPerHour &&
       s.identityRetentionDays >= s.windowDays + 1 &&
-      s.aggregateRetentionDays >= s.windowDays &&
+      s.aggregateRetentionDays >= s.windowDays + 1 &&
       s.weights[0] >= s.weights[1] &&
       s.weights[1] >= s.weights[2],
     "Inconsistent rate, retention or weight settings",

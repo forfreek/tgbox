@@ -23,6 +23,7 @@ export default async function globalSetup() {
     SITE_DATA_PATH: dataPath,
     SITE_URL: `http://127.0.0.1:${port}`,
     PUBLIC_SEARCH_ANALYTICS_ENABLED: process.env.TGBOX_E2E_ANALYTICS === "1" ? "1" : "0",
+    PUBLIC_SEARCH_PUBLICATION_ENABLED: process.env.TGBOX_E2E_PUBLICATION === "1" ? "1" : "0",
   };
   execFileSync(
     process.execPath,
