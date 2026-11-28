@@ -2,7 +2,7 @@
 
 ## 最新：阶段四，2026-11-28
 
-工作树 `C:/Users/123/tgbox-search-analytics-publication`，分支 `codex/search-analytics-publication`，base=阶段三76ca142 / PR #92。聚合/发布/撤回/清理及Web/Admin接入已实现；完整报告见[PUBLICATION.md](PUBLICATION.md)。本地专项验收和收尾中，PR/CI待核验，不是生产功能。
+工作树 `C:/Users/123/tgbox-search-analytics-publication`，分支 `codex/search-analytics-publication`，base=阶段三76ca142 / PR #92。聚合/发布/撤回/清理及Web/Admin接入已实现；完整报告见[PUBLICATION.md](PUBLICATION.md)。草稿[PR #93](https://github.com/forfreek/tgbox/pull/93)，实现3e41929的Linux CI 46121763628全部通过；后续为文档收尾，不是生产功能。
 
 共享统计69项、Web双D1 8项、Admin115项、新榜单浏览器3项及原浏览器14项通过；全仓类型11/11与Lint通过。最终提交检查见后续记录。Admin构建/固定Wrangler dry-run通过，总gzip1427.85KiB，生成cron为5 16 * * *。
 

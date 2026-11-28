@@ -2,6 +2,9 @@
 
 ## 2026-11-28：阶段四
 
+- 草稿PR #93依赖#92，实现3e41929；CI 46121763628状态查STATE，未合并/迁移/部署。
+- 实现提交3e41929的Linux全仓CI 46121763628通过；共享69、Web450+8、Admin115、浏览器17项本地验收见PUBLICATION。后续仅文档收尾，下一节点阶段五Admin。
+
 - 恢复tgbox-search-analytics-publication；先读STATE/PUBLICATION。基于阶段三76ca142，不将阶段四当生产。
 - immutable KV key+fresh first-primary前后校验；不能复用bookmark会话冒充第二次主库读取。no-store和打开时清空客户端旧词是严格撤回边界，不回退静态词。
 - D1指针与job ranking_json/published同batch；0003仅统计库列，后台可读原发布分数而非按新数据伪称历史榜单分数。
